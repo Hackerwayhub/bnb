@@ -1,0 +1,227 @@
+User-agent: *
+Allow: /
+Allow: /submit-listing/
+Allow: /book-on-whatsapp/
+Allow: /bnb-house-party//
+Allow: /location/
+
+# Disallow admin and backend areas
+Disallow: /admin/
+Disallow: /admin
+Disallow: /accounts/
+Disallow: /login/
+Disallow: /logout/
+Disallow: /signup/
+Disallow: /password-reset/
+Disallow: /api/
+Disallow: /api/
+Disallow: /static/admin/
+Disallow: /media/admin/
+Disallow: /django-admin/
+
+# Allow search engines to crawl CSS, JS, and images
+Allow: /static/
+Allow: /media/
+Allow: *.css
+Allow: *.js
+Allow: *.jpg
+Allow: *.jpeg
+Allow: *.png
+Allow: *.gif
+Allow: *.svg
+Allow: *.webp
+
+# Disallow query parameters that might create duplicate content
+Disallow: /*?*
+Disallow: /*&*
+Disallow: /*=*
+Disallow: /*?
+Disallow: /*page=
+Disallow: /*sort=
+Disallow: /*filter=
+
+# Sitemap location (update with your actual domain in production)
+Sitemap: http://127.0.0.1:8000/sitemap.xml
+Sitemap: https://yourdomain.com/sitemap.xml  # Production domain
+
+# Crawl delay for respectful crawling (adjust based on your server capacity)
+Crawl-delay: 2
+
+# Additional directives for specific search engines
+User-agent: Googlebot
+Allow: /
+Allow: /submit-listing/
+Allow: /book-on-whatsapp/
+Allow: /house-party/
+Allow: /location/
+Disallow: /admin/
+Disallow: /accounts/
+Crawl-delay: 1
+
+User-agent: Googlebot-Image
+Allow: /media/
+Allow: /static/
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.gif$
+Allow: /*.webp$
+
+User-agent: Bingbot
+Allow: /
+Allow: /submit-listing/
+Allow: /book-on-whatsapp/
+Allow: /house-party/
+Allow: /location/
+Disallow: /admin/
+Disallow: /accounts/
+Crawl-delay: 2
+
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /admin/
+Disallow: /accounts/
+Crawl-delay: 3
+
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /admin/
+Disallow: /accounts/
+
+User-agent: Applebot
+Allow: /
+Disallow: /admin/
+Disallow: /accounts/
+
+# Block scrapers and bad bots
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Crawl-delay: 10
+
+User-agent: DotBot
+Crawl-delay: 10
+
+User-agent: BLEXBot
+Crawl-delay: 10
+
+# Block known bad bots
+User-agent: Xenu
+Disallow: /
+
+User-agent: LinkWalker
+Disallow: /
+
+User-agent: larbin
+Disallow: /
+
+User-agent: libwww
+Disallow: /
+
+User-agent: ZyBORG
+Disallow: /
+
+User-agent: Rankivabot
+Disallow: /
+
+User-agent: ExtractorPro
+Disallow: /
+
+User-agent: CherryPicker
+Disallow: /
+
+User-agent: EmailCollector
+Disallow: /
+
+User-agent: EmailSiphon
+Disallow: /
+
+User-agent: WebBandit
+Disallow: /
+
+User-agent: CheeseBot
+Disallow: /
+
+User-agent: Teleport
+Disallow: /
+
+User-agent: TeleportPro
+Disallow: /
+
+User-agent: MIIxpc
+Disallow: /
+
+User-agent: Telesoft
+Disallow: /
+
+User-agent: Website Quester
+Disallow: /
+
+User-agent: WebZip
+Disallow: /
+
+User-agent: moget
+Disallow: /
+
+User-agent: WebZip
+Disallow: /
+
+User-agent: WebStripper
+Disallow: /
+
+User-agent: WebSauger
+Disallow: /
+
+User-agent: WebCopier
+Disallow: /
+
+User-agent: NetAnts
+Disallow: /
+
+User-agent: Mister Pix
+Disallow: /
+
+User-agent: WebAuto
+Disallow: /
+
+User-agent: TheNomad
+Disallow: /
+
+User-agent: WWW-Collector-E
+Disallow: /
+
+User-agent: RMA
+Disallow: /
+
+User-agent: libWeb/clsHTTP
+Disallow: /
+
+User-agent: asterias
+Disallow: /
+
+User-agent: httplib
+Disallow: /
+
+User-agent: turingos
+Disallow: /
+
+User-agent: spanner
+Disallow: /
+
+User-agent: InfoNaviRobot
+Disallow: /
+
+User-agent: Harvest
+Disallow: /
+
+User-agent: Bullseye
+Disallow: /
+
+User-agent: Crescent
+Disallow: /

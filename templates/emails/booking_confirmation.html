@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation - BK{{ booking.id|stringformat:"06d" }}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .booking-ref {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 25px;
+            border-left: 4px solid #4CAF50;
+        }
+        .booking-ref h2 {
+            margin: 0;
+            color: #2c3e50;
+        }
+        .section {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .section h3 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+        .detail-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .detail-label {
+            font-weight: bold;
+            width: 180px;
+            color: #666;
+        }
+        .detail-value {
+            flex: 1;
+            color: #333;
+        }
+        .highlight-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .highlight-box h4 {
+            margin-top: 0;
+            color: #856404;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .total-price {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 20px 0;
+        }
+        @media (max-width: 600px) {
+            .detail-row {
+                flex-direction: column;
+            }
+            .detail-label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>🎉 Booking Confirmation</h1>
+            <p>Your booking request has been received!</p>
+        </div>
+
+        <div class="content">
+            <div class="booking-ref">
+                <h2>Booking Reference: BK{{ booking.id|stringformat:"06d" }}</h2>
+                <p>Thank you, {{ booking.guest_name }}, for booking with us!</p>
+            </div>
+
+            <div class="highlight-box">
+                <h4>📋 Important Information</h4>
+                <p>This is a booking <strong>request</strong>. Your booking will be confirmed by the property owner within 24 hours. You will receive another email once it's fully confirmed.</p>
+            </div>
+
+            <div class="section">
+                <h3>🏨 Property Details</h3>
+                <div class="detail-row">
+                    <div class="detail-label">Property Name:</div>
+                    <div class="detail-value">{{ listing.title }}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Location:</div>
+                    <div class="detail-value">{{ listing.get_location_display }}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Property Type:</div>
+                    <div class="detail-value">{{ listing.get_property_type_display }}</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>📅 Booking Dates</h3>
+                <div class="detail-row">
+                    <div class="detail-label">Check-in Date:</div>
+                    <div class="detail-value">{{ check_in }}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Check-out Date:</div>
+                    <div class="detail-value">{{ check_out }}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Number of Nights:</div>
+                    <div class="detail-value">{{ number_of_nights }}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Number of Guests:</div>
+                    <div class="detail-value">{{ booking.number_of_guests }}</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>💰 Price Summary</h3>
+                <div class="detail-row">
+                    <div class="detail-label">Price per Night:</div>
+                    <div class="detail-value">KES {{ price_per_night }}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Total Nights:</div>
+                    <div class="detail-value">{{ number_of_nights }} nights</div>
+                </div>
+                <div class="total-price">
+                    Total Amount: KES {{ total_price }}
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>👤 Guest Information</h3>
+                <div class="detail-row">
+                    <div class="detail-label">Full Name:</div>
+                    <div class="detail-value">{{ booking.guest_name }}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Email Address:</div>
+                    <div class="detail-value">{{ booking.guest_email }}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Phone Number:</div>
+                    <div class="detail-value">{{ booking.guest_phone }}</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>📝 Next Steps</h3>
+                <ul style="padding-left: 20px;">
+                    <li>You will receive a confirmation email from the property owner within 24 hours</li>
+                    <li>Keep your booking reference (BK{{ booking.id|stringformat:"06d" }}) for all future communications</li>
+                    <li>Contact the property directly if you have any questions about your stay</li>
+                    <li>Review the property's cancellation policy before your stay</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>❓ Need Help?</h3>
+                <p>If you have any questions about your booking, please contact us:</p>
+                <ul style="padding-left: 20px;">
+                    <li>Email: support@bnbwebsite.com</li>
+                    <li>Phone: +254 700 000 000</li>
+                    <li>WhatsApp: +254 712 345 678</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© {% now "Y" %} BnB Website. All rights reserved.</p>
+            <p>This is an automated message, please do not reply to this email.</p>
+        </div>
+    </div>
+</body>
+</html>

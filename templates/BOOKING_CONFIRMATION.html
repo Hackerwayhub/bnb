@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #f8f9fa; padding: 20px; text-align: center; }
+        .booking-details { background-color: #fff; padding: 20px; border: 1px solid #ddd; }
+        .detail-row { margin-bottom: 10px; }
+        .label { font-weight: bold; color: #666; }
+        .value { color: #333; }
+        .highlight { background-color: #fff3cd; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Booking Confirmation</h1>
+            <p>Your booking request has been received!</p>
+        </div>
+
+        <div class="booking-details">
+            <h2>Booking Reference: {{ booking_ref }}</h2>
+            <p>Thank you, {{ booking.guest_name }}, for booking with us!</p>
+
+            <div class="highlight">
+                <p><strong>Important:</strong> This is a booking request. Your booking will be confirmed within 24 hours.</p>
+            </div>
+
+            <h3>Booking Summary</h3>
+            <div class="detail-row">
+                <span class="label">Property:</span>
+                <span class="value">{{ listing.title }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Check-in:</span>
+                <span class="value">{{ check_in }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Check-out:</span>
+                <span class="value">{{ check_out }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Number of Nights:</span>
+                <span class="value">{{ number_of_nights }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Guests:</span>
+                <span class="value">{{ booking.number_of_guests }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Total Price:</span>
+                <span class="value">${{ total_price }}</span>
+            </div>
+
+            <h3>Guest Information</h3>
+            <div class="detail-row">
+                <span class="label">Name:</span>
+                <span class="value">{{ booking.guest_name }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Email:</span>
+                <span class="value">{{ booking.guest_email }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Phone:</span>
+                <span class="value">{{ booking.guest_phone }}</span>
+            </div>
+
+            <h3>Next Steps</h3>
+            <ul>
+                <li>You will receive a confirmation email within 24 hours</li>
+                <li>Please keep this booking reference for future reference</li>
+                <li>Contact us if you have any questions</li>
+            </ul>
+
+            <p>Best regards,<br>The {{ listing.title }} Team</p>
+        </div>
+    </div>
+</body>
+</html>

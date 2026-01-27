@@ -1,0 +1,1047 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block content %}
+<div class="create-listing-container" style="min-height: 80vh; padding: 30px 0;">
+  <div class="row justify-content-center mx-0">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-8 px-2 px-md-3">
+      <!-- Success Message -->
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success alert-dismissible fade show" style="
+            border-radius: 12px;
+            border: none;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, rgba(255, 90, 95, 0.1), rgba(255, 56, 92, 0.1));
+            border-left: 5px solid #FF5A5F;
+            color: #155724;
+            padding: 15px 20px;
+            font-size: 14px;
+          ">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <div style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); color: white; min-width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">
+                <i class="fa fa-check"></i>
+              </div>
+              <div style="flex: 1;">
+                <h5 style="margin: 0 0 5px 0; color: #FF5A5F; font-weight: 700; font-size: 16px;">🎉 Success!</h5>
+                <p style="margin: 0;">{{ message }}</p>
+              </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" style="position: absolute; top: 10px; right: 10px; padding: 10px;"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <div class="listing-card" style="
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255, 90, 95, 0.15);
+        overflow: hidden;
+        margin: 0 auto;
+      ">
+        <!-- Card Header -->
+        <div class="card-header" style="
+          background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%);
+          color: white;
+          text-align: center;
+          padding: 25px 20px;
+          position: relative;
+        ">
+          <div style="position: relative; z-index: 1;">
+            <div style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; border: 2px solid rgba(255, 255, 255, 0.3);">
+              <i class="fa fa-home" style="font-size: 24px;"></i>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 15px;">
+              <span style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: 600;">
+                <i class="fa fa-shield" style="margin-right: 3px;"></i> Verified Hosts
+              </span>
+              <span style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: 600;">
+                <i class="fa fa-star" style="margin-right: 3px;"></i> Quality Standards
+              </span>
+              <span style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: 600;">
+                <i class="fa fa-bolt" style="margin-right: 3px;"></i> Quick Approval
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress Steps -->
+        <div style="padding: 15px 20px; background: #f8f9fa; border-bottom: 1px solid #e9ecef;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap;">
+            <div style="text-align: center; flex: 1; min-width: 0;">
+              <div style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; font-weight: bold; font-size: 13px; flex-shrink: 0;">1</div>
+              <div style="font-size: 11px; color: #FF5A5F; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Property Info</div>
+            </div>
+            <div style="flex: 1; height: 2px; background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); margin: 0 8px; min-width: 20px;"></div>
+            <div style="text-align: center; flex: 1; min-width: 0;">
+              <div style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; font-weight: bold; font-size: 13px; flex-shrink: 0;">2</div>
+              <div style="font-size: 11px; color: #FF5A5F; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Details</div>
+            </div>
+            <div style="flex: 1; height: 2px; background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); margin: 0 8px; min-width: 20px;"></div>
+            <div style="text-align: center; flex: 1; min-width: 0;">
+              <div style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; font-weight: bold; font-size: 13px; flex-shrink: 0;">3</div>
+              <div style="font-size: 11px; color: #FF5A5F; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Pricing & Photos</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Body -->
+        <div style="padding: 30px 20px;">
+          <form method="POST" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+
+            <!-- Property Information Section -->
+            <div style="margin-bottom: 30px;">
+              <div style="display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0;">
+                <div style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; color: white; font-size: 18px; flex-shrink: 0;">
+                  <i class="fa fa-info-circle"></i>
+                </div>
+                <div style="min-width: 0;">
+                  <h4 style="color: #333; margin: 0 0 3px 0; font-weight: 700; font-size: 18px;">
+                    Property Information
+                  </h4>
+                  <p style="color: #666; margin: 0; font-size: 13px;">
+                    Tell us about your property
+                  </p>
+                </div>
+              </div>
+
+              <!-- Title -->
+              <div style="margin-bottom: 20px;">
+                <label for="{{ form.title.id_for_label }}" style="
+                  display: block;
+                  margin-bottom: 8px;
+                  font-weight: 600;
+                  color: #333;
+                  font-size: 14px;
+                ">
+                  <i class="fa fa-pencil-alt" style="margin-right: 6px; color: #FF5A5F;"></i>
+                  Property Name
+                  <span style="color: #FF5A5F;">*</span>
+                </label>
+                {{ form.title }}
+                <div style="display: flex; align-items: flex-start; gap: 8px; margin-top: 6px;">
+                  <i class="fa fa-lightbulb" style="color: #FF5A5F; font-size: 12px; margin-top: 2px; flex-shrink: 0;"></i>
+                  <small style="font-size: 12px; color: #666; line-height: 1.4;">
+                    Make it catchy! Example: "Beautiful 3-Bedroom Apartment with City View"
+                  </small>
+                </div>
+                {% if form.title.errors %}
+                  <div style="display: block; color: #dc3545; font-size: 12px; margin-top: 6px; padding: 6px 10px; background: #fff5f5; border-radius: 6px; border-left: 3px solid #dc3545;">
+                    <i class="fa fa-exclamation-circle" style="margin-right: 6px;"></i>
+                    {% for error in form.title.errors %}
+                      {{ error }}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+
+              <!-- Property Type and Location -->
+              <div class="row mx-0" style="margin-bottom: 20px;">
+                <div class="col-12 col-md-6 px-1 px-md-2 mb-3 mb-md-0">
+                  <div style="margin-bottom: 20px;">
+                    <label for="{{ form.property_type.id_for_label }}" style="
+                      display: block;
+                      margin-bottom: 8px;
+                      font-weight: 600;
+                      color: #333;
+                      font-size: 14px;
+                    ">
+                      <i class="fa fa-building" style="margin-right: 6px; color: #FF5A5F;"></i>
+                      Property Type
+                      <span style="color: #FF5A5F;">*</span>
+                    </label>
+                    {{ form.property_type }}
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 px-1 px-md-2">
+                  <div style="margin-bottom: 20px;">
+                    <label for="{{ form.location.id_for_label }}" style="
+                      display: block;
+                      margin-bottom: 8px;
+                      font-weight: 600;
+                      color: #333;
+                      font-size: 14px;
+                    ">
+                      <i class="fa fa-map-marker-alt" style="margin-right: 6px; color: #FF5A5F;"></i>
+                      Location
+                      <span style="color: #FF5A5F;">*</span>
+                    </label>
+                    {{ form.location }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Specific Location -->
+              <div style="margin-bottom: 20px;">
+                <label for="{{ form.specific_location.id_for_label }}" style="
+                  display: block;
+                  margin-bottom: 8px;
+                  font-weight: 600;
+                  color: #333;
+                  font-size: 14px;
+                ">
+                  <i class="fa fa-map-pin" style="margin-right: 6px; color: #FF5A5F;"></i>
+                  Specific Location
+                  <span style="color: #FF5A5F;">*</span>
+                </label>
+                {{ form.specific_location }}
+              </div>
+            </div>
+
+            <!-- Host Information Section -->
+            <div style="margin-bottom: 30px;">
+              <div style="display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0;">
+                <div style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; color: white; font-size: 18px; flex-shrink: 0;">
+                  <i class="fa fa-user"></i>
+                </div>
+                <div style="min-width: 0;">
+                  <h4 style="color: #333; margin: 0 0 3px 0; font-weight: 700; font-size: 18px;">
+                    Host Information
+                  </h4>
+                  <p style="color: #666; margin: 0; font-size: 13px;">
+                    How guests can contact you
+                  </p>
+                </div>
+              </div>
+
+              <!-- Host Name -->
+              <div style="margin-bottom: 20px;">
+                <label for="{{ form.host_name.id_for_label }}" style="
+                  display: block;
+                  margin-bottom: 8px;
+                  font-weight: 600;
+                  color: #333;
+                  font-size: 14px;
+                ">
+                  <i class="fa fa-user-circle" style="margin-right: 6px; color: #FF5A5F;"></i>
+                  Host Name
+                  <span style="color: #FF5A5F;">*</span>
+                </label>
+                {{ form.host_name }}
+              </div>
+
+              <!-- Phone Numbers -->
+              <div class="row mx-0">
+                <div class="col-12 col-md-6 px-1 px-md-2 mb-3 mb-md-0">
+                  <div style="margin-bottom: 20px;">
+                    <label for="{{ form.host_phone.id_for_label }}" style="
+                      display: block;
+                      margin-bottom: 8px;
+                      font-weight: 600;
+                      color: #333;
+                      font-size: 14px;
+                    ">
+                      <i class="fa fa-phone" style="margin-right: 6px; color: #FF5A5F;"></i>
+                      Phone Number
+                      <span style="color: #FF5A5F;">*</span>
+                    </label>
+                    {{ form.host_phone }}
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 px-1 px-md-2">
+                  <div style="margin-bottom: 20px;">
+                    <label for="{{ form.host_whatsapp.id_for_label }}" style="
+                      display: block;
+                      margin-bottom: 8px;
+                      font-weight: 600;
+                      color: #333;
+                      font-size: 14px;
+                    ">
+                      <i class="fa fa-whatsapp" style="margin-right: 6px; color: #25D366;"></i>
+                      WhatsApp
+                      <span style="color: #FF5A5F;">*</span>
+                    </label>
+                    {{ form.host_whatsapp }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Property Details Section -->
+            <div style="margin-bottom: 30px;">
+              <div style="display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0;">
+                <div style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; color: white; font-size: 18px; flex-shrink: 0;">
+                  <i class="fa fa-bed"></i>
+                </div>
+                <div style="min-width: 0;">
+                  <h4 style="color: #333; margin: 0 0 3px 0; font-weight: 700; font-size: 18px;">
+                    Property Details
+                  </h4>
+                  <p style="color: #666; margin: 0; font-size: 13px;">
+                    Accommodation capacity and layout
+                  </p>
+                </div>
+              </div>
+
+              <!-- Capacity Grid -->
+              <div class="row mx-0">
+                <div class="col-6 col-md-3 px-1 mb-3">
+                  <div style="text-align: center; padding: 15px 10px; background: #f8f9fa; border-radius: 10px; border: 2px solid #e9ecef;">
+                    <div style="color: #FF5A5F; font-size: 20px; margin-bottom: 8px;">
+                      <i class="fa fa-users"></i>
+                    </div>
+                    <label for="{{ form.guests.id_for_label }}" style="
+                      display: block;
+                      margin-bottom: 8px;
+                      font-weight: 600;
+                      color: #333;
+                      font-size: 13px;
+                    ">
+                      Guests
+                    </label>
+                    {{ form.guests }}
+                  </div>
+                </div>
+                <div class="col-6 col-md-3 px-1 mb-3">
+                  <div style="text-align: center; padding: 15px 10px; background: #f8f9fa; border-radius: 10px; border: 2px solid #e9ecef;">
+                    <div style="color: #FF5A5F; font-size: 20px; margin-bottom: 8px;">
+                      <i class="fa fa-door-closed"></i>
+                    </div>
+                    <label for="{{ form.bedrooms.id_for_label }}" style="
+                      display: block;
+                      margin-bottom: 8px;
+                      font-weight: 600;
+                      color: #333;
+                      font-size: 13px;
+                    ">
+                      Bedrooms
+                    </label>
+                    {{ form.bedrooms }}
+                  </div>
+                </div>
+                <div class="col-6 col-md-3 px-1 mb-3">
+                  <div style="text-align: center; padding: 15px 10px; background: #f8f9fa; border-radius: 10px; border: 2px solid #e9ecef;">
+                    <div style="color: #FF5A5F; font-size: 20px; margin-bottom: 8px;">
+                      <i class="fa fa-bed"></i>
+                    </div>
+                    <label for="{{ form.beds.id_for_label }}" style="
+                      display: block;
+                      margin-bottom: 8px;
+                      font-weight: 600;
+                      color: #333;
+                      font-size: 13px;
+                    ">
+                      Beds
+                    </label>
+                    {{ form.beds }}
+                  </div>
+                </div>
+                <div class="col-6 col-md-3 px-1 mb-3">
+                  <div style="text-align: center; padding: 15px 10px; background: #f8f9fa; border-radius: 10px; border: 2px solid #e9ecef;">
+                    <div style="color: #FF5A5F; font-size: 20px; margin-bottom: 8px;">
+                      <i class="fa fa-bath"></i>
+                    </div>
+                    <label for="{{ form.bathrooms.id_for_label }}" style="
+                      display: block;
+                      margin-bottom: 8px;
+                      font-weight: 600;
+                      color: #333;
+                      font-size: 13px;
+                    ">
+                      Bathrooms
+                    </label>
+                    {{ form.bathrooms }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Amenities Section -->
+            <div style="margin-bottom: 30px;">
+              <div style="display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0;">
+                <div style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; color: white; font-size: 18px; flex-shrink: 0;">
+                  <i class="fa fa-star"></i>
+                </div>
+                <div style="min-width: 0;">
+                  <h4 style="color: #333; margin: 0 0 3px 0; font-weight: 700; font-size: 18px;">
+                    Amenities & Features
+                  </h4>
+                  <p style="color: #666; margin: 0; font-size: 13px;">
+                    Select what your property offers
+                  </p>
+                </div>
+              </div>
+
+              <!-- Amenities Grid -->
+              <div class="row mx-0">
+                {% for field_name in 'wifi parking kitchen pool ac tv'|split %}
+                  {% with form|get_item:field_name as field %}
+                    <div class="col-6 px-1 mb-3">
+                      <div style="padding: 12px; background: #f8f9fa; border-radius: 10px; border: 2px solid #e9ecef; display: flex; align-items: center; justify-content: space-between; height: 100%;">
+                        <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                          <div style="color: #FF5A5F; font-size: 16px; flex-shrink: 0;">
+                            {% if field_name == 'wifi' %}
+                              <i class="fa fa-wifi"></i>
+                            {% elif field_name == 'parking' %}
+                              <i class="fa fa-car"></i>
+                            {% elif field_name == 'kitchen' %}
+                              <i class="fa fa-utensils"></i>
+                            {% elif field_name == 'pool' %}
+                              <i class="fa fa-swimming-pool"></i>
+                            {% elif field_name == 'ac' %}
+                              <i class="fa fa-snowflake"></i>
+                            {% elif field_name == 'tv' %}
+                              <i class="fa fa-tv"></i>
+                            {% endif %}
+                          </div>
+                          <label for="{{ field.id_for_label }}" style="margin: 0; font-weight: 600; color: #495057; cursor: pointer; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            {{ field.label }}
+                          </label>
+                        </div>
+                        {{ field }}
+                      </div>
+                    </div>
+                  {% endwith %}
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Listing Type Section -->
+            <div style="margin-bottom: 30px;">
+              <div style="display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0;">
+                <div style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; color: white; font-size: 18px; flex-shrink: 0;">
+                  <i class="fa fa-crown"></i>
+                </div>
+                <div style="min-width: 0;">
+                  <h4 style="color: #333; margin: 0 0 3px 0; font-weight: 700; font-size: 18px;">
+                    Listing Type
+                  </h4>
+                  <p style="color: #666; margin: 0; font-size: 13px;">
+                    Choose how you want to list your property
+                  </p>
+                </div>
+              </div>
+
+              <!-- Listing Options -->
+              <div class="row mx-0">
+                <div class="col-12 col-md-6 px-1 mb-3">
+                  <div id="free-listing-card" style="
+                    border: 2px solid #e9ecef;
+                    border-radius: 12px;
+                    padding: 20px;
+                    background: #fff;
+                    cursor: pointer;
+                    height: 100%;
+                    text-align: center;
+                  ">
+                    <div style="color: #28a745; font-size: 36px; margin-bottom: 15px;">
+                      <i class="fa fa-gift"></i>
+                    </div>
+                    <h5 style="color: #333; margin-bottom: 10px; font-weight: 700; font-size: 16px;">
+                      Free Listing
+                    </h5>
+                    <div style="font-size: 28px; font-weight: 800; color: #28a745; margin-bottom: 12px;">
+                      KES 0
+                    </div>
+                    <div style="margin-bottom: 20px; text-align: left;">
+                      <ul style="padding-left: 18px; margin: 0; color: #666; font-size: 13px; line-height: 1.5;">
+                        <li>Basic listing on the site</li>
+                         <li>10% PER BOOKING</li>
+
+                      </ul>
+                    </div>
+                    <div>
+                      <div class="form-check" style="display: inline-block;">
+                        <input class="form-check-input listing-type-radio" type="radio"
+                               name="listing_type" id="id_listing_type_0" value="free" checked
+                               style="width: 18px; height: 18px; margin-right: 8px;">
+                        <label class="form-check-label" for="id_listing_type_0"
+                               style="font-weight: 600; color: #495057; cursor: pointer; font-size: 14px;">
+                          Select Free Listing
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 px-1 mb-3">
+                  <div id="featured-listing-card" style="
+                    border: 3px solid #e9ecef;
+                    border-radius: 12px;
+                    padding: 20px;
+                    background: linear-gradient(135deg, #fff9f0, #fff);
+                    cursor: pointer;
+                    height: 100%;
+                    text-align: center;
+                    position: relative;
+                  ">
+                    <div style="position: absolute; top: 10px; right: -25px; background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); color: white; padding: 4px 25px; transform: rotate(45deg); font-size: 11px; font-weight: 700;">
+                      POPULAR
+                    </div>
+                    <div style="color: #FF5A5F; font-size: 36px; margin-bottom: 15px;">
+                      <i class="fa fa-crown"></i>
+                    </div>
+                    <h5 style="color: #333; margin-bottom: 10px; font-weight: 700; font-size: 16px;">
+                      Featured Listing
+                    </h5>
+                    <div style="font-size: 28px; font-weight: 800; color: #FF5A5F; margin-bottom: 12px;">
+                      KES 1,000
+                    </div>
+                    <div style="margin-bottom: 20px; text-align: left;">
+                      <ul style="padding-left: 18px; margin: 0; color: #666; font-size: 13px; line-height: 1.5;">
+                        <li><strong>Appears at the TOP</strong> of search results</li>
+                        <li><strong>10x more visibility</strong></li>
+                        <li>Higher booking conversion</li>
+                        <li>social media ads & content</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <div class="form-check" style="display: inline-block;">
+                        <input class="form-check-input listing-type-radio" type="radio"
+                               name="listing_type" id="id_listing_type_1" value="featured"
+                               style="width: 18px; height: 18px; margin-right: 8px;">
+                        <label class="form-check-label" for="id_listing_type_1"
+                               style="font-weight: 600; color: #495057; cursor: pointer; font-size: 14px;">
+                          Select Featured Listing
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pricing Section -->
+            <div style="margin-bottom: 30px;">
+              <div style="display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0;">
+                <div style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; color: white; font-size: 18px; flex-shrink: 0;">
+                  <i class="fa fa-money-bill-wave"></i>
+                </div>
+                <div style="min-width: 0;">
+                  <h4 style="color: #333; margin: 0 0 3px 0; font-weight: 700; font-size: 18px;">
+                    Pricing
+                  </h4>
+                  <p style="color: #666; margin: 0; font-size: 13px;">
+                    Set your nightly rate
+                  </p>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 20px;">
+                <label for="{{ form.price_per_night.id_for_label }}" style="
+                  display: block;
+                  margin-bottom: 8px;
+                  font-weight: 600;
+                  color: #333;
+                  font-size: 14px;
+                ">
+                  <i class="fa fa-tag" style="margin-right: 6px; color: #FF5A5F;"></i>
+                  Price per Night
+                  <span style="color: #FF5A5F;">*</span>
+                </label>
+                <div style="display: flex; max-width: 300px;">
+                  <span style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); color: white; border: 2px solid #FF5A5F; padding: 12px 15px; border-radius: 10px 0 0 10px; font-weight: 600; font-size: 14px; flex-shrink: 0;">KES</span>
+                  {{ form.price_per_night }}
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 8px; margin-top: 6px;">
+                  <i class="fa fa-chart-line" style="color: #FF5A5F; font-size: 12px; margin-top: 2px; flex-shrink: 0;"></i>
+                  <small style="font-size: 12px; color: #666; line-height: 1.4;">
+                    Average nightly rate in this area: KES 5,000 - 15,000
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Images Section -->
+            <div style="margin-bottom: 40px;">
+              <div style="display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0;">
+                <div style="background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%); width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; color: white; font-size: 18px; flex-shrink: 0;">
+                  <i class="fa fa-images"></i>
+                </div>
+                <div style="min-width: 0;">
+                  <h4 style="color: #333; margin: 0 0 3px 0; font-weight: 700; font-size: 18px;">
+                    Property Photos
+                  </h4>
+                  <p style="color: #666; margin: 0; font-size: 13px;">
+                    High-quality photos attract more guests
+                  </p>
+                </div>
+              </div>
+
+              <!-- Photo Tips -->
+              <div style="background: linear-gradient(135deg, #fff8f0, #ffe6d6); border-radius: 10px; padding: 15px; margin-bottom: 20px; border-left: 4px solid #FF5A5F;">
+                <div style="display: flex; align-items: flex-start; gap: 12px;">
+                  <div style="color: #FF5A5F; font-size: 18px; flex-shrink: 0;">
+                    <i class="fa fa-camera"></i>
+                  </div>
+                  <div>
+                    <h5 style="margin: 0 0 6px 0; color: #333; font-weight: 600; font-size: 14px;">Photo Tips</h5>
+                    <ul style="margin: 0; padding-left: 18px; color: #666; font-size: 12px; line-height: 1.5;">
+                      <li>Use natural light for better quality</li>
+                      <li>Show all rooms and key features</li>
+                      <li>Keep images under 5MB each</li>
+                      <li>Upload at least 3 photos</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Image Uploads -->
+              <div class="row mx-0">
+                {% for field_name in 'main_image image_2 image_3 image_4'|split %}
+                  {% with form|get_item:field_name as field %}
+                    <div class="col-12 col-md-6 px-1 mb-3">
+                      <div style="border: 2px dashed #dee2e6; border-radius: 10px; padding: 20px; text-align: center; background: #f8f9fa; height: 100%;">
+                        <div style="color: #FF5A5F; font-size: 28px; margin-bottom: 12px;">
+                          {% if forloop.first %}
+                            <i class="fa fa-camera"></i>
+                          {% else %}
+                            <i class="fa fa-image"></i>
+                          {% endif %}
+                        </div>
+                        <label for="{{ field.id_for_label }}" style="
+                          display: block;
+                          margin-bottom: 12px;
+                          font-weight: 600;
+                          color: #333;
+                          cursor: pointer;
+                          font-size: 14px;
+                        ">
+                          {{ field.label }}
+                          {% if forloop.first %}
+                            <span style="color: #FF5A5F;">*</span>
+                          {% endif %}
+                        </label>
+                        {{ field }}
+                        <div style="margin-top: 8px; font-size: 12px; color: #666;">
+                          {% if forloop.first %}
+                            <i class="fa fa-star" style="color: #FF5A5F; margin-right: 5px;"></i>
+                            <span>Main photo (Required)</span>
+                          {% else %}
+                            <i class="fa fa-plus" style="color: #6c757d; margin-right: 5px;"></i>
+                            <span>Additional photo</span>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  {% endwith %}
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Submit Section -->
+            <div style="background: #f8f9fa; border-radius: 12px; padding: 25px 20px; border: 2px solid rgba(255, 90, 95, 0.1);">
+              <div style="text-align: center; margin-bottom: 20px;">
+                <h4 style="color: #333; margin: 0 0 8px 0; font-weight: 700; font-size: 18px;">
+                  Ready to List Your Property?
+                </h4>
+                <p style="color: #666; margin: 0; font-size: 13px;">
+                  Review your information and submit when ready
+                </p>
+              </div>
+
+              <div>
+                <button type="submit" id="submit-btn" class="w-100" style="
+                  background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%);
+                  color: white;
+                  border: none;
+                  padding: 16px 20px;
+                  border-radius: 10px;
+                  font-weight: 700;
+                  font-size: 16px;
+                  transition: all 0.3s ease;
+                  box-shadow: 0 4px 15px rgba(255, 90, 95, 0.3);
+                  cursor: pointer;
+                ">
+                  <i class="fa fa-paper-plane" style="margin-right: 8px;"></i>
+                  Submit Property Listing
+                </button>
+
+                <div style="text-align: center; margin-top: 15px;">
+                  <p style="color: #666; font-size: 12px; margin: 0;">
+                    <i class="fa fa-shield-alt" style="margin-right: 6px; color: #FF5A5F;"></i>
+                    Your listing will be reviewed within 24 hours
+                  </p>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Base Styles */
+body {
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #f8f9fa 0%, #fff5f0 100%);
+}
+
+.create-listing-container {
+  max-width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Form Controls */
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+input[type="file"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: #fff;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+select:focus,
+textarea:focus {
+  border-color: #FF5A5F;
+  box-shadow: 0 0 0 3px rgba(255, 90, 95, 0.1);
+  outline: none;
+}
+
+input[type="file"] {
+  padding: 10px;
+  cursor: pointer;
+}
+
+input[type="file"]:hover {
+  border-color: #FF5A5F;
+}
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* Form Check Styling */
+.form-check-input {
+  margin-top: 0;
+  margin-right: 0;
+  border: 2px solid #dee2e6;
+}
+
+.form-check-input:checked {
+  background-color: #FF5A5F;
+  border-color: #FF5A5F;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 576px) {
+  .create-listing-container {
+    padding: 20px 10px;
+  }
+
+  .col-12.col-sm-10.col-md-8.col-lg-8.px-2.px-md-3 {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+  }
+
+  .listing-card > div:last-child {
+    padding: 25px 15px !important;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="tel"],
+  select,
+  textarea {
+    padding: 14px 12px;
+    font-size: 16px;
+  }
+
+  #submit-btn {
+    padding: 18px 20px !important;
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 375px) {
+  .create-listing-container {
+    padding: 15px 8px;
+  }
+
+  .col-12.col-sm-10.col-md-8.col-lg-8.px-2.px-md-3 {
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+  }
+
+  .listing-card > div:last-child {
+    padding: 20px 12px !important;
+  }
+
+  .card-header {
+    padding: 20px 15px !important;
+  }
+
+  .card-header h1 {
+    font-size: 20px !important;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="tel"],
+  select,
+  textarea {
+    padding: 12px 10px;
+    font-size: 15px;
+  }
+}
+
+/* Ensure images don't overflow */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Button hover effects */
+button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(255, 90, 95, 0.4) !important;
+}
+
+/* Card hover effects */
+#free-listing-card:hover,
+#featured-listing-card:hover {
+  border-color: #FF5A5F !important;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+  transform: translateY(-3px);
+  transition: all 0.3s ease;
+}
+
+/* Input validation styles */
+.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.is-valid {
+  border-color: #28a745 !important;
+}
+
+/* Prevent horizontal overflow */
+.row.mx-0 {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.col-6.px-1,
+.col-12.px-1,
+.col-md-6.px-1,
+.col-md-3.px-1 {
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+}
+
+/* Spacing adjustments for mobile */
+.mb-3 {
+  margin-bottom: 15px !important;
+}
+
+/* Text overflow handling */
+h4, h5, h1, p, label {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Ensure form elements are touch-friendly on mobile */
+@media (max-width: 768px) {
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-width: 22px;
+    min-height: 22px;
+  }
+
+  label {
+    font-size: 15px !important;
+  }
+
+  .form-check {
+    margin-bottom: 10px;
+  }
+}
+
+/* Custom scrollbar for better mobile experience */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #FF385C 0%, #FF5A5F 100%);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form');
+  const inputs = form.querySelectorAll('input, select, textarea');
+
+  // Listing type selection
+  const freeCard = document.getElementById('free-listing-card');
+  const featuredCard = document.getElementById('featured-listing-card');
+  const freeRadio = document.getElementById('id_listing_type_0');
+  const featuredRadio = document.getElementById('id_listing_type_1');
+  const submitBtn = document.getElementById('submit-btn');
+
+  // Update card styles based on selection
+  function updateCardStyles() {
+    if (freeCard && featuredCard && freeRadio && featuredRadio) {
+      if (freeRadio.checked) {
+        freeCard.style.borderColor = '#28a745';
+        freeCard.style.boxShadow = '0 5px 15px rgba(40, 167, 69, 0.1)';
+        featuredCard.style.borderColor = '#e9ecef';
+        featuredCard.style.boxShadow = 'none';
+      } else {
+        featuredCard.style.borderColor = '#FF5A5F';
+        featuredCard.style.boxShadow = '0 5px 15px rgba(255, 90, 95, 0.1)';
+        freeCard.style.borderColor = '#e9ecef';
+        freeCard.style.boxShadow = 'none';
+      }
+    }
+  }
+
+  // Update submit button text
+  function updateSubmitButton() {
+    if (submitBtn) {
+      if (featuredRadio && featuredRadio.checked) {
+        submitBtn.innerHTML = '<i class="fa fa-crown" style="margin-right: 8px;"></i>Submit Featured Listing (KES 1,000)';
+      } else {
+        submitBtn.innerHTML = '<i class="fa fa-paper-plane" style="margin-right: 8px;"></i>Submit Property Listing';
+      }
+    }
+  }
+
+  // Add click handlers to cards
+  if (freeCard && freeRadio) {
+    freeCard.addEventListener('click', function() {
+      freeRadio.checked = true;
+      updateCardStyles();
+      updateSubmitButton();
+    });
+  }
+
+  if (featuredCard && featuredRadio) {
+    featuredCard.addEventListener('click', function() {
+      featuredRadio.checked = true;
+      updateCardStyles();
+      updateSubmitButton();
+    });
+  }
+
+  // Add change handlers to radio buttons
+  if (freeRadio) {
+    freeRadio.addEventListener('change', function() {
+      updateCardStyles();
+      updateSubmitButton();
+    });
+  }
+
+  if (featuredRadio) {
+    featuredRadio.addEventListener('change', function() {
+      updateCardStyles();
+      updateSubmitButton();
+    });
+  }
+
+  // Initialize styles
+  updateCardStyles();
+  updateSubmitButton();
+
+  // Form validation
+  inputs.forEach(input => {
+    input.addEventListener('blur', function() {
+      if (this.checkValidity()) {
+        this.classList.remove('is-invalid');
+        this.classList.add('is-valid');
+      } else {
+        this.classList.remove('is-valid');
+        this.classList.add('is-invalid');
+      }
+    });
+
+    input.addEventListener('input', function() {
+      if (this.checkValidity()) {
+        this.classList.remove('is-invalid');
+        this.classList.add('is-valid');
+      }
+    });
+  });
+
+  // Form submission handler
+  form.addEventListener('submit', function(e) {
+    // Validate required fields
+    let isValid = true;
+    inputs.forEach(input => {
+      if (input.required && !input.value.trim()) {
+        input.classList.add('is-invalid');
+        isValid = false;
+      }
+    });
+
+    if (!isValid) {
+      e.preventDefault();
+      alert('Please fill in all required fields marked with *');
+      return;
+    }
+
+    // Show loading state
+    if (submitBtn) {
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin" style="margin-right: 8px;"></i>Submitting...';
+      submitBtn.disabled = true;
+
+      // Re-enable button after 5 seconds in case submission fails
+      setTimeout(() => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 5000);
+    }
+  });
+
+  // Image preview for file inputs
+  const fileInputs = form.querySelectorAll('input[type="file"]');
+  fileInputs.forEach(input => {
+    input.addEventListener('change', function() {
+      const parent = this.closest('div');
+      if (parent) {
+        const fileInfo = parent.querySelector('small, .file-info');
+        if (fileInfo && this.files.length > 0) {
+          const fileName = this.files[0].name;
+          if (fileName.length > 20) {
+            fileInfo.textContent = fileName.substring(0, 17) + '...';
+          } else {
+            fileInfo.textContent = fileName;
+          }
+        }
+      }
+    });
+  });
+
+  // Add focus effects to form controls
+  inputs.forEach(input => {
+    input.addEventListener('focus', function() {
+      this.parentElement.style.transform = 'translateY(-2px)';
+    });
+
+    input.addEventListener('blur', function() {
+      this.parentElement.style.transform = 'translateY(0)';
+    });
+  });
+});
+</script>
+{% endblock %}

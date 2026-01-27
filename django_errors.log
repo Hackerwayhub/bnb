@@ -1,0 +1,12 @@
+Internal Server Error: /location/lumumba drive/
+Traceback (most recent call last):
+  File "C:\bnbke\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\bnbke\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\bnbke\listings\views.py", line 61, in listing_list
+    display_location_name = location_choices_dict.get(selected_location, selected_location.title())
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'title'
+"GET /location/lumumba%20drive/ HTTP/1.1" 500 79997
+Failed to send booking email for booking BK000016: [Errno 11001] getaddrinfo failed

@@ -1,0 +1,2366 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+   <!-- location filters section -->
+<section style="background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%); margin: 5px 11px; border: 3px solid #FF0000; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.05); position: relative; overflow: hidden;">
+  <div class="filters-row" style="margin: 3px; background-color: #FFFFFF; padding: 5px; display: flex; flex-wrap: wrap; align-items: center; gap: 5px;">
+
+<!-- Breadcrumb Navigation -->
+<div style="padding: 10px 20px; background-color: #FFFFFF; border-radius: 8px; margin: 10px 0;">
+
+  <nav aria-label="breadcrumb">
+    <h1>
+    <ol style="display: flex; list-style: none; color:#FF0000; padding: 0; margin: 0; align-items: center;">
+      <li style="margin-right: 5px;">
+        <a href="/" style="color:#FF0000; text-decoration: none;">
+           BnB  <i class="fa fa-home" style="font-size: 28px; "></i>
+        </a>
+      </li>
+     
+    </ol>
+    </h1>
+  </nav>
+</div>
+
+
+    <!-- Location-specific Links -->
+    {% if all_locations %}
+      {% for location in all_locations %}
+        <a href="{{ location.url }}"
+           class="filter-item {% if current_location_slug == location.slug %}active{% endif %}"
+           style="background-color: {% if current_location_slug == location.slug %}#ff5a5f{% else %}#FF0000{% endif %};
+                  font-size: 12px;
+                  color: white;
+                  border: 1px solid {% if current_location_slug == location.slug %}#FF6B35{% else %}#FF0000{% endif %};
+                  padding: 8px 16px;
+                  border-radius: 20px;
+                  text-decoration: none;
+                  display: inline-block;
+                  margin: 2px;
+                  transition: all 0.3s ease;
+                  font-weight: 600;
+              white-space: nowrap;">
+          <i class="fa fa-map-marker" aria-hidden="true" style="margin-right: 5px;"></i>
+          {{ location.name }}
+        </a>
+      {% endfor %}
+    {% else %}
+      <p style="color: #666; font-style: italic; padding: 10px;">
+        No locations available at the moment.
+      </p>
+    {% endif %}
+
+
+
+  </div>
+</section>
+<!-- end location filters -->
+
+
+<style>
+.clean-heading {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 900;
+  color: #FF0000;
+  margin: 0;
+  padding: 25px 20px;
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.clean-text {
+  font-weight: 900;
+  color: #ff5a5 ;
+  position: relative;
+  display: inline-block;
+}
+
+.clean-text::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ddd, transparent);
+}
+
+.clean-location {
+  color: #FF0000;
+  font-size: 0.9em;
+  font-weight: 900;
+  background: white;
+  padding: 12px 30px;
+  border-radius: 60px;
+  box-shadow:
+    0 4px 20px rgba(255,0,0,0.08),
+    0 0 0 1px rgba(255,0,0,0.05) inset;
+  position: relative;
+  transition: all 0.3s ease;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.clean-location:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 25px rgba(255,0,0,0.15),
+    0 0 0 1px rgba(255,0,0,0.1) inset;
+}
+
+.clean-location::before {
+  content: '📍';
+  margin-right: 8px;
+  font-size: 0.9em;
+}
+</style>
+
+
+
+
+<!-- Image Gallery CSS -->
+<style>
+  .image-gallery {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    overflow: hidden;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .listing-slide .image-gallery {
+    height: 320px;
+  }
+
+  .gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    border: none;
+    font-size: 1.2rem;
+    color: #333;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+  }
+
+  .gallery-nav:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .gallery-nav.prev {
+    left: 10px;
+  }
+
+  .gallery-nav.next {
+    right: 10px;
+  }
+
+  .gallery-thumbnails {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+    pointer-events: auto;
+  }
+
+  .gallery-thumbnail {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    opacity: 0.8;
+    pointer-events: auto;
+  }
+
+  .gallery-thumbnail:hover,
+  .gallery-thumbnail.active {
+    opacity: 1;
+    border-color: white;
+    transform: scale(1.1);
+  }
+
+  .gallery-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .image-counter {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    z-index: 10;
+    pointer-events: none;
+  }
+</style>
+
+
+<!-- Add CSS for the optimized desktop slider -->
+<style>
+  /* Common Slider Styles */
+  .listings-slider {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    border-radius: 20px;
+  }
+
+  .slides-container {
+    display: flex;
+    transition: transform 0.6s ease;
+    height: auto;
+  }
+
+  .listing-slide {
+    min-width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Desktop-specific: Show one at a time but with better layout */
+  @media (min-width: 768px) {
+    .listing-slide {
+      min-width: 33.333%;
+      flex: 0 0 33.333%;
+      padding: 0 15px;
+      opacity: 0.7;
+      transform: scale(0.95);
+      transition: all 0.5s ease;
+    }
+
+    .listing-slide.active-slide {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 2;
+    }
+
+    .slides-container {
+      justify-content: center;
+    }
+
+    .slider-arrow {
+      width: 60px;
+      height: 60px;
+      font-size: 1.6rem;
+      background-color: white;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+
+    .slider-arrow.prev {
+      left: 20px;
+    }
+
+    .slider-arrow.next {
+      right: 20px;
+    }
+
+    .listing-slide .listing-card {
+      max-width: 380px;
+      margin: 0 auto;
+    }
+  }
+
+  /* Mobile styles */
+  @media (max-width: 767px) {
+    .listing-slide {
+      min-width: 100%;
+      padding: 0 10px;
+    }
+
+    .slider-arrow {
+      width: 45px;
+      height: 45px;
+      font-size: 1.2rem;
+    }
+
+    .slider-arrow.prev {
+      left: 10px;
+    }
+
+    .slider-arrow.next {
+      right: 10px;
+    }
+  }
+
+  /* Listing Card Styles */
+  .listing-slide .listing-card {
+    height: 100%;
+    transition: all 0.3s ease;
+    border-radius: 20px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    position: relative;
+  }
+
+  .listing-slide .listing-img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .listing-slide .listing-placeholder {
+    width: 100%;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+    font-size: 4rem;
+    color: white;
+  }
+
+  /* Slider Navigation Arrows */
+  .slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    color: #007bff;
+    border: 2px solid rgba(0, 123, 255, 0.2);
+  }
+
+  .slider-arrow:hover {
+    background-color: #007bff;
+    color: white;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 5px 20px rgba(0, 123, 255, 0.3);
+  }
+
+  /* Dots Navigation */
+  .slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding-bottom: 15px;
+  }
+
+  .slider-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #ddd;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    position: relative;
+  }
+
+  .slider-dot.active {
+    background-color: #007bff;
+    transform: scale(1.3);
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+  }
+
+  .slider-dot::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+  }
+
+  .slider-dot.active::after {
+    border-color: rgba(0, 123, 255, 0.3);
+  }
+
+  .slider-dot:hover {
+    background-color: #0056b3;
+    transform: scale(1.2);
+  }
+
+  /* Listing Info */
+  .listing-slide .listing-info {
+    padding: 25px 20px;
+  }
+
+  .listing-slide h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #222;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .listing-slide .verified-badge {
+    color: #34a853;
+    font-size: 1rem;
+  }
+
+  .listing-slide .location {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .listing-slide .property-details {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+
+  .listing-slide .price-tag {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #28a745;
+    margin-bottom: 15px;
+  }
+
+  .listing-slide .listing-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+  }
+
+  .listing-slide .whatsapp-btn,
+  .listing-slide .phone-btn,
+  .listing-slide .details-btn {
+    flex: 1;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-width: 140px;
+  }
+
+  .listing-slide .whatsapp-btn {
+    background-color: #25D366;
+    color: white;
+    border: 2px solid #25D366;
+  }
+
+  .listing-slide .whatsapp-btn:hover {
+    background-color: #128C7E;
+    border-color: #128C7E;
+    transform: translateY(-3px);
+  }
+
+  .listing-slide .phone-btn {
+    background-color: #FF0000;
+    color: white;
+    border: 2px solid #FF0000;
+  }
+
+  .listing-slide .phone-btn:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    transform: translateY(-3px);
+  }
+
+  .listing-slide .details-btn {
+    background-color: #6c757d;
+    color: white;
+    border: 2px solid #6c757d;
+  }
+
+  .listing-slide .details-btn:hover {
+    background-color: #545b62;
+    border-color: #545b62;
+    transform: translateY(-3px);
+  }
+
+  /* Property type badge */
+  .property-type-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 6px 15px;
+    border-radius: 25px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  /* Amenities icons */
+  .amenities-icons {
+    display: flex;
+    gap: 8px;
+    margin: 10px 0;
+    flex-wrap: wrap;
+  }
+
+  .amenity-icon {
+    background: #f8f9fa;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    color: #555;
+  }
+
+  .amenity-icon i {
+    margin-right: 5px;
+    color: #007bff;
+  }
+</style>
+
+<!-- listings gallery section -->
+<section>
+  <div style="border-radius: 32px 32px 32px 32px; box-shadow: 0 4px 8px rgba(0,0,0,0.1), 0 6px 20px rgba(0,0,0,0.1); margin-top: 20px;">
+    <div class="container-fluid">
+
+      <!-- Heading -->
+      <div style="text-align: center; margin: 5px 0 20px 0;">
+        {% if selected_location != 'all' %}
+         <h1 class="clean-heading">
+          <span class="clean-text">Bnb <span class="clean-location">{{ location_name }}</span> </span>
+
+        </h1>
+       {% else %}
+        <h1 class="clean-heading">
+          <span class="clean-text"><span class="clean-location"> staycations in Kenya! </span>  </span>
+
+        </h1>
+        {% endif %}
+      </div>
+
+
+      <!-- First Three Listings Slider - FIXED: Now shows for single listings too -->
+{% if listings|length > 0 %}
+  <div class="listings-slider" id="listingsSlider">
+    <!-- Navigation Arrows - Only show if more than 1 slide AND more than 1 listing -->
+    {% if listings|length > 1 %}
+      <div class="slider-arrow prev" onclick="prevSlide()">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      </div>
+      <div class="slider-arrow next" onclick="nextSlide()">
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </div>
+    {% endif %}
+
+    <!-- Slides Container -->
+    <div class="slides-container" id="slidesContainer">
+      {% for listing in listings %}
+        {% if forloop.counter <= 3 %}  <!-- Show only first 3 listings -->
+          <div class="listing-slide {% if forloop.first %}active-slide{% endif %}" data-slide-index="{{ forloop.counter0 }}">
+            <div class="listing-card">
+              <!-- Image Gallery Section -->
+              <div class="image-gallery" id="featured-gallery-{{ listing.id }}">
+                {% if listing.main_image %}
+                  <!-- Get all images for this listing -->
+                  {% with listing.all_images as images %}
+                    {% if images|length > 0 %}
+                      <div class="image-counter">
+                        <i class="fa fa-camera" aria-hidden="true"></i> {{ images|length }}
+                      </div>
+
+                      <!-- Main Image Display -->
+                      <img src="{{ images.0.url }}"
+                           alt="{{ listing.title }} - Image 1"
+                           class="listing-img clickable-image"
+                           loading="lazy"
+                           data-gallery-id="featured-{{ listing.id }}"
+                           data-image-index="0"
+                           data-listing-admin-whatsapp="{{ listing.admin_whatsapp_link }}"
+                           data-listing-id="{{ listing.id }}"
+                           data-listing-title="{{ listing.title }}"
+                           data-listing-location="{{ listing.get_location_display }}"
+                           data-listing-phone="{{ listing.host_phone }}"
+                           data-listing-price="{{ listing.price_per_night }}"
+                           data-listing-type="{{ listing.property_type }}"
+                           data-listing-image="{{ images.0.url }}"
+                           data-listing-guests="{{ listing.guests }}"
+                           data-listing-bedrooms="{{ listing.bedrooms }}"
+                           data-listing-bathrooms="{{ listing.bathrooms }}"
+                           data-all-images='{% for img in images %}{{ img.url }}{% if not forloop.last %},{% endif %}{% endfor %}'>
+
+                      <!-- Navigation Arrows for Gallery -->
+                      {% if images|length > 1 %}
+                        <button class="gallery-nav prev" onclick="changeImage('featured-{{ listing.id }}', -1, event)">
+                          <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        </button>
+                        <button class="gallery-nav next" onclick="changeImage('featured-{{ listing.id }}', 1, event)">
+                          <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </button>
+
+                        <!-- Thumbnails -->
+                        <div class="gallery-thumbnails">
+                          {% for img in images %}
+                            <div class="gallery-thumbnail {% if forloop.first %}active{% endif %}"
+                                 onclick="goToImage('featured-{{ listing.id }}', {{ forloop.counter0 }}, event)">
+                              <img src="{{ img.url }}" alt="Thumbnail {{ forloop.counter }}">
+                            </div>
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+                    {% endif %}
+                  {% endwith %}
+                {% else %}
+                  <div class="listing-placeholder clickable-image"
+                       data-listing-id="{{ listing.id }}"
+                       data-listing-title="{{ listing.title }}"
+                       data-listing-admin-whatsapp="{{ listing.admin_whatsapp_link }}"
+                       data-listing-location="{{ listing.get_location_display }}"
+                       data-listing-phone="{{ listing.host_phone }}"
+                       data-listing-price="{{ listing.price_per_night }}"
+                       data-listing-type="{{ listing.property_type }}"
+                       data-listing-guests="{{ listing.guests }}"
+                       data-listing-bedrooms="{{ listing.bedrooms }}"
+                       data-listing-bathrooms="{{ listing.bathrooms }}">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                  </div>
+                {% endif %}
+              </div>
+
+              <!-- Property Type Badge -->
+              <div class="property-type-badge {{ listing.property_type }}">
+                {{ listing.get_property_type_display }}
+              </div>
+
+
+
+              <div class="listing-info">
+                <h3>
+                  {{ listing.title }}
+                  {% if listing.is_approved %}
+                  <span class="verified-badge" title="Verified property">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                  </span>
+                  {% endif %}
+                </h3>
+
+                <!-- 5-Star Rating -->
+                <div class="star-rating" style="margin: 8px 0;">
+                  <span class="stars" style="color: #ffc107;">
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                  </span>
+                  <span style="font-size: 0.9rem; color: #666; margin-left: 5px;">5.0</span>
+                </div>
+
+                <p class="location">
+                  <i class="fa fa-map-marker" style="color: #007bff;" aria-hidden="true"></i>
+                  {{ listing.get_location_display }} • {{ listing.specific_location }}
+                </p>
+
+                <!-- Quick Info Icons (UPDATED with parking) -->
+                <div class="amenities-icons" style="display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap;">
+                  {% if listing.guests %}
+                  <span class="amenity-icon" style="background: #f8f9fa; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; color: #555;">
+                    <i class="fa fa-users" aria-hidden="true" style="color: #007bff; margin-right: 5px;"></i> {{ listing.guests }} guests
+                  </span>
+                  {% endif %}
+
+
+
+                  {% if listing.bedrooms %}
+                  <span class="amenity-icon" style="background: #f8f9fa; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; color: #555;">
+                    <i class="fa fa-bed" aria-hidden="true" style="color: #007bff; margin-right: 5px;"></i> {{ listing.bedrooms }} beds
+                  </span>
+                  {% endif %}
+
+                  {% if listing.bathrooms %}
+                  <span class="amenity-icon" style="background: #f8f9fa; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; color: #555;">
+                    <i class="fa fa-bath" aria-hidden="true" style="color: #007bff; margin-right: 5px;"></i> {{ listing.bathrooms }} baths
+                  </span>
+                  {% endif %}
+                </div>
+
+                <!-- Price -->
+                <p class="price-tag" style="font-size: 1.2rem; font-weight: 700; color: #28a745; margin: 10px 0;">
+                  KSh {{ listing.price_per_night }} <small style="font-size: 0.9rem; color: #666;">/ night</small>
+                </p>
+
+                <!-- Amenities Section (ADDED - shows all amenities) -->
+                {% if listing.wifi or listing.parking or listing.kitchen or listing.pool or listing.ac or listing.tv %}
+                <div style="margin: 15px 0; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee;">
+                  <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: #555;">Amenities</h4>
+                  <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    {% if listing.wifi %}
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                      <i class="fa fa-wifi" aria-hidden="true" style="color: #007bff; font-size: 0.9rem;"></i>
+                      <span style="font-size: 0.8rem; color: #555;">WiFi</span>
+                    </div>
+                    {% endif %}
+
+                    {% if listing.parking %}
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                      <i class="fa fa-car" aria-hidden="true" style="color: #28a745; font-size: 0.9rem;"></i>
+                      <span style="font-size: 0.8rem; color: #555;">Parking</span>
+                    </div>
+                    {% endif %}
+
+                    {% if listing.kitchen %}
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                      <i class="fa fa-utensils" aria-hidden="true" style="color: #ff6b6b; font-size: 0.9rem;"></i>
+                      <span style="font-size: 0.8rem; color: #555;">Kitchen</span>
+                    </div>
+                    {% endif %}
+
+                    {% if listing.pool %}
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                      <i class="fa fa-swimming-pool" aria-hidden="true" style="color: #17a2b8; font-size: 0.9rem;"></i>
+                      <span style="font-size: 0.8rem; color: #555;">Pool</span>
+                    </div>
+                    {% endif %}
+
+                    {% if listing.ac %}
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                      <i class="fa fa-snowflake" aria-hidden="true" style="color: #6c757d; font-size: 0.9rem;"></i>
+                      <span style="font-size: 0.8rem; color: #555;">AC</span>
+                    </div>
+                    {% endif %}
+
+                    {% if listing.tv %}
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                      <i class="fa fa-tv" aria-hidden="true" style="color: #6610f2; font-size: 0.9rem;"></i>
+                      <span style="font-size: 0.8rem; color: #555;">TV</span>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+                {% endif %}
+
+                <!-- Action Buttons -->
+                <div class="listing-actions" style="display: flex; gap: 10px; margin-top: 15px;">
+
+                  <a href="{% url 'booking_form' listing.id %}"
+       style="background-color: #ff5a5f; color: white; padding: 12px 24px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; flex: 1; justify-content: center;"
+       onmouseover="this.style.backgroundColor='#e04a50'; this.style.transform='translateY(-2px)';"
+       onmouseout="this.style.backgroundColor='#ff5a5f'; this.style.transform='translateY(0)';"
+       title="Book this property online">
+        <i class="fa fa-calendar" aria-hidden="true"></i> Book Now
+    </a>
+
+                  <a href="{{ listing.admin_whatsapp_link }}" target="_blank"
+                     style="background-color: #ff5a5f; color: white; padding: 10px 20px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; flex: 1; justify-content: center;"
+                     onmouseover="this.style.backgroundColor='#128C7E'; this.style.transform='translateY(-2px)';"
+                     onmouseout="this.style.backgroundColor='#25D366'; this.style.transform='translateY(0)';"
+                     title="Contact admin to book on behalf of client">
+                    <i class="fa fa-whatsapp" aria-hidden="true"></i> Book via whatsapp
+                  </a>
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Dots Navigation (only for first 3 listings and only if more than 1 slide) -->
+    {% if listings|length > 1 and listings|length <= 3 %}
+      <div class="slider-dots" id="sliderDots">
+        {% for listing in listings %}
+          {% if forloop.counter <= 3 %}  <!-- Show dots only for first 3 listings -->
+            <div class="slider-dot {% if forloop.first %}active{% endif %}" onclick="goToSlide({{ forloop.counter0 }})"></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+<!-- All Listings Grid -->
+<div class="row" id="gallery-container">
+  {% if listings %}
+    <!-- Display listings in grid, starting from the 4th listing -->
+    {% for listing in listings %}
+      {% if forloop.counter > 3 %}  <!-- Skip first 3 since they're in the slider -->
+        <div class="col-md-4 col-sm-6 mb-4" data-location="{{ listing.location }}" style="margin-bottom: 15px !important;">
+          <div class="listing-card">
+
+            <!-- Image Gallery for Grid Items -->
+            <div class="image-gallery" id="grid-gallery-{{ listing.id }}">
+              {% if listing.main_image %}
+                {% with listing.all_images as images %}
+                  {% if images|length > 0 %}
+                    <div class="image-counter">
+                      <i class="fa fa-camera" aria-hidden="true"></i> {{ images|length }}
+                    </div>
+
+                    <!-- Main Image Display -->
+                    <img src="{{ images.0.url }}"
+                         alt="{{ listing.title }} - Image 1"
+                         class="listing-img clickable-image"
+                         loading="lazy"
+                         style="width: 100%; height: 280px; object-fit: cover; object-position: center;"
+                         data-gallery-id="grid-{{ listing.id }}"
+                         data-image-index="0"
+                         data-listing-id="{{ listing.id }}"
+                         data-listing-title="{{ listing.title }}"
+                         data-listing-location="{{ listing.get_location_display }}"
+                         data-listing-phone="{{ listing.host_phone }}"
+                         data-listing-price="{{ listing.price_per_night }}"
+                         data-listing-type="{{ listing.property_type }}"
+                         data-listing-image="{{ images.0.url }}"
+                         data-listing-guests="{{ listing.guests }}"
+                         data-listing-bedrooms="{{ listing.bedrooms }}"
+                         data-listing-bathrooms="{{ listing.bathrooms }}"
+                         data-all-images='{% for img in images %}{{ img.url }}{% if not forloop.last %},{% endif %}{% endfor %}'>
+
+                    <!-- Navigation Arrows for Gallery -->
+                    {% if images|length > 1 %}
+                      <button class="gallery-nav prev" onclick="changeImage('grid-{{ listing.id }}', -1, event)">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                      </button>
+                      <button class="gallery-nav next" onclick="changeImage('grid-{{ listing.id }}', 1, event)">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                      </button>
+
+                      <!-- Thumbnails -->
+                      <div class="gallery-thumbnails">
+                        {% for img in images %}
+                          <div class="gallery-thumbnail {% if forloop.first %}active{% endif %}"
+                               onclick="goToImage('grid-{{ listing.id }}', {{ forloop.counter0 }}, event)">
+                            <img src="{{ img.url }}" alt="Thumbnail {{ forloop.counter }}">
+                          </div>
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+                  {% endif %}
+                {% endwith %}
+              {% else %}
+                <div style="width: 100%; height: 280px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);"
+                     class="clickable-image"
+                     data-listing-id="{{ listing.id }}"
+                     data-listing-title="{{ listing.title }}"
+                     data-listing-location="{{ listing.get_location_display }}"
+                     data-listing-phone="{{ listing.host_phone }}"
+                     data-listing-price="{{ listing.price_per_night }}"
+                     data-listing-type="{{ listing.property_type }}"
+                     data-listing-guests="{{ listing.guests }}"
+                     data-listing-bedrooms="{{ listing.bedrooms }}"
+                     data-listing-bathrooms="{{ listing.bathrooms }}">
+                  <i class="fa fa-home" aria-hidden="true" style="font-size: 4rem; color: white;"></i>
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="property-type-badge {{ listing.property_type }}" style="top: 15px; right: 15px; padding: 5px 12px; font-size: 0.75rem;">
+              {{ listing.get_property_type_display }}
+            </div>
+            <div class="listing-info" style="padding: 20px;">
+              <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; color: #222;">
+                {{ listing.title }}
+                {% if listing.is_approved %}
+                <span class="verified-badge" style="color: #34a853; font-size: 1rem;" title="Verified property">
+                  <i class="fa fa-check-circle" aria-hidden="true"></i>
+                </span>
+                {% endif %}
+              </h3>
+
+              <!-- 5-Star Rating for Grid -->
+              <div class="star-rating" style="margin: 5px 0 10px 0;">
+                <span class="stars" style="color: #ffc107; font-size: 0.9rem;">
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                </span>
+              </div>
+
+              <p style="font-size: 1.2rem; font-weight: 700; color: #28a745; margin-bottom: 10px;">
+                KSh {{ listing.price_per_night }} <small style="font-size: 0.9rem; color: #666;">/ night</small>
+              </p>
+
+              <p class="location" style="font-size: 0.95rem; color: #666; margin-bottom: 10px;">
+                <i class="fa fa-map-marker" style="color: #007bff;" aria-hidden="true"></i>
+                {{ listing.get_location_display }} • {{ listing.specific_location }}
+              </p>
+
+              <!-- Quick Info -->
+              <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                {% if listing.guests %}
+                <span style="background: #f8f9fa; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; color: #555;">
+                  <i class="fa fa-users" aria-hidden="true" style="color: #007bff; margin-right: 5px;"></i> {{ listing.guests }} guests
+                </span>
+                {% endif %}
+
+
+
+                {% if listing.bedrooms %}
+                <span style="background: #f8f9fa; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; color: #555;">
+                  <i class="fa fa-bed" aria-hidden="true" style="color: #007bff; margin-right: 5px;"></i> {{ listing.bedrooms }} beds
+                </span>
+                {% endif %}
+                {% if listing.bathrooms %}
+                <span style="background: #f8f9fa; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; color: #555;">
+                  <i class="fa fa-bath" aria-hidden="true" style="color: #007bff; margin-right: 5px;"></i> {{ listing.bathrooms }} baths
+                </span>
+                {% endif %}
+              </div>
+
+              <!-- AMENITIES SECTION (NEW) -->
+              {% if listing.wifi or listing.parking or listing.kitchen or listing.pool or listing.ac or listing.tv %}
+              <div style="margin: 15px 0; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee;">
+                <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: #555;">Amenities</h4>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                  {% if listing.wifi %}
+                  <div style="display: flex; align-items: center; gap: 5px;">
+                    <i class="fa fa-wifi" aria-hidden="true" style="color: #007bff; font-size: 0.9rem;"></i>
+                    <span style="font-size: 0.8rem; color: #555;">WiFi</span>
+                  </div>
+                  {% endif %}
+
+                  {% if listing.parking %}
+                  <div style="display: flex; align-items: center; gap: 5px;">
+                    <i class="fa fa-car" aria-hidden="true" style="color: #28a745; font-size: 0.9rem;"></i>
+                    <span style="font-size: 0.8rem; color: #555;">Parking</span>
+                  </div>
+                  {% endif %}
+
+                  {% if listing.kitchen %}
+                  <div style="display: flex; align-items: center; gap: 5px;">
+                    <i class="fa fa-utensils" aria-hidden="true" style="color: #ff6b6b; font-size: 0.9rem;"></i>
+                    <span style="font-size: 0.8rem; color: #555;">Kitchen</span>
+                  </div>
+                  {% endif %}
+
+                  {% if listing.pool %}
+                  <div style="display: flex; align-items: center; gap: 5px;">
+                    <i class="fa fa-swimming-pool" aria-hidden="true" style="color: #17a2b8; font-size: 0.9rem;"></i>
+                    <span style="font-size: 0.8rem; color: #555;">Pool</span>
+                  </div>
+                  {% endif %}
+
+                  {% if listing.ac %}
+                  <div style="display: flex; align-items: center; gap: 5px;">
+                    <i class="fa fa-snowflake" aria-hidden="true" style="color: #6c757d; font-size: 0.9rem;"></i>
+                    <span style="font-size: 0.8rem; color: #555;">AC</span>
+                  </div>
+                  {% endif %}
+
+                  {% if listing.tv %}
+                  <div style="display: flex; align-items: center; gap: 5px;">
+                    <i class="fa fa-tv" aria-hidden="true" style="color: #6610f2; font-size: 0.9rem;"></i>
+                    <span style="font-size: 0.8rem; color: #555;">TV</span>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+              {% endif %}
+
+              <div style="display: flex; gap: 10px; margin-top: 15px;">
+
+                <a href="{% url 'booking_form' listing.id %}"
+       style="background-color: #ff5a5f; color: white; padding: 12px 24px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; flex: 1; justify-content: center;"
+       onmouseover="this.style.backgroundColor='#e04a50'; this.style.transform='translateY(-2px)';"
+       onmouseout="this.style.backgroundColor='#ff5a5f'; this.style.transform='translateY(0)';"
+       title="Book this property online">
+        <i class="fa fa-calendar" aria-hidden="true"></i> Book Now
+    </a>
+
+                <a href="{{ listing.admin_whatsapp_link }}" target="_blank"
+                   style="background-color: #ff5a5f; color: white; padding: 10px 20px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; flex: 1; justify-content: center;"
+                   onmouseover="this.style.backgroundColor='#128C7E'; this.style.transform='translateY(-2px)';"
+                   onmouseout="this.style.backgroundColor='#25D366'; this.style.transform='translateY(0)';"
+                   title="Contact admin to book on behalf of client">
+                  <i class="fa fa-whatsapp" aria-hidden="true"></i> Book via whatsapp
+                </a>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    <!-- NO LISTINGS FOUND -->
+    <div class="col-12">
+      <div class="no-listings" style="text-align: center; padding: 40px 20px;">
+        <i class="fa fa-home" aria-hidden="true" style="font-size: 48px; margin-bottom: 15px; color: #FF0000;"></i>
+        <h2 style="font-size: 1.3rem; font-weight: 600; color: #000000; margin-bottom: 10px;">No BnB Found</h2>
+        <p style="color: #000000; margin-bottom: 20px;">
+          {% if selected_location != 'all' %}
+            No BnB  in {{ location_name }} at the moment.
+          {% else %}
+            No BnB available at the moment.
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  {% endif %}
+</div>
+    </div>
+  </div>
+</section>
+
+<!-- Image Gallery CSS -->
+<style>
+  .image-gallery {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    overflow: hidden;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .listing-slide .image-gallery {
+    height: 320px;
+  }
+
+  .gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    border: none;
+    font-size: 1.2rem;
+    color: #333;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+  }
+
+  .gallery-nav:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .gallery-nav.prev {
+    left: 10px;
+  }
+
+  .gallery-nav.next {
+    right: 10px;
+  }
+
+  .gallery-thumbnails {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+    pointer-events: auto;
+  }
+
+  .gallery-thumbnail {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    opacity: 0.8;
+    pointer-events: auto;
+  }
+
+  .gallery-thumbnail:hover,
+  .gallery-thumbnail.active {
+    opacity: 1;
+    border-color: white;
+    transform: scale(1.1);
+  }
+
+  .gallery-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .image-counter {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    z-index: 10;
+    pointer-events: none;
+  }
+</style>
+
+<!-- Fixed JavaScript for Desktop Sliding -->
+<script>
+  let currentSlide = 0;
+  let slideInterval;
+  const slides = document.querySelectorAll('.listing-slide');
+  const totalSlides = slides.length;
+  const isMobile = window.innerWidth < 768;
+
+  // Only initialize slider functionality if we have slides
+  if (totalSlides > 0) {
+    function updateSlider() {
+      const slidesContainer = document.getElementById('slidesContainer');
+      const dots = document.querySelectorAll('.slider-dot');
+
+      // If only one slide, just make sure it's properly displayed
+      if (totalSlides === 1) {
+        if (slides[0]) {
+          slides[0].classList.add('active-slide');
+          slides[0].style.opacity = '1';
+          slides[0].style.transform = 'scale(1)';
+        }
+        if (slidesContainer) {
+          slidesContainer.style.transform = 'translateX(0)';
+        }
+        return;
+      }
+
+      if (isMobile) {
+        // Mobile: Traditional sliding
+        slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+      } else {
+        // Desktop: Use active class for animation
+        slides.forEach((slide, index) => {
+          slide.classList.toggle('active-slide', index === currentSlide);
+
+          // Add/remove opacity and scale for desktop
+          if (!isMobile) {
+            if (index === currentSlide) {
+              slide.style.opacity = '1';
+              slide.style.transform = 'scale(1)';
+            } else {
+              slide.style.opacity = '0.7';
+              slide.style.transform = 'scale(0.95)';
+            }
+          }
+        });
+
+        // Center the active slide on desktop
+        if (!isMobile && slidesContainer) {
+          const activeSlide = slides[currentSlide];
+          if (activeSlide) {
+            const slideWidth = activeSlide.offsetWidth;
+            const containerWidth = slidesContainer.parentElement.offsetWidth;
+
+            if (totalSlides <= 3) {
+              // For 3 or fewer slides, don't scroll, just show them all
+              slidesContainer.style.transform = 'translateX(0)';
+            } else {
+              // For more than 3 slides, calculate proper centering
+              const scrollPosition = (slideWidth * currentSlide) - (containerWidth / 2) + (slideWidth / 2);
+              const maxScroll = slideWidth * totalSlides - containerWidth;
+              const finalPosition = Math.max(0, Math.min(scrollPosition, maxScroll));
+              slidesContainer.style.transform = `translateX(-${finalPosition}px)`;
+            }
+          }
+        }
+      }
+
+      // Update dots if they exist
+      dots.forEach((dot, index) => {
+        if (dot) {
+          dot.classList.toggle('active', index === currentSlide);
+        }
+      });
+    }
+
+    function nextSlide() {
+      if (totalSlides <= 1) return; // Don't navigate if only one slide
+
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+      } else {
+        currentSlide = 0;
+      }
+      updateSlider();
+      resetAutoSlide();
+    }
+
+    function prevSlide() {
+      if (totalSlides <= 1) return; // Don't navigate if only one slide
+
+      if (currentSlide > 0) {
+        currentSlide--;
+      } else {
+        currentSlide = totalSlides - 1;
+      }
+      updateSlider();
+      resetAutoSlide();
+    }
+
+    function goToSlide(index) {
+      if (totalSlides <= 1) return; // Don't navigate if only one slide
+
+      if (index >= 0 && index < totalSlides) {
+        currentSlide = index;
+        updateSlider();
+        resetAutoSlide();
+      }
+    }
+
+    function startAutoSlide() {
+      if (totalSlides > 1) {
+        slideInterval = setInterval(nextSlide, 5000);
+      }
+    }
+
+    function resetAutoSlide() {
+      clearInterval(slideInterval);
+      startAutoSlide();
+    }
+
+    // Initialize
+    updateSlider();
+    if (totalSlides > 1) {
+      startAutoSlide();
+    }
+
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        // Recalculate on resize
+        const newIsMobile = window.innerWidth < 768;
+        if (newIsMobile !== isMobile) {
+          // Reset to first slide on breakpoint change
+          currentSlide = 0;
+          updateSlider();
+        }
+      }, 250);
+    });
+
+    // Pause auto-slide on hover
+    const slider = document.getElementById('listingsSlider');
+    if (slider) {
+      slider.addEventListener('mouseenter', () => {
+        clearInterval(slideInterval);
+      });
+
+      slider.addEventListener('mouseleave', () => {
+        if (totalSlides > 1) {
+          startAutoSlide();
+        }
+      });
+
+      // Touch support for mobile
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      slider.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        clearInterval(slideInterval);
+      });
+
+      slider.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        if (totalSlides > 1) {
+          handleSwipe();
+          startAutoSlide();
+        }
+      });
+
+      function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+          if (diff > 0) {
+            nextSlide();
+          } else {
+            prevSlide();
+          }
+        }
+      }
+    }
+  }
+
+  // Image Gallery Functions (remain the same)
+  function changeImage(galleryId, direction, event) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+
+    let gallery;
+    if (galleryId.startsWith('grid-')) {
+      gallery = document.getElementById(`grid-gallery-${galleryId.replace('grid-', '')}`);
+    } else if (galleryId.startsWith('featured-')) {
+      gallery = document.getElementById(`featured-gallery-${galleryId.replace('featured-', '')}`);
+    } else {
+      gallery = document.getElementById(`featured-gallery-${galleryId}`);
+    }
+
+    if (!gallery) return;
+
+    const mainImage = gallery.querySelector('.listing-img');
+    const thumbnails = gallery.querySelectorAll('.gallery-thumbnail');
+    const images = gallery.querySelectorAll('.gallery-thumbnail img');
+
+    if (!mainImage || images.length === 0) return;
+
+    let currentIndex = parseInt(mainImage.getAttribute('data-image-index')) || 0;
+    let newIndex = (currentIndex + direction + images.length) % images.length;
+
+    // Update main image
+    mainImage.src = images[newIndex].src;
+    mainImage.setAttribute('data-image-index', newIndex);
+    mainImage.setAttribute('data-listing-image', images[newIndex].src);
+
+    // Update thumbnails
+    thumbnails.forEach((thumb, index) => {
+      thumb.classList.toggle('active', index === newIndex);
+    });
+  }
+
+  function goToImage(galleryId, index, event) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+
+    let gallery;
+    if (galleryId.startsWith('grid-')) {
+      gallery = document.getElementById(`grid-gallery-${galleryId.replace('grid-', '')}`);
+    } else if (galleryId.startsWith('featured-')) {
+      gallery = document.getElementById(`featured-gallery-${galleryId.replace('featured-', '')}`);
+    } else {
+      gallery = document.getElementById(`featured-gallery-${galleryId}`);
+    }
+
+    if (!gallery) return;
+
+    const mainImage = gallery.querySelector('.listing-img');
+    const thumbnails = gallery.querySelectorAll('.gallery-thumbnail');
+    const images = gallery.querySelectorAll('.gallery-thumbnail img');
+
+    if (!mainImage || images.length === 0 || index >= images.length) return;
+
+    // Update main image
+    mainImage.src = images[index].src;
+    mainImage.setAttribute('data-image-index', index);
+    mainImage.setAttribute('data-listing-image', images[index].src);
+
+    // Update thumbnails
+    thumbnails.forEach((thumb, idx) => {
+      thumb.classList.toggle('active', idx === index);
+    });
+  }
+</script>
+<!-- Location-Specific SEO Content Section for BnB -->
+{% if selected_location != 'all' %}
+<section class="seo-location-section">
+  <div class="container-fluid">
+    <div class="seo-content-wrapper">
+
+      <!-- Content Grid -->
+      <div class="seo-content-grid">
+
+        <!-- Nearby Areas Section - MOVED TO TOP -->
+        <div class="nearby-areas-card">
+          <h3 class="nearby-title">
+            Find BnB Vacation Rentals in Nearby Areas
+          </h3>
+          <div class="nearby-links-container">
+            {% for location in all_locations %}
+              {% if location.code != selected_location %}
+                {% if forloop.counter0 < 15 %}
+                <a href="{% url 'listings_by_location' location.slug %}"
+                   class="nearby-link">
+                  {{ location.name }}
+                </a>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            {% if all_locations|length > 16 %}
+              <a href="{% url 'home' %}"
+                 class="nearby-link view-more">
+                View More Areas
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Main Content Card -->
+        <div class="main-content-card">
+          <div class="content-grid">
+            <p class="content-paragraph">
+              Discover the finest selection of <strong> BnB| staycations in kenya {{ location_name }}</strong>.
+              Our curated collection of properties in {{ location_name }} offers premium accommodation
+              with complete comfort and professional hosting. Whether you're looking for a cozy studio,
+              spacious apartment, or luxurious villa for your stay, our <strong>verified BnBs in {{ location_name }}</strong>
+              provide exceptional service tailored to your travel needs.
+            </p>
+
+            <p class="content-paragraph">
+              With {{ total_listings }} active listings in {{ location_name }}, you'll find the perfect
+              <strong>BnB| staycations in  {{ location_name }}</strong> to suit your preferences and budget.
+              All our properties are verified by hosts and maintain the highest standards of cleanliness and comfort,
+              ensuring a safe and enjoyable experience for travelers seeking quality accommodation in {{ location_name }}.
+            </p>
+
+            <p class="content-paragraph">
+              Our <strong>featured BnBs in {{ location_name }}</strong> are available for various occasions
+              including business trips, family vacations, weekend getaways, and extended stays.
+              Each property undergoes thorough verification to ensure quality and reliability for
+              travelers seeking premium accommodation in the {{ location_name }} area.
+            </p>
+          </div>
+        </div>
+
+        <!-- Benefits Section -->
+        <div class="benefits-section">
+          <h3 class="benefits-title">
+            Why Choose BnB.co.ke Vacation Rentals in {{ location_name }}?
+          </h3>
+
+          <div class="benefits-grid">
+            <!-- Benefit 1 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-content">
+                <strong class="benefit-heading">Verified Properties</strong>
+                <p class="benefit-description">Complete verification and quality checks in {{ location_name }}</p>
+              </div>
+            </div>
+
+            <!-- Benefit 2 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-content">
+                <strong class="benefit-heading">Professional Hosts</strong>
+                <p class="benefit-description">Experienced hosts throughout {{ location_name }} area</p>
+              </div>
+            </div>
+
+            <!-- Benefit 3 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-content">
+                <strong class="benefit-heading">Direct Contact</strong>
+                <p class="benefit-description">Instant communication with hosts for quick booking</p>
+              </div>
+            </div>
+
+            <!-- Benefit 4 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-content">
+                <strong class="benefit-heading">Transparent Pricing</strong>
+                <p class="benefit-description">Clear nightly rates with no hidden fees in {{ location_name }}</p>
+              </div>
+            </div>
+
+            <!-- Benefit 5 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-content">
+                <strong class="benefit-heading">24/7 Support</strong>
+                <p class="benefit-description">Round-the-clock assistance for all bookings</p>
+              </div>
+            </div>
+
+            <!-- Benefit 6 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-content">
+                <strong class="benefit-heading">Premium Selection</strong>
+                <p class="benefit-description">Carefully curated properties for discerning travelers</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Location Navigation -->
+    {% if selected_location != 'all' %}
+      <div class="location-navigation-container">
+        <a href="{% url 'home' %}" class="location-navigation-btn">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to All Locations
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% else %}
+<!-- Content for "all" location (Home page) -->
+<section class="seo-location-section">
+  <div class="container-fluid">
+    <div class="seo-content-wrapper">
+      <div class="seo-content-grid">
+
+        <!-- Main Content Card for All Locations -->
+        <div class="main-content-card">
+          <div class="content-grid">
+
+            <p class="content-paragraph">
+              Explore our extensive collection of <strong> BnB | staycations in kenya</strong>.
+              Whether you're planning a beach getaway in Diani, a business trip in Nairobi, a safari adventure in Maasai Mara,
+              or a mountain retreat in Nanyuki, we offer premium accommodation options across the country.
+            </p>
+
+            <p class="content-paragraph">
+              With thousands of active listings nationwide, find the perfect <strong>vacation rental in Kenya</strong>
+              to suit every taste and budget. All properties undergo thorough verification to ensure the highest standards
+              of cleanliness, comfort, and security for travelers seeking quality accommodation.
+            </p>
+
+            <p class="content-paragraph">
+              Our <strong>featured BnBs across Kenya</strong> cater to various travel needs including family vacations,
+              romantic getaways, corporate stays, and group retreats. Each property is carefully selected to provide
+              exceptional experiences with professional hosting and modern amenities.
+            </p>
+          </div>
+        </div>
+
+        <!-- Top Destinations Section -->
+        <div class="nearby-areas-card">
+          <h3 class="nearby-title">
+            Popular BnB Destinations in Kenya
+          </h3>
+          <div class="nearby-links-container">
+            {% for location in all_locations %}
+              {% if forloop.counter0 < 15 %}
+              <a href="{% url 'listings_by_location' location.slug %}"
+                 class="nearby-link">
+                {{ location.name }}
+              </a>
+              {% endif %}
+            {% endfor %}
+
+          </div>
+        </div>
+
+        <!-- Benefits Section for All Locations -->
+        <div class="benefits-section">
+          <h3 class="benefits-title">
+            Why Choose BnB.co.ke for Your Kenya Vacation?
+          </h3>
+
+          <div class="benefits-grid">
+            <!-- Benefit 1 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-content">
+                <strong class="benefit-heading">Nationwide Coverage</strong>
+                <p class="benefit-description">Verified properties across all major Kenyan destinations</p>
+              </div>
+            </div>
+
+            <!-- Benefit 2 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-content">
+                <strong class="benefit-heading">Best Price Guarantee</strong>
+                <p class="benefit-description">Competitive rates with no booking fees nationwide</p>
+              </div>
+            </div>
+
+            <!-- Benefit 3 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-content">
+                <strong class="benefit-heading">Verified Hosts</strong>
+                <p class="benefit-description">Professional hosts with verified credentials and reviews</p>
+              </div>
+            </div>
+
+            <!-- Benefit 4 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-content">
+                <strong class="benefit-heading">Flexible Booking</strong>
+                <p class="benefit-description">Easy booking with flexible cancellation policies</p>
+              </div>
+            </div>
+
+            <!-- Benefit 5 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-content">
+                <strong class="benefit-heading">24/7 Customer Support</strong>
+                <p class="benefit-description">Round-the-clock assistance for all your travel needs</p>
+              </div>
+            </div>
+
+            <!-- Benefit 6 -->
+            <div class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-content">
+                <strong class="benefit-heading">Secure Payments</strong>
+                <p class="benefit-description">Safe and secure payment processing for all bookings</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</section>
+
+{% endif %}
+<style>
+/* Reset and Base Styles for BnB */
+.seo-location-section * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.seo-location-section {
+  padding: clamp(25px, 5vw, 40px) 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #fff9f3 100%);
+  margin: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Container Styles */
+.container-fluid {
+  padding: 0 clamp(10px, 3vw, 15px);
+  width: 100%;
+  max-width: 100%;
+}
+
+.seo-content-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Grid Layout */
+.seo-content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(20px, 4vw, 30px);
+  padding: 0 clamp(10px, 3vw, 20px);
+  width: 100%;
+}
+
+/* Nearby Areas Card */
+.nearby-areas-card {
+  background: white;
+  padding: clamp(15px, 3vw, 20px);
+  border-radius: clamp(8px, 1.5vw, 10px);
+  border: 1px solid #e9ecef;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  width: 100%;
+  min-height: 0;
+}
+
+.nearby-title {
+  color: #333;
+  font-size: clamp(0.95rem, 2vw, 1.2rem);
+  margin-bottom: clamp(10px, 2vw, 15px);
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.nearby-links-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(6px, 1vw, 10px);
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.nearby-link {
+  background: #f8f9fa;
+  color: #333;
+  padding: clamp(6px, 1.2vw, 8px) clamp(10px, 2vw, 15px);
+  text-decoration: none;
+  border-radius: 20px;
+  font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+  border: 1px solid #dee2e6;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  display: inline-block;
+  text-align: center;
+  min-width: fit-content;
+  flex-shrink: 0;
+}
+
+.nearby-link:hover,
+.nearby-link:focus {
+  background: #FF6B35;
+  color: white;
+  border-color: #FF6B35;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2);
+}
+
+.nearby-link.view-more {
+  background: #FF6B35;
+  color: white;
+  border-color: #FF6B35;
+}
+
+.nearby-link.view-more:hover,
+.nearby-link.view-more:focus {
+  background: #FF8C42;
+  border-color: #FF8C42;
+  transform: translateY(-1px);
+}
+
+/* Main Content Card */
+.main-content-card {
+  background: white;
+  padding: clamp(20px, 4vw, 40px);
+  border-radius: clamp(15px, 3vw, 20px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 1px solid #e9ecef;
+  width: 100%;
+  min-height: 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(15px, 3vw, 25px);
+  width: 100%;
+}
+
+.content-paragraph {
+  color: #555;
+  line-height: 1.7;
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  margin: 0;
+  text-align: justify;
+  hyphens: auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.content-paragraph strong {
+  color: #FF6B35;
+}
+
+/* Benefits Section */
+.benefits-section {
+  background: linear-gradient(135deg, #fff5f0 0%, #ffe6d6 100%);
+  padding: clamp(20px, 4vw, 40px);
+  border-radius: clamp(15px, 3vw, 20px);
+  border-left: clamp(3px, 1vw, 5px) solid #FF6B35;
+  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.1);
+  width: 100%;
+  min-height: 0;
+}
+
+.benefits-title {
+  color: #333;
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  margin-bottom: clamp(15px, 3vw, 25px);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: clamp(12px, 2vw, 20px);
+  width: 100%;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(10px, 2vw, 15px);
+  padding: clamp(12px, 2vw, 15px);
+  background: rgba(255,255,255,0.9);
+  border-radius: clamp(8px, 1.5vw, 12px);
+  width: 100%;
+  min-height: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.benefit-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.benefit-icon {
+  background: #FF6B35;
+  color: white;
+  width: clamp(24px, 5vw, 30px);
+  height: clamp(24px, 5vw, 30px);
+  min-width: clamp(24px, 5vw, 30px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-weight: bold;
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
+}
+
+.benefit-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.benefit-heading {
+  color: #333;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  display: block;
+  margin-bottom: 4px;
+  line-height: 1.3;
+  word-wrap: break-word;
+}
+
+.benefit-description {
+  color: #666;
+  margin: 0;
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+/* Location Navigation */
+.location-navigation-container {
+  margin-top: clamp(20px, 4vw, 30px);
+  padding: 0 clamp(10px, 3vw, 20px);
+  text-align: center;
+  width: 100%;
+}
+
+.location-navigation-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  color: #FF6B35;
+  padding: clamp(10px, 2vw, 15px) clamp(20px, 4vw, 30px);
+  text-decoration: none;
+  border-radius: 30px;
+  border: 2px solid #FF6B35;
+  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.location-navigation-btn:hover,
+.location-navigation-btn:focus {
+  background: #FF6B35;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
+}
+
+/* Stats Banner */
+.stats-banner {
+  background: linear-gradient(135deg, #FF6B35, #FF8C42);
+  padding: clamp(15px, 3vw, 25px);
+  border-radius: clamp(10px, 2vw, 15px);
+  color: white;
+  text-align: center;
+  margin-top: clamp(20px, 4vw, 30px);
+}
+
+.stats-title {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  margin-bottom: clamp(10px, 2vw, 15px);
+  font-weight: 600;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: clamp(15px, 3vw, 25px);
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+  opacity: 0.9;
+}
+
+/* Media Queries for Fine-tuning */
+@media (max-width: 480px) {
+  .seo-content-grid {
+    gap: 15px;
+    padding: 0 10px;
+  }
+
+  .nearby-links-container {
+    gap: 5px;
+  }
+
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .content-paragraph {
+    text-align: left;
+    hyphens: none;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .benefit-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .benefit-icon {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .seo-content-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* Prevent layout shift */
+.nearby-link,
+.benefit-item,
+.main-content-card,
+.nearby-areas-card,
+.benefits-section {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+</style>
+
+<!-- Enhanced Mobile-Responsive Image Modal -->
+<div id="imageModal" class="modal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95);">
+  <div class="modal-content" style="position: relative; margin: auto; padding: 0; width: 100%; height: 100%; display: flex; flex-direction: column; background: #000;">
+    <!-- Close Button -->
+    <span class="close" style="position: fixed; top: 15px; right: 15px; color: white; font-size: 32px; font-weight: bold; cursor: pointer; z-index: 10000; background: rgba(0,0,0,0.7); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; line-height: 1; touch-action: manipulation;">
+      &times;
+    </span>
+
+    <!-- Modal Navigation -->
+    <button class="modal-nav prev" onclick="modalPrevImage()" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); background: rgba(255,255,255,0.25); border: none; width: 44px; height: 44px; border-radius: 50%; color: white; font-size: 20px; cursor: pointer; z-index: 10000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); touch-action: manipulation; min-width: 44px; min-height: 44px;">
+      <i class="fa fa-chevron-left" aria-hidden="true"></i>
+    </button>
+
+    <button class="modal-nav next" onclick="modalNextImage()" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); background: rgba(255,255,255,0.25); border: none; width: 44px; height: 44px; border-radius: 50%; color: white; font-size: 20px; cursor: pointer; z-index: 10000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); touch-action: manipulation; min-width: 44px; min-height: 44px;">
+      <i class="fa fa-chevron-right" aria-hidden="true"></i>
+    </button>
+
+    <!-- Image Counter -->
+    <div id="modalImageCounter" style="position: fixed; top: 15px; left: 15px; background: rgba(0,0,0,0.7); color: white; padding: 6px 12px; border-radius: 20px; font-size: 14px; z-index: 10000; font-weight: 500;">
+      <span id="currentImage">1</span> / <span id="totalImages">1</span>
+    </div>
+
+    <div class="modal-body" style="display: flex; flex-direction: column; height: 100%;">
+      <!-- Image Section - Adjusts based on screen size -->
+      <div class="modal-image-container" style="flex: 1; position: relative; overflow: hidden; background: #000; min-height: 40vh;">
+        <img id="modalImage" src="" alt="" style="width: 100%; height: 100%; object-fit: contain; object-position: center; -webkit-touch-callout: none; user-select: none;">
+      </div>
+
+      <!-- Listing Info Section - Collapsible on mobile -->
+      <div class="modal-listing-info" style="flex-shrink: 0; max-height: 45vh; padding: 15px; background: white; overflow-y: auto; border-top-left-radius: 20px; border-top-right-radius: 20px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); position: relative;">
+        <!-- Collapse handle for mobile -->
+        <div class="collapse-handle" style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 40px; height: 4px; background: #ddd; border-radius: 2px; cursor: grab; touch-action: manipulation;"></div>
+
+        <div style="margin-top: 10px;">
+          <h3 id="modalListingTitle" style="margin: 0 0 10px 0; color: #333; font-size: 1.2rem; font-weight: bold; line-height: 1.3;"></h3>
+
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
+            <p id="modalListingPrice" class="price" style="color: #28a745; font-weight: bold; margin: 0; font-size: 1.2rem; order: 1;">
+              KSh <span id="priceText"></span> <small style="font-size: 0.85rem; color: #666;">/ night</small>
+            </p>
+
+            <p id="modalListingLocation" class="location" style="color: #666; margin: 0; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; order: 2;">
+              <i class="fa fa-map-marker" aria-hidden="true" style="color: #007bff; flex-shrink: 0;"></i>
+              <span id="locationText" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+            </p>
+          </div>
+
+          <div class="listing-details" style="margin-bottom: 15px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+            <div id="modalListingGuests" class="detail-item" style="display: flex; align-items: center; gap: 6px; color: #333; padding: 6px 10px; background: #f8f9fa; border-radius: 8px; font-size: 0.9rem; min-height: 36px;">
+              <i class="fa fa-users" aria-hidden="true" style="color: #007bff; font-size: 0.9rem;"></i>
+              <span id="guestsText"></span> guests
+            </div>
+            <div id="modalListingBedrooms" class="detail-item" style="display: flex; align-items: center; gap: 6px; color: #333; padding: 6px 10px; background: #f8f9fa; border-radius: 8px; font-size: 0.9rem; min-height: 36px;">
+              <i class="fa fa-bed" aria-hidden="true" style="color: #007bff; font-size: 0.9rem;"></i>
+              <span id="bedroomsText"></span> bedrooms
+            </div>
+            <div id="modalListingBathrooms" class="detail-item" style="display: flex; align-items: center; gap: 6px; color: #333; padding: 6px 10px; background: #f8f9fa; border-radius: 8px; font-size: 0.9rem; min-height: 36px;">
+              <i class="fa fa-bath" aria-hidden="true" style="color: #007bff; font-size: 0.9rem;"></i>
+              <span id="bathroomsText"></span> bathrooms
+            </div>
+          </div>
+
+          <div class="bio-section" style="margin-bottom: 15px;">
+            <h4 style="margin: 0 0 6px 0; color: #333; font-size: 0.95rem; font-weight: 600;">Description</h4>
+            <div id="modalListingDescription" class="bio" style="color: #555; line-height: 1.4; font-size: 0.9rem; max-height: 80px; overflow-y: auto; padding: 10px; background: #f8f9fa; border-radius: 8px; scrollbar-width: thin;">
+              <p style="margin: 0;"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Responsive breakpoints */
+@media (min-width: 768px) {
+  .modal .close {
+    top: 25px !important;
+    right: 35px !important;
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 40px !important;
+  }
+
+  .modal-nav.prev {
+    left: 25px !important;
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 24px !important;
+  }
+
+  .modal-nav.next {
+    right: 25px !important;
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 24px !important;
+  }
+
+  #modalImageCounter {
+    top: 25px !important;
+    left: 25px !important;
+    padding: 8px 16px !important;
+    font-size: 16px !important;
+  }
+
+  .modal-listing-info {
+    padding: 25px !important;
+    max-height: 35vh !important;
+  }
+
+  #modalListingTitle {
+    font-size: 1.4rem !important;
+  }
+
+  .modal-body {
+    flex-direction: row !important;
+  }
+
+  .modal-image-container {
+    flex: 0 0 60% !important;
+    min-height: auto !important;
+  }
+
+  .modal-listing-info {
+    flex: 0 0 40% !important;
+    max-height: 100% !important;
+    border-radius: 0 !important;
+    border-top-left-radius: 20px !important;
+    border-bottom-left-radius: 20px !important;
+  }
+
+  .collapse-handle {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .modal-image-container {
+    flex: 0 0 70% !important;
+  }
+
+  .modal-listing-info {
+    flex: 0 0 30% !important;
+  }
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 767px) {
+  /* Hide collapse handle on landscape */
+  @media (orientation: landscape) {
+    .modal-listing-info {
+      max-height: 80vh !important;
+    }
+
+    .collapse-handle {
+      display: none !important;
+    }
+  }
+}
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+</style>
+
+<script>
+  let modalCurrentImageIndex = 0;
+  let modalAllImages = [];
+  let modalCurrentListingId = null;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalListingTitle = document.getElementById('modalListingTitle');
+    const modalListingPrice = document.getElementById('modalListingPrice');
+    const priceText = document.getElementById('priceText');
+    const modalListingLocation = document.getElementById('modalListingLocation');
+    const locationText = document.getElementById('locationText');
+    const modalListingGuests = document.getElementById('modalListingGuests');
+    const guestsText = document.getElementById('guestsText');
+    const modalListingBedrooms = document.getElementById('modalListingBedrooms');
+    const bedroomsText = document.getElementById('bedroomsText');
+    const modalListingBathrooms = document.getElementById('modalListingBathrooms');
+    const bathroomsText = document.getElementById('bathroomsText');
+    const modalListingDescription = document.getElementById('modalListingDescription');
+    const closeBtn = document.querySelector('.close');
+    const currentImageSpan = document.getElementById('currentImage');
+    const totalImagesSpan = document.getElementById('totalImages');
+
+    // Add click event to all listing images
+    document.querySelectorAll('.clickable-image').forEach(img => {
+      img.addEventListener('click', function(e) {
+        // Check if click came from gallery navigation
+        if (e.target.closest('.gallery-nav') || e.target.closest('.gallery-thumbnail')) {
+          return; // Don't open modal if clicking navigation
+        }
+
+        const listingData = {
+          id: this.getAttribute('data-listing-id'),
+          title: this.getAttribute('data-listing-title'),
+          location: this.getAttribute('data-listing-location'),
+          description: this.getAttribute('data-listing-description'),
+          price: this.getAttribute('data-listing-price'),
+          image: this.getAttribute('data-listing-image'),
+          guests: this.getAttribute('data-listing-guests'),
+          bedrooms: this.getAttribute('data-listing-bedrooms'),
+          bathrooms: this.getAttribute('data-listing-bathrooms')
+        };
+
+        // Get all images for this listing
+        const allImagesAttr = this.getAttribute('data-all-images');
+        modalAllImages = allImagesAttr ? allImagesAttr.split(',') : [listingData.image];
+        modalCurrentImageIndex = parseInt(this.getAttribute('data-image-index')) || 0;
+        modalCurrentListingId = listingData.id;
+
+        // Populate modal with listing data
+        modalImage.src = modalAllImages[modalCurrentImageIndex];
+        modalImage.alt = listingData.title;
+        modalListingTitle.textContent = listingData.title;
+        priceText.textContent = listingData.price;
+        locationText.textContent = listingData.location;
+        guestsText.textContent = listingData.guests;
+        bedroomsText.textContent = listingData.bedrooms;
+        bathroomsText.textContent = listingData.bathrooms;
+
+        // Update image counter
+        currentImageSpan.textContent = modalCurrentImageIndex + 1;
+        totalImagesSpan.textContent = modalAllImages.length;
+
+        // Description with fallback
+        if (listingData.description && listingData.description !== 'None') {
+          modalListingDescription.querySelector('p').textContent = listingData.description;
+          modalListingDescription.style.display = 'block';
+        } else {
+          modalListingDescription.querySelector('p').textContent = 'No description available';
+          modalListingDescription.style.color = '#999';
+        }
+
+        // Show modal
+        modal.style.display = 'block';
+        document.body.classList.add('modal-open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // Close modal when clicking X
+    closeBtn.addEventListener('click', function() {
+      modal.style.display = 'none';
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = 'auto';
+      modalAllImages = [];
+      modalCurrentImageIndex = 0;
+      modalCurrentListingId = null;
+    });
+
+    // Close modal when clicking outside the content
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = 'auto';
+        modalAllImages = [];
+        modalCurrentImageIndex = 0;
+        modalCurrentListingId = null;
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.style.display === 'block') {
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = 'auto';
+        modalAllImages = [];
+        modalCurrentImageIndex = 0;
+        modalCurrentListingId = null;
+      }
+    });
+
+    // Add keyboard navigation for images
+    document.addEventListener('keydown', function(e) {
+      if (modal.style.display === 'block') {
+        if (e.key === 'ArrowRight') {
+          modalNextImage();
+        } else if (e.key === 'ArrowLeft') {
+          modalPrevImage();
+        }
+      }
+    });
+
+    // Swipe gesture support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    modal.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    modal.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = touchStartX - touchEndX;
+
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          modalNextImage();
+        } else {
+          modalPrevImage();
+        }
+      }
+    }
+  });
+
+  // Modal Image Navigation
+  function modalNextImage() {
+    if (modalAllImages.length > 0) {
+      modalCurrentImageIndex = (modalCurrentImageIndex + 1) % modalAllImages.length;
+      updateModalImage();
+    }
+  }
+
+  function modalPrevImage() {
+    if (modalAllImages.length > 0) {
+      modalCurrentImageIndex = (modalCurrentImageIndex - 1 + modalAllImages.length) % modalAllImages.length;
+      updateModalImage();
+    }
+  }
+
+  function updateModalImage() {
+    const modalImage = document.getElementById('modalImage');
+    const currentImageSpan = document.getElementById('currentImage');
+
+    if (modalImage && modalAllImages[modalCurrentImageIndex]) {
+      modalImage.src = modalAllImages[modalCurrentImageIndex];
+      currentImageSpan.textContent = modalCurrentImageIndex + 1;
+    }
+  }
+</script>
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="{% static 'js/ekko-lightbox.min.js' %}"></script>
+  <script src="{% static 'js/custom.js' %}"></script>
+  <script src="{% static 'js/babes.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,435 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    <style>
+        /* All your existing CSS remains the same */
+        .booking-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .booking-header {
+            background: linear-gradient(135deg, #ff5a5f 0%, #ff7b7f 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 2rem;
+        }
+
+        /* Add Django Messages Alert Styles */
+        .django-messages {
+            margin-bottom: 1.5rem;
+            animation: slideInDown 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .alert-success-custom {
+            border-radius: 12px;
+            border: none;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, rgba(255, 90, 95, 0.1), rgba(255, 56, 92, 0.1));
+            border-left: 5px solid #FF5A5F;
+            color: #155724;
+            padding: 15px 20px;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .alert-success-custom .alert-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .alert-success-custom .alert-icon {
+            background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%);
+            color: white;
+            min-width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .alert-success-custom .alert-text {
+            flex: 1;
+        }
+
+        .alert-success-custom .alert-title {
+            margin: 0 0 5px 0;
+            color: #FF5A5F;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .alert-success-custom .alert-message {
+            margin: 0;
+        }
+
+        .alert-success-custom .btn-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .alert-success-custom .btn-close:hover {
+            opacity: 1;
+        }
+
+        .booking-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #ff5a5f;
+            box-shadow: 0 0 0 3px rgba(255, 90, 95, 0.1);
+        }
+
+        .booking-summary {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        .total-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff5a5f;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff5a5f 0%, #ff7b7f 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #e04a50 0%, #e06a6f 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 90, 95, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #218838 0%, #17a2b8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .date-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .booking-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            .date-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .alert-success-custom {
+                padding: 12px 15px;
+            }
+
+            .alert-success-custom .alert-content {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .alert-success-custom .alert-icon {
+                margin: 0 auto;
+            }
+
+            .alert-success-custom .btn-close {
+                top: 5px;
+                right: 5px;
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .alert-success-custom .alert-title {
+                font-size: 14px;
+            }
+
+            .alert-success-custom .alert-message {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="booking-container">
+        <div class="booking-header">
+            <h1>Book {{ listing.title }}</h1>
+            <p>{{ listing.location }} • {{ listing.guests }} guests • {{ listing.bedrooms }} bedrooms</p>
+            <p class="price-highlight">KES {{ listing.price_per_night }} per night</p>
+        </div>
+
+        <!-- Django Messages Alert -->
+        <div class="django-messages">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-success-custom">
+                        <div class="alert-content">
+                            <div class="alert-icon">
+                                <i class="fa fa-check"></i>
+                            </div>
+                            <div class="alert-text">
+                                <h5 class="alert-title">🎉 Success!</h5>
+                                <p class="alert-message">{{ message }}</p>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close" onclick="this.parentElement.style.display='none';">×</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <form method="post" id="bookingForm">
+            {% csrf_token %}
+            <input type="hidden" name="listing_id" value="{{ listing.id }}">
+
+            <div class="booking-form-grid">
+                <div class="form-group">
+                    <label class="form-label">Full Name *</label>
+                    {{ form.guest_name }}
+                    {% if form.guest_name.errors %}
+                        <div class="error-message">{{ form.guest_name.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email *</label>
+                    {{ form.guest_email }}
+                    {% if form.guest_email.errors %}
+                        <div class="error-message">{{ form.guest_email.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Phone Number *</label>
+                    {{ form.guest_phone }}
+                    <small style="color: #666; font-size: 0.9rem;">{{ form.guest_phone.help_text }}</small>
+                    {% if form.guest_phone.errors %}
+                        <div class="error-message">{{ form.guest_phone.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Number of Guests *</label>
+                    {{ form.number_of_guests }}
+                    {% if form.number_of_guests.errors %}
+                        <div class="error-message">{{ form.number_of_guests.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="date-inputs">
+                <div class="form-group">
+                    <label class="form-label">Check-in Date *</label>
+                    {{ form.check_in }}
+                    {% if form.check_in.errors %}
+                        <div class="error-message">{{ form.check_in.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Check-out Date *</label>
+                    {{ form.check_out }}
+                    {% if form.check_out.errors %}
+                        <div class="error-message">{{ form.check_out.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Special Requests</label>
+                {{ form.special_requests }}
+            </div>
+
+            <div class="booking-summary">
+                <h3>Booking Summary</h3>
+                <div class="summary-item">
+                    <span>Price per night:</span>
+                    <span>KES <span id="pricePerNight">{{ listing.price_per_night }}</span></span>
+                </div>
+                <div class="summary-item">
+                    <span>Number of nights:</span>
+                    <span id="nightsCount">0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Total Price:</span>
+                    <span class="total-price">KES <span id="totalPrice">0</span></span>
+                </div>
+            </div>
+
+            {% if form.non_field_errors %}
+                <div class="error-message" style="margin-bottom: 1rem;">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                Submit Booking Request
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function calculateTotal() {
+            const checkIn = document.querySelector('input[name="check_in"]');
+            const checkOut = document.querySelector('input[name="check_out"]');
+            const pricePerNight = parseFloat(document.getElementById('pricePerNight').textContent);
+
+            if (checkIn.value && checkOut.value) {
+                const checkInDate = new Date(checkIn.value);
+                const checkOutDate = new Date(checkOut.value);
+                const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
+                const nights = timeDiff / (1000 * 3600 * 24);
+
+                if (nights > 0) {
+                    document.getElementById('nightsCount').textContent = Math.round(nights);
+                    document.getElementById('totalPrice').textContent = (nights * pricePerNight).toFixed(2);
+                } else {
+                    document.getElementById('nightsCount').textContent = 0;
+                    document.getElementById('totalPrice').textContent = '0.00';
+                }
+            }
+        }
+
+        // Initialize calculation on page load
+        document.addEventListener('DOMContentLoaded', calculateTotal);
+
+        document.querySelector('input[name="check_in"]').addEventListener('change', calculateTotal);
+        document.querySelector('input[name="check_out"]').addEventListener('change', calculateTotal);
+
+        // Set min date for checkout based on checkin
+        document.querySelector('input[name="check_in"]').addEventListener('change', function() {
+            const checkOutField = document.querySelector('input[name="check_out"]');
+            checkOutField.min = this.value;
+            if (checkOutField.value && checkOutField.value <= this.value) {
+                checkOutField.value = '';
+                calculateTotal();
+            }
+        });
+
+        // Auto-hide success message after 8 seconds
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert-success-custom');
+            alerts.forEach(alert => {
+                alert.style.opacity = '0';
+                alert.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 300);
+            });
+        }, 8000);
+
+        // Scroll to top if there's a success message
+        {% if messages %}
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        {% endif %}
+    </script>
+</body>
+{% endblock %}

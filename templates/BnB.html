@@ -1042,13 +1042,15 @@
     <!-- NO LISTINGS FOUND -->
     <div class="col-12">
       <div class="no-listings" style="text-align: center; padding: 40px 20px;">
-        <i class="fa fa-home" aria-hidden="true" style="font-size: 48px; margin-bottom: 15px; color: #FF0000;"></i>
-        <h2 style="font-size: 1.3rem; font-weight: 600; color: #000000; margin-bottom: 10px;">No BnB Found</h2>
+
+
+          <span class="clean-text"> 🏠  </span>
+
         <p style="color: #000000; margin-bottom: 20px;">
           {% if selected_location != 'all' %}
-            No BnB  in {{ location_name }} at the moment.
+            No BnB  in {{ location_name }} at the moment.Please check another location
           {% else %}
-            No BnB available at the moment.
+            No BnB available at the moment.Please check again later
           {% endif %}
         </p>
       </div>

@@ -1,10 +1,14 @@
 /* PWA Install Prompt Styles */
 .pwa-install-prompt {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
   z-index: 9999;
   animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Desktop positioning */
+.pwa-install-prompt {
+  bottom: 24px;
+  right: 24px;
 }
 
 .pwa-prompt-content {
@@ -13,42 +17,44 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15),
               0 0 0 1px rgba(0, 0, 0, 0.05),
               0 0 30px rgba(255, 90, 95, 0.2);
-  padding: 24px;
+  padding: 20px;
   max-width: 320px;
   border: 1px solid rgba(255, 90, 95, 0.1);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .pwa-prompt-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .pwa-prompt-header .pwa-icon {
-  font-size: 48px;
-  margin-bottom: 12px;
+  font-size: 42px;
+  margin-bottom: 10px;
 }
 
 .pwa-prompt-header h3 {
   color: #1a1a1a;
-  margin: 0 0 8px 0;
-  font-size: 20px;
+  margin: 0 0 6px 0;
+  font-size: 18px;
   font-weight: 700;
+  line-height: 1.3;
 }
 
 .pwa-prompt-header p {
   color: #666;
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.4;
 }
 
 .pwa-prompt-features {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
-  padding: 16px 0;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 14px 0;
   border-top: 1px solid #f0f0f0;
   border-bottom: 1px solid #f0f0f0;
 }
@@ -61,19 +67,20 @@
 }
 
 .feature-icon {
-  font-size: 20px;
-  margin-bottom: 6px;
+  font-size: 18px;
+  margin-bottom: 5px;
 }
 
 .feature span:last-child {
-  font-size: 12px;
+  font-size: 11px;
   color: #666;
   font-weight: 500;
+  line-height: 1.3;
 }
 
 .pwa-prompt-buttons {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
 }
 
@@ -83,14 +90,16 @@
   color: white;
   border: none;
   border-radius: 12px;
-  padding: 14px 20px;
+  padding: 14px 16px;
   font-weight: 600;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 14px;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 48px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .pwa-install-btn:hover {
@@ -103,10 +112,12 @@
   color: #666;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 12px 16px;
+  padding: 10px 14px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   transition: all 0.2s ease;
+  min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .pwa-later-btn:hover {
@@ -119,15 +130,16 @@
   color: #999;
   border: none;
   border-radius: 8px;
-  padding: 8px;
+  padding: 6px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   transition: all 0.2s ease;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .pwa-close-btn:hover {
@@ -144,18 +156,19 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
   animation: fadeIn 0.3s ease;
 }
 
 .ios-prompt-content {
   background: white;
   border-radius: 20px;
-  padding: 32px;
+  padding: 24px;
   max-width: 400px;
   width: 100%;
   text-align: center;
@@ -165,66 +178,71 @@
 
 .ios-prompt-header h3 {
   color: #1a1a1a;
-  margin: 0 0 12px 0;
-  font-size: 24px;
+  margin: 0 0 10px 0;
+  font-size: 22px;
   font-weight: 700;
+  line-height: 1.3;
 }
 
 .ios-prompt-header p {
   color: #666;
-  margin: 0 0 32px 0;
-  font-size: 16px;
+  margin: 0 0 24px 0;
+  font-size: 15px;
   line-height: 1.5;
 }
 
 .ios-instructions {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin-bottom: 32px;
-  padding: 24px;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 20px;
   background: #f8f9fa;
   border-radius: 12px;
 }
 
 .ios-step {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  align-items: flex-start;
+  gap: 14px;
 }
 
 .step-number {
   background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%);
   color: white;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   flex-shrink: 0;
+  font-size: 14px;
 }
 
 .step-text {
   text-align: left;
   color: #333;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.4;
+  padding-top: 2px;
 }
 
 .share-icon {
   display: inline-block;
   background: #f0f0f0;
-  padding: 4px 8px;
-  border-radius: 6px;
-  margin: 0 4px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  margin: 0 3px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .ios-prompt-buttons {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .ios-gotit-btn {
@@ -235,8 +253,10 @@
   padding: 16px;
   font-weight: 600;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
   transition: all 0.3s ease;
+  min-height: 50px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .ios-gotit-btn:hover {
@@ -250,8 +270,9 @@
   border: none;
   padding: 12px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .ios-dismiss-btn:hover {
@@ -290,42 +311,367 @@
   }
 }
 
-/* Responsive Design */
+/* Mobile Responsive Design */
 @media (max-width: 768px) {
-  .pwa-install-prompt {
-    bottom: 20px;
-    right: 20px;
-    left: 20px;
-    max-width: none;
-  }
-
-  .pwa-prompt-content {
-    max-width: none;
-  }
-
-  .pwa-prompt-features {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .ios-prompt-content {
-    padding: 24px;
-  }
-}
-
-@media (max-width: 480px) {
   .pwa-install-prompt {
     bottom: 16px;
     right: 16px;
     left: 16px;
+    max-width: none;
+    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .pwa-prompt-content {
+    padding: 18px;
+    max-width: none;
+    border-radius: 14px;
+    margin: 0 auto;
+    max-width: 400px;
+  }
+
+  .pwa-prompt-header .pwa-icon {
+    font-size: 40px;
+  }
+
+  .pwa-prompt-header h3 {
+    font-size: 17px;
+  }
+
+  .pwa-prompt-header p {
+    font-size: 12px;
+  }
+
+  .pwa-prompt-features {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 18px;
+    padding: 12px 0;
+  }
+
+  .feature-icon {
+    font-size: 16px;
+  }
+
+  .feature span:last-child {
+    font-size: 10px;
   }
 
   .pwa-prompt-buttons {
-    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pwa-install-btn {
+    padding: 13px 14px;
+    font-size: 13px;
+    min-height: 46px;
+  }
+
+  .pwa-later-btn {
+    padding: 9px 12px;
+    font-size: 12px;
+    min-height: 42px;
+  }
+
+  .pwa-close-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 15px;
+  }
+}
+
+/* Small Phones */
+@media (max-width: 480px) {
+  .pwa-install-prompt {
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+  }
+
+  .pwa-prompt-content {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .pwa-prompt-header .pwa-icon {
+    font-size: 36px;
+    margin-bottom: 8px;
+  }
+
+  .pwa-prompt-header h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .pwa-prompt-header p {
+    font-size: 11px;
+  }
+
+  .pwa-prompt-features {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 16px;
+    padding: 10px 0;
+  }
+
+  .feature-icon {
+    font-size: 15px;
+  }
+
+  .feature span:last-child {
+    font-size: 9px;
+    line-height: 1.2;
+  }
+
+  .pwa-prompt-buttons {
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .pwa-install-btn {
+    padding: 12px 10px;
+    font-size: 12px;
+    min-height: 44px;
+    border-radius: 10px;
+  }
+
+  .pwa-later-btn {
+    padding: 8px 10px;
+    font-size: 11px;
+    min-height: 40px;
+    border-radius: 8px;
+    flex: 0.5;
+  }
+
+  .pwa-close-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+    flex: 0;
+  }
+
+  /* iOS Prompt Mobile */
+  .ios-install-prompt {
+    padding: 12px;
+  }
+
+  .ios-prompt-content {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .ios-prompt-header h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .ios-prompt-header p {
+    font-size: 14px;
+    margin-bottom: 20px;
   }
 
   .ios-instructions {
     padding: 16px;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .ios-step {
+    gap: 12px;
+  }
+
+  .step-number {
+    width: 26px;
+    height: 26px;
+    font-size: 13px;
+  }
+
+  .step-text {
+    font-size: 13px;
+  }
+
+  .share-icon {
+    font-size: 12px;
+    padding: 2px 5px;
+  }
+
+  .ios-gotit-btn {
+    padding: 14px;
+    font-size: 14px;
+    min-height: 48px;
+    border-radius: 10px;
+  }
+
+  .ios-dismiss-btn {
+    padding: 10px;
+    font-size: 12px;
+  }
+}
+
+/* Extra Small Phones */
+@media (max-width: 360px) {
+  .pwa-install-prompt {
+    bottom: 8px;
+    right: 8px;
+    left: 8px;
+  }
+
+  .pwa-prompt-content {
+    padding: 14px;
+  }
+
+  .pwa-prompt-header .pwa-icon {
+    font-size: 32px;
+  }
+
+  .pwa-prompt-header h3 {
+    font-size: 15px;
+  }
+
+  .pwa-prompt-header p {
+    font-size: 10px;
+  }
+
+  .pwa-prompt-features {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding: 8px 0;
+  }
+
+  .feature {
+    flex-direction: row;
+    text-align: left;
+    gap: 8px;
+    padding: 6px 0;
+  }
+
+  .feature-icon {
+    margin-bottom: 0;
+    font-size: 14px;
+    min-width: 20px;
+  }
+
+  .feature span:last-child {
+    font-size: 11px;
+    text-align: left;
+  }
+
+  .pwa-prompt-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pwa-install-btn {
+    width: 100%;
+    order: 1;
+  }
+
+  .pwa-later-btn {
+    width: 100%;
+    order: 2;
+    flex: none;
+  }
+
+  .pwa-close-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    order: 0;
+    width: 30px;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  /* iOS Prompt for extra small */
+  .ios-prompt-content {
+    padding: 16px;
+  }
+
+  .ios-prompt-header h3 {
+    font-size: 18px;
+  }
+
+  .ios-prompt-header p {
+    font-size: 13px;
+  }
+
+  .ios-instructions {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .step-number {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+
+  .step-text {
+    font-size: 12px;
+  }
+}
+
+/* Landscape Orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+  .pwa-install-prompt {
+    top: 8px;
+    bottom: auto;
+    right: 8px;
+    left: auto;
+    max-width: 300px;
+  }
+
+  .pwa-prompt-content {
+    padding: 12px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .pwa-prompt-features {
+    display: none;
+  }
+
+  .ios-install-prompt {
+    padding: 8px;
+  }
+
+  .ios-prompt-content {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .ios-instructions {
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .pwa-install-btn:hover,
+  .pwa-later-btn:hover,
+  .pwa-close-btn:hover,
+  .ios-gotit-btn:hover,
+  .ios-dismiss-btn:hover {
+    transform: none;
+  }
+
+  .pwa-install-btn:active {
+    transform: scale(0.98);
+  }
+
+  .pwa-later-btn:active,
+  .pwa-close-btn:active {
+    background: #f0f0f0;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .pwa-install-prompt,
+  .ios-install-prompt,
+  #offlineIndicator {
+    animation: none !important;
   }
 }
 
@@ -343,6 +689,7 @@
   z-index: 10001;
   display: none;
   animation: slideDown 0.3s ease;
+  font-size: 14px;
 }
 
 @keyframes slideDown {
@@ -356,4 +703,12 @@
 
 #offlineIndicator.show {
   display: block;
+}
+
+/* Mobile Offline Indicator */
+@media (max-width: 480px) {
+  #offlineIndicator {
+    padding: 10px;
+    font-size: 13px;
+  }
 }

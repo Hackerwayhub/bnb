@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-lpx4f76plz*wv7#k&3utds@5&id+9$!lewvlf(9(#rhnu&u41q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '162.0.222.42',
+    'bnb.co.ke',
+    'www.bnb.co.ke',
+]
 
 
 # Application definition
@@ -117,7 +123,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Email settings
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # or your email provider
 EMAIL_PORT = 587
@@ -125,8 +131,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'booking.bnb.co.ke@gmail.com'
 EMAIL_HOST_PASSWORD = 'mhxgbnsbkudttfll'  # Use app password for Gmail
 DEFAULT_FROM_EMAIL = 'booking.bnb.co.ke@gmail.com'
-
-ADMIN_EMAIL = 'booking.bnb.co.ke@gmail.com'  # Optional
+ADMIN_EMAIL = 'booking.bnb.co.ke@gmail.com'
 
 
 # Logging configuration

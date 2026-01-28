@@ -10,3 +10,5 @@ Traceback (most recent call last):
 AttributeError: 'NoneType' object has no attribute 'title'
 "GET /location/lumumba%20drive/ HTTP/1.1" 500 79997
 Failed to send booking email for booking BK000016: [Errno 11001] getaddrinfo failed
+Failed to send booking email for booking BK000021: [WinError 10061] No connection could be made because the target machine actively refused it
+Failed to send booking email for booking BK000022: [WinError 10061] No connection could be made because the target machine actively refused it

@@ -256,7 +256,7 @@ def book_via_whatsapp(request):
     context = {
         'page_title': 'Book BnB via WhatsApp - Instant Booking',
         'meta_description': 'Book your vacation rental directly on WhatsApp. Chat with hosts instantly, get quick responses.',
-        'whatsapp_number': '254712345678',  # Your business WhatsApp number
+        'whatsapp_number': '+254707341748',  # Your business WhatsApp number
     }
     return render(request, 'BOOKVIAWHATSAPP.html', context)
 
@@ -288,7 +288,7 @@ def send_booking_confirmation_email(booking):
         subject = f"Booking Confirmation - {booking.listing.title} (Ref: BK{booking.id:06d})"
 
         # Sender and recipient
-        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@bnbwebsite.com')
+        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'booking.bnb.co.ke@gmail.com')
         recipient_list = [booking.guest_email]
 
         # Send email to guest
@@ -366,7 +366,7 @@ def booking_view(request, listing_id):
                 f"🎉 Booking request sent successfully! "
                 f"Your booking reference is BK{booking.id:06d}. "
                 f"Please allow us few minutes to confirm your booking! "
-                f"You will receive a confirmation email on {booking.guest_email}."
+                f"You will receive a text or call on  {booking.guest_phone} & a  confirmation email on {booking.guest_email}."
             )
 
             context = {

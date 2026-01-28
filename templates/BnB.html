@@ -14,18 +14,18 @@
   }
 </style>
    <!-- location filters section -->
-<section style="background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%); margin: 5px 11px; border: 3px solid #FF0000; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.05); position: relative; overflow: hidden;">
-  <div class="filters-row" style="margin: 3px; background-color: #FFFFFF; padding: 5px; display: flex; flex-wrap: wrap; align-items: center; gap: 5px;">
+<section style="background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%); margin: 1px 9px; border: 3px solid #FF0000; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.05); position: relative; overflow: hidden;">
+  <div class="filters-row" style="margin: 1px; background-color: #FFFFFF; padding: 5px; display: flex; flex-wrap: wrap; align-items: center; gap: 5px;">
 
 <!-- Breadcrumb Navigation -->
-<div style="padding: 10px 20px; background-color: #FFFFFF; border-radius: 8px; margin: 10px 0;">
+<div style="padding: 10px 10px; background-color: #FFFFFF; border-radius: 8px; margin: 10px 0;">
 
   <nav aria-label="breadcrumb">
     <h1>
     <ol style="display: flex; list-style: none; color:#FF0000; padding: 0; margin: 0; align-items: center;">
-      <li style="margin-right: 5px;">
+      <li style="margin-right: 2px;">
         <a href="/" style="color:#FF0000; text-decoration: none;">
-           BnB  <i class="fa fa-home" style="font-size: 24px; "></i>
+           BnB
         </a>
       </li>
      
@@ -580,11 +580,12 @@
           <span class="clean-text">Bnb <span class="clean-location">{{ location_name }}</span> </span>
 
         </h1>
-       {% else %}
-        <h1 class="clean-heading">
-          <span class="clean-text"><span class="clean-location"> staycations in Kenya! </span>  </span>
 
-        </h1>
+         {% else %}
+
+          <span class="clean-text">🏠 <span class="clean-location"> staycations in Kenya! </span>  </span>
+
+
         {% endif %}
       </div>
 
@@ -804,7 +805,7 @@
                      onmouseover="this.style.backgroundColor='#128C7E'; this.style.transform='translateY(-2px)';"
                      onmouseout="this.style.backgroundColor='#25D366'; this.style.transform='translateY(0)';"
                      title="Contact admin to book on behalf of client">
-                    <i class="fa fa-whatsapp" aria-hidden="true"></i> Book via whatsapp
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i> Book via whatsapp
                   </a>
 
 
@@ -1026,7 +1027,7 @@
                    onmouseover="this.style.backgroundColor='#128C7E'; this.style.transform='translateY(-2px)';"
                    onmouseout="this.style.backgroundColor='#25D366'; this.style.transform='translateY(0)';"
                    title="Contact admin to book on behalf of client">
-                  <i class="fa fa-whatsapp" aria-hidden="true"></i> Book via whatsapp
+                  <i class="fab fa-whatsapp" aria-hidden="true"></i> Book via whatsapp
                 </a>
 
 

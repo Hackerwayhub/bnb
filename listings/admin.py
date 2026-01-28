@@ -10,7 +10,7 @@ class ListingAdmin(admin.ModelAdmin):
     list_filter = ('is_approved', 'is_featured', 'listing_type', 'property_type', 'location')
     search_fields = ('title', 'description', 'host_name', 'specific_location')
     list_editable = ('is_approved', 'is_featured')
-    readonly_fields = ('admin_contact', 'created_at', 'updated_at', 'slug', 'featured_payment_amount')
+    readonly_fields = ('created_at', 'updated_at', 'slug', 'featured_payment_amount')
 
     # Add actions for bulk operations
     actions = ['make_featured', 'make_free', 'approve_listings', 'unapprove_listings']

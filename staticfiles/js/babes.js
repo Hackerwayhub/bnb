@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set items per row based on device type
     let itemsPerRow;
     if (window.innerWidth < 768) {
-        itemsPerRow = 3; // Mobile
+        itemsPerRow = 2; // Mobile
     } else {
         itemsPerRow = 8; // Desktop/Laptop
     }
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const moreButton = document.createElement('a');
         moreButton.href = '#';
         moreButton.className = 'filter-item more-button';
-        moreButton.innerHTML = '<i class="fa fa-chevron-down" aria-hidden="true"></i> ';
+        moreButton.innerHTML = '<i class="fa fa-chevron-down" aria-hidden="true"></i> more locations ';
         moreButton.style.cssText = `
             cursor: pointer !important;
             font-weight: bold !important;
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         item.style.display = 'inline-block';
                     }
                 });
-                moreButton.innerHTML = '<i class="fa fa-chevron-up" aria-hidden="true"></i> ';
+                moreButton.innerHTML = '<i class="fa fa-chevron-up" aria-hidden="true"></i>  ';
                 moreButton.setAttribute('data-expanded', 'true');
             } else {
                 // Hide items beyond the limit

@@ -6,59 +6,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page_title }}</title>
     <style>
-        /* All your existing CSS remains the same */
+        :root {
+            --glass-white: rgba(255, 255, 255, 0.95);
+            --glass-light: rgba(255, 255, 255, 0.85);
+            --glass-medium: rgba(255, 255, 255, 0.75);
+            --glass-dark: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --blur-intensity: blur(20px);
+            --border-radius: 20px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text-primary);
+        }
+
         .booking-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 2rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            background: var(--glass-white);
+            backdrop-filter: var(--blur-intensity);
+            -webkit-backdrop-filter: var(--blur-intensity);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--glass-border);
+            box-shadow:
+                var(--glass-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
         }
 
         .booking-header {
-            background: linear-gradient(135deg, #ff5a5f 0%, #ff7b7f 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: 2rem;
+            background: var(--glass-light);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--glass-border);
         }
 
-        /* Add Django Messages Alert Styles */
+        .booking-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.8) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.6) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .booking-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .booking-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+            margin: 0.3rem 0;
+        }
+
+        .price-highlight {
+            display: inline-block;
+            background: var(--glass-medium);
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            margin-top: 1rem;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Glassmorphism Form Container */
+        .form-content {
+            padding: 2.5rem;
+            background: var(--glass-light);
+        }
+
+        /* Django Messages Alert - Glassmorphism */
         .django-messages {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             animation: slideInDown 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .alert-success-custom {
-            border-radius: 12px;
-            border: none;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, rgba(255, 90, 95, 0.1), rgba(255, 56, 92, 0.1));
-            border-left: 5px solid #FF5A5F;
-            color: #155724;
-            padding: 15px 20px;
-            font-size: 14px;
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+            padding: 20px 25px;
             position: relative;
+            overflow: hidden;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .alert-success-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #48bb78, #38a169);
         }
 
         .alert-success-custom .alert-content {
             display: flex;
-            align-items: flex-start;
-            gap: 12px;
+            align-items: center;
+            gap: 20px;
         }
 
         .alert-success-custom .alert-icon {
-            background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%);
+            background: linear-gradient(135deg, #48bb78, #38a169);
             color: white;
-            min-width: 32px;
-            height: 32px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 22px;
             flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.2);
         }
 
         .alert-success-custom .alert-text {
@@ -66,192 +158,368 @@
         }
 
         .alert-success-custom .alert-title {
-            margin: 0 0 5px 0;
-            color: #FF5A5F;
+            margin: 0 0 8px 0;
+            color: var(--text-primary);
             font-weight: 700;
-            font-size: 16px;
+            font-size: 18px;
         }
 
         .alert-success-custom .alert-message {
             margin: 0;
+            color: var(--text-secondary);
         }
 
         .alert-success-custom .btn-close {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 10px;
-            background: transparent;
-            border: none;
-            font-size: 20px;
+            top: 15px;
+            right: 15px;
+            background: var(--glass-medium);
+            border: 1px solid var(--glass-border);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            color: var(--text-muted);
             cursor: pointer;
-            opacity: 0.7;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
         }
 
         .alert-success-custom .btn-close:hover {
-            opacity: 1;
+            background: var(--glass-dark);
+            color: var(--text-primary);
+            transform: rotate(90deg);
         }
 
+        /* Glassmorphism Form Groups */
         .booking-form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2.5rem;
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             font-weight: 600;
-            color: #333;
+            color: var(--text-primary);
+            font-size: 1rem;
         }
 
         .form-control {
             width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            background: var(--glass-white);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
             font-size: 1rem;
+            color: var(--text-primary);
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted);
         }
 
         .form-control:focus {
             outline: none;
-            border-color: #ff5a5f;
-            box-shadow: 0 0 0 3px rgba(255, 90, 95, 0.1);
+            background: var(--glass-white);
+            border-color: rgba(148, 163, 184, 0.5);
+            box-shadow:
+                0 0 0 3px rgba(148, 163, 184, 0.1),
+                0 4px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
         }
 
+        /* Glassmorphism Date Inputs */
+        .date-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Glassmorphism Booking Summary */
         .booking-summary {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
+            background: var(--glass-medium);
+            backdrop-filter: blur(15px);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2.5rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .booking-summary h3 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
         .summary-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #e1e5e9;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            color: var(--text-primary);
+            font-weight: 600;
         }
 
         .total-price {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #ff5a5f;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
+        /* Glassmorphism Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            padding: 1.2rem 2.5rem;
+            background: var(--glass-white);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            font-size: 1.2rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
-            gap: 10px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #ff5a5f 0%, #ff7b7f 100%);
-            color: white;
+            gap: 12px;
             width: 100%;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--glass-shadow);
         }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #e04a50 0%, #e06a6f 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 90, 95, 0.3);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
             width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transition: 0.5s;
         }
 
-        .btn-success:hover {
-            background: linear-gradient(135deg, #218838 0%, #17a2b8 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            background: var(--glass-white);
+            transform: translateY(-3px);
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.1),
+                0 5px 15px rgba(0, 0, 0, 0.07);
+            border-color: rgba(148, 163, 184, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn i {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
         }
 
         .error-message {
-            color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
+            color: #e53e3e;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(229, 62, 62, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #e53e3e;
         }
 
-        .date-inputs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+        /* Info icons styling */
+        .info-icon {
+            color: var(--text-muted);
+            margin-right: 8px;
+            font-size: 0.9em;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         @keyframes slideInDown {
             from {
                 opacity: 0;
-                transform: translateY(-30px);
+                transform: translateY(-40px) scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(30px, 30px) rotate(360deg); }
         }
 
+        /* Responsive Design */
         @media (max-width: 768px) {
             .booking-container {
                 margin: 1rem;
-                padding: 1rem;
+                padding: 0;
+                border-radius: 16px;
             }
 
+            .booking-header {
+                padding: 2rem 1.5rem;
+            }
+
+            .booking-header h1 {
+                font-size: 2rem;
+            }
+
+            .form-content {
+                padding: 1.5rem;
+            }
+
+            .booking-form-grid,
             .date-inputs {
                 grid-template-columns: 1fr;
-            }
-
-            .alert-success-custom {
-                padding: 12px 15px;
+                gap: 1.2rem;
             }
 
             .alert-success-custom .alert-content {
                 flex-direction: column;
-                gap: 10px;
                 text-align: center;
+                gap: 15px;
             }
 
-            .alert-success-custom .alert-icon {
-                margin: 0 auto;
-            }
-
-            .alert-success-custom .btn-close {
-                top: 5px;
-                right: 5px;
-                font-size: 18px;
+            :root {
+                --border-radius: 16px;
             }
         }
 
         @media (max-width: 480px) {
-            .alert-success-custom .alert-title {
-                font-size: 14px;
+            body {
+                padding: 10px;
+                background: #f1f5f9;
             }
 
-            .alert-success-custom .alert-message {
-                font-size: 13px;
+            .booking-header {
+                padding: 1.5rem 1rem;
             }
+
+            .booking-header h1 {
+                font-size: 1.7rem;
+            }
+
+            .price-highlight {
+                font-size: 1.2rem;
+                padding: 0.6rem 1.2rem;
+            }
+
+            .btn {
+                padding: 1rem 1.5rem;
+                font-size: 1.1rem;
+            }
+
+            .form-control {
+                padding: 0.9rem 1rem;
+            }
+        }
+
+        /* Input number styling */
+        input[type="number"] {
+            appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            appearance: none;
+            margin: 0;
+        }
+
+        /* Calendar icon color */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.5);
+            opacity: 0.7;
+        }
+
+        /* Textarea specific styling */
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Focus states for all interactive elements */
+        .form-control:focus,
+        .btn:focus,
+        .alert-success-custom .btn-close:focus {
+            outline: 2px solid rgba(148, 163, 184, 0.3);
+            outline-offset: 2px;
+        }
+
+        /* Subtle loading animation */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        /* Selection styling */
+        ::selection {
+            background: rgba(148, 163, 184, 0.3);
+            color: var(--text-primary);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--glass-light);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--glass-dark);
+            border-radius: 4px;
+            border: 2px solid var(--glass-light);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--glass-medium);
         }
     </style>
 </head>
@@ -259,8 +527,8 @@
     <div class="booking-container">
         <div class="booking-header">
             <h1>Book {{ listing.title }}</h1>
-            <p>{{ listing.location }} • {{ listing.guests }} guests • {{ listing.bedrooms }} bedrooms</p>
-            <p class="price-highlight">KES {{ listing.price_per_night }} per night</p>
+            <p><span class="info-icon">📍</span>{{ listing.location }} • <span class="info-icon">👥</span>{{ listing.guests }} guests • <span class="info-icon">🛏️</span>{{ listing.bedrooms }} bedrooms</p>
+            <p class="price-highlight"><span class="info-icon">💰</span>KES {{ listing.price_per_night }} per night</p>
         </div>
 
         <!-- Django Messages Alert -->
@@ -273,7 +541,7 @@
                                 <i class="fa fa-check"></i>
                             </div>
                             <div class="alert-text">
-                                <h5 class="alert-title">🎉 Success!</h5>
+                                <h5 class="alert-title">Booking Confirmed</h5>
                                 <p class="alert-message">{{ message }}</p>
                             </div>
                         </div>
@@ -283,97 +551,99 @@
             {% endif %}
         </div>
 
-        <form method="post" id="bookingForm">
-            {% csrf_token %}
-            <input type="hidden" name="listing_id" value="{{ listing.id }}">
+        <div class="form-content">
+            <form method="post" id="bookingForm">
+                {% csrf_token %}
+                <input type="hidden" name="listing_id" value="{{ listing.id }}">
 
-            <div class="booking-form-grid">
-                <div class="form-group">
-                    <label class="form-label">Full Name *</label>
-                    {{ form.guest_name }}
-                    {% if form.guest_name.errors %}
-                        <div class="error-message">{{ form.guest_name.errors }}</div>
-                    {% endif %}
+                <div class="booking-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Full Name *</label>
+                        {{ form.guest_name }}
+                        {% if form.guest_name.errors %}
+                            <div class="error-message">{{ form.guest_name.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email Address *</label>
+                        {{ form.guest_email }}
+                        {% if form.guest_email.errors %}
+                            <div class="error-message">{{ form.guest_email.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Phone Number *</label>
+                        {{ form.guest_phone }}
+                        <small style="color: var(--text-muted); font-size: 0.9rem;">{{ form.guest_phone.help_text }}</small>
+                        {% if form.guest_phone.errors %}
+                            <div class="error-message">{{ form.guest_phone.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Number of Guests *</label>
+                        {{ form.number_of_guests }}
+                        {% if form.number_of_guests.errors %}
+                            <div class="error-message">{{ form.number_of_guests.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="date-inputs">
+                    <div class="form-group">
+                        <label class="form-label">Check-in Date *</label>
+                        {{ form.check_in }}
+                        {% if form.check_in.errors %}
+                            <div class="error-message">{{ form.check_in.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Check-out Date *</label>
+                        {{ form.check_out }}
+                        {% if form.check_out.errors %}
+                            <div class="error-message">{{ form.check_out.errors }}</div>
+                        {% endif %}
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Email *</label>
-                    {{ form.guest_email }}
-                    {% if form.guest_email.errors %}
-                        <div class="error-message">{{ form.guest_email.errors }}</div>
-                    {% endif %}
+                    <label class="form-label">Special Requests (Optional)</label>
+                    {{ form.special_requests }}
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Phone Number *</label>
-                    {{ form.guest_phone }}
-                    <small style="color: #666; font-size: 0.9rem;">{{ form.guest_phone.help_text }}</small>
-                    {% if form.guest_phone.errors %}
-                        <div class="error-message">{{ form.guest_phone.errors }}</div>
-                    {% endif %}
+                <div class="booking-summary">
+                    <h3>Booking Summary</h3>
+                    <div class="summary-item">
+                        <span>Price per night:</span>
+                        <span>KES <span id="pricePerNight">{{ listing.price_per_night }}</span></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Number of nights:</span>
+                        <span id="nightsCount">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Total Price:</span>
+                        <span class="total-price">KES <span id="totalPrice">0</span></span>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Number of Guests *</label>
-                    {{ form.number_of_guests }}
-                    {% if form.number_of_guests.errors %}
-                        <div class="error-message">{{ form.number_of_guests.errors }}</div>
-                    {% endif %}
-                </div>
-            </div>
+                {% if form.non_field_errors %}
+                    <div class="error-message" style="margin-bottom: 1.5rem; padding: 1rem;">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
 
-            <div class="date-inputs">
-                <div class="form-group">
-                    <label class="form-label">Check-in Date *</label>
-                    {{ form.check_in }}
-                    {% if form.check_in.errors %}
-                        <div class="error-message">{{ form.check_in.errors }}</div>
-                    {% endif %}
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Check-out Date *</label>
-                    {{ form.check_out }}
-                    {% if form.check_out.errors %}
-                        <div class="error-message">{{ form.check_out.errors }}</div>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Special Requests</label>
-                {{ form.special_requests }}
-            </div>
-
-            <div class="booking-summary">
-                <h3>Booking Summary</h3>
-                <div class="summary-item">
-                    <span>Price per night:</span>
-                    <span>KES <span id="pricePerNight">{{ listing.price_per_night }}</span></span>
-                </div>
-                <div class="summary-item">
-                    <span>Number of nights:</span>
-                    <span id="nightsCount">0</span>
-                </div>
-                <div class="summary-item">
-                    <span>Total Price:</span>
-                    <span class="total-price">KES <span id="totalPrice">0</span></span>
-                </div>
-            </div>
-
-            {% if form.non_field_errors %}
-                <div class="error-message" style="margin-bottom: 1rem;">
-                    {% for error in form.non_field_errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            <button type="submit" class="btn btn-primary">
-                <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                Submit Booking Request
-            </button>
-        </form>
+                <button type="submit" class="btn">
+                    <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                    Submit Booking Request
+                </button>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -419,7 +689,7 @@
             const alerts = document.querySelectorAll('.alert-success-custom');
             alerts.forEach(alert => {
                 alert.style.opacity = '0';
-                alert.style.transform = 'translateY(-20px)';
+                alert.style.transform = 'translateY(-20px) scale(0.95)';
                 setTimeout(() => {
                     alert.style.display = 'none';
                 }, 300);
@@ -430,6 +700,68 @@
         {% if messages %}
             window.scrollTo({ top: 0, behavior: 'smooth' });
         {% endif %}
+
+        // Add floating animation to form elements on focus
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.transform = 'translateY(-2px)';
+                this.parentElement.style.transform = 'translateY(-5px)';
+            });
+
+            input.addEventListener('blur', function() {
+                this.style.transform = 'translateY(0)';
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Add subtle animation to booking summary
+        const bookingSummary = document.querySelector('.booking-summary');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeIn 0.8s ease-out';
+                }
+            });
+        });
+
+        observer.observe(bookingSummary);
+
+        // Add ripple effect to button
+        document.querySelector('.btn').addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.cssText = `
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.6);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+            `;
+
+            this.appendChild(ripple);
+
+            setTimeout(() => ripple.remove(), 600);
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 {% endblock %}

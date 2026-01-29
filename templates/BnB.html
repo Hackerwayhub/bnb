@@ -715,6 +715,10 @@
                 <div class="amenities-icons" style="display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap;">
 
 
+
+
+
+
                 </div>
 
                 <!-- Price -->
@@ -923,27 +927,7 @@
                 {{ listing.get_location_display }} • {{ listing.specific_location }}
               </p>
 
-              <!-- Quick Info -->
-              <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-                {% if listing.guests %}
-                <span style="background: #f8f9fa; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; color: #555;">
-                  <i class="fa fa-users" aria-hidden="true" style="color: #007bff; margin-right: 5px;"></i> {{ listing.guests }} guests
-                </span>
-                {% endif %}
 
-
-
-                {% if listing.bedrooms %}
-                <span style="background: #f8f9fa; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; color: #555;">
-                  <i class="fa fa-bed" aria-hidden="true" style="color: #007bff; margin-right: 5px;"></i> {{ listing.bedrooms }} beds
-                </span>
-                {% endif %}
-                {% if listing.bathrooms %}
-                <span style="background: #f8f9fa; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; color: #555;">
-                  <i class="fa fa-bath" aria-hidden="true" style="color: #007bff; margin-right: 5px;"></i> {{ listing.bathrooms }} baths
-                </span>
-                {% endif %}
-              </div>
 
               <!-- AMENITIES SECTION (NEW) -->
               {% if listing.wifi or listing.parking or listing.kitchen or listing.pool or listing.ac or listing.tv %}

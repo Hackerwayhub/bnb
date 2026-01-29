@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set items per row based on device type
     let itemsPerRow;
     if (window.innerWidth < 768) {
-        itemsPerRow = 2; // Mobile
+        itemsPerRow = 3; // Mobile
     } else {
         itemsPerRow = 8; // Desktop/Laptop
     }

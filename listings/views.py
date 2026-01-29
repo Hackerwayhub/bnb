@@ -196,7 +196,7 @@ def listing_list(request, location_slug=None):
         },
         'featured_price': 1000.00,  # Added featured price
         'page_title': f'BnB in {display_location_name}' if selected_location != 'all' else 'BnB | staycations in kenya',
-        'meta_description': f' Book BnB in {display_location_name}. Find verified properties with photos, amenities, and booking details.',
+        'meta_description': f' Book BnB in {display_location_name}. Book verified BnB properties with photos, amenities, and booking details.',
     }
     return render(request, 'BnB.html', context)
 
@@ -255,7 +255,7 @@ def book_via_whatsapp(request):
     """
     context = {
         'page_title': 'Book BnB via WhatsApp - Instant Booking',
-        'meta_description': 'Book your vacation rental directly on WhatsApp. Chat with hosts instantly, get quick responses.',
+        'meta_description': 'Book your BnB directly on WhatsApp. Chat with hosts instantly, get quick responses.',
         'whatsapp_number': '+254707341748',  # Your business WhatsApp number
     }
     return render(request, 'BOOKVIAWHATSAPP.html', context)

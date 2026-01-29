@@ -12,30 +12,26 @@
   <meta name="theme-color" content="#FF5A5F"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="BNBKE">
-  <meta name="description" content="BNBKE - Find Perfect Vacation Rentals & Holiday Homes">
+  <meta name="apple-mobile-web-app-title" content="BnB">
+  <meta name="description" content="BnB - Find Perfect Vacation Rentals & Holiday Homes">
 
   <!-- Web App Manifest -->
   <link rel="manifest" href="{% static 'manifest.json' %}">
 
-  <!-- Dynamic SEO Meta Tags -->
-  <title>{{ page_title|default:"BNB | staycations & Holiday Homes" }}</title>
-  <meta name="description" content="{{ meta_description|default:'Find perfect vacation rentals and holiday homes on BNBKE. Browse verified properties with photos, amenities, and booking details. Safe, reliable accommodation booking.'|truncatechars:160 }}" />
-
-  <meta name="keywords" content="BNBKE, vacation rentals, holiday homes, accommodation booking, travel Kenya{% if location_display %}, rentals in {{ location_display }}, {{ location_display }} accommodations{% endif %}" />
-  <meta name="author" content="BNBKE" />
+  
+  <meta name="author" content="BnB" />
   <meta name="robots" content="index, follow" />
 
   <!-- Open Graph / Social Media Meta Tags -->
-  <meta property="og:title" content="{% if page_title %}{{ page_title }}{% else %}BNBKE | Vacation Rentals & Holiday Homes{% endif %}" />
-  <meta property="og:description" content="{% if meta_description %}{{ meta_description }}{% else %}BNBKE - Kenya's premier vacation rental platform. Find beautiful, verified accommodations for your perfect holiday. Safe, reliable booking services.{% endif %}" />
+  <meta property="og:title" content="{% if page_title %}{{ page_title }}{% else %}BnB | Vacation Rentals & Holiday Homes{% endif %}" />
+  <meta property="og:description" content="{% if meta_description %}{{ meta_description }}{% else %}BnB - Kenya\'s premier vacation rental platform. Find beautiful, verified accommodations for your perfect holiday. Safe, reliable booking services.{% endif %}" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.bnbke.site{% if selected_location != 'all' %}/rentals-in-{{ selected_location }}/{% endif %}" />
+  <meta property="og:url" content="https://bnb.co.ke{% if selected_location != 'all' %}/rentals-in-{{ selected_location }}/{% endif %}" />
   <meta property="og:image" content="{% static 'images/og-image.jpg' %}" />
-  <meta property="og:site_name" content="BNBKE" />
+  <meta property="og:site_name" content="BnB" />
 
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://www.bnbke.site{% if selected_location != 'all' %}/rentals-in-{{ selected_location }}/{% endif %}" />
+  <link rel="canonical" href="https://bnb.co.ke{% if selected_location != 'all' %}/rentals-in-{{ selected_location }}/{% endif %}" />
 
   <!-- Favicon files -->
   <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
@@ -76,25 +72,25 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://www.bnbke.site/#website",
-      "name": "BNBKE",
-      "alternateName": ["BNB KE", "BnbKe"],
-      "url": "https://www.bnbke.site/",
-      "description": "{% if meta_description %}{{ meta_description }}{% else %}Kenya's premier vacation rental platform. Find beautiful, verified accommodations for holidays, vacations, and getaways.{% endif %}",
+      "@id": "https://bnb.co.ke/#website",
+      "name": "BnB",
+      "alternateName": ["BnB Kenya", "BnB.co.ke"],
+      "url": "https://bnb.co.ke/",
+      "description": "{% if meta_description %}{{ meta_description }}{% else %}Kenya\'s premier vacation rental platform. Find beautiful, verified accommodations for holidays, vacations, and getaways.{% endif %}",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://www.bnbke.site/#search?q={search_term_string}",
+        "target": "https://bnb.co.ke/#search?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     },
     {
       "@type": "Service",
-      "@id": "https://www.bnbke.site/#service",
-      "name": "BNBKE Vacation Rentals",
+      "@id": "https://bnb.co.ke/",
+      "name": "BnB staycations in Kenya",
       "description": "Premium vacation rentals and holiday homes across Kenya",
       "provider": {
         "@type": "Organization",
-        "name": "BNBKE"
+        "name": "BnB"
       },
       "areaServed": "{% if location_display %}{{ location_display }}{% else %}Kenya{% endif %}",
       "serviceType": "Vacation Rentals",
@@ -105,9 +101,9 @@
     },
     {
       "@type": "Organization",
-      "@id": "https://www.bnbke.site/#organization",
-      "name": "BNBKE",
-      "url": "https://www.bnbke.site/",
+      "@id": "https://bnb.co.ke/",
+      "name": "BnB",
+      "url": "https://bnb.co.ke/",
       "logo": {
         "@type": "ImageObject",
         "url": "{% static 'images/logo.png' %}",
@@ -131,12 +127,12 @@
 {
   "@context": "https://schema.org",
   "@type": "Service",
-  "name": "BNBKE Vacation Rentals in {{ location_name }}",
+  "name": "BnB Vacation Rentals in {{ location_name }}",
   "description": "Premium verified vacation rentals and holiday homes in {{ location_name }}, Kenya. Find beautiful accommodations for holidays, vacations, and getaways.",
   "provider": {
     "@type": "Organization",
-    "name": "BNBKE",
-    "url": "https://www.bnbke.site"
+    "name": "BnB",
+    "url": "https://bnb.co.ke"
   },
   "areaServed": {
     "@type": "City",
@@ -145,7 +141,7 @@
   "serviceType": "Vacation Rentals",
   "availableChannel": {
     "@type": "ServiceChannel",
-    "serviceUrl": "https://www.bnbke.site/rentals-in-{{ selected_location }}/"
+    "serviceUrl": "https://bnb.co.ke/rentals-in-{{ selected_location }}/"
   }
 }
 </script>
@@ -153,6 +149,8 @@
 
   {% block extra_head %}{% endblock %}
 </head>
+
+
 <body>
 <!-- Elevated Header Section -->
 <header class="header_section" style="position: relative; z-index: 1000; margin-top: 1px;">

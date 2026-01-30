@@ -18,7 +18,16 @@
   <!-- Web App Manifest -->
   <link rel="manifest" href="{% static 'manifest.json' %}">
 
-  
+
+    <!-- Dynamic SEO Meta Tags -->
+  <title>{{ page_title|default:"BNB | staycations & Holiday Homes in kenya" }}</title>
+  <meta name="description" content="{{ meta_description|default:'Find perfect vacation rentals and holiday homes on BNBKE. Browse verified properties with photos, amenities, and booking details. Safe, reliable accommodation booking.'|truncatechars:160 }}" />
+
+  <meta name="keywords" content="BNB, staycations, holiday homes, accommodation booking, travel Kenya{% if location_display %}, rentals in {{ location_display }}, {{ location_display }} accommodations{% endif %}" />
+  <meta name="author" content="BNB" />
+  <meta name="robots" content="index, follow" />
+
+
   <meta name="author" content="BnB" />
   <meta name="robots" content="index, follow" />
 

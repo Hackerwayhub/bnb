@@ -19,10 +19,22 @@ class Listing(models.Model):
         ('westlands', 'Westlands'),
         ('kilimani', 'Kilimani'),
         ('kileleshwa', 'Kileleshwa'),
+        ('pangani', 'Pangani'),
+        ('parklands', 'Parklands'),
+        ('ngara', 'Ngara'),
+        ('garden_city', 'Garden City'),
+
         ('roysambu', 'Roysambu'),
+        ('roasters', 'Roasters'),
         ('mirema', 'Mirema'),
         ('Trm_drive', 'Trm drive'),
         ('Lumumba_drive', 'Lumumba drive'),
+
+        ('kitisuru', 'Kitisuru'),
+        ('lavington', 'Lavington'),
+        ('loresho', 'Loresho'),
+
+        ('zimmerman', 'Zimmerman'),
         ('kahawa_sukari', 'Kahawa Sukari'),
         ('kahawa_wendani', 'Kahawa Wendani'),
         ('kasarani', 'Kasarani'),
@@ -30,72 +42,54 @@ class Listing(models.Model):
         ('Membley', 'Membley'),
         ('ruiru', 'Ruiru'),
 
-        ('zimmerman', 'Zimmerman'),
-        ('pangani', 'Pangani'),
-        ('ngara', 'Ngara'),
+        ('kiambu', 'Kiambu'),
+        ('thome', 'Thome'),
+        ('kiambu_road', 'Kiambu Road'),
+        ('ngong', 'Ngong'),
+        ('rongai', 'Rongai'),
 
 
         ('gwakairu', 'Gwakairu'),
         ('kimbo', 'Kimbo'),
         ('k_road', 'K Road'),
         ('juja', 'Juja'),
-
         ('thika', 'Thika'),
         ('kahawa_west', 'Kahawa West'),
-
         ('kitengela', 'Kitengela'),
-        ('kitisuru', 'Kitisuru'),
-        ('komarock', 'Komarock'),
-        ('lavington', 'Lavington'),
-        ('loresho', 'Loresho'),
 
-        ('ngong', 'Ngong'),
-        ('rongai', 'Rongai'),
+        ('watamu', 'Watamu'),
+        ('diani', 'Diani'),
+
+
         ('embakasi', 'Embakasi'),
-
         ('fedha', 'Fedha'),
         ('south_b', 'South B'),
         ('south_c', 'South C'),
-        ('kiambu', 'Kiambu'),
-        ('thome', 'Thome'),
-        ('kiambu_road', 'Kiambu Road'),
-
         ('utawala', 'Utawala'),
+
+
 
         ('mombasa', 'Mombasa'),
         ('eldoret', 'Eldoret'),
         ('nakuru', 'Nakuru'),
         ('naivasha', 'Naivasha'),
 
-        ('garden_city', 'Garden City'),
-
         ('homeland', 'Homeland'),
         ('hurlingham', 'Hurlingham'),
-
         ('kabete', 'Kabete'),
-
         ('kangemi', 'Kangemi'),
         ('karen', 'Karen'),
-
         ('kawangware', 'Kawangware'),
 
 
 
-
-
-
         ('milimani', 'Milimani'),
-
         ('muthaiga', 'Muthaiga'),
-
         ('mwiki', 'Mwiki'),
 
 
         ('nairobi_west', 'Nairobi West'),
-
         ('ongata_rongai', 'Ongata Rongai'),
-        ('parklands', 'Parklands'),
-        ('roasters', 'Roasters'),
         ('ruai', 'Ruai'),
         ('ruaka', 'Ruaka'),
         ('ruaraka', 'Ruaraka'),
@@ -106,6 +100,8 @@ class Listing(models.Model):
         ('upper_hill', 'Upper Hill'),
         ('uthiru', 'Uthiru'),
         ('athiriver', 'Athiriver'),
+
+
         ('kisumu', 'Kisumu'),
         ('machakos', 'Machakos'),
         ('meru_town', 'Meru Town'),
@@ -127,10 +123,8 @@ class Listing(models.Model):
         ('kilifi_town', 'Kilifi Town'),
         ('wangige', 'Wangige'),
         ('kericho_town', 'Kericho Town'),
-        ('watamu', 'Watamu'),
-        ('diani', 'Diani'),
 
-        ('chuka', 'Chuka'),
+
     ]
 
     LISTING_TYPE_CHOICES = [

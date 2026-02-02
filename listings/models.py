@@ -236,7 +236,6 @@ class Listing(models.Model):
         message += f"Property: {self.title}\n"
         message += f"Location: {self.get_location_display()} - {self.specific_location}\n"
         message += f"Host: {self.host_name}\n"
-        message += f"code: {self.host_phone}\n"
         message += f"Price: KSh {self.price_per_night}/night\n"
         message += f"Property Type: {self.get_property_type_display()}\n"
         message += f"Listing Type: {self.get_listing_type_display()}\n\n"

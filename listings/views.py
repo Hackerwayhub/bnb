@@ -105,7 +105,7 @@ def listing_list(request, location_slug=None):
             super().__init__(object_list, per_page, **kwargs)
 
     # Pagination
-    paginator = ListPaginator(all_listings_shuffled, 12)
+    paginator = ListPaginator(all_listings_shuffled, 99)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

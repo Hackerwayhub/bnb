@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const moreButton = document.createElement('a');
         moreButton.href = '#';
         moreButton.className = 'filter-item more-button';
-        moreButton.innerHTML = '<i class="fa fa-chevron-down" aria-hidden="true"></i> Explore by location ';
+        moreButton.innerHTML = '<i class="fa fa-chevron-down" aria-hidden="true"></i> Explore locations ';
         moreButton.style.cssText = `
             cursor: pointer !important;
             font-weight: bold !important;

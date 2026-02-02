@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set items per row based on device type
     let itemsPerRow;
     if (window.innerWidth < 768) {
-        itemsPerRow = 0; // Mobile
+        itemsPerRow = 2; // Mobile
     } else {
         itemsPerRow = 10; // Desktop/Laptop
     }
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         item.style.display = 'none';
                     }
                 });
-                moreButton.innerHTML = '<i class="fa fa-chevron-down" aria-hidden="true"></i> ';
+                moreButton.innerHTML = '<i class="fa fa-chevron-down" aria-hidden="true"></i>Explore locations ';
                 moreButton.setAttribute('data-expanded', 'false');
             }
         });

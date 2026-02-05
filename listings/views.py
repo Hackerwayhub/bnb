@@ -256,7 +256,7 @@ def book_via_whatsapp(request):
     context = {
         'page_title': 'Book BnB via WhatsApp - Instant Booking',
         'meta_description': 'Book your BnB directly on WhatsApp. Chat with hosts instantly, get quick responses.',
-        'whatsapp_number': '+254707341748',  # Your business WhatsApp number
+        'whatsapp_number': '+254798246467',  # Your business WhatsApp number
     }
     return render(request, 'BOOKVIAWHATSAPP.html', context)
 

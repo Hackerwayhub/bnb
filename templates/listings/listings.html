@@ -1129,14 +1129,12 @@ document.addEventListener('DOMContentLoaded', function() {
                <!-- Action Buttons - UPDATED WITH VIEW DETAILS -->
 <div class="listing-actions" style="display: flex; gap: 10px; margin-top: 15px;">
 
-      {% if listing.host_phone %}
-          <a href="tel:{{ listing.host_phone }}"
-             style="background-color: #007bff; color: white; padding: 12px; text-decoration: none; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; margin-bottom: 10px; transition: all 0.3s ease;"
-             onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='translateY(-2px)';"
-             onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='translateY(0)';">
-            <i class="fa fa-phone" aria-hidden="true"></i>
-          </a>
-          {% endif %}
+     <a href="tel:{{ listing.admin_contact }}"
+   style="background-color: #007bff; color: white; padding: 12px; text-decoration: none; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; margin-bottom: 10px; transition: all 0.3s ease;"
+   onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='translateY(-2px)';"
+   onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='translateY(0)';">
+  <i class="fa fa-phone" aria-hidden="true"></i>
+</a>
 
   <a href="{{ listing.admin_whatsapp_link }}" target="_blank"
      style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; flex: 1; justify-content: center;"
@@ -1347,14 +1345,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
              <div style="display: flex; gap: 10px; margin-top: 15px;">
 
-                   {% if listing.host_phone %}
-          <a href="tel:{{ listing.host_phone }}"
-             style="background-color: #007bff; color: white; padding: 12px; text-decoration: none; border-radius: 50px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; margin-bottom: 10px; transition: all 0.3s ease;"
-             onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='translateY(-2px)';"
-             onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='translateY(0)';">
-            <i class="fa fa-phone" aria-hidden="true"></i>
-          </a>
-          {% endif %}
+              <a href="tel:{{ listing.admin_contact }}"
+   style="background-color: #007bff; color: white; padding: 12px; text-decoration: none; border-radius: 50px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; margin-bottom: 10px; transition: all 0.3s ease;"
+   onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='translateY(-2px)';"
+   onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='translateY(0)';">
+  <i class="fa fa-phone" aria-hidden="true"></i>
+</a>
+
   <a href="{{ listing.admin_whatsapp_link }}" target="_blank"
      style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; flex: 1; justify-content: center;"
      onmouseover="this.style.backgroundColor='#25D366'; this.style.transform='translateY(-2px)';"

@@ -5,12 +5,13 @@ from .models import Listing, Booking
 
 @admin.register(Listing)
 class ListingAdmin(admin.ModelAdmin):
-    list_display = ('title', 'property_type', 'location', 'price_per_night',
+    list_display = ('title', 'user', 'property_type', 'location', 'price_per_night',
                     'listing_type_display', 'is_approved', 'is_featured', 'created_at')
-    list_filter = ('is_approved', 'is_featured', 'listing_type', 'property_type', 'location')
-    search_fields = ('title', 'description', 'host_name', 'specific_location')
+    list_filter = ('is_approved', 'is_featured', 'listing_type', 'property_type', 'location', 'user')
+    search_fields = ('title', 'description', 'host_name', 'specific_location', 'user__username', 'user__email')
     list_editable = ('is_approved', 'is_featured')
     readonly_fields = ('created_at', 'updated_at', 'slug', 'featured_payment_amount')
+    raw_id_fields = ('user',)
 
     # Add actions for bulk operations
     actions = ['make_featured', 'make_free', 'approve_listings', 'unapprove_listings']
@@ -21,7 +22,7 @@ class ListingAdmin(admin.ModelAdmin):
                        'specific_location', 'slug')
         }),
         ('Contact Information', {
-            'fields': ('host_name', 'host_phone', 'host_whatsapp', 'admin_contact')
+            'fields': ('host_name', 'host_email', 'host_phone', 'host_whatsapp', 'admin_contact')
         }),
         ('Listing Type & Pricing', {
             'fields': ('listing_type', 'featured_payment_amount', 'price_per_night')
@@ -36,7 +37,7 @@ class ListingAdmin(admin.ModelAdmin):
             'fields': ('main_image', 'image_2', 'image_3', 'image_4')
         }),
         ('Status & User', {
-            'fields': ('is_approved', 'is_featured', 'submitted_by', 'created_at', 'updated_at')
+            'fields': ('user', 'is_approved', 'is_featured', 'created_at', 'updated_at')
         }),
     )
 
@@ -86,18 +87,19 @@ class ListingAdmin(admin.ModelAdmin):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('id', 'guest_name', 'listing_link', 'check_in', 'check_out',
+    list_display = ('id', 'guest_name', 'user', 'listing_link', 'check_in', 'check_out',
                     'number_of_guests', 'total_price', 'status_badge', 'created_at', 'contact_info')
-    list_filter = ('status', 'check_in', 'check_out', 'listing', 'created_at')
-    search_fields = ('guest_name', 'guest_email', 'guest_phone', 'listing__title')
+    list_filter = ('status', 'check_in', 'check_out', 'listing', 'created_at', 'user')
+    search_fields = ('guest_name', 'guest_email', 'guest_phone', 'listing__title', 'user__username')
     list_per_page = 25
     date_hierarchy = 'created_at'
     readonly_fields = ('created_at', 'updated_at', 'total_price_display', 'duration_display')
     ordering = ('-created_at',)
+    raw_id_fields = ('listing', 'user')
 
     fieldsets = (
         ('Booking Information', {
-            'fields': ('listing', 'status', 'total_price_display')
+            'fields': ('listing', 'user', 'status', 'total_price_display')
         }),
         ('Guest Information', {
             'fields': ('guest_name', 'guest_email', 'guest_phone')
@@ -118,7 +120,7 @@ class BookingAdmin(admin.ModelAdmin):
     actions = ['mark_as_confirmed', 'mark_as_pending', 'mark_as_cancelled', 'mark_as_completed']
 
     def listing_link(self, obj):
-        url = f"/admin/app_name/listing/{obj.listing.id}/change/"
+        url = f"/admin/listings/listing/{obj.listing.id}/change/"
         return format_html('<a href="{}">{}</a>', url, obj.listing.title)
 
     listing_link.short_description = 'Property'
@@ -189,7 +191,7 @@ class BookingAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         # Add related listing to optimize queries
-        return super().get_queryset(request).select_related('listing')
+        return super().get_queryset(request).select_related('listing', 'user')
 
     # Customize form to show relevant help text
     def get_form(self, request, obj=None, **kwargs):

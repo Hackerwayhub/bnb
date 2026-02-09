@@ -1,0 +1,2337 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+{% load static %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Listing - BnB Ke</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+    :root {
+        --glass-white: rgba(255, 255, 255, 0.95);
+        --glass-light: rgba(255, 255, 255, 0.85);
+        --glass-medium: rgba(255, 255, 255, 0.75);
+        --glass-dark: rgba(255, 255, 255, 0.65);
+        --glass-border: rgba(255, 255, 255, 0.25);
+        --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        --blur-intensity: blur(20px);
+        --border-radius: 16px;
+        --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        --secondary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        --text-primary: #2d3748;
+        --text-secondary: #4a5568;
+        --text-muted: #718096;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --error-color: #ef4444;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        min-height: 100vh;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        padding: 16px;
+        color: var(--text-primary);
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 8px;
+    }
+
+    .glass-shapes {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .shape {
+        position: absolute;
+        background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+        border-radius: 50%;
+        filter: blur(40px);
+        animation: float 20s infinite linear;
+    }
+
+    .shape-1 {
+        width: 200px;
+        height: 200px;
+        top: -100px;
+        right: -100px;
+    }
+
+    .shape-2 {
+        width: 150px;
+        height: 150px;
+        bottom: -75px;
+        left: -75px;
+        animation-delay: -10s;
+        background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+    }
+
+    /* Header */
+    .page-header {
+        position: relative;
+        z-index: 1;
+        margin-bottom: 1.5rem;
+        animation: slideUp 0.8s ease-out;
+    }
+
+    .header-glass {
+        background: var(--glass-white);
+        backdrop-filter: var(--blur-intensity);
+        -webkit-backdrop-filter: var(--blur-intensity);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--glass-shadow);
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header-glass::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--primary-gradient);
+    }
+
+    .header-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .header-text {
+        text-align: center;
+    }
+
+    .header-text h1 {
+        font-size: 1.75rem;
+        margin-bottom: 0.75rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    .header-text p {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .header-text p i {
+        color: var(--text-muted);
+    }
+
+    .listing-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: var(--glass-light);
+        border-radius: 20px;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .listing-status.approved {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+        color: var(--success-color);
+        border: 1px solid rgba(5, 150, 105, 0.2);
+    }
+
+    .listing-status.pending {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.05));
+        color: var(--warning-color);
+        border: 1px solid rgba(217, 119, 6, 0.2);
+    }
+
+    .listing-status.featured {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.05));
+        color: #6366f1;
+        border: 1px solid rgba(139, 92, 246, 0.2);
+    }
+
+    .header-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    /* Messages */
+    .messages-container {
+        position: relative;
+        z-index: 1;
+        margin-bottom: 1.5rem;
+    }
+
+    .alert {
+        padding: 1rem;
+        background: var(--glass-white);
+        backdrop-filter: blur(20px);
+        border-radius: 12px;
+        margin-bottom: 0.75rem;
+        border-left: 4px solid;
+        box-shadow: var(--glass-shadow);
+        animation: slideInDown 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .alert i {
+        font-size: 1.2rem;
+        flex-shrink: 0;
+        margin-top: 0.125rem;
+    }
+
+    .alert.success {
+        border-left-color: var(--success-color);
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+    }
+
+    .alert.error {
+        border-left-color: var(--error-color);
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05));
+    }
+
+    .alert.warning {
+        border-left-color: var(--warning-color);
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.05));
+    }
+
+    .alert.info {
+        border-left-color: #3b82f6;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.05));
+    }
+
+    .alert ul {
+        margin-top: 0.5rem;
+        padding-left: 1rem;
+    }
+
+    .alert ul li {
+        margin-bottom: 0.25rem;
+    }
+
+    /* Form Container */
+    .form-container {
+        position: relative;
+        z-index: 1;
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .form-glass {
+        background: var(--glass-white);
+        backdrop-filter: var(--blur-intensity);
+        -webkit-backdrop-filter: var(--blur-intensity);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--glass-shadow);
+        padding: 1.5rem;
+    }
+
+    /* Form Progress */
+    .form-progress {
+        margin-bottom: 2rem;
+    }
+
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+    .progress-steps::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--glass-light);
+        transform: translateY(-50%);
+        z-index: 1;
+    }
+
+    .step {
+        width: 36px;
+        height: 36px;
+        background: var(--glass-white);
+        border: 2px solid var(--glass-border);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: var(--text-muted);
+        position: relative;
+        z-index: 2;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+    .step.active {
+        background: var(--primary-gradient);
+        border-color: transparent;
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .step.completed {
+        background: var(--success-color);
+        border-color: transparent;
+        color: white;
+    }
+
+    .step-label {
+        display: none;
+        position: absolute;
+        top: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        white-space: nowrap;
+    }
+
+    .step.active .step-label {
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    /* Form Steps */
+    .form-step {
+        display: none;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .form-step.active {
+        display: block;
+    }
+
+    .step-header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--glass-border);
+        text-align: center;
+    }
+
+    .step-header h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .step-header h2 i {
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .step-header p {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    /* Form Layout */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+    }
+
+    .form-section h3 {
+        font-size: 1.25rem;
+        margin-bottom: 1.25rem;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .form-section h3 i {
+        color: var(--text-muted);
+    }
+
+    /* Form Groups */
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-label i {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .form-label .required {
+        color: var(--error-color);
+        margin-left: 0.25rem;
+    }
+
+    .form-control, select.form-control, textarea.form-control {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        background: var(--glass-white);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        font-size: 1rem;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    }
+
+    select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23718096'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1.25rem;
+        padding-right: 2.5rem;
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form-control::placeholder {
+        color: var(--text-muted);
+    }
+
+    .form-control:focus, select.form-control:focus, textarea.form-control:focus {
+        outline: none;
+        background: var(--glass-white);
+        border-color: rgba(99, 102, 241, 0.3);
+        box-shadow:
+            0 0 0 3px rgba(99, 102, 241, 0.1),
+            0 8px 25px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+    }
+
+    .form-control.error {
+        border-color: var(--error-color);
+    }
+
+    .input-group {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        z-index: 2;
+    }
+
+    .form-control.has-icon {
+        padding-left: 3rem;
+    }
+
+    .help-text {
+        display: block;
+        margin-top: 0.5rem;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+
+    .error-message {
+        display: block;
+        margin-top: 0.5rem;
+        color: var(--error-color);
+        font-size: 0.85rem;
+        padding-left: 0.5rem;
+        border-left: 2px solid var(--error-color);
+    }
+
+    .field-error {
+        border-color: var(--error-color) !important;
+    }
+
+    /* Radio Buttons */
+    .radio-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .radio-option {
+        width: 100%;
+    }
+
+    .radio-input {
+        display: none;
+    }
+
+    .radio-label {
+        display: block;
+        padding: 1.25rem;
+        background: var(--glass-light);
+        border: 2px solid var(--glass-border);
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .radio-input:checked + .radio-label {
+        background: var(--glass-white);
+        border-color: rgba(99, 102, 241, 0.5);
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .radio-icon {
+        font-size: 1.75rem;
+        margin-bottom: 0.75rem;
+        display: block;
+    }
+
+    .radio-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+        font-size: 1.1rem;
+    }
+
+    .radio-desc {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .radio-price {
+        margin-top: 0.75rem;
+        font-weight: 700;
+        color: var(--success-color);
+        font-size: 1.1rem;
+    }
+
+    /* Checkbox Groups */
+    .checkbox-group {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--glass-light);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .checkbox-item:hover {
+        background: var(--glass-white);
+        transform: translateY(-2px);
+    }
+
+    .checkbox-input {
+        display: none;
+    }
+
+    .checkbox-input:checked + .checkbox-item {
+        background: var(--glass-white);
+        border-color: rgba(99, 102, 241, 0.3);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .checkbox-icon {
+        width: 24px;
+        height: 24px;
+        background: var(--glass-white);
+        border: 2px solid var(--glass-border);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: transparent;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .checkbox-input:checked + .checkbox-item .checkbox-icon {
+        background: var(--primary-gradient);
+        border-color: transparent;
+        color: white;
+    }
+
+    .checkbox-text {
+        flex: 1;
+    }
+
+    .checkbox-text span {
+        display: block;
+    }
+
+    .checkbox-title {
+        font-weight: 500;
+        color: var(--text-primary);
+    }
+
+    .checkbox-desc {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-top: 0.25rem;
+    }
+
+    /* Image Upload */
+    .image-upload-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .upload-box {
+        height: 120px;
+        background: var(--glass-light);
+        border: 2px dashed var(--glass-border);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .upload-box:hover {
+        background: var(--glass-white);
+        border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .upload-box.has-image {
+        border-style: solid;
+        background: var(--glass-white);
+    }
+
+    .upload-icon {
+        font-size: 1.5rem;
+        color: var(--text-muted);
+        margin-bottom: 0.5rem;
+    }
+
+    .upload-text {
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+        text-align: center;
+        padding: 0 0.5rem;
+    }
+
+    .upload-box.has-image .upload-icon,
+    .upload-box.has-image .upload-text {
+        display: none;
+    }
+
+    .upload-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .upload-remove {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 28px;
+        height: 28px;
+        background: rgba(239, 68, 68, 0.9);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 2;
+        font-size: 0.9rem;
+    }
+
+    .upload-box.has-image:hover .upload-remove {
+        opacity: 1;
+    }
+
+    .upload-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 0.5rem;
+        font-size: 0.75rem;
+        text-align: center;
+        backdrop-filter: blur(10px);
+    }
+
+    /* Form Actions */
+    .form-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--glass-border);
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        order: 2;
+    }
+
+    .form-progress-text {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-align: center;
+        order: 1;
+    }
+
+    /* Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 0.875rem 1.5rem;
+        background: var(--primary-gradient);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        width: 100%;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: 0.5s;
+    }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn:hover::before {
+        left: 100%;
+    }
+
+    .btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+    .btn-secondary {
+        background: var(--glass-light);
+        color: var(--text-primary);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-secondary:hover {
+        background: var(--glass-medium);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-danger {
+        background: var(--danger-gradient);
+        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger:hover {
+        box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-warning {
+        background: var(--warning-gradient);
+        box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-warning:hover {
+        box-shadow: 0 15px 35px rgba(245, 158, 11, 0.4);
+    }
+
+    /* Preview */
+    .preview-section {
+        background: var(--glass-light);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--glass-border);
+        padding: 1.5rem;
+        margin-top: 2rem;
+        animation: fadeIn 0.5s ease-out;
+        display: none;
+    }
+
+    .preview-header {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .preview-header h3 {
+        font-size: 1.25rem;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        justify-content: center;
+    }
+
+    .preview-header h3 i {
+        color: var(--text-muted);
+    }
+
+    /* Animations */
+    @keyframes float {
+        0% { transform: translate(0, 0) rotate(0deg); }
+        100% { transform: translate(50px, 50px) rotate(360deg); }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+
+    .shake {
+        animation: shake 0.5s ease-in-out;
+    }
+
+    /* Loading Overlay */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .loading-overlay.active {
+        display: flex;
+    }
+
+    .loading-content {
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid var(--primary-gradient);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive Breakpoints */
+
+    /* Small tablets and large phones (600px and up) */
+    @media (min-width: 600px) {
+        .container {
+            padding: 0 16px;
+        }
+
+        .header-glass {
+            padding: 2rem;
+        }
+
+        .form-glass {
+            padding: 2rem;
+        }
+
+        .header-content {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-text {
+            text-align: left;
+            flex: 1;
+        }
+
+        .header-actions {
+            flex-direction: row;
+            width: auto;
+        }
+
+        .btn {
+            width: auto;
+            padding: 1rem 2rem;
+        }
+
+        .checkbox-group {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+
+        .image-upload-grid {
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        }
+
+        .action-buttons {
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .form-actions {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-buttons {
+            order: 1;
+        }
+
+        .form-progress-text {
+            order: 2;
+            text-align: right;
+        }
+    }
+
+    /* Medium tablets (768px and up) */
+    @media (min-width: 768px) {
+        body {
+            padding: 24px;
+        }
+
+        .header-text h1 {
+            font-size: 2rem;
+        }
+
+        .listing-status {
+            margin-left: 1rem;
+            margin-top: 0;
+        }
+
+        .form-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .form-group[style*="grid-column"] {
+            grid-column: 1 / -1;
+        }
+
+        .radio-group {
+            flex-direction: row;
+            gap: 1.5rem;
+        }
+
+        .image-upload-grid {
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .upload-box {
+            height: 150px;
+        }
+
+        .step-label {
+            display: block;
+        }
+
+        .progress-steps::before {
+            display: block;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+        }
+
+        .preview-header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .preview-header h3 {
+            justify-content: flex-start;
+        }
+    }
+
+    /* Large tablets and small desktops (992px and up) */
+    @media (min-width: 992px) {
+        .form-glass {
+            padding: 2.5rem;
+        }
+
+        .header-text h1 {
+            font-size: 2.2rem;
+        }
+
+        .step-header {
+            text-align: left;
+        }
+
+        .step-header h2 {
+            justify-content: flex-start;
+        }
+
+        .checkbox-group {
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .image-upload-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    /* Desktops (1200px and up) */
+    @media (min-width: 1200px) {
+        .container {
+            padding: 0 24px;
+        }
+
+        .header-text h1 {
+            font-size: 2.5rem;
+        }
+
+        .form-section h3 {
+            font-size: 1.4rem;
+        }
+    }
+
+    /* Small phones (480px and below) */
+    @media (max-width: 480px) {
+        body {
+            padding: 12px;
+        }
+
+        .container {
+            padding: 0 8px;
+        }
+
+        .header-glass {
+            padding: 1.25rem;
+        }
+
+        .header-text h1 {
+            font-size: 1.5rem;
+        }
+
+        .header-text p {
+            font-size: 0.9rem;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .form-glass {
+            padding: 1.25rem;
+        }
+
+        .step-header h2 {
+            font-size: 1.3rem;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .image-upload-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .upload-box {
+            height: 100px;
+        }
+
+        .checkbox-group {
+            grid-template-columns: 1fr;
+        }
+
+        .form-section h3 {
+            font-size: 1.2rem;
+        }
+
+        .radio-label {
+            padding: 1rem;
+        }
+
+        .radio-icon {
+            font-size: 1.5rem;
+        }
+
+        .radio-title {
+            font-size: 1rem;
+        }
+    }
+
+    /* Medium phones (481px to 599px) */
+    @media (min-width: 481px) and (max-width: 599px) {
+        .image-upload-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .upload-box {
+            height: 120px;
+        }
+
+        .checkbox-group {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Touch device optimizations */
+    @media (hover: none) and (pointer: coarse) {
+        .upload-box:hover .upload-remove {
+            opacity: 1;
+        }
+
+        .btn:hover,
+        .checkbox-item:hover,
+        .radio-label:hover {
+            transform: none;
+        }
+
+        /* Increase touch target sizes */
+        .btn,
+        .checkbox-item,
+        .radio-label,
+        .upload-box,
+        .step {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .checkbox-item,
+        .radio-label {
+            padding: 1.25rem;
+        }
+
+        .form-control {
+            padding: 1rem 1.2rem;
+            font-size: 16px; /* Prevents zoom on iOS */
+        }
+    }
+
+    /* High-resolution displays */
+    @media (min-resolution: 192dpi) {
+        .header-glass,
+        .form-glass,
+        .alert {
+            backdrop-filter: var(--blur-intensity) saturate(180%);
+        }
+    }
+
+    /* Print styles */
+    @media print {
+        .glass-shapes,
+        .form-actions,
+        .btn,
+        .alert {
+            display: none;
+        }
+
+        .header-glass,
+        .form-glass {
+            box-shadow: none;
+            border: 1px solid #ddd;
+        }
+
+        .form-step.active {
+            display: block !important;
+        }
+
+        .progress-steps {
+            display: none;
+        }
+    }
+</style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Saving your changes...</p>
+        </div>
+    </div>
+
+    <div class="glass-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+    </div>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-glass">
+                <div class="header-content">
+                    <div class="header-text">
+                        <h1>Edit Listing</h1>
+                        <p>
+                            <i class="fas fa-edit"></i>
+                            Update your property details and photos
+                            <span class="listing-status {% if listing.is_approved %}approved{% else %}pending{% endif %} {% if listing.listing_type == 'featured' %}featured{% endif %}">
+                                {% if listing.listing_type == 'featured' %}⭐ {% endif %}
+                                {{ listing.is_approved|yesno:"Approved,Pending" }}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="header-actions">
+                        <a href="{{ listing.get_absolute_url }}" class="btn btn-secondary" target="_blank">
+                            <i class="fas fa-eye"></i>
+                            View Live
+                        </a>
+                        <a href="{% url 'my_bnb_listings' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to Listings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {% if message.tags == 'success' %}
+                    <i class="fas fa-check-circle"></i>
+                {% elif message.tags == 'error' %}
+                    <i class="fas fa-exclamation-circle"></i>
+                {% elif message.tags == 'warning' %}
+                    <i class="fas fa-exclamation-triangle"></i>
+                {% else %}
+                    <i class="fas fa-info-circle"></i>
+                {% endif %}
+                <span>{{ message }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Form Errors -->
+        {% if form.errors %}
+        <div class="messages-container">
+            <div class="alert error">
+                <i class="fas fa-exclamation-circle"></i>
+                <div>
+                    <strong>Please correct the errors below:</strong>
+                    <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ field|title }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Form Container -->
+        <div class="form-container">
+            <div class="form-glass">
+                <!-- Form Progress -->
+                <div class="form-progress">
+                    <div class="progress-steps">
+                        <div class="step active" id="step1-indicator">
+                            1
+                            <span class="step-label">Basic Info</span>
+                        </div>
+                        <div class="step" id="step2-indicator">
+                            2
+                            <span class="step-label">Details</span>
+                        </div>
+                        <div class="step" id="step3-indicator">
+                            3
+                            <span class="step-label">Amenities</span>
+                        </div>
+                        <div class="step" id="step4-indicator">
+                            4
+                            <span class="step-label">Pricing</span>
+                        </div>
+                        <div class="step" id="step5-indicator">
+                            5
+                            <span class="step-label">Photos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <form method="post" enctype="multipart/form-data" id="editListingForm" novalidate>
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="edit_listing">
+
+                    <!-- Step 1: Basic Information -->
+                    <div class="form-step active" id="step1">
+                        <div class="step-header">
+                            <h2><i class="fas fa-info-circle"></i> Basic Information</h2>
+                            <p>Start with the essential details about your property</p>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.title.id_for_label }}">
+                                    <i class="fas fa-heading"></i>
+                                    Listing Title<span class="required">*</span>
+                                </label>
+                                {{ form.title }}
+                                {% if form.title.errors %}
+                                <span class="error-message">{{ form.title.errors.0 }}</span>
+                                {% endif %}
+                                <span class="help-text">Catchy title that describes your property (max 200 characters)</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.property_type.id_for_label }}">
+                                    <i class="fas fa-home"></i>
+                                    Property Type<span class="required">*</span>
+                                </label>
+                                {{ form.property_type }}
+                                {% if form.property_type.errors %}
+                                <span class="error-message">{{ form.property_type.errors.0 }}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.location.id_for_label }}">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Location<span class="required">*</span>
+                                </label>
+                                {{ form.location }}
+                                {% if form.location.errors %}
+                                <span class="error-message">{{ form.location.errors.0 }}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.specific_location.id_for_label }}">
+                                    <i class="fas fa-map-pin"></i>
+                                    Specific Location
+                                </label>
+                                {{ form.specific_location }}
+                                {% if form.specific_location.errors %}
+                                <span class="error-message">{{ form.specific_location.errors.0 }}</span>
+                                {% endif %}
+                                <span class="help-text">Estate, street, landmarks, etc. (max 200 characters)</span>
+                            </div>
+
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label class="form-label" for="{{ form.description.id_for_label }}">
+                                    <i class="fas fa-align-left"></i>
+                                    Description
+                                </label>
+                                <textarea name="description" id="description" class="form-control" rows="4"
+                                          placeholder="Describe your property, nearby attractions, unique features...">{{ form.description.value|default:listing.description }}</textarea>
+                                {% if form.description.errors %}
+                                <span class="error-message">{{ form.description.errors.0 }}</span>
+                                {% endif %}
+                                <span class="help-text">Detailed description of your property (max 2000 characters)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Property Details -->
+                    <div class="form-step" id="step2">
+                        <div class="step-header">
+                            <h2><i class="fas fa-clipboard-list"></i> Property Details</h2>
+                            <p>Specify the capacity and features of your property</p>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.guests.id_for_label }}">
+                                    <i class="fas fa-users"></i>
+                                    Maximum Guests<span class="required">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <i class="fas fa-users input-icon"></i>
+                                    {{ form.guests }}
+                                </div>
+                                {% if form.guests.errors %}
+                                <span class="error-message">{{ form.guests.errors.0 }}</span>
+                                {% endif %}
+                                <span class="help-text">Maximum number of guests allowed</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.bedrooms.id_for_label }}">
+                                    <i class="fas fa-bed"></i>
+                                    Bedrooms<span class="required">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <i class="fas fa-bed input-icon"></i>
+                                    {{ form.bedrooms }}
+                                </div>
+                                {% if form.bedrooms.errors %}
+                                <span class="error-message">{{ form.bedrooms.errors.0 }}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.beds.id_for_label }}">
+                                    <i class="fas fa-bed"></i>
+                                    Beds<span class="required">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <i class="fas fa-bed input-icon"></i>
+                                    {{ form.beds }}
+                                </div>
+                                {% if form.beds.errors %}
+                                <span class="error-message">{{ form.beds.errors.0 }}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.bathrooms.id_for_label }}">
+                                    <i class="fas fa-bath"></i>
+                                    Bathrooms<span class="required">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <i class="fas fa-bath input-icon"></i>
+                                    {{ form.bathrooms }}
+                                </div>
+                                {% if form.bathrooms.errors %}
+                                <span class="error-message">{{ form.bathrooms.errors.0 }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-phone"></i> Contact Information</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.host_phone.id_for_label }}">
+                                        <i class="fas fa-phone"></i>
+                                        Contact Phone<span class="required">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <i class="fas fa-phone input-icon"></i>
+                                        {{ form.host_phone }}
+                                    </div>
+                                    {% if form.host_phone.errors %}
+                                    <span class="error-message">{{ form.host_phone.errors.0 }}</span>
+                                    {% endif %}
+                                    <span class="help-text">Format: +2547XXXXXXXX</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.host_whatsapp.id_for_label }}">
+                                        <i class="fab fa-whatsapp"></i>
+                                        WhatsApp Number<span class="required">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <i class="fab fa-whatsapp input-icon"></i>
+                                        {{ form.host_whatsapp }}
+                                    </div>
+                                    {% if form.host_whatsapp.errors %}
+                                    <span class="error-message">{{ form.host_whatsapp.errors.0 }}</span>
+                                    {% endif %}
+                                    <span class="help-text">For guests to contact you via WhatsApp</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Amenities -->
+                    <div class="form-step" id="step3">
+                        <div class="step-header">
+                            <h2><i class="fas fa-star"></i> Amenities & Features</h2>
+                            <p>Select the amenities available at your property</p>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-wifi"></i> Essential Amenities</h3>
+                            <div class="checkbox-group">
+                                {% for checkbox in form %}
+                                    {% if checkbox.name in 'wifi,parking,kitchen,pool,ac,tv'|split:',' %}
+                                    <input type="checkbox"
+                                           name="{{ checkbox.name }}"
+                                           id="{{ checkbox.id_for_label }}"
+                                           class="checkbox-input"
+                                           {% if checkbox.value %}checked{% endif %}>
+                                    <label for="{{ checkbox.id_for_label }}" class="checkbox-item">
+                                        <span class="checkbox-icon">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <div class="checkbox-text">
+                                            <span class="checkbox-title">
+                                                {% if checkbox.name == 'wifi' %}WiFi
+                                                {% elif checkbox.name == 'parking' %}Parking
+                                                {% elif checkbox.name == 'kitchen' %}Kitchen
+                                                {% elif checkbox.name == 'pool' %}Swimming Pool
+                                                {% elif checkbox.name == 'ac' %}Air Conditioning
+                                                {% elif checkbox.name == 'tv' %}TV
+                                                {% endif %}
+                                            </span>
+                                            <span class="checkbox-desc">
+                                                {% if checkbox.name == 'wifi' %}High-speed internet access
+                                                {% elif checkbox.name == 'parking' %}Free parking on premises
+                                                {% elif checkbox.name == 'kitchen' %}Full kitchen access
+                                                {% elif checkbox.name == 'pool' %}Private or shared pool
+                                                {% elif checkbox.name == 'ac' %}Cooling system available
+                                                {% elif checkbox.name == 'tv' %}Television with cable
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Pricing & Listing Type -->
+                    <div class="form-step" id="step4">
+                        <div class="step-header">
+                            <h2><i class="fas fa-tag"></i> Pricing & Listing Type</h2>
+                            <p>Set your pricing and choose how to list your property</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="{{ form.price_per_night.id_for_label }}">
+                                <i class="fas fa-money-bill-wave"></i>
+                                Price Per Night (KES)<span class="required">*</span>
+                            </label>
+                            <div class="input-group">
+                                <i class="fas fa-money-bill input-icon"></i>
+                                {{ form.price_per_night }}
+                            </div>
+                            {% if form.price_per_night.errors %}
+                            <span class="error-message">{{ form.price_per_night.errors.0 }}</span>
+                            {% endif %}
+                            <span class="help-text">Enter the price per night in Kenyan Shillings (minimum 100 KES)</span>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-crown"></i> Listing Type</h3>
+                            <p class="help-text" style="margin-bottom: 1rem;">Choose how you want your listing to appear</p>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="listing_type" id="free" value="free" class="radio-input"
+                                           {% if form.listing_type.value == 'free' %}checked{% endif %}>
+                                    <label for="free" class="radio-label">
+                                        <i class="fas fa-tag radio-icon"></i>
+                                        <div class="radio-title">Free Listing</div>
+                                        <div class="radio-desc">
+                                            Standard visibility in search results
+                                            Perfect for testing the platform
+                                            No additional cost
+                                        </div>
+                                        <div class="radio-price">FREE</div>
+                                    </label>
+                                </div>
+
+                                <div class="radio-option">
+                                    <input type="radio" name="listing_type" id="featured" value="featured" class="radio-input"
+                                           {% if form.listing_type.value == 'featured' %}checked{% endif %}>
+                                    <label for="featured" class="radio-label">
+                                        <i class="fas fa-crown radio-icon"></i>
+                                        <div class="radio-title">Featured Listing</div>
+                                        <div class="radio-desc">
+                                            Top placement in search results
+                                            5x more visibility
+                                            Priority support
+                                            Featured badge
+                                        </div>
+                                        <div class="radio-price">KES 1,000/month</div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Photos -->
+                    <div class="form-step" id="step5">
+                        <div class="step-header">
+                            <h2><i class="fas fa-images"></i> Property Photos</h2>
+                            <p>Upload high-quality photos to showcase your property</p>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-camera"></i> Upload Photos</h3>
+                            <p class="help-text" style="margin-bottom: 1rem;">
+                                <i class="fas fa-info-circle"></i>
+                                Upload at least one high-quality photo. Recommended size: 1200x800 pixels. Max file size: 5MB per image.
+                            </p>
+
+                            <div class="image-upload-grid">
+                                <!-- Main Image -->
+                                <div class="upload-box has-image" id="mainImageBox">
+                                    {% if listing.main_image %}
+                                    <img src="{{ listing.main_image.url }}" alt="Main Image" class="upload-image" id="mainImagePreview">
+                                    <div class="upload-remove" onclick="removeImage('main', true)">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                    {% else %}
+                                    <div class="upload-icon">
+                                        <i class="fas fa-camera"></i>
+                                    </div>
+                                    <div class="upload-text">
+                                        Click to upload main photo
+                                    </div>
+                                    {% endif %}
+                                    <input type="file" name="main_image" id="mainImage" accept="image/*" class="image-input" style="display: none;" onchange="previewImage(this, 'main')">
+                                    <div class="upload-label">Main Photo*</div>
+                                </div>
+
+                                <!-- Image 2 -->
+                                <div class="upload-box {% if listing.image_2 %}has-image{% endif %}" id="image2Box">
+                                    {% if listing.image_2 %}
+                                    <img src="{{ listing.image_2.url }}" alt="Image 2" class="upload-image" id="image2Preview">
+                                    <div class="upload-remove" onclick="removeImage('2', true)">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                    {% else %}
+                                    <div class="upload-icon">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <div class="upload-text">
+                                        Click to add photo
+                                    </div>
+                                    {% endif %}
+                                    <input type="file" name="image_2" id="image2" accept="image/*" class="image-input" style="display: none;" onchange="previewImage(this, '2')">
+                                    <div class="upload-label">Photo 2 (Optional)</div>
+                                </div>
+
+                                <!-- Image 3 -->
+                                <div class="upload-box {% if listing.image_3 %}has-image{% endif %}" id="image3Box">
+                                    {% if listing.image_3 %}
+                                    <img src="{{ listing.image_3.url }}" alt="Image 3" class="upload-image" id="image3Preview">
+                                    <div class="upload-remove" onclick="removeImage('3', true)">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                    {% else %}
+                                    <div class="upload-icon">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <div class="upload-text">
+                                        Click to add photo
+                                    </div>
+                                    {% endif %}
+                                    <input type="file" name="image_3" id="image3" accept="image/*" class="image-input" style="display: none;" onchange="previewImage(this, '3')">
+                                    <div class="upload-label">Photo 3 (Optional)</div>
+                                </div>
+
+                                <!-- Image 4 -->
+                                <div class="upload-box {% if listing.image_4 %}has-image{% endif %}" id="image4Box">
+                                    {% if listing.image_4 %}
+                                    <img src="{{ listing.image_4.url }}" alt="Image 4" class="upload-image" id="image4Preview">
+                                    <div class="upload-remove" onclick="removeImage('4', true)">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                    {% else %}
+                                    <div class="upload-icon">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <div class="upload-text">
+                                        Click to add photo
+                                    </div>
+                                    {% endif %}
+                                    <input type="file" name="image_4" id="image4" accept="image/*" class="image-input" style="display: none;" onchange="previewImage(this, '4')">
+                                    <div class="upload-label">Photo 4 (Optional)</div>
+                                </div>
+                            </div>
+
+                            <div class="help-text" style="margin-top: 1rem; padding: 1rem; background: var(--glass-light); border-radius: 8px; border-left: 3px solid var(--warning-color);">
+                                <i class="fas fa-lightbulb"></i>
+                                <strong>Pro tip:</strong> Properties with 4+ high-quality photos get 3x more bookings!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <div class="action-buttons">
+                            <button type="button" class="btn btn-secondary" id="prevBtn">
+                                <i class="fas fa-arrow-left"></i>
+                                Previous
+                            </button>
+                            <button type="button" class="btn" id="nextBtn">
+                                Next
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                            <button type="submit" class="btn" id="submitBtn" style="display: none;">
+                                <i class="fas fa-save"></i>
+                                Save Changes
+                            </button>
+                            <button type="button" class="btn btn-warning" id="previewBtn" onclick="showPreview()" style="display: none;">
+                                <i class="fas fa-eye"></i>
+                                Preview
+                            </button>
+                        </div>
+
+                        <div class="form-progress-text">
+                            <span id="currentStep">Step 1</span> of 5 • <span id="stepDescription">Basic Information</span>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Preview Section -->
+                <div class="preview-section" id="previewSection">
+                    <div class="preview-header">
+                        <h3><i class="fas fa-eye"></i> Preview Changes</h3>
+                        <button type="button" class="btn btn-secondary" onclick="hidePreview()">
+                            <i class="fas fa-times"></i>
+                            Close Preview
+                        </button>
+                    </div>
+
+                    <div id="previewContent">
+                        <!-- Preview will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Multi-step form functionality
+        let currentStep = 1;
+        const totalSteps = 5;
+        const stepDescriptions = [
+            "Basic Information",
+            "Property Details",
+            "Amenities & Features",
+            "Pricing & Listing Type",
+            "Property Photos"
+        ];
+
+        function updateStepIndicator() {
+            // Update step indicators
+            for (let i = 1; i <= totalSteps; i++) {
+                const step = document.getElementById(`step${i}-indicator`);
+                if (i < currentStep) {
+                    step.className = 'step completed';
+                    step.innerHTML = '<i class="fas fa-check"></i>';
+                } else if (i === currentStep) {
+                    step.className = 'step active';
+                    step.innerHTML = i;
+                } else {
+                    step.className = 'step';
+                    step.innerHTML = i;
+                }
+            }
+
+            // Show current step
+            for (let i = 1; i <= totalSteps; i++) {
+                const stepForm = document.getElementById(`step${i}`);
+                stepForm.style.display = i === currentStep ? 'block' : 'none';
+            }
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').style.display = currentStep === 1 ? 'none' : 'inline-flex';
+            document.getElementById('nextBtn').style.display = currentStep === totalSteps ? 'none' : 'inline-flex';
+            document.getElementById('submitBtn').style.display = currentStep === totalSteps ? 'inline-flex' : 'none';
+            document.getElementById('previewBtn').style.display = currentStep === totalSteps ? 'inline-flex' : 'none';
+
+            // Update step text
+            document.getElementById('currentStep').textContent = `Step ${currentStep}`;
+            document.getElementById('stepDescription').textContent = stepDescriptions[currentStep - 1];
+
+            // Scroll to top
+            scrollToTop();
+        }
+
+        function nextStep() {
+            if (validateStep(currentStep)) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    updateStepIndicator();
+                }
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepIndicator();
+            }
+        }
+
+        function validateStep(step) {
+            let isValid = true;
+            clearStepErrors(step);
+
+            // Add validation logic for each step
+            switch(step) {
+                case 1:
+                    const title = document.querySelector('input[name="title"]');
+                    const propertyType = document.querySelector('select[name="property_type"]');
+                    const location = document.querySelector('select[name="location"]');
+
+                    if (!title.value.trim()) {
+                        showFieldError(title, 'Title is required');
+                        isValid = false;
+                    } else if (title.value.trim().length > 200) {
+                        showFieldError(title, 'Title must be 200 characters or less');
+                        isValid = false;
+                    }
+
+                    if (!propertyType.value) {
+                        showFieldError(propertyType, 'Property type is required');
+                        isValid = false;
+                    }
+
+                    if (!location.value) {
+                        showFieldError(location, 'Location is required');
+                        isValid = false;
+                    }
+
+                    const description = document.getElementById('description');
+                    if (description.value.length > 2000) {
+                        showFieldError(description, 'Description must be 2000 characters or less');
+                        isValid = false;
+                    }
+                    break;
+
+                case 2:
+                    const guests = document.querySelector('input[name="guests"]');
+                    const bedrooms = document.querySelector('input[name="bedrooms"]');
+                    const beds = document.querySelector('input[name="beds"]');
+                    const bathrooms = document.querySelector('input[name="bathrooms"]');
+                    const phone = document.querySelector('input[name="host_phone"]');
+                    const whatsapp = document.querySelector('input[name="host_whatsapp"]');
+
+                    if (!guests.value || parseInt(guests.value) < 1) {
+                        showFieldError(guests, 'Please enter a valid number of guests (minimum 1)');
+                        isValid = false;
+                    } else if (parseInt(guests.value) > 50) {
+                        showFieldError(guests, 'Maximum 50 guests allowed');
+                        isValid = false;
+                    }
+
+                    if (!bedrooms.value || parseInt(bedrooms.value) < 0) {
+                        showFieldError(bedrooms, 'Please enter a valid number of bedrooms');
+                        isValid = false;
+                    } else if (parseInt(bedrooms.value) > 20) {
+                        showFieldError(bedrooms, 'Maximum 20 bedrooms allowed');
+                        isValid = false;
+                    }
+
+                    if (!beds.value || parseInt(beds.value) < 1) {
+                        showFieldError(beds, 'Please enter a valid number of beds (minimum 1)');
+                        isValid = false;
+                    } else if (parseInt(beds.value) > 40) {
+                        showFieldError(beds, 'Maximum 40 beds allowed');
+                        isValid = false;
+                    }
+
+                    if (!bathrooms.value || parseInt(bathrooms.value) < 0) {
+                        showFieldError(bathrooms, 'Please enter a valid number of bathrooms');
+                        isValid = false;
+                    } else if (parseInt(bathrooms.value) > 20) {
+                        showFieldError(bathrooms, 'Maximum 20 bathrooms allowed');
+                        isValid = false;
+                    }
+
+                    if (!phone.value.trim()) {
+                        showFieldError(phone, 'Phone number is required');
+                        isValid = false;
+                    } else if (!isValidPhone(phone.value)) {
+                        showFieldError(phone, 'Please enter a valid phone number (format: +2547XXXXXXXX)');
+                        isValid = false;
+                    }
+
+                    if (!whatsapp.value.trim()) {
+                        showFieldError(whatsapp, 'WhatsApp number is required');
+                        isValid = false;
+                    } else if (!isValidPhone(whatsapp.value)) {
+                        showFieldError(whatsapp, 'Please enter a valid WhatsApp number (format: +2547XXXXXXXX)');
+                        isValid = false;
+                    }
+                    break;
+
+                case 4:
+                    const price = document.querySelector('input[name="price_per_night"]');
+                    if (!price.value || parseFloat(price.value) < 100) {
+                        showFieldError(price, 'Price must be at least 100 KES per night');
+                        isValid = false;
+                    } else if (parseFloat(price.value) > 1000000) {
+                        showFieldError(price, 'Maximum price is 1,000,000 KES per night');
+                        isValid = false;
+                    }
+
+                    const listingType = document.querySelector('input[name="listing_type"]:checked');
+                    if (!listingType) {
+                        showMessage('Please select a listing type', 'warning');
+                        isValid = false;
+                    }
+                    break;
+
+                case 5:
+                    const mainImage = document.getElementById('mainImage');
+                    const mainImageBox = document.getElementById('mainImageBox');
+                    const hasExistingMainImage = mainImageBox.classList.contains('has-image');
+
+                    if (!mainImage.files[0] && !hasExistingMainImage) {
+                        showMessage('Please upload at least the main photo', 'warning');
+                        isValid = false;
+                    }
+
+                    // Validate image sizes
+                    const imageInputs = document.querySelectorAll('.image-input');
+                    for (const input of imageInputs) {
+                        if (input.files[0] && input.files[0].size > 5 * 1024 * 1024) {
+                            showFieldError(input, `Image ${input.id} is too large (max 5MB)`);
+                            isValid = false;
+                        }
+                    }
+                    break;
+            }
+
+            return isValid;
+        }
+
+        function isValidPhone(phone) {
+            const phoneRegex = /^\+?[0-9]{10,15}$/;
+            return phoneRegex.test(phone);
+        }
+
+        function showFieldError(element, message) {
+            element.classList.add('field-error');
+
+            let errorElement = element.nextElementSibling;
+            while (errorElement && !errorElement.classList.contains('error-message')) {
+                errorElement = errorElement.nextElementSibling;
+            }
+
+            if (!errorElement) {
+                errorElement = document.createElement('span');
+                errorElement.className = 'error-message';
+                element.parentNode.appendChild(errorElement);
+            }
+
+            errorElement.textContent = message;
+
+            // Add shake animation
+            element.parentNode.classList.add('shake');
+            setTimeout(() => {
+                element.parentNode.classList.remove('shake');
+            }, 500);
+        }
+
+        function clearStepErrors(step) {
+            const stepElement = document.getElementById(`step${step}`);
+            stepElement.querySelectorAll('.field-error').forEach(el => {
+                el.classList.remove('field-error');
+            });
+            stepElement.querySelectorAll('.error-message').forEach(el => el.remove());
+        }
+
+        function clearAllErrors() {
+            document.querySelectorAll('.field-error').forEach(el => {
+                el.classList.remove('field-error');
+            });
+            document.querySelectorAll('.error-message').forEach(el => el.remove());
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showMessage(message, type = 'error') {
+            const messagesContainer = document.querySelector('.messages-container');
+            if (!messagesContainer) return;
+
+            const alert = document.createElement('div');
+            alert.className = `alert ${type}`;
+            alert.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+
+            messagesContainer.appendChild(alert);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        }
+
+        // Image upload functionality
+        function previewImage(input, imageNumber) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // Validate file type
+            if (!file.type.match('image.*')) {
+                showFieldError(input, 'Please select an image file');
+                return;
+            }
+
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                showFieldError(input, 'Image must be less than 5MB');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const box = document.getElementById(`${imageNumber}ImageBox`);
+                let preview = document.getElementById(`${imageNumber}ImagePreview`);
+
+                if (!preview) {
+                    preview = document.createElement('img');
+                    preview.id = `${imageNumber}ImagePreview`;
+                    preview.className = 'upload-image';
+                    box.appendChild(preview);
+                }
+
+                preview.src = e.target.result;
+                box.classList.add('has-image');
+
+                // Show remove button
+                let removeBtn = box.querySelector('.upload-remove');
+                if (!removeBtn) {
+                    removeBtn = document.createElement('div');
+                    removeBtn.className = 'upload-remove';
+                    removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    removeBtn.onclick = () => removeImage(imageNumber, false);
+                    box.appendChild(removeBtn);
+                }
+
+                // Clear any errors
+                input.classList.remove('field-error');
+                const error = input.nextElementSibling;
+                if (error && error.classList.contains('error-message')) {
+                    error.remove();
+                }
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage(imageNumber, isExisting = false) {
+            const box = document.getElementById(`${imageNumber}ImageBox`);
+            const input = document.getElementById(`${imageNumber}Image`);
+            const preview = document.getElementById(`${imageNumber}ImagePreview`);
+            const removeBtn = box.querySelector('.upload-remove');
+
+            if (isExisting && confirm('Are you sure you want to remove this image? This action cannot be undone.')) {
+                // For existing images, we need to mark them for deletion
+                const deleteInput = document.createElement('input');
+                deleteInput.type = 'hidden';
+                deleteInput.name = `delete_${imageNumber}_image`;
+                deleteInput.value = 'true';
+                document.getElementById('editListingForm').appendChild(deleteInput);
+            }
+
+            // Reset input
+            if (input) input.value = '';
+
+            // Remove preview and remove button
+            if (preview) preview.remove();
+            if (removeBtn) removeBtn.remove();
+
+            // Reset box state
+            box.classList.remove('has-image');
+        }
+
+        // Setup click events for upload boxes
+        document.querySelectorAll('.upload-box').forEach(box => {
+            box.addEventListener('click', function(e) {
+                if (e.target.classList.contains('upload-remove')) return;
+
+                const boxId = this.id;
+                const imageNumber = boxId.replace('ImageBox', '').replace('image', '');
+                const inputId = imageNumber === 'main' ? 'mainImage' : `image${imageNumber}`;
+                document.getElementById(inputId).click();
+            });
+        });
+
+        // Preview functionality
+        function showPreview() {
+            if (!validateStep(currentStep)) return;
+
+            // Collect form data
+            const formData = new FormData(document.getElementById('editListingForm'));
+            let previewHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <h4 style="margin-bottom: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem;">Property Details</h4>
+                        <div style="background: var(--glass-light); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--glass-border);">
+                            <p><strong>Title:</strong> ${formData.get('title') || 'Not set'}</p>
+                            <p><strong>Type:</strong> ${getDisplayValue('property_type', formData.get('property_type'))}</p>
+                            <p><strong>Location:</strong> ${getDisplayValue('location', formData.get('location'))}</p>
+                            <p><strong>Specific Location:</strong> ${formData.get('specific_location') || 'Not specified'}</p>
+                            <p><strong>Guests:</strong> ${formData.get('guests') || '0'}</p>
+                            <p><strong>Bedrooms:</strong> ${formData.get('bedrooms') || '0'}</p>
+                            <p><strong>Beds:</strong> ${formData.get('beds') || '0'}</p>
+                            <p><strong>Bathrooms:</strong> ${formData.get('bathrooms') || '0'}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 style="margin-bottom: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem;">Pricing & Contact</h4>
+                        <div style="background: var(--glass-light); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--glass-border);">
+                            <p><strong>Price:</strong> KES ${formData.get('price_per_night') || '0'}/night</p>
+                            <p><strong>Listing Type:</strong> ${formData.get('listing_type') === 'featured' ? '⭐ Featured' : 'Free'}</p>
+                            <p><strong>Phone:</strong> ${formData.get('host_phone') || 'Not set'}</p>
+                            <p><strong>WhatsApp:</strong> ${formData.get('host_whatsapp') || 'Not set'}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h4 style="margin-bottom: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem;">Amenities</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 1rem; background: var(--glass-light); border-radius: 12px; border: 1px solid var(--glass-border);">
+                        ${formData.get('wifi') ? '<span style="background: var(--glass-white); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-wifi"></i> WiFi</span>' : ''}
+                        ${formData.get('parking') ? '<span style="background: var(--glass-white); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-parking"></i> Parking</span>' : ''}
+                        ${formData.get('kitchen') ? '<span style="background: var(--glass-white); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-utensils"></i> Kitchen</span>' : ''}
+                        ${formData.get('pool') ? '<span style="background: var(--glass-white); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-swimming-pool"></i> Pool</span>' : ''}
+                        ${formData.get('ac') ? '<span style="background: var(--glass-white); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-snowflake"></i> AC</span>' : ''}
+                        ${formData.get('tv') ? '<span style="background: var(--glass-white); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-tv"></i> TV</span>' : ''}
+                        ${!formData.get('wifi') && !formData.get('parking') && !formData.get('kitchen') && !formData.get('pool') && !formData.get('ac') && !formData.get('tv') ? '<span style="color: var(--text-muted);">No amenities selected</span>' : ''}
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h4 style="margin-bottom: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem;">Description</h4>
+                    <div style="padding: 1rem; background: var(--glass-light); border-radius: 12px; border: 1px solid var(--glass-border); min-height: 100px;">
+                        ${formData.get('description') || '<span style="color: var(--text-muted);">No description provided</span>'}
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; text-align: center;">
+                    <button type="button" class="btn" onclick="submitForm()" style="margin-right: 1rem;">
+                        <i class="fas fa-check"></i>
+                        Confirm & Save
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="hidePreview()">
+                        <i class="fas fa-edit"></i>
+                        Edit Changes
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('previewContent').innerHTML = previewHTML;
+            document.getElementById('previewSection').style.display = 'block';
+            document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getDisplayValue(fieldName, value) {
+            // This function would map field values to display names
+            // For now, just return the value
+            return value || 'Not set';
+        }
+
+        function hidePreview() {
+            document.getElementById('previewSection').style.display = 'none';
+        }
+
+        function submitForm() {
+            const form = document.getElementById('editListingForm');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Show loading
+            document.getElementById('loadingOverlay').classList.add('active');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            submitBtn.disabled = true;
+
+            // Submit form
+            setTimeout(() => {
+                form.submit();
+            }, 1000);
+        }
+
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStepIndicator();
+
+            // Add step navigation
+            document.getElementById('nextBtn').addEventListener('click', nextStep);
+            document.getElementById('prevBtn').addEventListener('click', prevStep);
+
+            // Add enter key navigation
+            document.querySelectorAll('.form-control').forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (currentStep < totalSteps) {
+                            nextStep();
+                        }
+                    }
+                });
+            });
+
+            // Clear errors on input
+            document.querySelectorAll('.form-control, select, textarea').forEach(input => {
+                input.addEventListener('input', function() {
+                    this.classList.remove('field-error');
+                    const error = this.nextElementSibling;
+                    if (error && error.classList.contains('error-message')) {
+                        error.remove();
+                    }
+                });
+            });
+
+            // Form submission handler
+            document.getElementById('editListingForm').addEventListener('submit', function(e) {
+                // Validate all steps
+                let allValid = true;
+                for (let i = 1; i <= totalSteps; i++) {
+                    if (!validateStep(i)) {
+                        allValid = false;
+                        currentStep = i;
+                        updateStepIndicator();
+                        break;
+                    }
+                }
+
+                if (!allValid) {
+                    e.preventDefault();
+                    showMessage('Please fix the errors in the form before submitting.', 'warning');
+                } else {
+                    // Show loading
+                    document.getElementById('loadingOverlay').classList.add('active');
+                }
+            });
+
+            // Auto-hide messages after 5 seconds
+            setTimeout(() => {
+                document.querySelectorAll('.alert').forEach(alert => {
+                    setTimeout(() => {
+                        alert.style.opacity = '0';
+                        setTimeout(() => alert.remove(), 300);
+                    }, 5000);
+                });
+            }, 100);
+        });
+
+        // Allow direct access to steps via URL hash
+        window.addEventListener('hashchange', function() {
+            const hash = window.location.hash.substring(1);
+            if (hash && hash.startsWith('step')) {
+                const stepNum = parseInt(hash.replace('step', ''));
+                if (stepNum >= 1 && stepNum <= totalSteps) {
+                    currentStep = stepNum;
+                    updateStepIndicator();
+                }
+            }
+        });
+    </script>
+</body>
+{% endblock %}

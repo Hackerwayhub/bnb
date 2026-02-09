@@ -11,7 +11,7 @@ class Listing(models.Model):
         ('one_bedroom', 'One Bedroom'),
         ('two_bedroom', 'Two Bedroom'),
         ('three_bedroom', 'Three Bedroom'),
-        ('Own_compound', 'Own compound'),
+        ('Own_compound', 'Own compound/villa'),
         ('beach_house', 'beach house'),
     ]
 
@@ -48,7 +48,6 @@ class Listing(models.Model):
         ('ngong', 'Ngong'),
         ('rongai', 'Rongai'),
 
-
         ('gwakairu', 'Gwakairu'),
         ('kimbo', 'Kimbo'),
         ('k_road', 'K Road'),
@@ -60,14 +59,11 @@ class Listing(models.Model):
         ('watamu', 'Watamu'),
         ('diani', 'Diani'),
 
-
         ('embakasi', 'Embakasi'),
         ('fedha', 'Fedha'),
         ('south_b', 'South B'),
         ('south_c', 'South C'),
         ('utawala', 'Utawala'),
-
-
 
         ('mombasa', 'Mombasa'),
         ('eldoret', 'Eldoret'),
@@ -81,12 +77,9 @@ class Listing(models.Model):
         ('karen', 'Karen'),
         ('kawangware', 'Kawangware'),
 
-
-
         ('milimani', 'Milimani'),
         ('muthaiga', 'Muthaiga'),
         ('mwiki', 'Mwiki'),
-
 
         ('nairobi_west', 'Nairobi West'),
         ('ongata_rongai', 'Ongata Rongai'),
@@ -100,7 +93,6 @@ class Listing(models.Model):
         ('upper_hill', 'Upper Hill'),
         ('uthiru', 'Uthiru'),
         ('athiriver', 'Athiriver'),
-
 
         ('kisumu', 'Kisumu'),
         ('machakos', 'Machakos'),
@@ -124,7 +116,6 @@ class Listing(models.Model):
         ('wangige', 'Wangige'),
         ('kericho_town', 'Kericho Town'),
 
-
     ]
 
     LISTING_TYPE_CHOICES = [
@@ -141,6 +132,9 @@ class Listing(models.Model):
 
     # Contact Information
     host_name = models.CharField(max_length=100)
+
+    # Add host_email field
+    host_email = models.EmailField(max_length=255, blank=True)
 
     phone_validator = RegexValidator(
         regex=r'^\+?1?\d{9,15}$',
@@ -201,7 +195,16 @@ class Listing(models.Model):
     is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    submitted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    # Update submitted_by to be required and named 'user'
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='user_listings',
+        verbose_name='Property Owner',
+        null = True,  # Allow null for existing records
+        blank = True  # Allow blank in forms
+    )
 
     # Meta
     slug = models.SlugField(unique=True, blank=True)
@@ -213,6 +216,15 @@ class Listing(models.Model):
     def save(self, *args, **kwargs):
         # Automatically set is_featured based on listing_type
         self.is_featured = (self.listing_type == 'featured')
+
+        # Auto-fill host_email from user if not set
+        if self.user and not self.host_email:
+            self.host_email = self.user.email
+
+        # Auto-fill host_name from user if not set
+        if self.user and not self.host_name:
+            full_name = f"{self.user.first_name} {self.user.last_name}".strip()
+            self.host_name = full_name if full_name else self.user.username
 
         if not self.slug:
             from django.utils.text import slugify
@@ -239,7 +251,6 @@ class Listing(models.Model):
         message += f"Price: KSh {self.price_per_night}/night\n"
         message += f"Property Type: {self.get_property_type_display()}\n"
         message += f"Listing Type: {self.get_listing_type_display()}\n\n"
-
 
         import urllib.parse
         encoded_message = urllib.parse.quote(message)
@@ -325,6 +336,16 @@ class Booking(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
+    # Add user relationship for booking history
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='user_bookings',
+        verbose_name='Guest Account'
+    )
+
     class Meta:
         ordering = ['-created_at']
 
@@ -344,3 +365,8 @@ class Booking(models.Model):
         if self.check_in and self.check_out:
             return (self.check_out - self.check_in).days
         return 0
+
+    @property
+    def booking_ref(self):
+        """Generate booking reference number"""
+        return f"BK{self.id:06d}"

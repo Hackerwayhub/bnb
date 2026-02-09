@@ -1,0 +1,1432 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Listings - BnB</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+        --glass-white: rgba(255, 255, 255, 0.95);
+        --glass-light: rgba(255, 255, 255, 0.85);
+        --glass-medium: rgba(255, 255, 255, 0.75);
+        --glass-dark: rgba(255, 255, 255, 0.65);
+        --glass-border: rgba(255, 255, 255, 0.25);
+        --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        --blur-intensity: blur(20px);
+        --border-radius: 20px;
+        --primary-gradient:linear-gradient(135deg, rgb(255, 0, 0), rgb(255, 107, 53));
+        --secondary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        --accent-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        --text-primary: #2d3748;
+        --text-secondary: #4a5568;
+        --text-muted: #718096;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        min-height: 100vh;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        padding: 16px;
+        color: var(--text-primary);
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 8px;
+    }
+
+    .glass-shapes {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .shape {
+        position: absolute;
+        background: linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1));
+        border-radius: 50%;
+        filter: blur(40px);
+        animation: float 20s infinite linear;
+    }
+
+    .shape-1 {
+        width: 300px;
+        height: 300px;
+        top: -150px;
+        right: -150px;
+    }
+
+    .shape-2 {
+        width: 200px;
+        height: 200px;
+        bottom: -100px;
+        left: -100px;
+        animation-delay: -10s;
+        background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+    }
+
+    /* Header */
+    .page-header {
+        position: relative;
+        z-index: 1;
+        margin-bottom: 1.5rem;
+        animation: slideUp 0.8s ease-out;
+    }
+
+    .header-glass {
+        background: var(--glass-white);
+        backdrop-filter: var(--blur-intensity);
+        -webkit-backdrop-filter: var(--blur-intensity);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--glass-shadow);
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header-glass::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+    }
+
+    .header-content {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.5rem;
+    }
+
+    .header-text h1 {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    .header-text p {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .header-text p i {
+        color: var(--text-muted);
+    }
+
+    .header-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .stat-card {
+        background: var(--glass-white);
+        backdrop-filter: var(--blur-intensity);
+        -webkit-backdrop-filter: var(--blur-intensity);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--glass-shadow);
+        padding: 1.25rem;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .stat-icon.total {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.2));
+        color: #8b5cf6;
+    }
+
+    .stat-icon.active {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.2));
+        color: #10b981;
+    }
+
+    .stat-icon.pending {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.2));
+        color: #f59e0b;
+    }
+
+    .stat-content h3 {
+        font-size: 1.75rem;
+        margin-bottom: 0.25rem;
+        font-weight: 700;
+    }
+
+    .stat-content p {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    /* Filter Controls */
+    .filter-controls {
+        background: var(--glass-light);
+        backdrop-filter: var(--blur-intensity);
+        -webkit-backdrop-filter: var(--blur-intensity);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--glass-border);
+        padding: 1.25rem;
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .filter-row {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .filter-btn {
+        padding: 0.75rem 1.25rem;
+        background: var(--glass-white);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
+        flex: 1;
+        min-width: 0;
+        justify-content: center;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+        background: var(--primary-gradient);
+        color: white;
+        border-color: transparent;
+    }
+
+    .search-box {
+        position: relative;
+        width: 100%;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 0.9rem 1.2rem 0.9rem 3rem;
+        background: var(--glass-white);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        font-size: 0.95rem;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: rgba(139, 92, 246, 0.3);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+    }
+
+    /* Listings Grid */
+    .listings-container {
+        position: relative;
+        z-index: 1;
+    }
+
+    .listings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .listing-card {
+        background: var(--glass-white);
+        backdrop-filter: var(--blur-intensity);
+        -webkit-backdrop-filter: var(--blur-intensity);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--glass-shadow);
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+    }
+
+    .listing-card:hover {
+        transform: translateY(-8px);
+        box-shadow:
+            0 30px 60px rgba(0, 0, 0, 0.12),
+            0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .listing-image {
+        height: 180px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .listing-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .listing-card:hover .listing-image img {
+        transform: scale(1.05);
+    }
+
+    .listing-badge {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        background: var(--glass-white);
+        backdrop-filter: blur(10px);
+        padding: 0.35rem 0.85rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        border: 1px solid var(--glass-border);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .listing-badge.featured {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(217, 119, 6, 0.9));
+        color: white;
+        border-color: transparent;
+    }
+
+    .listing-badge.free {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.9));
+        color: white;
+        border-color: transparent;
+    }
+
+    .listing-content {
+        padding: 1.25rem;
+    }
+
+    .listing-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .listing-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        line-height: 1.4;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .listing-price {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #059669;
+        white-space: nowrap;
+    }
+
+    .listing-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-shrink: 0;
+    }
+
+    .meta-item i {
+        color: var(--text-muted);
+    }
+
+    .listing-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .feature-tag {
+        padding: 0.25rem 0.6rem;
+        background: var(--glass-light);
+        border-radius: 20px;
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        border: 1px solid var(--glass-border);
+        white-space: nowrap;
+    }
+
+    .listing-footer {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid var(--glass-border);
+    }
+
+    @media (min-width: 480px) {
+        .listing-footer {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    .listing-status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+
+    .status-dot.active {
+        background: #10b981;
+        box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+    }
+
+    .status-dot.inactive {
+        background: #ef4444;
+        box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+    }
+
+    .status-dot.pending {
+        background: #f59e0b;
+        box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+    }
+
+    .listing-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    /* Action Buttons */
+    .action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--glass-white);
+        border: 1px solid var(--glass-border);
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .action-btn.view:hover {
+        background: #3b82f6;
+        color: white;
+        border-color: transparent;
+    }
+
+    .action-btn.edit:hover {
+        background: #8b5cf6;
+        color: white;
+        border-color: transparent;
+    }
+
+    .action-btn.delete:hover {
+        background: #ef4444;
+        color: white;
+        border-color: transparent;
+    }
+
+    .action-btn .tooltip {
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--text-primary);
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+
+    .action-btn:hover .tooltip {
+        opacity: 1;
+        visibility: visible;
+        bottom: -25px;
+    }
+
+    /* Empty State */
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 3rem 1.5rem;
+        background: var(--glass-light);
+        border-radius: var(--border-radius);
+        border: 2px dashed var(--glass-border);
+    }
+
+    .empty-icon {
+        width: 70px;
+        height: 70px;
+        background: var(--glass-white);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.25rem;
+        border: 1px solid var(--glass-border);
+    }
+
+    .empty-icon i {
+        font-size: 2rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--text-primary);
+    }
+
+    .empty-state p {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+
+    /* Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 0.875rem 1.5rem;
+        background: var(--primary-gradient);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        text-align: center;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: 0.5s;
+    }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn:hover::before {
+        left: 100%;
+    }
+
+    .btn-secondary {
+        background: var(--glass-light);
+        color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+        background: var(--glass-medium);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .page-btn {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--glass-white);
+        border: 1px solid var(--glass-border);
+        border-radius: 10px;
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .page-btn:hover, .page-btn.active {
+        background: var(--primary-gradient);
+        color: white;
+        border-color: transparent;
+    }
+
+    .page-btn.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Animations */
+    @keyframes float {
+        0% { transform: translate(0, 0) rotate(0deg); }
+        100% { transform: translate(50px, 50px) rotate(360deg); }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive Breakpoints */
+    @media (min-width: 480px) {
+        body {
+            padding: 20px;
+        }
+
+        .container {
+            padding: 0 12px;
+        }
+
+        .header-content {
+            flex-direction: row;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .header-actions {
+            flex-direction: row;
+            width: auto;
+        }
+
+        .btn {
+            width: auto;
+        }
+
+        .filter-row {
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            width: auto;
+            max-width: 400px;
+        }
+
+        .header-text h1 {
+            font-size: 2rem;
+        }
+
+        .listing-header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .listing-price {
+            margin-left: 1rem;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .stats-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .header-glass {
+            padding: 2rem;
+        }
+
+        .header-content {
+            gap: 3rem;
+        }
+
+        .header-text h1 {
+            font-size: 2.25rem;
+        }
+
+        .listing-image {
+            height: 200px;
+        }
+
+        .listing-content {
+            padding: 1.5rem;
+        }
+
+        .listing-footer {
+            flex-direction: row;
+        }
+
+        .filter-group {
+            flex-wrap: nowrap;
+        }
+
+        .filter-btn {
+            flex: none;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .header-content {
+            flex-direction: row;
+        }
+
+        .header-text h1 {
+            font-size: 2.5rem;
+        }
+
+        .filter-row {
+            flex-direction: row;
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: none;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .listings-grid {
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+    }
+
+    /* Mobile-specific adjustments */
+    @media (max-width: 767px) {
+        .header-glass {
+            padding: 1.25rem;
+        }
+
+        .stat-card {
+            padding: 1rem;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            font-size: 1.25rem;
+        }
+
+        .stat-content h3 {
+            font-size: 1.5rem;
+        }
+
+        .filter-controls {
+            padding: 1rem;
+        }
+
+        .listing-badge {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.7rem;
+        }
+
+        .empty-state {
+            padding: 2rem 1rem;
+        }
+
+        .empty-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .empty-icon i {
+            font-size: 1.75rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding: 12px;
+        }
+
+        .container {
+            padding: 0 8px;
+        }
+
+        .header-glass {
+            padding: 1rem;
+            border-radius: 16px;
+        }
+
+        .header-text h1 {
+            font-size: 1.5rem;
+        }
+
+        .header-text p {
+            font-size: 0.9rem;
+        }
+
+        .stat-card {
+            padding: 0.875rem;
+            border-radius: 16px;
+        }
+
+        .stat-content h3 {
+            font-size: 1.35rem;
+        }
+
+        .stat-content p {
+            font-size: 0.85rem;
+        }
+
+        .listings-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .listing-image {
+            height: 160px;
+        }
+
+        .listing-content {
+            padding: 1rem;
+        }
+
+        .listing-title {
+            font-size: 1.1rem;
+        }
+
+        .listing-price {
+            font-size: 1.25rem;
+        }
+
+        .listing-meta {
+            font-size: 0.8rem;
+            gap: 0.5rem;
+        }
+
+        .feature-tag {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.625rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .search-input {
+            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            font-size: 0.9rem;
+        }
+
+        .search-icon {
+            left: 0.875rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Tablet landscape and desktop */
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .listings-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+
+        .header-content {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .header-actions {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    /* Touch device optimizations */
+    @media (hover: none) and (pointer: coarse) {
+        .listing-card:hover {
+            transform: none;
+        }
+
+        .action-btn:hover {
+            transform: none;
+        }
+
+        .stat-card:hover {
+            transform: none;
+        }
+
+        .btn:hover {
+            transform: none;
+        }
+
+        .filter-btn:hover {
+            transform: none;
+        }
+
+        /* Increase touch target sizes */
+        .action-btn,
+        .page-btn,
+        .filter-btn {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .listing-actions .action-btn {
+            width: 44px;
+            height: 44px;
+        }
+    }
+
+    /* High-resolution displays */
+    @media (min-resolution: 192dpi) {
+        .header-glass,
+        .stat-card,
+        .listing-card {
+            backdrop-filter: var(--blur-intensity) saturate(180%);
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="glass-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+    </div>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-glass">
+                <div class="header-content">
+                    <div class="header-text">
+
+                        <p>
+                            <i class="fas fa-home"></i>
+                            Manage all your property listings in one place
+                        </p>
+                    </div>
+                    <div class="header-actions">
+                        <a href="{% url 'advertise_bnb' %}" class="btn">
+                            <i class="fas fa-plus"></i>
+                            Create New Listing
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon total">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ listings.count }}</h3>
+                    <p>Total Listings</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon active">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ active_listings.count }}</h3>
+                    <p>Active Listings</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon pending">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ pending_bookings }}</h3>
+                    <p>Pending Bookings</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="filter-controls">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-layer-group"></i>
+                        All Listings
+                    </button>
+
+                    <button class="filter-btn" data-filter="featured">
+                        <i class="fas fa-star"></i>
+                        Featured
+                    </button>
+                    <button class="filter-btn" data-filter="free">
+                        <i class="fas fa-tag"></i>
+                        Free
+                    </button>
+                </div>
+
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search your listings...">
+                </div>
+            </div>
+        </div>
+
+        <!-- Listings Grid -->
+        <div class="listings-container">
+            <div class="listings-grid">
+                {% if listings %}
+                    {% for listing in listings %}
+                    <div class="listing-card" data-listing-type="{{ listing.listing_type }}" data-listing-status="{{ listing.is_active|yesno:'active,inactive' }}">
+                        <div class="listing-image">
+                            {% if listing.main_image %}
+                            <img src="{{ listing.main_image.url }}" alt="{{ listing.title }}">
+                            {% else %}
+                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--glass-medium), var(--glass-light)); display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-home fa-3x" style="color: var(--text-muted);"></i>
+                            </div>
+                            {% endif %}
+
+                            <span class="listing-badge {{ listing.listing_type }}">
+                                <i class="fas fa-{% if listing.listing_type == 'featured' %}star{% else %}tag{% endif %}"></i>
+                                {{ listing.get_listing_type_display }}
+                            </span>
+                        </div>
+
+                        <div class="listing-content">
+                            <div class="listing-header">
+                                <h3 class="listing-title">{{ listing.title|truncatechars:50 }}</h3>
+                                <div class="listing-price">KES {{ listing.price_per_night }}</div>
+                            </div>
+
+                            <div class="listing-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>{{ listing.location }}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>{{ listing.guests }} guests</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-bed"></i>
+                                    <span>{{ listing.bedrooms }} beds</span>
+                                </div>
+                            </div>
+
+                            {% if listing.wifi or listing.parking or listing.pool or listing.ac %}
+                            <div class="listing-features">
+                                {% if listing.wifi %}<span class="feature-tag">WiFi</span>{% endif %}
+                                {% if listing.parking %}<span class="feature-tag">Parking</span>{% endif %}
+                                {% if listing.pool %}<span class="feature-tag">Pool</span>{% endif %}
+                                {% if listing.ac %}<span class="feature-tag">AC</span>{% endif %}
+                                {% if listing.kitchen %}<span class="feature-tag">Kitchen</span>{% endif %}
+                                {% if listing.tv %}<span class="feature-tag">TV</span>{% endif %}
+                            </div>
+                            {% endif %}
+
+                            <div class="listing-footer">
+                                <div class="listing-status">
+                                    <div class="status-dot {% if listing.is_active %}active{% else %}inactive{% endif %}"></div>
+                                    <span>{% if listing.is_approved %}Active{% else %}Inactive{% endif %}</span>
+                                    <span style="margin-left: 0.5rem; color: var(--text-muted); font-size: 0.85rem;">
+                                        {{ listing.created_at|date:"M d, Y" }}
+                                    </span>
+                                </div>
+
+                                <div class="listing-actions">
+                                    <a href="{{ listing.get_absolute_url }}" class="action-btn view">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                    <a href="{% url 'edit_bnb_listing' listing.id %}" class="action-btn edit">
+                                        <i class="fas fa-edit"></i>
+                                        <span class="tooltip">Edit</span>
+                                    </a>
+                                    <button class="action-btn delete" onclick="confirmDelete('{{ listing.id }}')">
+                                        <i class="fas fa-trash"></i>
+                                        <span class="tooltip">Delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>No Listings Yet</h3>
+                    <p>You haven't created any BnB listings yet. Start by creating your first listing to share your property with travelers.</p>
+                    <a href="{% url 'advertise_bnb' %}" class="btn">
+                        <i class="fas fa-plus"></i>
+                        Create Your First Listing
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if listings and listings.paginator.num_pages > 1 %}
+            <div class="pagination">
+                {% if listings.has_previous %}
+                <a href="?page={{ listings.previous_page_number }}" class="page-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                {% else %}
+                <span class="page-btn disabled">
+                    <i class="fas fa-chevron-left"></i>
+                </span>
+                {% endif %}
+
+                {% for num in listings.paginator.page_range %}
+                    {% if listings.number == num %}
+                    <span class="page-btn active">{{ num }}</span>
+                    {% elif num > listings.number|add:'-3' and num < listings.number|add:'3' %}
+                    <a href="?page={{ num }}" class="page-btn">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if listings.has_next %}
+                <a href="?page={{ listings.next_page_number }}" class="page-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                {% else %}
+                <span class="page-btn disabled">
+                    <i class="fas fa-chevron-right"></i>
+                </span>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Filter listings
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Update active filter button
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const filter = this.dataset.filter;
+                const searchTerm = document.querySelector('.search-input').value.toLowerCase();
+
+                // Filter listings
+                document.querySelectorAll('.listing-card').forEach(card => {
+                    const listingType = card.dataset.listingType;
+                    const listingStatus = card.dataset.listingStatus;
+                    const title = card.querySelector('.listing-title').textContent.toLowerCase();
+
+                    let show = true;
+
+                    // Apply type filter
+                    if (filter !== 'all' && listingType !== filter) {
+                        show = false;
+                    }
+
+                    // Apply search filter
+                    if (searchTerm && !title.includes(searchTerm)) {
+                        show = false;
+                    }
+
+                    // Show/hide card
+                    card.style.display = show ? 'block' : 'none';
+
+                    // Add animation
+                    if (show) {
+                        card.style.animation = 'fadeIn 0.5s ease-out';
+                    }
+                });
+            });
+        });
+
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+
+            document.querySelectorAll('.listing-card').forEach(card => {
+                const listingType = card.dataset.listingType;
+                const title = card.querySelector('.listing-title').textContent.toLowerCase();
+                const location = card.querySelector('.meta-item:first-child span').textContent.toLowerCase();
+
+                let show = true;
+
+                // Apply search filter
+                if (searchTerm && !title.includes(searchTerm) && !location.includes(searchTerm)) {
+                    show = false;
+                }
+
+                // Apply active type filter
+                if (activeFilter !== 'all' && listingType !== activeFilter) {
+                    show = false;
+                }
+
+                card.style.display = show ? 'block' : 'none';
+
+                if (show) {
+                    card.style.animation = 'fadeIn 0.5s ease-out';
+                }
+            });
+        });
+
+        // Delete confirmation
+        function confirmDelete(listingId) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(10px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                animation: fadeIn 0.3s ease-out;
+            `;
+
+            modal.innerHTML = `
+                <div style="
+                    background: var(--glass-white);
+                    backdrop-filter: blur(20px);
+                    border-radius: var(--border-radius);
+                    border: 1px solid var(--glass-border);
+                    padding: 2rem;
+                    max-width: 400px;
+                    width: 90%;
+                    box-shadow: var(--glass-shadow);
+                    animation: slideUp 0.3s ease-out;
+                ">
+                    <h3 style="margin-bottom: 1rem; color: var(--text-primary);">Delete Listing</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.5;">
+                        Are you sure you want to delete this listing? This action cannot be undone.
+                    </p>
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button onclick="this.closest('div').remove()" style="
+                            padding: 0.75rem 1.5rem;
+                            background: var(--glass-light);
+                            border: 1px solid var(--glass-border);
+                            border-radius: 10px;
+                            color: var(--text-primary);
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                        " onmouseover="this.style.background='var(--glass-medium)'"
+                           onmouseout="this.style.background='var(--glass-light)'">
+                            Cancel
+                        </button>
+                        <button onclick="deleteListing('${listingId}')" style="
+                            padding: 0.75rem 1.5rem;
+                            background: linear-gradient(135deg, #ef4444, #dc2626);
+                            border: none;
+                            border-radius: 10px;
+                            color: white;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                        " onmouseover="this.style.transform='translateY(-2px)'"
+                           onmouseout="this.style.transform='translateY(0)'">
+                            Delete Listing
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            // Close modal on background click
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.remove();
+                }
+            });
+        }
+
+        function deleteListing(listingId) {
+            // Create delete form
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = `/delete/${listingId}/`;
+            form.style.display = 'none';
+
+            const csrf = document.createElement('input');
+            csrf.type = 'hidden';
+            csrf.name = 'csrfmiddlewaretoken';
+            csrf.value = '{{ csrf_token }}';
+
+            form.appendChild(csrf);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        // Add hover effects to cards
+        document.querySelectorAll('.listing-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.zIndex = '10';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.zIndex = '1';
+            });
+        });
+
+        // Add animation to stats cards on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'slideUp 0.6s ease-out';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.stat-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Initialize filter on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Trigger filter to apply any search term
+            document.querySelector('.search-input').dispatchEvent(new Event('input'));
+        });
+    </script>
+</body>
+{% endblock %}

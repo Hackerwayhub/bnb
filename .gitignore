@@ -27,6 +27,13 @@ MANIFEST
 *.pyc
 db.sqlite3
 db.sqlite3-journal
+*.sqlite3
+*.sqlite3-*
+
+# Local settings - IMPORTANT: Keep settings out of version control
+bnb/local_settings.py
+bnb/settings/local.py
+bnb/settings/development.py
 
 # Environments
 .env
@@ -36,6 +43,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+pyvenv.cfg
 
 # IDE
 .idea/
@@ -43,6 +51,11 @@ venv.bak/
 *.swp
 *.swo
 *~
+.vs/
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+.ropeproject
 
 # OS generated files
 .DS_Store
@@ -52,7 +65,61 @@ venv.bak/
 .Trashes
 ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Media and static files
-# media/
-# staticfiles/
+# Media and static files (these are generated, don't commit them)
+media/
+media/*
+!media/.gitkeep
+staticfiles/
+static/
+!static/.gitkeep
+
+# Django migrations (except __init__.py)
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# Coverage reports
+.coverage
+htmlcov/
+
+# Pytest
+.pytest_cache/
+.tox/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# PyCharm
+.idea/
+
+# MyPy
+.mypy_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Log files
+*.log
+django_errors.log
+
+# Local development files
+local_settings.py
+.env.local
+.env.development
+
+# Database backups
+*.backup
+*.dump
+
+# Temporary files
+temp/
+tmp/
+
+# System files
+*.pid
+*.state
+
+# Project specific
+git  # This appears in your untracked files

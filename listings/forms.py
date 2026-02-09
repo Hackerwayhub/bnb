@@ -1,6 +1,7 @@
 from django import forms
 from .models import Booking, Listing
 from datetime import date
+from django.contrib.auth.models import User
 
 
 class ListingSubmissionForm(forms.ModelForm):
@@ -17,23 +18,23 @@ class ListingSubmissionForm(forms.ModelForm):
         model = Listing
         fields = [
             'title', 'property_type', 'location', 'specific_location',
-            'host_name', 'host_phone', 'host_whatsapp',
+            'host_phone', 'host_whatsapp',  # Removed host_name, host_email (auto-filled)
             'guests', 'bedrooms', 'beds', 'bathrooms',
             'wifi', 'parking', 'kitchen', 'pool', 'ac', 'tv',
             'price_per_night', 'main_image', 'image_2', 'image_3', 'image_4',
-            'listing_type'  # Added listing_type
+            'listing_type'
         ]
         widgets = {
             'property_type': forms.Select(attrs={'class': 'form-control'}),
             'location': forms.Select(attrs={'class': 'form-control'}),
-            'specific_location': forms.TextInput(attrs={'placeholder': 'e.g., e.g., "Near ABC Mall, 5 minutes from the city center", etc.'}),
+            'specific_location': forms.TextInput(
+                attrs={'placeholder': 'e.g., "Near ABC Mall, 5 minutes from the city center", etc.'}),
             'host_phone': forms.TextInput(attrs={'placeholder': '+254712345678'}),
             'host_whatsapp': forms.TextInput(attrs={'placeholder': '+254712345678'}),
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Beautiful 3-Bedroom Apartment with City View'
             }),
-            'host_name': forms.TextInput(attrs={'class': 'form-control'}),
             'guests': forms.NumberInput(attrs={'class': 'form-control'}),
             'bedrooms': forms.NumberInput(attrs={'class': 'form-control'}),
             'beds': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -59,10 +60,16 @@ class ListingSubmissionForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        # Admin contact is not in fields, it's automatically set
-        self.fields['host_phone'].required = True
-        self.fields['host_whatsapp'].required = True
+
+        # Pre-fill contact info from user profile
+        if self.user and hasattr(self.user, 'profile'):
+            profile = self.user.profile
+            if profile.phone:
+                self.fields['host_phone'].initial = profile.phone
+            if profile.whatsapp:
+                self.fields['host_whatsapp'].initial = profile.whatsapp
 
         # Add CSS classes to all form fields
         for field_name, field in self.fields.items():
@@ -85,6 +92,22 @@ class ListingSubmissionForm(forms.ModelForm):
 
         # Set initial value for listing_type radio buttons
         self.fields['listing_type'].initial = 'free'
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        # Set user and auto-fill host info
+        if self.user:
+            instance.user = self.user
+            instance.host_email = self.user.email
+
+            # Set host_name from user profile
+            full_name = f"{self.user.first_name} {self.user.last_name}".strip()
+            instance.host_name = full_name if full_name else self.user.username
+
+        if commit:
+            instance.save()
+        return instance
 
     def clean(self):
         cleaned_data = super().clean()
@@ -128,6 +151,7 @@ class ListingSubmissionForm(forms.ModelForm):
             raise forms.ValidationError("Number of bathrooms cannot be negative")
         return bathrooms
 
+
 class BookingForm(forms.ModelForm):
     listing_id = forms.IntegerField(widget=forms.HiddenInput())
 
@@ -151,7 +175,16 @@ class BookingForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.listing = kwargs.pop('listing', None)
+        self.user = kwargs.pop('user', None)  # Add user parameter
         super().__init__(*args, **kwargs)
+
+        # Pre-fill guest info from user profile if authenticated
+        if self.user and self.user.is_authenticated:
+            self.fields['guest_name'].initial = f"{self.user.first_name} {self.user.last_name}".strip()
+            self.fields['guest_email'].initial = self.user.email
+
+            if hasattr(self.user, 'profile') and self.user.profile.phone:
+                self.fields['guest_phone'].initial = self.user.profile.phone
 
         # Set minimum date to today
         today = date.today().isoformat()
@@ -160,6 +193,17 @@ class BookingForm(forms.ModelForm):
 
         if self.listing:
             self.fields['number_of_guests'].widget.attrs['max'] = self.listing.guests
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        # Set user if authenticated
+        if self.user and self.user.is_authenticated:
+            instance.user = self.user
+
+        if commit:
+            instance.save()
+        return instance
 
     def clean(self):
         cleaned_data = super().clean()

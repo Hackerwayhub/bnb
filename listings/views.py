@@ -195,18 +195,19 @@ def listing_list(request, location_slug=None):
             'max_price': max_price,
         },
         'featured_price': 1000.00,  # Added featured price
-        'page_title': f'BnB in {display_location_name}' if selected_location != 'all' else 'BnB | staycations in kenya',
-        'meta_description': f' Book BnB in {display_location_name}. Book verified BnB properties with photos, amenities, and booking details.',
+        'page_title': f'BnB in {display_location_name}' if selected_location != 'all' else 'BnB | Staycations in Kenya',
+        'meta_description': f'Book BnB in {display_location_name}. Book verified BnB properties with photos, amenities, and booking details.',
     }
-    return render(request, 'BnB.html', context)
+    return render(request, 'listings/listings.html', context)
 
 
+@login_required
 def submit_listing(request):
     """
-    Submit new listing page - Allow BnB owners to submit new listings
+    Submit new listing page - Allow authenticated users to submit new listings
     """
     if request.method == 'POST':
-        form = ListingSubmissionForm(request.POST, request.FILES)
+        form = ListingSubmissionForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             listing = form.save(commit=False)
             listing_type = form.cleaned_data.get('listing_type', 'free')
@@ -237,16 +238,16 @@ def submit_listing(request):
                                  'You will be notified once it\'s live.'
                                  )
 
-            return redirect('submit_listing')  # Redirect back to the same form page
+            return redirect('my_bnb_listings')  # Redirect to user's listings page
     else:
-        form = ListingSubmissionForm()
+        form = ListingSubmissionForm(user=request.user)
 
     context = {
         'form': form,
-        'title': 'Submit New Listing',
+        'title': 'Submit New Listing - BnB.co.ke',
         'featured_price': 1000.00,
     }
-    return render(request, 'ADVERTISEBNB.html', context)
+    return render(request, 'listings/create_listing.html', context)
 
 
 def book_via_whatsapp(request):
@@ -254,11 +255,11 @@ def book_via_whatsapp(request):
     Simple WhatsApp booking page - Just a big WhatsApp button
     """
     context = {
-        'page_title': 'Book BnB via WhatsApp - Instant Booking',
+        'page_title': 'Book BnB via WhatsApp - Instant Booking | BnB.co.ke',
         'meta_description': 'Book your BnB directly on WhatsApp. Chat with hosts instantly, get quick responses.',
         'whatsapp_number': '+254707341748',  # Your business WhatsApp number
     }
-    return render(request, 'BOOKVIAWHATSAPP.html', context)
+    return render(request, 'listings/book_via_whatsapp.html', context)
 
 
 def send_booking_confirmation_email(booking):
@@ -281,14 +282,14 @@ def send_booking_confirmation_email(booking):
         }
 
         # Render HTML email template
-        html_message = render_to_string('emails/BOOKING_CONFIRMATION.html', context)
+        html_message = render_to_string('emails/booking_confirmation.html', context)
         plain_message = strip_tags(html_message)  # Create plain text version
 
         # Email subject
         subject = f"Booking Confirmation - {booking.listing.title} (Ref: BK{booking.id:06d})"
 
         # Sender and recipient
-        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'booking.bnb.co.ke@gmail.com')
+        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'booking@bnb.co.ke')
         recipient_list = [booking.guest_email]
 
         # Send email to guest
@@ -340,7 +341,7 @@ def booking_view(request, listing_id):
     listing = get_object_or_404(Listing, id=listing_id)
 
     if request.method == 'POST':
-        form = BookingForm(request.POST, listing=listing)
+        form = BookingForm(request.POST, listing=listing, user=request.user if request.user.is_authenticated else None)
         if form.is_valid():
             booking = form.save(commit=False)
             booking.listing = listing
@@ -358,7 +359,8 @@ def booking_view(request, listing_id):
             request.session['last_booking_id'] = booking.id
 
             # Clear the form for new submission
-            form = BookingForm(initial={'listing_id': listing.id}, listing=listing)
+            form = BookingForm(initial={'listing_id': listing.id}, listing=listing,
+                               user=request.user if request.user.is_authenticated else None)
 
             # Add success message using Django messages
             messages.success(
@@ -372,7 +374,7 @@ def booking_view(request, listing_id):
             context = {
                 'form': form,
                 'listing': listing,
-                'page_title': f'Book {listing.title}',
+                'page_title': f'Book {listing.title} - BnB.co.ke',
                 'booking_id': booking.id,  # Pass booking_id to template
                 'booking_details': {
                     'guest_name': booking.guest_name,
@@ -386,16 +388,17 @@ def booking_view(request, listing_id):
                     'number_of_nights': number_of_nights,
                 }
             }
-            return render(request, 'BOOKINGFORM.html', context)
+            return render(request, 'listings/booking_form.html', context)
     else:
-        form = BookingForm(initial={'listing_id': listing.id}, listing=listing)
+        form = BookingForm(initial={'listing_id': listing.id}, listing=listing,
+                           user=request.user if request.user.is_authenticated else None)
 
     context = {
         'form': form,
         'listing': listing,
-        'page_title': f'Book {listing.title}',
+        'page_title': f'Book {listing.title} - BnB.co.ke',
     }
-    return render(request, 'BOOKINGFORM.html', context)
+    return render(request, 'listings/booking_form.html', context)
 
 
 def booking_confirmation(request, booking_id):
@@ -413,7 +416,104 @@ def booking_confirmation(request, booking_id):
         'check_out_formatted': booking.check_out.strftime('%B %d, %Y'),
         'total_price_formatted': f"{booking.total_price:,.2f}",
         'number_of_nights': (booking.check_out - booking.check_in).days,
-        'page_title': f'Booking Confirmation - BK{booking.id:06d}',
+        'page_title': f'Booking Confirmation - BK{booking.id:06d} | BnB.co.ke',
     }
 
-    return render(request, 'BOOKING_CONFIRMATION.html', context)
+    return render(request, 'booking_confirmation.html', context)
+
+
+@login_required
+def my_listings(request):
+    """
+    Display user's listings (moved from auth app for better organization)
+    """
+    listings = Listing.objects.filter(user=request.user).order_by('-created_at')
+
+    # Statistics
+    active_listings = listings.filter(is_approved=True)
+    featured_listings = listings.filter(listing_type='featured')
+
+    context = {
+        'listings': listings,
+        'active_listings': active_listings,
+        'featured_listings': featured_listings,
+        'pending_bookings': 0,  # You can add this later
+        'title': 'My Listings - BnB.co.ke',
+        'page_title': 'My Listings'
+    }
+    return render(request, 'listings/my_listings.html', context)
+
+
+@login_required
+def edit_listing(request, listing_id):
+    """Edit existing listing - only accessible by listing owner"""
+    listing = get_object_or_404(Listing, id=listing_id)
+
+    # Check if user owns the listing
+    if listing.user != request.user:
+        messages.error(request, 'You do not have permission to edit this listing.')
+        return redirect('my_bnb_listings')
+
+    if request.method == 'POST':
+        form = ListingSubmissionForm(
+            request.POST,
+            request.FILES,
+            instance=listing,
+            user=request.user
+        )
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Listing updated successfully!')
+            return redirect('my_bnb_listings')
+    else:
+        form = ListingSubmissionForm(instance=listing, user=request.user)
+
+    context = {
+        'form': form,
+        'listing': listing,
+        'title': f'Edit {listing.title} - BnB.co.ke',
+        'page_title': 'Edit Listing'
+    }
+    return render(request, 'listings/edit_listing.html', context)
+
+
+@login_required
+def delete_listing(request, listing_id):
+    """Delete listing - only accessible by listing owner"""
+    listing = get_object_or_404(Listing, id=listing_id)
+
+    # Check if user owns the listing
+    if listing.user != request.user:
+        messages.error(request, 'You do not have permission to delete this listing.')
+        return redirect('my_bnb_listings')
+
+    if request.method == 'POST':
+        listing.delete()
+        messages.success(request, 'Listing deleted successfully!')
+        return redirect('my_bnb_listings')
+
+    context = {
+        'listing': listing,
+        'title': f'Delete {listing.title} - BnB.co.ke',
+        'page_title': 'Delete Listing'
+    }
+    return render(request, 'listings/delete_listing.html', context)
+
+
+def listing_detail(request, slug):
+    """
+    Display individual listing detail page
+    """
+    listing = get_object_or_404(Listing, slug=slug, is_approved=True)
+
+    # Check if user is the owner
+    is_owner = request.user.is_authenticated and listing.user == request.user
+
+    context = {
+        'listing': listing,
+        'is_owner': is_owner,
+        'page_title': f'{listing.title} - BnB.co.ke',
+        'meta_description': f'Book {listing.title} in {listing.get_location_display()}. {listing.guests} guests, {listing.bedrooms} bedrooms, KES {listing.price_per_night}/night.',
+    }
+    return render(request, 'listings/listing_detail.html', context)
+

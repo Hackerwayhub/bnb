@@ -1,0 +1,1219 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - BnB.co.ke</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <style>
+    :root {
+        --glass-white: rgba(255, 255, 255, 0.95);
+        --glass-light: rgba(255, 255, 255, 0.85);
+        --glass-medium: rgba(255, 255, 255, 0.75);
+        --glass-dark: rgba(255, 255, 255, 0.65);
+        --glass-border: rgba(255, 255, 255, 0.25);
+        --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        --blur-intensity: blur(20px);
+        --border-radius: 16px;
+        --primary-gradient: linear-gradient(135deg, rgb(255, 0, 0), rgb(255, 107, 53));
+        --secondary-gradient: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+        --text-primary: #2d3748;
+        --text-secondary: #4a5568;
+        --text-muted: #718096;
+        --success-color: #10b981;
+        --error-color: #ef4444;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        min-height: 100vh;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        position: relative;
+        overflow-x: hidden;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .glass-shapes {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .shape {
+        position: absolute;
+        background: linear-gradient(45deg, rgba(79, 70, 229, 0.1), rgba(124, 58, 237, 0.1));
+        border-radius: 50%;
+        filter: blur(40px);
+        animation: float 20s infinite linear;
+    }
+
+    .shape-1 {
+        width: 200px;
+        height: 200px;
+        top: -100px;
+        right: -100px;
+        animation-delay: 0s;
+    }
+
+    .shape-2 {
+        width: 150px;
+        height: 150px;
+        bottom: -75px;
+        left: -75px;
+        animation-delay: -5s;
+        background: linear-gradient(45deg, rgba(14, 165, 233, 0.1), rgba(59, 130, 246, 0.1));
+    }
+
+    .auth-container {
+        width: 100%;
+        max-width: 480px;
+        position: relative;
+        z-index: 1;
+        animation: slideUp 0.8s ease-out;
+    }
+
+    .auth-glass {
+        background: var(--glass-white);
+        backdrop-filter: var(--blur-intensity);
+        -webkit-backdrop-filter: var(--blur-intensity);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--glass-border);
+        box-shadow:
+            var(--glass-shadow),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .auth-glass::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--primary-gradient);
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .logo-circle {
+        width: 70px;
+        height: 70px;
+        background: var(--glass-light);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.25rem;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo-circle i {
+        font-size: 2rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .auth-header h1 {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    .auth-header p {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    /* Messages */
+    .messages {
+        margin-bottom: 1.25rem;
+    }
+
+    .alert {
+        padding: 1rem;
+        background: var(--glass-light);
+        border-radius: 12px;
+        margin-bottom: 0.75rem;
+        border-left: 4px solid;
+        animation: slideInDown 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    .alert.success {
+        border-left-color: var(--success-color);
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+    }
+
+    .alert.error {
+        border-left-color: var(--error-color);
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05));
+    }
+
+    .alert ul {
+        margin-top: 0.5rem;
+        padding-left: 1.25rem;
+    }
+
+    .alert li {
+        margin-bottom: 0.25rem;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        line-height: 1.3;
+    }
+
+    .form-label i {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .input-group {
+        position: relative;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 1rem 1rem 1rem 3rem;
+        background: var(--glass-white);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        font-size: 1rem;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        min-height: 52px;
+    }
+
+    .form-input::placeholder {
+        color: var(--text-muted);
+    }
+
+    .form-input:focus {
+        outline: none;
+        background: var(--glass-white);
+        border-color: rgba(79, 70, 229, 0.3);
+        box-shadow:
+            0 0 0 3px rgba(79, 70, 229, 0.1),
+            0 8px 25px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+    }
+
+    .form-input.error {
+        border-color: var(--error-color);
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        z-index: 2;
+        font-size: 1rem;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 1rem;
+        z-index: 2;
+        transition: color 0.3s ease;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .password-toggle:hover {
+        color: var(--text-primary);
+    }
+
+    .password-strength {
+        margin-top: 0.5rem;
+        height: 4px;
+        background: var(--glass-light);
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .strength-bar {
+        height: 100%;
+        width: 0;
+        transition: width 0.3s ease;
+        border-radius: 2px;
+    }
+
+    .password-hints {
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .hint {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+        line-height: 1.3;
+    }
+
+    .hint i {
+        font-size: 0.8rem;
+        flex-shrink: 0;
+    }
+
+    .hint.valid {
+        color: var(--success-color);
+    }
+
+    .hint.invalid {
+        color: var(--error-color);
+    }
+
+    .error-message {
+        display: block;
+        margin-top: 0.5rem;
+        color: var(--error-color);
+        font-size: 0.85rem;
+        padding-left: 0.5rem;
+        border-left: 2px solid var(--error-color);
+        line-height: 1.3;
+    }
+
+    .terms {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin: 1.5rem 0;
+    }
+
+    .checkbox-wrapper {
+        position: relative;
+        margin-top: 0.25rem;
+        flex-shrink: 0;
+    }
+
+    .checkbox-input {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .checkbox-custom {
+        width: 20px;
+        height: 20px;
+        background: var(--glass-white);
+        border: 1px solid var(--glass-border);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .checkbox-input:checked + .checkbox-custom {
+        background: var(--primary-gradient);
+        border-color: transparent;
+    }
+
+    .checkbox-input:checked + .checkbox-custom::after {
+        content: '✓';
+        color: white;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .terms label {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.4;
+        cursor: pointer;
+    }
+
+    .terms a {
+        color: #4f46e5;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .terms a:hover {
+        text-decoration: underline;
+    }
+
+    .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        width: 100%;
+        padding: 1rem;
+        background: var(--primary-gradient);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+        min-height: 56px;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: 0.5s;
+    }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow:
+            0 15px 35px rgba(79, 70, 229, 0.4),
+            0 5px 15px rgba(79, 70, 229, 0.2);
+    }
+
+    .btn:hover::before {
+        left: 100%;
+    }
+
+    .btn:active {
+        transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .btn:disabled:hover {
+        transform: none;
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+    }
+
+    .auth-links {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--glass-border);
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    .auth-links a {
+        color: #4f46e5;
+        text-decoration: none;
+        font-weight: 600;
+        margin-left: 0.5rem;
+    }
+
+    .auth-links a:hover {
+        text-decoration: underline;
+    }
+
+    /* Form Help Text */
+    .form-help {
+        display: block;
+        margin-top: 0.5rem;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+
+    /* Animations */
+    @keyframes float {
+        0% { transform: translate(0, 0) rotate(0deg); }
+        100% { transform: translate(50px, 50px) rotate(360deg); }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    @keyframes slideInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* Responsive Breakpoints */
+
+    /* Small tablets and large phones (600px and up) */
+    @media (min-width: 600px) {
+        .auth-container {
+            max-width: 500px;
+        }
+
+        .auth-glass {
+            padding: 2rem;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        .auth-header h1 {
+            font-size: 2rem;
+        }
+
+        .logo-circle {
+            width: 80px;
+            height: 80px;
+        }
+
+        .logo-circle i {
+            font-size: 2.5rem;
+        }
+    }
+
+    /* Tablets and small desktops (768px and up) */
+    @media (min-width: 768px) {
+        body {
+            padding: 24px;
+        }
+
+        .auth-container {
+            max-width: 520px;
+        }
+
+        .auth-glass {
+            padding: 2.5rem;
+            border-radius: 20px;
+        }
+
+        .shape-1, .shape-2 {
+            display: block;
+        }
+
+        .auth-header h1 {
+            font-size: 2.2rem;
+        }
+
+        .auth-header p {
+            font-size: 1rem;
+        }
+
+        .form-input {
+            padding: 1rem 1.2rem 1rem 3.5rem;
+        }
+
+        .input-icon {
+            left: 1.2rem;
+        }
+    }
+
+    /* Desktop (1024px and up) */
+    @media (min-width: 1024px) {
+        .auth-container {
+            max-width: 500px;
+        }
+    }
+
+    /* Small phones (480px and below) */
+    @media (max-width: 480px) {
+        body {
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .auth-glass {
+            padding: 1.25rem;
+            border-radius: 14px;
+        }
+
+        .logo-circle {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+        }
+
+        .logo-circle i {
+            font-size: 1.75rem;
+        }
+
+        .auth-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .auth-header p {
+            font-size: 0.9rem;
+        }
+
+        .alert {
+            padding: 0.875rem;
+            font-size: 0.9rem;
+        }
+
+        .form-label {
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            padding: 0.875rem 0.875rem 0.875rem 2.75rem;
+            font-size: 15px;
+            min-height: 48px;
+        }
+
+        .input-icon {
+            left: 0.875rem;
+            font-size: 0.9rem;
+        }
+
+        .password-toggle {
+            right: 0.875rem;
+            width: 20px;
+            height: 20px;
+            font-size: 0.9rem;
+        }
+
+        .password-hints {
+            font-size: 0.8rem;
+        }
+
+        .hint {
+            gap: 0.4rem;
+        }
+
+        .terms {
+            margin: 1.25rem 0;
+            gap: 0.5rem;
+        }
+
+        .terms label {
+            font-size: 0.85rem;
+        }
+
+        .btn {
+            padding: 0.875rem;
+            font-size: 1rem;
+            min-height: 52px;
+        }
+
+        .auth-links {
+            margin-top: 1.25rem;
+            padding-top: 1.25rem;
+            font-size: 0.9rem;
+        }
+
+        .form-help {
+            font-size: 0.8rem;
+        }
+    }
+
+    /* Medium phones (481px to 599px) */
+    @media (min-width: 481px) and (max-width: 599px) {
+        .auth-glass {
+            padding: 1.5rem;
+        }
+
+        .logo-circle {
+            width: 70px;
+            height: 70px;
+        }
+
+        .logo-circle i {
+            font-size: 2rem;
+        }
+
+        .auth-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .form-input {
+            padding: 1rem 1rem 1rem 3rem;
+        }
+    }
+
+    /* Touch device optimizations */
+    @media (hover: none) and (pointer: coarse) {
+        .password-toggle:hover {
+            color: var(--text-muted);
+        }
+
+        .btn:hover {
+            transform: none;
+        }
+
+        .btn:hover::before {
+            left: -100%;
+        }
+
+        .terms a:hover {
+            text-decoration: none;
+        }
+
+        .auth-links a:hover {
+            text-decoration: none;
+        }
+
+        /* Increase touch target sizes */
+        .form-input,
+        .btn,
+        .password-toggle,
+        .checkbox-custom {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .form-input {
+            font-size: 16px; /* Prevents zoom on iOS */
+        }
+
+        .checkbox-wrapper {
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .terms label {
+            min-height: 20px;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    /* High-resolution displays */
+    @media (min-resolution: 192dpi) {
+        .auth-glass,
+        .alert,
+        .form-input {
+            backdrop-filter: var(--blur-intensity) saturate(180%);
+        }
+    }
+
+    /* Reduced motion preference */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+
+        .btn::before {
+            display: none;
+        }
+    }
+
+    /* Print styles */
+    @media print {
+        .glass-shapes,
+        .auth-glass::before,
+        .btn,
+        .password-toggle {
+            display: none;
+        }
+
+        .auth-glass {
+            border: 1px solid #ddd;
+            box-shadow: none;
+            background: white;
+        }
+
+        .form-input {
+            background: white;
+            border: 1px solid #ccc;
+        }
+
+        .checkbox-custom {
+            background: white;
+            border: 1px solid #ccc;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="glass-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+    </div>
+
+    <div class="auth-container">
+        <div class="auth-glass">
+            <div class="auth-header">
+                <div class="logo-circle">
+                    <i class="fas fa-home"></i>
+                </div>
+                <h1>BnB</h1>
+                <p>Create your account to list and book properties</p>
+            </div>
+
+            <!-- Messages -->
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Registration Form -->
+            <form method="post" class="auth-form" id="registerForm">
+                {% csrf_token %}
+
+                <!-- Form Errors -->
+                {% if form.non_field_errors %}
+                <div class="alert error">
+                    <strong>Please correct the errors below:</strong>
+                    <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <div class="form-grid">
+                    <!-- First Name -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user"></i>
+                            First Name *
+                        </label>
+                        <div class="input-group">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" name="first_name" class="form-input {% if form.first_name.errors %}error{% endif %}"
+                                   placeholder="Enter first name"
+                                   value="{{ form.first_name.value|default:'' }}"
+                                   required>
+                        </div>
+                        {% if form.first_name.errors %}
+                            <span class="error-message">{{ form.first_name.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user"></i>
+                            Last Name *
+                        </label>
+                        <div class="input-group">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" name="last_name" class="form-input {% if form.last_name.errors %}error{% endif %}"
+                                   placeholder="Enter last name"
+                                   value="{{ form.last_name.value|default:'' }}"
+                                   required>
+                        </div>
+                        {% if form.last_name.errors %}
+                            <span class="error-message">{{ form.last_name.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-envelope"></i>
+                        Email Address *
+                    </label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" name="email" class="form-input {% if form.email.errors %}error{% endif %}"
+                               placeholder="Enter your email"
+                               value="{{ form.email.value|default:'' }}"
+                               required>
+                    </div>
+                    {% if form.email.errors %}
+                        <span class="error-message">{{ form.email.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Username -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-at"></i>
+                        Username *
+                    </label>
+                    <div class="input-group">
+                        <i class="fas fa-user-circle input-icon"></i>
+                        <input type="text" name="username" class="form-input {% if form.username.errors %}error{% endif %}"
+                               placeholder="Choose a username"
+                               value="{{ form.username.value|default:'' }}"
+                               required>
+                    </div>
+                    {% if form.username.errors %}
+                        <span class="error-message">{{ form.username.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-phone"></i>
+                        Phone Number
+                    </label>
+                    <div class="input-group">
+                        <i class="fas fa-phone input-icon"></i>
+                        <input type="tel" name="phone" class="form-input {% if form.phone.errors %}error{% endif %}"
+                               placeholder="+254712345678"
+                               value="{{ form.phone.value|default:'' }}">
+                    </div>
+                    {% if form.phone.errors %}
+                        <span class="error-message">{{ form.phone.errors.0 }}</span>
+                    {% endif %}
+                    <small style="color: var(--text-muted); font-size: 0.85rem; display: block; margin-top: 0.5rem;">
+                        Format: +254712345678
+                    </small>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Password *
+                        </label>
+                        <div class="input-group">
+                            <i class="fas fa-key input-icon"></i>
+                            <input type="password" name="password1" id="password1"
+                                   class="form-input {% if form.password1.errors %}error{% endif %}"
+                                   placeholder="Create password"
+                                   required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('password1')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        {% if form.password1.errors %}
+                            <span class="error-message">{{ form.password1.errors.0 }}</span>
+                        {% endif %}
+                        <div class="password-strength">
+                            <div class="strength-bar" id="strengthBar"></div>
+                        </div>
+                        <div class="password-hints" id="passwordHints">
+                            <div class="hint invalid" id="hintLength">
+                                <i class="fas fa-times-circle"></i>
+                                At least 8 characters
+                            </div>
+                            <div class="hint invalid" id="hintUpper">
+                                <i class="fas fa-times-circle"></i>
+                                Uppercase letter
+                            </div>
+                            <div class="hint invalid" id="hintLower">
+                                <i class="fas fa-times-circle"></i>
+                                Lowercase letter
+                            </div>
+                            <div class="hint invalid" id="hintNumber">
+                                <i class="fas fa-times-circle"></i>
+                                Number
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Confirm Password *
+                        </label>
+                        <div class="input-group">
+                            <i class="fas fa-key input-icon"></i>
+                            <input type="password" name="password2" id="password2"
+                                   class="form-input {% if form.password2.errors %}error{% endif %}"
+                                   placeholder="Confirm password"
+                                   required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('password2')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        {% if form.password2.errors %}
+                            <span class="error-message">{{ form.password2.errors.0 }}</span>
+                        {% endif %}
+                        <div class="password-hints">
+                            <div class="hint invalid" id="hintMatch">
+                                <i class="fas fa-times-circle"></i>
+                                Passwords match
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terms -->
+                <div class="terms">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="terms" name="terms" class="checkbox-input" required>
+                        <span class="checkbox-custom"></span>
+                    </div>
+                    <label for="terms">
+                        I agree to the <a href="#" style="color: #4f46e5;">Terms of Service</a> and <a href="#" style="color: #4f46e5;">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn" id="submitBtn">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </button>
+            </form>
+
+            <div class="auth-links">
+                Already have an account?
+                <a href="{% url 'login' %}">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password visibility toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling.querySelector('i');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Password strength checker
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            const hints = {
+                length: false,
+                upper: false,
+                lower: false,
+                number: false
+            };
+
+            // Check length
+            if (password.length >= 8) {
+                strength += 25;
+                hints.length = true;
+                document.getElementById('hintLength').className = 'hint valid';
+                document.getElementById('hintLength').innerHTML = '<i class="fas fa-check-circle"></i> At least 8 characters';
+            } else {
+                document.getElementById('hintLength').className = 'hint invalid';
+                document.getElementById('hintLength').innerHTML = '<i class="fas fa-times-circle"></i> At least 8 characters';
+            }
+
+            // Check uppercase
+            if (/[A-Z]/.test(password)) {
+                strength += 25;
+                hints.upper = true;
+                document.getElementById('hintUpper').className = 'hint valid';
+                document.getElementById('hintUpper').innerHTML = '<i class="fas fa-check-circle"></i> Uppercase letter';
+            } else {
+                document.getElementById('hintUpper').className = 'hint invalid';
+                document.getElementById('hintUpper').innerHTML = '<i class="fas fa-times-circle"></i> Uppercase letter';
+            }
+
+            // Check lowercase
+            if (/[a-z]/.test(password)) {
+                strength += 25;
+                hints.lower = true;
+                document.getElementById('hintLower').className = 'hint valid';
+                document.getElementById('hintLower').innerHTML = '<i class="fas fa-check-circle"></i> Lowercase letter';
+            } else {
+                document.getElementById('hintLower').className = 'hint invalid';
+                document.getElementById('hintLower').innerHTML = '<i class="fas fa-times-circle"></i> Lowercase letter';
+            }
+
+            // Check number
+            if (/[0-9]/.test(password)) {
+                strength += 25;
+                hints.number = true;
+                document.getElementById('hintNumber').className = 'hint valid';
+                document.getElementById('hintNumber').innerHTML = '<i class="fas fa-check-circle"></i> Number';
+            } else {
+                document.getElementById('hintNumber').className = 'hint invalid';
+                document.getElementById('hintNumber').innerHTML = '<i class="fas fa-times-circle"></i> Number';
+            }
+
+            // Update strength bar
+            const strengthBar = document.getElementById('strengthBar');
+            strengthBar.style.width = strength + '%';
+
+            // Set color based on strength
+            if (strength < 50) {
+                strengthBar.style.background = '#ef4444';
+            } else if (strength < 75) {
+                strengthBar.style.background = '#f59e0b';
+            } else {
+                strengthBar.style.background = '#10b981';
+            }
+
+            return { strength, hints };
+        }
+
+        // Check password match
+        function checkPasswordMatch() {
+            const password1 = document.getElementById('password1').value;
+            const password2 = document.getElementById('password2').value;
+            const hintMatch = document.getElementById('hintMatch');
+
+            if (password2 === '') {
+                hintMatch.className = 'hint invalid';
+                hintMatch.innerHTML = '<i class="fas fa-times-circle"></i> Passwords match';
+                return false;
+            }
+
+            if (password1 === password2) {
+                hintMatch.className = 'hint valid';
+                hintMatch.innerHTML = '<i class="fas fa-check-circle"></i> Passwords match';
+                return true;
+            } else {
+                hintMatch.className = 'hint invalid';
+                hintMatch.innerHTML = '<i class="fas fa-times-circle"></i> Passwords match';
+                return false;
+            }
+        }
+
+        // Event listeners
+        document.getElementById('password1').addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+            checkPasswordMatch();
+        });
+
+        document.getElementById('password2').addEventListener('input', checkPasswordMatch);
+
+        // Add floating animation to inputs
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-5px)';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Form submission handler
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            submitBtn.disabled = true;
+
+            // You can add additional validation here before submission
+            const password1 = document.getElementById('password1').value;
+            const password2 = document.getElementById('password2').value;
+            const terms = document.getElementById('terms').checked;
+
+            if (!terms) {
+                e.preventDefault();
+                alert('Please agree to the Terms of Service and Privacy Policy');
+                submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+                submitBtn.disabled = false;
+                return;
+            }
+
+            if (password1 !== password2) {
+                e.preventDefault();
+                alert('Passwords do not match');
+                submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+                submitBtn.disabled = false;
+                return;
+            }
+        });
+
+        // Clear error styling on input
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.classList.contains('error')) {
+                    this.classList.remove('error');
+                    const errorMsg = this.parentElement.nextElementSibling;
+                    if (errorMsg && errorMsg.classList.contains('error-message')) {
+                        errorMsg.remove();
+                    }
+                }
+            });
+        });
+
+        // Focus first input on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstInput = document.querySelector('input[name="first_name"]');
+            if (firstInput) firstInput.focus();
+        });
+    </script>
+</body>
+{% endblock %}

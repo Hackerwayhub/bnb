@@ -462,6 +462,26 @@ def edit_listing(request, listing_id):
             user=request.user
         )
         if form.is_valid():
+            # Handle image deletions before saving
+            if request.POST.get('delete_main_image') == 'true':
+                listing.main_image.delete(save=False)
+                listing.main_image = None
+
+            if request.POST.get('delete_image_2') == 'true':
+                if listing.image_2:
+                    listing.image_2.delete(save=False)
+                listing.image_2 = None
+
+            if request.POST.get('delete_image_3') == 'true':
+                if listing.image_3:
+                    listing.image_3.delete(save=False)
+                listing.image_3 = None
+
+            if request.POST.get('delete_image_4') == 'true':
+                if listing.image_4:
+                    listing.image_4.delete(save=False)
+                listing.image_4 = None
+
             form.save()
             messages.success(request, 'Listing updated successfully!')
             return redirect('my_bnb_listings')
@@ -475,7 +495,6 @@ def edit_listing(request, listing_id):
         'page_title': 'Edit Listing'
     }
     return render(request, 'listings/edit_listing.html', context)
-
 
 @login_required
 def delete_listing(request, listing_id):

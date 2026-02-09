@@ -30,10 +30,7 @@ db.sqlite3-journal
 *.sqlite3
 *.sqlite3-*
 
-# Local settings - IMPORTANT: Keep settings out of version control
-bnb/local_settings.py
-bnb/settings/local.py
-bnb/settings/development.py
+
 
 # Environments
 .env
@@ -67,13 +64,10 @@ ehthumbs.db
 Thumbs.db
 desktop.ini
 
-# Media and static files (these are generated, don't commit them)
-media/
-media/*
-!media/.gitkeep
 staticfiles/
-static/
-!static/.gitkeep
+
+media/
+readme.md/
 
 # Django migrations (except __init__.py)
 */migrations/*.py

@@ -2090,18 +2090,28 @@
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const box = document.getElementById(`${imageNumber}ImageBox`);
-                let preview = document.getElementById(`${imageNumber}ImagePreview`);
+                // Handle different naming for main image
+                const boxId = imageNumber === 'main' ? 'mainImageBox' : `image${imageNumber}Box`;
+                const previewId = imageNumber === 'main' ? 'mainImagePreview' : `image${imageNumber}Preview`;
+
+                const box = document.getElementById(boxId);
+                let preview = document.getElementById(previewId);
 
                 if (!preview) {
                     preview = document.createElement('img');
-                    preview.id = `${imageNumber}ImagePreview`;
+                    preview.id = previewId;
                     preview.className = 'upload-image';
                     box.appendChild(preview);
                 }
 
                 preview.src = e.target.result;
                 box.classList.add('has-image');
+
+                // Remove upload icon and text
+                const uploadIcon = box.querySelector('.upload-icon');
+                const uploadText = box.querySelector('.upload-text');
+                if (uploadIcon) uploadIcon.remove();
+                if (uploadText) uploadText.remove();
 
                 // Show remove button
                 let removeBtn = box.querySelector('.upload-remove');
@@ -2125,16 +2135,21 @@
         }
 
         function removeImage(imageNumber, isExisting = false) {
-            const box = document.getElementById(`${imageNumber}ImageBox`);
-            const input = document.getElementById(`${imageNumber}Image`);
-            const preview = document.getElementById(`${imageNumber}ImagePreview`);
+            // Handle different naming for main image
+            const boxId = imageNumber === 'main' ? 'mainImageBox' : `image${imageNumber}Box`;
+            const inputId = imageNumber === 'main' ? 'mainImage' : `image${imageNumber}`;
+            const previewId = imageNumber === 'main' ? 'mainImagePreview' : `image${imageNumber}Preview`;
+
+            const box = document.getElementById(boxId);
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
             const removeBtn = box.querySelector('.upload-remove');
 
             if (isExisting && confirm('Are you sure you want to remove this image? This action cannot be undone.')) {
                 // For existing images, we need to mark them for deletion
                 const deleteInput = document.createElement('input');
                 deleteInput.type = 'hidden';
-                deleteInput.name = `delete_${imageNumber}_image`;
+                deleteInput.name = imageNumber === 'main' ? 'delete_main_image' : `delete_image_${imageNumber}`;
                 deleteInput.value = 'true';
                 document.getElementById('editListingForm').appendChild(deleteInput);
             }
@@ -2148,6 +2163,25 @@
 
             // Reset box state
             box.classList.remove('has-image');
+
+            // Show upload icon/text if they were removed
+            if (!box.querySelector('.upload-icon')) {
+                const uploadIcon = document.createElement('div');
+                uploadIcon.className = 'upload-icon';
+                uploadIcon.innerHTML = imageNumber === 'main' ?
+                    '<i class="fas fa-camera"></i>' :
+                    '<i class="fas fa-plus"></i>';
+                box.appendChild(uploadIcon);
+            }
+
+            if (!box.querySelector('.upload-text')) {
+                const uploadText = document.createElement('div');
+                uploadText.className = 'upload-text';
+                uploadText.textContent = imageNumber === 'main' ?
+                    'Click to upload main photo' :
+                    'Click to add photo';
+                box.appendChild(uploadText);
+            }
         }
 
         // Setup click events for upload boxes
@@ -2156,7 +2190,16 @@
                 if (e.target.classList.contains('upload-remove')) return;
 
                 const boxId = this.id;
-                const imageNumber = boxId.replace('ImageBox', '').replace('image', '');
+                let imageNumber;
+
+                // Extract image number from box ID
+                if (boxId === 'mainImageBox') {
+                    imageNumber = 'main';
+                } else {
+                    // Extract number from 'image2Box', 'image3Box', etc.
+                    imageNumber = boxId.replace('image', '').replace('Box', '');
+                }
+
                 const inputId = imageNumber === 'main' ? 'mainImage' : `image${imageNumber}`;
                 document.getElementById(inputId).click();
             });

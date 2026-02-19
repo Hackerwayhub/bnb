@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="BnB">
-  <meta name="description" content="BnB - Find Perfect Vacation Rentals & Holiday Homes">
+
 
   <!-- Web App Manifest -->
   <link rel="manifest" href="{% static 'manifest.json' %}">
@@ -36,7 +36,7 @@
 <meta property="og:description" content="{% if meta_description %}{{ meta_description }}{% else %}BnB - Kenya\'s premier vacation rental platform. Find beautiful, verified accommodations for your perfect holiday. Safe, reliable booking services.{% endif %}" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://bnb.co.ke{% if selected_location and selected_location != 'all' %}{% url 'listings_by_location' selected_location %}{% else %}{% url 'home' %}{% endif %}" />
-<meta property="og:image" content="{% static 'images/og-image.jpg' %}" />
+<meta property="og:image" content="{% static 'images/android-chrome-512x512.png' %}" />
 <meta property="og:site_name" content="BnB" />
 
 <!-- Canonical URL -->
@@ -318,16 +318,28 @@
                     transform: translateY(-20px);
                     transition: all 0.5s ease 0.2s;
                 ">
-                    <div style="
-                        font-size: 14px;
-                        color: rgba(255, 255, 255, 0.6);
-                        text-transform: uppercase;
-                        letter-spacing: 3px;
-                        margin-bottom: 10px;
-                        font-weight: 600;
-                    ">
-                        Navigation
-                    </div>
+                   <h1>
+            <a class="navbar-brand" href="{% url 'home' %}" style="
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            ">
+                <span style="
+                    color: #FF0000;
+                    font-weight: 900;
+                    text-transform: none;
+                    font-family: 'Poppins', sans-serif;
+                    font-size: 2em;
+                    text-shadow:
+                        0 0 15px rgba(255, 0, 0, 0.4),
+                        0 0 25px rgba(255, 0, 0, 0.3),
+                        0 0 35px rgba(255, 0, 0, 0.2);
+                    display: inline-block;
+                    line-height: 1;
+                ">βnb</span>
+            </a>
+           </h1>
 
                 </div>
 

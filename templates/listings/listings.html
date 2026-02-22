@@ -1128,24 +1128,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Action Buttons - RESPONSIVE FLUID VERSION -->
 <div class="listing-actions" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; width: 100%;">
 
-  <!-- Phone Button -->
-  <a href="tel:{{ listing.admin_contact }}"
-     style="background-color: #007bff; color: white; padding: 10px 16px; text-decoration: none; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; min-width: 44px; flex-shrink: 0;"
-     onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='translateY(-2px)';"
-     onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='translateY(0)';">
-    <i class="fa fa-phone" aria-hidden="true"></i>
-    <span style="display: none;">Call</span>
-  </a>
 
-  <!-- WhatsApp Button -->
-  <a href="{{ listing.admin_whatsapp_link }}" target="_blank"
-     style="background-color: #25D366; color: white; padding: 10px 16px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; flex: 1 1 auto; min-width: 0; justify-content: center; white-space: nowrap; font-size: clamp(0.8rem, 2vw, 0.9rem);"
-     onmouseover="this.style.backgroundColor='#1da851'; this.style.transform='translateY(-2px)';"
-     onmouseout="this.style.backgroundColor='#25D366'; this.style.transform='translateY(0)';"
-     title="Contact admin to book on behalf of client">
-    <i class="fab fa-whatsapp" aria-hidden="true"></i>
-    <span>Book via WhatsApp</span>
-  </a>
 
   <!-- Book Now Button -->
   <a href="{% url 'booking_form' listing.id %}"
@@ -1156,6 +1139,25 @@ document.addEventListener('DOMContentLoaded', function() {
     <i class="fa fa-calendar" aria-hidden="true"></i>
     <span>Book Now</span>
   </a>
+
+     <!-- WhatsApp Button -->
+  <a href="{{ listing.admin_whatsapp_link }}" target="_blank"
+     style="background-color: #25D366; color: white; padding: 10px 16px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; flex: 1 1 auto; min-width: 0; justify-content: center; white-space: nowrap; font-size: clamp(0.8rem, 2vw, 0.9rem);"
+     onmouseover="this.style.backgroundColor='#1da851'; this.style.transform='translateY(-2px)';"
+     onmouseout="this.style.backgroundColor='#25D366'; this.style.transform='translateY(0)';"
+     title="Contact admin to book on behalf of client">
+    <i class="fab fa-whatsapp" aria-hidden="true"></i>
+    <span>Book via WhatsApp</span>
+  </a>
+  <!-- Phone Button -->
+  <a href="tel:{{ listing.admin_contact }}"
+     style="background-color: #007bff; color: white; padding: 10px 16px; text-decoration: none; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; min-width: 44px; flex-shrink: 0;"
+     onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='translateY(-2px)';"
+     onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='translateY(0)';">
+    <i class="fa fa-phone" aria-hidden="true"></i>
+    <span style="display: none;">Call</span>
+  </a>
+
 
 </div>
 
@@ -1381,25 +1383,6 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Action Buttons - RESPONSIVE FLUID VERSION -->
 <div class="listing-actions" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; width: 100%;">
 
-  <!-- Phone Button -->
-  <a href="tel:{{ listing.admin_contact }}"
-     style="background-color: #007bff; color: white; padding: 10px 16px; text-decoration: none; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; min-width: 44px; flex-shrink: 0;"
-     onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='translateY(-2px)';"
-     onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='translateY(0)';">
-    <i class="fa fa-phone" aria-hidden="true"></i>
-    <span style="display: none;">Call</span>
-  </a>
-
-  <!-- WhatsApp Button -->
-  <a href="{{ listing.admin_whatsapp_link }}" target="_blank"
-     style="background-color: #25D366; color: white; padding: 10px 16px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; flex: 1 1 auto; min-width: 0; justify-content: center; white-space: nowrap; font-size: clamp(0.8rem, 2vw, 0.9rem);"
-     onmouseover="this.style.backgroundColor='#1da851'; this.style.transform='translateY(-2px)';"
-     onmouseout="this.style.backgroundColor='#25D366'; this.style.transform='translateY(0)';"
-     title="Contact admin to book on behalf of client">
-    <i class="fab fa-whatsapp" aria-hidden="true"></i>
-    <span>Book via WhatsApp</span>
-  </a>
-
   <!-- Book Now Button -->
   <a href="{% url 'booking_form' listing.id %}"
      style="background-color: #ff5a5f; color: white; padding: 10px 16px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; flex: 1 1 auto; min-width: 0; justify-content: center; white-space: nowrap; font-size: clamp(0.85rem, 2.5vw, 1rem);"
@@ -1409,6 +1392,27 @@ document.addEventListener('DOMContentLoaded', function() {
     <i class="fa fa-calendar" aria-hidden="true"></i>
     <span>Book Now</span>
   </a>
+
+          <!-- WhatsApp Button -->
+  <a href="{{ listing.admin_whatsapp_link }}" target="_blank"
+     style="background-color: #25D366; color: white; padding: 10px 16px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; flex: 1 1 auto; min-width: 0; justify-content: center; white-space: nowrap; font-size: clamp(0.8rem, 2vw, 0.9rem);"
+     onmouseover="this.style.backgroundColor='#1da851'; this.style.transform='translateY(-2px)';"
+     onmouseout="this.style.backgroundColor='#25D366'; this.style.transform='translateY(0)';"
+     title="Contact admin to book on behalf of client">
+    <i class="fab fa-whatsapp" aria-hidden="true"></i>
+    <span>Book via WhatsApp</span>
+  </a>
+
+  <!-- Phone Button -->
+  <a href="tel:{{ listing.admin_contact }}"
+     style="background-color: #007bff; color: white; padding: 10px 16px; text-decoration: none; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; min-width: 44px; flex-shrink: 0;"
+     onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='translateY(-2px)';"
+     onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='translateY(0)';">
+    <i class="fa fa-phone" aria-hidden="true"></i>
+    <span style="display: none;">Call</span>
+  </a>
+
+
 
 </div>
 

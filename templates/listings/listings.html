@@ -1027,12 +1027,6 @@ document.addEventListener('DOMContentLoaded', function() {
                   {% if listing.is_approved %}
                   <span class="verified-badge" title="Verified property">
                     <i class="fa fa-check-circle" aria-hidden="true"></i>
-                                                                                                       <!-- NEW: View Full Details Button -->
-  <a href="{% url 'listing_detail' listing.slug %}"
-
-     title="View full details, photos, and amenities">
-    <i class="fa fa-search" aria-hidden="true"></i> View full Details
-  </a>
                   </span>
 
 
@@ -1122,7 +1116,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     {% endif %}
                   </div>
+                                                                                                       <!-- NEW: View Full Details Button -->
+  <a href="{% url 'listing_detail' listing.slug %}"
 
+     title="View full details, photos, and amenities">
+    <i class="fa fa-search" aria-hidden="true"></i> View full Details
+  </a>
                 </div>
                 {% endif %}
 <!-- Action Buttons - RESPONSIVE FLUID VERSION -->
@@ -1298,12 +1297,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 {% if listing.is_approved %}
                 <span class="verified-badge" style="color: #34a853; font-size: 1rem;" title="Verified property">
                   <i class="fa fa-check-circle" aria-hidden="true"></i>
-                                                                                                      <!-- NEW: View Full Details Button -->
-  <a href="{% url 'listing_detail' listing.slug %}"
 
-     title="View full details, photos, and amenities">
-    <i class="fa fa-search" aria-hidden="true"></i> View full Details
-  </a>
                 </span>
                 {% endif %}
               </h3>
@@ -1378,6 +1372,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
                   {% endif %}
                 </div>
+
+                                                                                                                         <!-- NEW: View Full Details Button -->
+  <a href="{% url 'listing_detail' listing.slug %}"
+
+     title="View full details, photos, and amenities">
+    <i class="fa fa-search" aria-hidden="true"></i> View full Details
+  </a>
               </div>
               {% endif %}
 <!-- Action Buttons - RESPONSIVE FLUID VERSION -->

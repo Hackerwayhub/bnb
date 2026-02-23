@@ -195,7 +195,7 @@ def listing_list(request, location_slug=None):
             'max_price': max_price,
         },
         'featured_price': 1000.00,  # Added featured price
-        'page_title': f'BnB in {display_location_name}' if selected_location != 'all' else 'Bnb.co.ke | staycations & Holiday Homes in kenya',
+        'page_title': f'BnB in {display_location_name}' if selected_location != 'all' else 'Bnb.co.ke | Bnb, staycations & Holiday Homes in kenya',
         'meta_description': f'Book BnB in {display_location_name}. Book verified BnB properties with photos, amenities, and booking details.',
     }
     return render(request, 'listings/listings.html', context)

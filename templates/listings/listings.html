@@ -191,7 +191,7 @@
                         ">
                             <option value="all" {% if selected_location == 'all' %}selected{% endif %}>
 
-          <span class="clean-text"> <span class="clean-location"> staycations in Kenya! | Explore locationss </span>  </span>
+          <span class="clean-text"> <span class="clean-location">Explore locations! </span>  </span>
 
                             </option>
                             {% for location in all_locations %}
@@ -251,7 +251,7 @@
                             font-family: 'Poppins', 'Inter', sans-serif;
                             white-space: nowrap;
                         ">
-                            <option value="">select 🏠</option>
+                            <option value="">select 🏠 type</option>
                             {% for type_code, type_name in property_types %}
                                 <option value="{{ type_code }}"
                                         {% if current_filters.property_type == type_code %}selected{% endif %}>
@@ -1325,7 +1325,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   </div>
                   {% endif %}
 
-                 
+
 
                   {% if listing.pool %}
                   <div style="display: flex; align-items: center; gap: 5px;">

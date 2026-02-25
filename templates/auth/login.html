@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+
 {% load static %}
 {% block content %}
 <head>
@@ -6,604 +6,710 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Login - BnB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        :root {
-            --glass-white: rgba(255, 255, 255, 0.98);
-            --glass-light: rgba(255, 255, 255, 0.9);
-            --glass-medium: rgba(255, 255, 255, 0.8);
-            --glass-dark: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.3);
-            --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            --blur-intensity: blur(15px);
-            --border-radius: 24px;
-            --primary-gradient: linear-gradient(135deg, #ff4d4d, #ff6b35);
-            --text-primary: #1a202c;
-            --text-secondary: #4a5568;
-            --text-muted: #718096;
-            --success-color: #48bb78;
-            --error-color: #e53e3e;
-            --safe-area-top: env(safe-area-inset-top);
-            --safe-area-bottom: env(safe-area-inset-bottom);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
-            min-height: 100vh;
-            min-height: -webkit-fill-available;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            position: relative;
-            overflow-x: hidden;
-            font-size: 16px;
-            line-height: 1.4;
-        }
-
-        /* Animated background elements - optimized for mobile */
-        .glass-shapes {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.6;
-        }
-
-        .shape {
-            position: absolute;
-            background: linear-gradient(45deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
-            border-radius: 50%;
-            filter: blur(50px);
-        }
-
-        .shape-1 {
-            width: 200px;
-            height: 200px;
-            top: -100px;
-            right: -100px;
-        }
-
-        .shape-2 {
-            width: 180px;
-            height: 180px;
-            bottom: -90px;
-            left: -90px;
-            background: linear-gradient(45deg, rgba(72, 187, 120, 0.08), rgba(56, 161, 105, 0.08));
-        }
-
-        .shape-3 {
-            display: none; /* Hidden on mobile for performance */
-        }
-
-        /* Main container - full width on mobile */
-        .auth-container {
-            width: 100%;
-            max-width: 100%;
-            position: relative;
-            z-index: 1;
-            padding: 0;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .auth-glass {
-            background: var(--glass-white);
-            backdrop-filter: var(--blur-intensity);
-            -webkit-backdrop-filter: var(--blur-intensity);
-            border-radius: 0;
-            border: none;
-            box-shadow: none;
-            padding: 24px 20px;
-            position: relative;
-            overflow-y: auto;
-            width: 100%;
-            height: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        /* Header - simplified for mobile */
-        .auth-header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .logo-circle {
-            width: 72px;
-            height: 72px;
-            background: var(--glass-light);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
-        }
-
-        .logo-circle i {
-            font-size: 32px;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .auth-header h1 {
-            font-size: 28px;
-             margin-top: 39px;
-            margin-bottom: 6px;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .auth-header p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            font-weight: 400;
-        }
-
-        /* Messages - compact for mobile */
-        .messages {
-            margin-bottom: 24px;
-        }
-
-        .alert {
-            padding: 14px 16px;
-            background: var(--glass-light);
-            border-radius: 16px;
-            margin-bottom: 8px;
-            border-left: 4px solid;
-            font-size: 14px;
-            line-height: 1.4;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-        }
-
-        .alert.success { border-left-color: var(--success-color); }
-        .alert.error { border-left-color: var(--error-color); }
-        .alert.info { border-left-color: #4299e1; }
-
-        /* Form - touch optimized */
-        .auth-form {
-            margin-bottom: 24px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--text-primary);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .form-label i {
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-
-        .input-group {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 16px 16px 16px 48px;
-            background: var(--glass-white);
-            border: 1.5px solid #e2e8f0;
-            border-radius: 16px;
-            font-size: 16px; /* Prevents zoom on iOS */
-            color: var(--text-primary);
-            transition: all 0.2s ease;
-            min-height: 56px;
-            -webkit-appearance: none;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #ff4d4d;
-            box-shadow: 0 0 0 4px rgba(255, 77, 77, 0.1);
-        }
-
-        .form-input.error {
-            border-color: var(--error-color);
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 16px;
-            color: var(--text-muted);
-            font-size: 18px;
-            pointer-events: none;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 0px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 18px;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            transition: background-color 0.2s;
-        }
-
-        .password-toggle:active {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        /* Remember me & Forgot password - stacked on mobile */
-        .remember-me {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .checkbox-wrapper {
-            position: relative;
-        }
-
-        .checkbox-input {
-            position: absolute;
-            opacity: 0;
-            width: 24px;
-            height: 24px;
-        }
-
-        .checkbox-custom {
-            width: 24px;
-            height: 24px;
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .checkbox-input:checked + .checkbox-custom {
-            background: var(--primary-gradient);
-            border-color: transparent;
-        }
-
-        .checkbox-input:checked + .checkbox-custom::after {
-            content: '✓';
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .remember-me label {
-            color: var(--text-secondary);
-            font-size: 15px;
-            cursor: pointer;
-            flex: 1;
-        }
-
-        .forgot-password {
-            color: #ff4d4d;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            padding: 8px 0;
-            display: inline-block;
-        }
-
-        /* Button - large touch target */
-        .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 18px 20px;
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            border-radius: 16px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s, transform 0.1s;
-            min-height: 60px;
-            box-shadow: 0 8px 20px rgba(255, 77, 77, 0.3);
-            -webkit-appearance: none;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-            opacity: 0.9;
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            transform: none;
-        }
-
-        /* Social login - simplified */
-        .social-divider {
-            display: flex;
-            align-items: center;
-            margin: 24px 0;
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-
-        .social-divider::before,
-        .social-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #e2e8f0;
-        }
-
-        .social-divider span {
-            padding: 0 12px;
-        }
-
-        .social-login {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .social-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 16px;
-            background: white;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            color: var(--text-primary);
-            text-decoration: none;
-            min-height: 56px;
-            transition: background-color 0.2s, transform 0.1s;
-        }
-
-        .social-btn:active {
-            background-color: #f8fafc;
-            transform: scale(0.98);
-        }
-
-        .social-btn.google i { color: #DB4437; }
-        .social-btn.facebook i { color: #4267B2; }
-
-        /* Registration link */
-        .auth-links {
-            display: flex;
-            justify-content: center;
-            margin-top: 16px;
-            margin-bottom: 36px;
-            padding-top: 16px;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .auth-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px;
-        }
-
-        .auth-link i {
-            color: #ff4d4d;
-        }
-
-        /* Error messages */
-        .error-message {
-            display: block;
-            margin-top: 6px;
-            color: var(--error-color);
-            font-size: 13px;
-            padding-left: 12px;
-        }
-
-        /* Bottom sheet for additional options (mobile only) */
-        .mobile-bottom-sheet {
-            display: none;
-        }
-
-        /* Tablet and up styles */
-        @media (min-width: 768px) {
-            body {
-                padding: 20px;
-            }
-
-            .auth-container {
-                max-width: 440px;
-                min-height: auto;
-            }
-
-            .auth-glass {
-                border-radius: 24px;
-                padding: 40px;
-                min-height: auto;
-                box-shadow: var(--glass-shadow);
-                border: 1px solid var(--glass-border);
-            }
-
-            .remember-me {
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-            }
-
-            .social-login {
-                flex-direction: row;
-            }
-
-            .social-btn {
-                flex: 1;
-            }
-
-            .shape-3 {
-                display: block;
-                width: 150px;
-                height: 150px;
-                top: 20%;
-                left: 5%;
-                background: linear-gradient(45deg, rgba(245, 158, 11, 0.08), rgba(217, 119, 6, 0.08));
-            }
-        }
-
-        /* Safe area for notched phones */
-        @supports (padding: max(0px)) {
-            .auth-glass {
-                padding-left: max(20px, env(safe-area-inset-left));
-                padding-right: max(20px, env(safe-area-inset-right));
-                padding-top: max(24px, env(safe-area-inset-top));
-                padding-bottom: max(24px, env(safe-area-inset-bottom));
-            }
-        }
-
-        /* Touch device optimizations */
-        @media (hover: none) and (pointer: coarse) {
-            .form-input,
-            .btn,
-            .social-btn,
-            .password-toggle,
-            .checkbox-wrapper {
-                cursor: default;
-            }
-
-            .btn:hover,
-            .social-btn:hover,
-            .forgot-password:hover {
-                transform: none;
-            }
-        }
-
-        /* Reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation: none !important;
-                transition: none !important;
-            }
-        }
-
-        /* Loading state */
-        .btn-loading {
-            position: relative;
-            color: transparent !important;
-        }
-
-        .btn-loading::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid white;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Quick login options for returning users */
-        .quick-login {
-            margin-top: 24px;
-            display: none;
-        }
-
-        .quick-login.active {
-            display: block;
-        }
-
-        .quick-login-title {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            text-align: center;
-        }
-
-        .saved-users {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding: 4px 0;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        .saved-users::-webkit-scrollbar {
-            display: none;
-        }
-
-        .saved-user {
-            flex: 0 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            padding: 12px;
-            background: var(--glass-light);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            min-width: 80px;
-        }
-
-        .saved-user i {
-            font-size: 24px;
-            color: #ff4d4d;
-        }
-
-        .saved-user span {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-    </style>
+:root {
+    --glass-white: rgba(255, 255, 255, 0.98);
+    --glass-light: rgba(255, 255, 255, 0.9);
+    --glass-medium: rgba(255, 255, 255, 0.8);
+    --glass-dark: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --blur-intensity: blur(15px);
+    --border-radius: 24px;
+    --primary-gradient: linear-gradient(135deg, #ff4d4d, #ff6b35);
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --success-color: #48bb78;
+    --error-color: #e53e3e;
+    --safe-area-top: env(safe-area-inset-top);
+    --safe-area-bottom: env(safe-area-inset-bottom);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    position: relative;
+    overflow-x: hidden;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+/* Animated background elements - optimized for mobile */
+.glass-shapes {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+}
+
+.shape {
+    position: absolute;
+    background: linear-gradient(45deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+    border-radius: 50%;
+    filter: blur(50px);
+}
+
+.shape-1 {
+    width: 200px;
+    height: 200px;
+    top: -100px;
+    right: -100px;
+}
+
+.shape-2 {
+    width: 180px;
+    height: 180px;
+    bottom: -90px;
+    left: -90px;
+    background: linear-gradient(45deg, rgba(72, 187, 120, 0.08), rgba(56, 161, 105, 0.08));
+}
+
+.shape-3 {
+    display: none; /* Hidden on mobile for performance */
+}
+
+/* Main container - centered on all screens */
+.auth-container {
+    width: 100%;
+    max-width: 440px; /* Limit width on larger screens */
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    margin: 0 auto; /* Center horizontally */
+    min-height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Glass card - centered and responsive */
+.auth-glass {
+    background: var(--glass-white);
+    backdrop-filter: var(--blur-intensity);
+    -webkit-backdrop-filter: var(--blur-intensity);
+    border-radius: 24px; /* Consistent rounded corners */
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    padding: 32px 24px;
+    position: relative;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+/* Header - centered */
+.auth-header {
+    text-align: center;
+    margin-bottom: 32px;
+    width: 100%;
+}
+
+.logo-circle {
+    width: 72px;
+    height: 72px;
+    background: var(--glass-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px; /* Center with auto margins */
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+}
+
+.logo-circle i {
+    font-size: 32px;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.auth-header h1 {
+    font-size: 28px;
+    margin: 0 0 8px 0; /* Remove top margin, add bottom */
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    text-align: center;
+}
+
+.auth-header p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    font-weight: 400;
+    text-align: center;
+    margin: 0;
+}
+
+/* Messages - centered */
+.messages {
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.alert {
+    padding: 14px 16px;
+    background: var(--glass-light);
+    border-radius: 16px;
+    margin-bottom: 8px;
+    border-left: 4px solid;
+    font-size: 14px;
+    line-height: 1.4;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    width: 100%;
+}
+
+.alert.success { border-left-color: var(--success-color); }
+.alert.error { border-left-color: var(--error-color); }
+.alert.info { border-left-color: #4299e1; }
+
+/* Form - centered */
+.auth-form {
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+    width: 100%;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.form-label i {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.form-input {
+    width: 100%;
+    padding: 16px 16px 16px 48px;
+    background: var(--glass-white);
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    min-height: 56px;
+    -webkit-appearance: none;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #ff4d4d;
+    box-shadow: 0 0 0 4px rgba(255, 77, 77, 0.1);
+}
+
+.form-input.error {
+    border-color: var(--error-color);
+}
+
+.input-icon {
+    position: absolute;
+    left: 16px;
+    color: var(--text-muted);
+    font-size: 18px;
+    pointer-events: none;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 0px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 18px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    transition: background-color 0.2s;
+}
+
+.password-toggle:active {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Remember me & Forgot password */
+.remember-me {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.checkbox-wrapper {
+    position: relative;
+}
+
+.checkbox-input {
+    position: absolute;
+    opacity: 0;
+    width: 24px;
+    height: 24px;
+}
+
+.checkbox-custom {
+    width: 24px;
+    height: 24px;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.checkbox-input:checked + .checkbox-custom {
+    background: var(--primary-gradient);
+    border-color: transparent;
+}
+
+.checkbox-input:checked + .checkbox-custom::after {
+    content: '✓';
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.remember-me label {
+    color: var(--text-secondary);
+    font-size: 15px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.forgot-password {
+    color: #ff4d4d;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 8px 0;
+    display: inline-block;
+    text-align: center;
+}
+
+/* Button - centered */
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 18px 20px;
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    min-height: 60px;
+    box-shadow: 0 8px 20px rgba(255, 77, 77, 0.3);
+    -webkit-appearance: none;
+    margin: 0 auto; /* Center button */
+}
+
+.btn:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    transform: none;
+}
+
+/* Social login - centered */
+.social-divider {
+    display: flex;
+    align-items: center;
+    margin: 24px 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    width: 100%;
+}
+
+.social-divider::before,
+.social-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e2e8f0;
+}
+
+.social-divider span {
+    padding: 0 12px;
+}
+
+.social-login {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px;
+    background: white;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text-primary);
+    text-decoration: none;
+    min-height: 56px;
+    transition: background-color 0.2s, transform 0.1s;
+    width: 100%;
+}
+
+.social-btn:active {
+    background-color: #f8fafc;
+    transform: scale(0.98);
+}
+
+.social-btn.google i { color: #DB4437; }
+.social-btn.facebook i { color: #4267B2; }
+
+/* Registration link - centered */
+.auth-links {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    margin-bottom: 0;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+    width: 100%;
+}
+
+.auth-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    transition: color 0.2s;
+}
+
+.auth-link i {
+    color: #ff4d4d;
+}
+
+.auth-link:hover {
+    color: #ff4d4d;
+}
+
+/* Error messages */
+.error-message {
+    display: block;
+    margin-top: 6px;
+    color: var(--error-color);
+    font-size: 13px;
+    padding-left: 12px;
+}
+
+/* Tablet and up styles */
+@media (min-width: 768px) {
+    body {
+        padding: 20px;
+    }
+
+    .auth-container {
+        max-width: 440px;
+        padding: 20px;
+    }
+
+    .auth-glass {
+        padding: 40px 36px;
+        border-radius: 32px;
+    }
+
+    .remember-me {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .social-login {
+        flex-direction: row;
+        gap: 16px;
+    }
+
+    .social-btn {
+        flex: 1;
+    }
+
+    .shape-3 {
+        display: block;
+        width: 150px;
+        height: 150px;
+        top: 20%;
+        left: 5%;
+        background: linear-gradient(45deg, rgba(245, 158, 11, 0.08), rgba(217, 119, 6, 0.08));
+    }
+
+    .auth-header h1 {
+        font-size: 32px;
+    }
+
+    .forgot-password {
+        text-align: right;
+    }
+}
+
+/* Desktop styles */
+@media (min-width: 1024px) {
+    .auth-container {
+        max-width: 480px;
+    }
+
+    .auth-glass {
+        padding: 48px 40px;
+    }
+
+    .auth-header {
+        margin-bottom: 40px;
+    }
+
+    .auth-header h1 {
+        font-size: 36px;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 16px;
+    }
+
+    .auth-glass {
+        padding: 24px 20px;
+        border-radius: 20px;
+    }
+
+    .auth-header h1 {
+        font-size: 26px;
+        margin-top: 0;
+    }
+
+    .btn {
+        padding: 16px;
+        min-height: 56px;
+    }
+
+    .social-btn {
+        padding: 14px;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+    .auth-container {
+        padding: 12px;
+    }
+
+    .auth-glass {
+        padding: 20px 16px;
+    }
+
+    .auth-header h1 {
+        font-size: 24px;
+    }
+
+    .form-input {
+        padding: 14px 14px 14px 44px;
+        min-height: 52px;
+    }
+
+    .btn {
+        padding: 14px;
+        min-height: 52px;
+    }
+}
+
+/* Safe area for notched phones */
+@supports (padding: max(0px)) {
+    .auth-glass {
+        padding-left: max(24px, env(safe-area-inset-left));
+        padding-right: max(24px, env(safe-area-inset-right));
+        padding-top: max(24px, env(safe-area-inset-top));
+        padding-bottom: max(24px, env(safe-area-inset-bottom));
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .form-input,
+    .btn,
+    .social-btn,
+    .password-toggle,
+    .checkbox-wrapper {
+        cursor: default;
+    }
+
+    .btn:hover,
+    .social-btn:hover,
+    .forgot-password:hover {
+        transform: none;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Loading state */
+.btn-loading {
+    position: relative;
+    color: transparent !important;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid white;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Quick login options for returning users */
+.quick-login {
+    margin-top: 24px;
+    display: none;
+    width: 100%;
+}
+
+.quick-login.active {
+    display: block;
+}
+
+.quick-login-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.saved-users {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 4px 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    justify-content: center; /* Center the saved users */
+}
+
+.saved-users::-webkit-scrollbar {
+    display: none;
+}
+
+.saved-user {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px;
+    background: var(--glass-light);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    min-width: 80px;
+}
+
+.saved-user i {
+    font-size: 24px;
+    color: #ff4d4d;
+}
+
+.saved-user span {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* Center alignment utilities */
+.text-center {
+    text-align: center;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
 </head>
 <body>
     <!-- Animated background shapes - simplified -->
@@ -726,21 +832,6 @@
                 {% endif %}
             </form>
 
-            <!-- Social Login -->
-            <div class="social-divider">
-                <span>Or continue with</span>
-            </div>
-
-            <div class="social-login">
-                <button type="button" class="social-btn google" onclick="handleSocialLogin('google')" aria-label="Sign in with Google">
-                    <i class="fab fa-google" aria-hidden="true"></i>
-                    Google
-                </button>
-                <button type="button" class="social-btn facebook" onclick="handleSocialLogin('facebook')" aria-label="Sign in with Facebook">
-                    <i class="fab fa-facebook-f" aria-hidden="true"></i>
-                    Facebook
-                </button>
-            </div>
 
             <!-- Registration Link -->
             <div class="auth-links">

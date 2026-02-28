@@ -80,7 +80,7 @@ def prepare_listing_context(request, queryset, context_extra=None):
     all_listings_shuffled = featured_listings + non_featured_listings
 
     # Pagination
-    paginator = Paginator(all_listings_shuffled, 12)  # 12 listings per page for better UX
+    paginator = Paginator(all_listings_shuffled, 99)  # 12 listings per page for better UX
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -630,7 +630,7 @@ def listing_detail(request, slug):
     context = {
         'listing': listing,
         'is_owner': is_owner,
-        'page_title': f'Condo | {listing.title}',
+        'page_title': f' {listing.title} | Bnb.co.ke',
         'meta_description': f'Book {listing.title} in {listing.get_location_display()}. {listing.guests} guests, {listing.bedrooms} bedrooms, KES {listing.price_per_night}/night.',
     }
     return render(request, 'listings/listing_detail.html', context)

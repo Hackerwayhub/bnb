@@ -362,7 +362,7 @@ def submit_listing(request):
 
             context = {
                 'form': form,
-                'title': 'Submit New Listing - Condo.co.ke',
+                'title': 'Submit New Listing - Bnb.co.ke',
                 'featured_price': 1000.00,
             }
             return render(request, 'listings/create_listing.html', context)
@@ -439,7 +439,7 @@ def book_via_whatsapp(request):
     Simple WhatsApp booking page - Just a big WhatsApp button
     """
     context = {
-        'page_title': 'Book via WhatsApp - Instant Booking | Condo.co.ke',
+        'page_title': 'Book via WhatsApp - Instant Booking | Bnb.co.ke',
         'meta_description': 'Book your property directly on WhatsApp. Chat with hosts instantly, get quick responses.',
         'whatsapp_number': '+254798246467',  # Your business WhatsApp number
     }
@@ -476,7 +476,7 @@ def booking_view(request, listing_id):
     context = {
         'form': form,
         'listing': listing,
-        'page_title': f'Inquire about {listing.title} - Condo.co.ke',
+        'page_title': f' Book{listing.title} | Bnb.co.ke',
     }
     return render(request, 'listings/booking_form.html', context)
 
@@ -495,7 +495,7 @@ def booking_confirmation(request, booking_id):
         'check_out_formatted': booking.check_out.strftime('%B %d, %Y'),
         'total_price_formatted': f"{booking.total_price:,.2f}",
         'number_of_nights': (booking.check_out - booking.check_in).days,
-        'page_title': f'Booking Confirmation - BK{booking.id:06d} | Condo.co.ke',
+        'page_title': f'Booking Confirmation - BK{booking.id:06d} | Bnb.co.ke',
     }
     return render(request, 'booking_confirmation.html', context)
 
@@ -516,7 +516,7 @@ def my_listings(request):
         'active_listings': active_listings,
         'featured_listings': featured_listings,
         'pending_bookings': 0,  # You can add this later
-        'title': 'My Listings - Condo.co.ke',
+        'title': 'My Listings | Bnb.co.ke',
         'page_title': 'My Listings'
     }
     return render(request, 'listings/my_listings.html', context)
@@ -589,7 +589,7 @@ def edit_listing(request, listing_id):
     context = {
         'form': form,
         'listing': listing,
-        'title': f'Edit {listing.title} - Condo.co.ke',
+        'title': f'Edit {listing.title} | Bnb.co.ke',
         'page_title': 'Edit Listing'
     }
     return render(request, 'listings/edit_listing.html', context)
@@ -612,7 +612,7 @@ def delete_listing(request, listing_id):
 
     context = {
         'listing': listing,
-        'title': f'Delete {listing.title} - Condo.co.ke',
+        'title': f'Delete {listing.title} - Bnb.co.ke',
         'page_title': 'Delete Listing'
     }
     return render(request, 'listings/delete_listing.html', context)

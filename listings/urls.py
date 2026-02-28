@@ -29,8 +29,9 @@ urlpatterns = [
     # WhatsApp booking
     path('book-via-whatsapp/', views.book_via_whatsapp, name='whatsapp_booking'),
 
-    # Special pages
-    path('bnb-house-party/', TemplateView.as_view(template_name='listings/bnb_house_party.html'), name='house_party'),
+    # Property type URLs (clean URLs)
+    path('property-type/', views.all_property_types, name='all_property_types'),
+    path('property-type/<slug:property_type_slug>/', views.listings_by_property_type, name='listings_by_property_type'),
 
     # Keep legacy URLs for backward compatibility
     path('submit-listing/', views.submit_listing, name='submit_listing'),  # Legacy - redirects to advertise/

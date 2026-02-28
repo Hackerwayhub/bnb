@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Listing - BnB</title>
+    <title>Edit Listing - Condo.co.ke</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -18,7 +18,7 @@
         --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
         --blur-intensity: blur(20px);
         --border-radius: 16px;
-        --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        --primary-gradient: linear-gradient(135deg, #FF0000 0%, #cc0000 100%);
         --secondary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
         --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
         --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
@@ -47,7 +47,7 @@
     }
 
     .container {
-        max-width: 1200px;
+        max-width: 1400px;
         margin: 0 auto;
         padding: 0 8px;
     }
@@ -62,7 +62,7 @@
 
     .shape {
         position: absolute;
-        background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+        background: linear-gradient(45deg, rgba(255, 0, 0, 0.1), rgba(204, 0, 0, 0.1));
         border-radius: 50%;
         filter: blur(40px);
         animation: float 20s infinite linear;
@@ -172,9 +172,9 @@
     }
 
     .listing-status.featured {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.05));
-        color: #6366f1;
-        border: 1px solid rgba(139, 92, 246, 0.2);
+        background: linear-gradient(135deg, rgba(255, 0, 0, 0.1), rgba(204, 0, 0, 0.05));
+        color: #FF0000;
+        border: 1px solid rgba(204, 0, 0, 0.2);
     }
 
     .header-actions {
@@ -375,6 +375,10 @@
 
     .form-section {
         margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: var(--glass-light);
+        border-radius: 16px;
+        border: 1px solid var(--glass-border);
     }
 
     .form-section h3 {
@@ -450,10 +454,8 @@
     .form-control:focus, select.form-control:focus, textarea.form-control:focus {
         outline: none;
         background: var(--glass-white);
-        border-color: rgba(99, 102, 241, 0.3);
-        box-shadow:
-            0 0 0 3px rgba(99, 102, 241, 0.1),
-            0 8px 25px rgba(0, 0, 0, 0.08);
+        border-color: rgba(255, 0, 0, 0.3);
+        box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1), 0 8px 25px rgba(0, 0, 0, 0.08);
         transform: translateY(-2px);
     }
 
@@ -528,8 +530,8 @@
 
     .radio-input:checked + .radio-label {
         background: var(--glass-white);
-        border-color: rgba(99, 102, 241, 0.5);
-        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+        border-color: rgba(255, 0, 0, 0.5);
+        box-shadow: 0 8px 25px rgba(255, 0, 0, 0.15);
         transform: translateY(-2px);
     }
 
@@ -590,8 +592,14 @@
 
     .checkbox-input:checked + .checkbox-item {
         background: var(--glass-white);
-        border-color: rgba(99, 102, 241, 0.3);
+        border-color: rgba(255, 0, 0, 0.3);
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .checkbox-input:checked + .checkbox-item .checkbox-icon {
+        background: var(--primary-gradient);
+        border-color: transparent;
+        color: white;
     }
 
     .checkbox-icon {
@@ -606,12 +614,6 @@
         color: transparent;
         transition: all 0.3s ease;
         flex-shrink: 0;
-    }
-
-    .checkbox-input:checked + .checkbox-item .checkbox-icon {
-        background: var(--primary-gradient);
-        border-color: transparent;
-        color: white;
     }
 
     .checkbox-text {
@@ -658,7 +660,7 @@
 
     .upload-box:hover {
         background: var(--glass-white);
-        border-color: rgba(99, 102, 241, 0.3);
+        border-color: rgba(255, 0, 0, 0.3);
     }
 
     .upload-box.has-image {
@@ -772,7 +774,7 @@
         text-decoration: none;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        box-shadow: 0 8px 25px rgba(255, 0, 0, 0.3);
         width: 100%;
     }
 
@@ -789,7 +791,7 @@
 
     .btn:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
+        box-shadow: 0 15px 35px rgba(255, 0, 0, 0.4);
     }
 
     .btn:hover::before {
@@ -1292,7 +1294,7 @@
                             Update your property details and photos
                             <span class="listing-status {% if listing.is_approved %}approved{% else %}pending{% endif %} {% if listing.listing_type == 'featured' %}featured{% endif %}">
                                 {% if listing.listing_type == 'featured' %}⭐ {% endif %}
-                                {{ listing.is_approved|yesno:"Approved,Pending" }}
+                                {{ listing.get_transaction_type_display|default:"Property" }} • {{ listing.is_approved|yesno:"Approved,Pending" }}
                             </span>
                         </p>
                     </div>
@@ -1303,7 +1305,7 @@
                         </a>
                         <a href="{% url 'my_bnb_listings' %}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i>
-                            Back to Listings
+                            Back to My Listings
                         </a>
                     </div>
                 </div>
@@ -1361,18 +1363,22 @@
                         </div>
                         <div class="step" id="step2-indicator">
                             2
-                            <span class="step-label">Details</span>
+                            <span class="step-label">Property Details</span>
                         </div>
                         <div class="step" id="step3-indicator">
                             3
-                            <span class="step-label">Amenities</span>
+                            <span class="step-label">Size & Rooms</span>
                         </div>
                         <div class="step" id="step4-indicator">
                             4
-                            <span class="step-label">Pricing</span>
+                            <span class="step-label">Amenities</span>
                         </div>
                         <div class="step" id="step5-indicator">
                             5
+                            <span class="step-label">Pricing</span>
+                        </div>
+                        <div class="step" id="step6-indicator">
+                            6
                             <span class="step-label">Photos</span>
                         </div>
                     </div>
@@ -1391,7 +1397,7 @@
                         </div>
 
                         <div class="form-grid">
-                            <div class="form-group">
+                            <div class="form-group" style="grid-column: 1 / -1;">
                                 <label class="form-label" for="{{ form.title.id_for_label }}">
                                     <i class="fas fa-heading"></i>
                                     Listing Title<span class="required">*</span>
@@ -1401,6 +1407,18 @@
                                 <span class="error-message">{{ form.title.errors.0 }}</span>
                                 {% endif %}
                                 <span class="help-text">Catchy title that describes your property (max 200 characters)</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.transaction_type.id_for_label }}">
+                                    <i class="fas fa-exchange-alt"></i>
+                                    Transaction Type<span class="required">*</span>
+                                </label>
+                                {{ form.transaction_type }}
+                                {% if form.transaction_type.errors %}
+                                <span class="error-message">{{ form.transaction_type.errors.0 }}</span>
+                                {% endif %}
+                                <span class="help-text">Rent (monthly), Sale (purchase), or Shortlet (nightly)</span>
                             </div>
 
                             <div class="form-group">
@@ -1428,13 +1446,25 @@
                             <div class="form-group">
                                 <label class="form-label" for="{{ form.specific_location.id_for_label }}">
                                     <i class="fas fa-map-pin"></i>
-                                    Specific Location
+                                    Specific Location<span class="required">*</span>
                                 </label>
                                 {{ form.specific_location }}
                                 {% if form.specific_location.errors %}
                                 <span class="error-message">{{ form.specific_location.errors.0 }}</span>
                                 {% endif %}
-                                <span class="help-text">Estate, street, landmarks, etc. (max 200 characters)</span>
+                                <span class="help-text">Estate, street, landmarks, etc.</span>
+                            </div>
+
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label class="form-label" for="{{ form.address.id_for_label }}">
+                                    <i class="fas fa-address-card"></i>
+                                    Full Address (Optional)
+                                </label>
+                                {{ form.address }}
+                                {% if form.address.errors %}
+                                <span class="error-message">{{ form.address.errors.0 }}</span>
+                                {% endif %}
+                                <span class="help-text">Street name, building name (helps with Google Maps)</span>
                             </div>
 
                             <div class="form-group" style="grid-column: 1 / -1;">
@@ -1442,79 +1472,108 @@
                                     <i class="fas fa-align-left"></i>
                                     Description
                                 </label>
-                                <textarea name="description" id="description" class="form-control" rows="4"
-                                          placeholder="Describe your property, nearby attractions, unique features...">{{ form.description.value|default:listing.description }}</textarea>
+                                {{ form.description }}
                                 {% if form.description.errors %}
                                 <span class="error-message">{{ form.description.errors.0 }}</span>
                                 {% endif %}
-                                <span class="help-text">Detailed description of your property (max 2000 characters)</span>
+                                <span class="help-text">Detailed description of your property, nearby attractions, unique features...</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Step 2: Property Details -->
+                    <!-- Step 2: Property Details & Contact -->
                     <div class="form-step" id="step2">
                         <div class="step-header">
-                            <h2><i class="fas fa-clipboard-list"></i> Property Details</h2>
-                            <p>Specify the capacity and features of your property</p>
+                            <h2><i class="fas fa-clipboard-list"></i> Property Details & Contact</h2>
+                            <p>Specify the capacity and contact information</p>
                         </div>
 
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="form-label" for="{{ form.guests.id_for_label }}">
-                                    <i class="fas fa-users"></i>
-                                    Maximum Guests<span class="required">*</span>
-                                </label>
-                                <div class="input-group">
-                                    <i class="fas fa-users input-icon"></i>
-                                    {{ form.guests }}
+                        <div class="form-section">
+                            <h3><i class="fas fa-users"></i> Capacity</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.guests.id_for_label }}">
+                                        <i class="fas fa-users"></i>
+                                        Maximum Guests<span class="required">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <i class="fas fa-users input-icon"></i>
+                                        {{ form.guests }}
+                                    </div>
+                                    {% if form.guests.errors %}
+                                    <span class="error-message">{{ form.guests.errors.0 }}</span>
+                                    {% endif %}
                                 </div>
-                                {% if form.guests.errors %}
-                                <span class="error-message">{{ form.guests.errors.0 }}</span>
-                                {% endif %}
-                                <span class="help-text">Maximum number of guests allowed</span>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-label" for="{{ form.bedrooms.id_for_label }}">
-                                    <i class="fas fa-bed"></i>
-                                    Bedrooms<span class="required">*</span>
-                                </label>
-                                <div class="input-group">
-                                    <i class="fas fa-bed input-icon"></i>
-                                    {{ form.bedrooms }}
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.bedrooms.id_for_label }}">
+                                        <i class="fas fa-bed"></i>
+                                        Bedrooms<span class="required">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <i class="fas fa-bed input-icon"></i>
+                                        {{ form.bedrooms }}
+                                    </div>
+                                    {% if form.bedrooms.errors %}
+                                    <span class="error-message">{{ form.bedrooms.errors.0 }}</span>
+                                    {% endif %}
                                 </div>
-                                {% if form.bedrooms.errors %}
-                                <span class="error-message">{{ form.bedrooms.errors.0 }}</span>
-                                {% endif %}
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-label" for="{{ form.beds.id_for_label }}">
-                                    <i class="fas fa-bed"></i>
-                                    Beds<span class="required">*</span>
-                                </label>
-                                <div class="input-group">
-                                    <i class="fas fa-bed input-icon"></i>
-                                    {{ form.beds }}
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.beds.id_for_label }}">
+                                        <i class="fas fa-bed"></i>
+                                        Beds<span class="required">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <i class="fas fa-bed input-icon"></i>
+                                        {{ form.beds }}
+                                    </div>
+                                    {% if form.beds.errors %}
+                                    <span class="error-message">{{ form.beds.errors.0 }}</span>
+                                    {% endif %}
                                 </div>
-                                {% if form.beds.errors %}
-                                <span class="error-message">{{ form.beds.errors.0 }}</span>
-                                {% endif %}
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-label" for="{{ form.bathrooms.id_for_label }}">
-                                    <i class="fas fa-bath"></i>
-                                    Bathrooms<span class="required">*</span>
-                                </label>
-                                <div class="input-group">
-                                    <i class="fas fa-bath input-icon"></i>
-                                    {{ form.bathrooms }}
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.bathrooms.id_for_label }}">
+                                        <i class="fas fa-bath"></i>
+                                        Bathrooms<span class="required">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <i class="fas fa-bath input-icon"></i>
+                                        {{ form.bathrooms }}
+                                    </div>
+                                    {% if form.bathrooms.errors %}
+                                    <span class="error-message">{{ form.bathrooms.errors.0 }}</span>
+                                    {% endif %}
                                 </div>
-                                {% if form.bathrooms.errors %}
-                                <span class="error-message">{{ form.bathrooms.errors.0 }}</span>
-                                {% endif %}
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.en_suites.id_for_label }}">
+                                        <i class="fas fa-shower"></i>
+                                        En-suite Bathrooms
+                                    </label>
+                                    <div class="input-group">
+                                        <i class="fas fa-shower input-icon"></i>
+                                        {{ form.en_suites }}
+                                    </div>
+                                    {% if form.en_suites.errors %}
+                                    <span class="error-message">{{ form.en_suites.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.parking_spots.id_for_label }}">
+                                        <i class="fas fa-parking"></i>
+                                        Parking Spots
+                                    </label>
+                                    <div class="input-group">
+                                        <i class="fas fa-parking input-icon"></i>
+                                        {{ form.parking_spots }}
+                                    </div>
+                                    {% if form.parking_spots.errors %}
+                                    <span class="error-message">{{ form.parking_spots.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
 
@@ -1554,18 +1613,243 @@
                         </div>
                     </div>
 
-                    <!-- Step 3: Amenities -->
+                    <!-- Step 3: Size, Condition & Rooms -->
                     <div class="form-step" id="step3">
                         <div class="step-header">
-                            <h2><i class="fas fa-star"></i> Amenities & Features</h2>
-                            <p>Select the amenities available at your property</p>
+                            <h2><i class="fas fa-ruler-combined"></i> Size, Condition & Rooms</h2>
+                            <p>Specify dimensions, condition, and additional rooms</p>
                         </div>
 
                         <div class="form-section">
-                            <h3><i class="fas fa-wifi"></i> Essential Amenities</h3>
+                            <h3><i class="fas fa-ruler"></i> Property Size</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.land_size.id_for_label }}">
+                                        <i class="fas fa-tree"></i>
+                                        Land Size
+                                    </label>
+                                    {{ form.land_size }}
+                                    {% if form.land_size.errors %}
+                                    <span class="error-message">{{ form.land_size.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.land_size_unit.id_for_label }}">
+                                        <i class="fas fa-ruler"></i>
+                                        Unit
+                                    </label>
+                                    {{ form.land_size_unit }}
+                                    {% if form.land_size_unit.errors %}
+                                    <span class="error-message">{{ form.land_size_unit.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.floor_area.id_for_label }}">
+                                        <i class="fas fa-building"></i>
+                                        Floor Area (sqm)
+                                    </label>
+                                    {{ form.floor_area }}
+                                    {% if form.floor_area.errors %}
+                                    <span class="error-message">{{ form.floor_area.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-check-circle"></i> Property Condition</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.year_built.id_for_label }}">
+                                        <i class="fas fa-calendar"></i>
+                                        Year Built
+                                    </label>
+                                    {{ form.year_built }}
+                                    {% if form.year_built.errors %}
+                                    <span class="error-message">{{ form.year_built.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.condition.id_for_label }}">
+                                        <i class="fas fa-check-circle"></i>
+                                        Condition
+                                    </label>
+                                    {{ form.condition }}
+                                    {% if form.condition.errors %}
+                                    <span class="error-message">{{ form.condition.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.furnishing.id_for_label }}">
+                                        <i class="fas fa-couch"></i>
+                                        Furnishing
+                                    </label>
+                                    {{ form.furnishing }}
+                                    {% if form.furnishing.errors %}
+                                    <span class="error-message">{{ form.furnishing.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-layer-group"></i> Floor Details</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.total_floors.id_for_label }}">
+                                        <i class="fas fa-arrow-up"></i>
+                                        Total Floors in Building
+                                    </label>
+                                    {{ form.total_floors }}
+                                    {% if form.total_floors.errors %}
+                                    <span class="error-message">{{ form.total_floors.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.floor_number.id_for_label }}">
+                                        <i class="fas fa-layer-group"></i>
+                                        Floor Number
+                                    </label>
+                                    {{ form.floor_number }}
+                                    {% if form.floor_number.errors %}
+                                    <span class="error-message">{{ form.floor_number.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-door-open"></i> Additional Rooms</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.living_rooms.id_for_label }}">
+                                        <i class="fas fa-couch"></i>
+                                        Living Rooms
+                                    </label>
+                                    {{ form.living_rooms }}
+                                    {% if form.living_rooms.errors %}
+                                    <span class="error-message">{{ form.living_rooms.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.dining_rooms.id_for_label }}">
+                                        <i class="fas fa-utensils"></i>
+                                        Dining Rooms
+                                    </label>
+                                    {{ form.dining_rooms }}
+                                    {% if form.dining_rooms.errors %}
+                                    <span class="error-message">{{ form.dining_rooms.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.kitchens.id_for_label }}">
+                                        <i class="fas fa-utensils"></i>
+                                        Kitchens
+                                    </label>
+                                    {{ form.kitchens }}
+                                    {% if form.kitchens.errors %}
+                                    <span class="error-message">{{ form.kitchens.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="checkbox-group" style="margin-top: 1rem;">
+                                {% for checkbox in form %}
+                                    {% if checkbox.name in 'servant_quarters,store_rooms,covered_parking,visitor_parking'|split:',' %}
+                                    <input type="checkbox"
+                                           name="{{ checkbox.name }}"
+                                           id="{{ checkbox.id_for_label }}"
+                                           class="checkbox-input"
+                                           {% if checkbox.value %}checked{% endif %}>
+                                    <label for="{{ checkbox.id_for_label }}" class="checkbox-item">
+                                        <span class="checkbox-icon">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <div class="checkbox-text">
+                                            <span class="checkbox-title">
+                                                {% if checkbox.name == 'servant_quarters' %}Servant Quarters
+                                                {% elif checkbox.name == 'store_rooms' %}Store Rooms
+                                                {% elif checkbox.name == 'covered_parking' %}Covered Parking
+                                                {% elif checkbox.name == 'visitor_parking' %}Visitor Parking
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-calendar-alt"></i> Availability</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.available_from.id_for_label }}">
+                                        <i class="fas fa-calendar-check"></i>
+                                        Available From
+                                    </label>
+                                    {{ form.available_from }}
+                                    {% if form.available_from.errors %}
+                                    <span class="error-message">{{ form.available_from.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.available_to.id_for_label }}">
+                                        <i class="fas fa-calendar-times"></i>
+                                        Available To
+                                    </label>
+                                    {{ form.available_to }}
+                                    {% if form.available_to.errors %}
+                                    <span class="error-message">{{ form.available_to.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.minimum_stay.id_for_label }}">
+                                        <i class="fas fa-clock"></i>
+                                        Minimum Stay (nights)
+                                    </label>
+                                    {{ form.minimum_stay }}
+                                    {% if form.minimum_stay.errors %}
+                                    <span class="error-message">{{ form.minimum_stay.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.maximum_stay.id_for_label }}">
+                                        <i class="fas fa-hourglass-end"></i>
+                                        Maximum Stay (nights)
+                                    </label>
+                                    {{ form.maximum_stay }}
+                                    {% if form.maximum_stay.errors %}
+                                    <span class="error-message">{{ form.maximum_stay.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Amenities -->
+                    <div class="form-step" id="step4">
+                        <div class="step-header">
+                            <h2><i class="fas fa-star"></i> Amenities & Features</h2>
+                            <p>Select all amenities available at your property</p>
+                        </div>
+
+                        <!-- Basic Amenities -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-check-circle"></i> Basic Amenities</h3>
                             <div class="checkbox-group">
                                 {% for checkbox in form %}
-                                    {% if checkbox.name in 'wifi,parking,kitchen,pool,ac,tv'|split:',' %}
+                                    {% if checkbox.name in 'wifi,parking,kitchen'|split:',' %}
                                     <input type="checkbox"
                                            name="{{ checkbox.name }}"
                                            id="{{ checkbox.id_for_label }}"
@@ -1580,18 +1864,260 @@
                                                 {% if checkbox.name == 'wifi' %}WiFi
                                                 {% elif checkbox.name == 'parking' %}Parking
                                                 {% elif checkbox.name == 'kitchen' %}Kitchen
-                                                {% elif checkbox.name == 'pool' %}Swimming Pool
-                                                {% elif checkbox.name == 'ac' %}Air Conditioning
-                                                {% elif checkbox.name == 'tv' %}TV
                                                 {% endif %}
                                             </span>
                                             <span class="checkbox-desc">
                                                 {% if checkbox.name == 'wifi' %}High-speed internet access
                                                 {% elif checkbox.name == 'parking' %}Free parking on premises
                                                 {% elif checkbox.name == 'kitchen' %}Full kitchen access
-                                                {% elif checkbox.name == 'pool' %}Private or shared pool
-                                                {% elif checkbox.name == 'ac' %}Cooling system available
-                                                {% elif checkbox.name == 'tv' %}Television with cable
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Fitness & Wellness -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-heartbeat"></i> Fitness & Wellness</h3>
+                            <div class="checkbox-group">
+                                {% for checkbox in form %}
+                                    {% if checkbox.name in 'gym,pool,spa,sauna,steam_room'|split:',' %}
+                                    <input type="checkbox"
+                                           name="{{ checkbox.name }}"
+                                           id="{{ checkbox.id_for_label }}"
+                                           class="checkbox-input"
+                                           {% if checkbox.value %}checked{% endif %}>
+                                    <label for="{{ checkbox.id_for_label }}" class="checkbox-item">
+                                        <span class="checkbox-icon">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <div class="checkbox-text">
+                                            <span class="checkbox-title">
+                                                {% if checkbox.name == 'gym' %}Gym
+                                                {% elif checkbox.name == 'pool' %}Swimming Pool
+                                                {% elif checkbox.name == 'spa' %}Spa
+                                                {% elif checkbox.name == 'sauna' %}Sauna
+                                                {% elif checkbox.name == 'steam_room' %}Steam Room
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Climate Control -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-thermometer-half"></i> Climate Control</h3>
+                            <div class="checkbox-group">
+                                {% for checkbox in form %}
+                                    {% if checkbox.name in 'ac,heating,ceiling_fans,fireplace'|split:',' %}
+                                    <input type="checkbox"
+                                           name="{{ checkbox.name }}"
+                                           id="{{ checkbox.id_for_label }}"
+                                           class="checkbox-input"
+                                           {% if checkbox.value %}checked{% endif %}>
+                                    <label for="{{ checkbox.id_for_label }}" class="checkbox-item">
+                                        <span class="checkbox-icon">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <div class="checkbox-text">
+                                            <span class="checkbox-title">
+                                                {% if checkbox.name == 'ac' %}Air Conditioning
+                                                {% elif checkbox.name == 'heating' %}Heating
+                                                {% elif checkbox.name == 'ceiling_fans' %}Ceiling Fans
+                                                {% elif checkbox.name == 'fireplace' %}Fireplace
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Entertainment -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-tv"></i> Entertainment</h3>
+                            <div class="checkbox-group">
+                                {% for checkbox in form %}
+                                    {% if checkbox.name in 'tv,sound_system,home_theater'|split:',' %}
+                                    <input type="checkbox"
+                                           name="{{ checkbox.name }}"
+                                           id="{{ checkbox.id_for_label }}"
+                                           class="checkbox-input"
+                                           {% if checkbox.value %}checked{% endif %}>
+                                    <label for="{{ checkbox.id_for_label }}" class="checkbox-item">
+                                        <span class="checkbox-icon">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <div class="checkbox-text">
+                                            <span class="checkbox-title">
+                                                {% if checkbox.name == 'tv' %}TV
+                                                {% elif checkbox.name == 'sound_system' %}Sound System
+                                                {% elif checkbox.name == 'home_theater' %}Home Theater
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Outdoor Features -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-tree"></i> Outdoor Features</h3>
+                            <div class="checkbox-group">
+                                {% for checkbox in form %}
+                                    {% if checkbox.name in 'balcony,terrace,garden,roof_terrace,bbq_area,outdoor_shower'|split:',' %}
+                                    <input type="checkbox"
+                                           name="{{ checkbox.name }}"
+                                           id="{{ checkbox.id_for_label }}"
+                                           class="checkbox-input"
+                                           {% if checkbox.value %}checked{% endif %}>
+                                    <label for="{{ checkbox.id_for_label }}" class="checkbox-item">
+                                        <span class="checkbox-icon">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <div class="checkbox-text">
+                                            <span class="checkbox-title">
+                                                {% if checkbox.name == 'balcony' %}Balcony
+                                                {% elif checkbox.name == 'terrace' %}Terrace
+                                                {% elif checkbox.name == 'garden' %}Garden
+                                                {% elif checkbox.name == 'roof_terrace' %}Roof Terrace
+                                                {% elif checkbox.name == 'bbq_area' %}BBQ Area
+                                                {% elif checkbox.name == 'outdoor_shower' %}Outdoor Shower
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Security -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-shield-alt"></i> Security</h3>
+                            <div class="checkbox-group">
+                                {% for checkbox in form %}
+                                    {% if checkbox.name in 'cctv,security_guards,electric_fence,secure_compound,alarm_system'|split:',' %}
+                                    <input type="checkbox"
+                                           name="{{ checkbox.name }}"
+                                           id="{{ checkbox.id_for_label }}"
+                                           class="checkbox-input"
+                                           {% if checkbox.value %}checked{% endif %}>
+                                    <label for="{{ checkbox.id_for_label }}" class="checkbox-item">
+                                        <span class="checkbox-icon">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <div class="checkbox-text">
+                                            <span class="checkbox-title">
+                                                {% if checkbox.name == 'cctv' %}CCTV
+                                                {% elif checkbox.name == 'security_guards' %}Security Guards
+                                                {% elif checkbox.name == 'electric_fence' %}Electric Fence
+                                                {% elif checkbox.name == 'secure_compound' %}Secure Compound
+                                                {% elif checkbox.name == 'alarm_system' %}Alarm System
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Utilities -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-plug"></i> Utilities</h3>
+                            <div class="checkbox-group">
+                                {% for checkbox in form %}
+                                    {% if checkbox.name in 'generator,solar_panels,water_tank,borehole,backup_water,internet_fiber'|split:',' %}
+                                    <input type="checkbox"
+                                           name="{{ checkbox.name }}"
+                                           id="{{ checkbox.id_for_label }}"
+                                           class="checkbox-input"
+                                           {% if checkbox.value %}checked{% endif %}>
+                                    <label for="{{ checkbox.id_for_label }}" class="checkbox-item">
+                                        <span class="checkbox-icon">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <div class="checkbox-text">
+                                            <span class="checkbox-title">
+                                                {% if checkbox.name == 'generator' %}Generator
+                                                {% elif checkbox.name == 'solar_panels' %}Solar Panels
+                                                {% elif checkbox.name == 'water_tank' %}Water Tank
+                                                {% elif checkbox.name == 'borehole' %}Borehole
+                                                {% elif checkbox.name == 'backup_water' %}Backup Water
+                                                {% elif checkbox.name == 'internet_fiber' %}Fiber Internet
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Building Amenities -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-building"></i> Building Amenities</h3>
+                            <div class="checkbox-group">
+                                {% for checkbox in form %}
+                                    {% if checkbox.name in 'elevator,wheelchair_accessible,reception,lobby,concierge,laundry_room,play_area,pet_friendly'|split:',' %}
+                                    <input type="checkbox"
+                                           name="{{ checkbox.name }}"
+                                           id="{{ checkbox.id_for_label }}"
+                                           class="checkbox-input"
+                                           {% if checkbox.value %}checked{% endif %}>
+                                    <label for="{{ checkbox.id_for_label }}" class="checkbox-item">
+                                        <span class="checkbox-icon">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <div class="checkbox-text">
+                                            <span class="checkbox-title">
+                                                {% if checkbox.name == 'elevator' %}Elevator/Lift
+                                                {% elif checkbox.name == 'wheelchair_accessible' %}Wheelchair Accessible
+                                                {% elif checkbox.name == 'reception' %}Reception
+                                                {% elif checkbox.name == 'lobby' %}Lobby
+                                                {% elif checkbox.name == 'concierge' %}Concierge
+                                                {% elif checkbox.name == 'laundry_room' %}Laundry Room
+                                                {% elif checkbox.name == 'play_area' %}Children's Play Area
+                                                {% elif checkbox.name == 'pet_friendly' %}Pet Friendly
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Staff -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-users"></i> Staff Included</h3>
+                            <div class="checkbox-group">
+                                {% for checkbox in form %}
+                                    {% if checkbox.name in 'house_staff,askari,caretaker'|split:',' %}
+                                    <input type="checkbox"
+                                           name="{{ checkbox.name }}"
+                                           id="{{ checkbox.id_for_label }}"
+                                           class="checkbox-input"
+                                           {% if checkbox.value %}checked{% endif %}>
+                                    <label for="{{ checkbox.id_for_label }}" class="checkbox-item">
+                                        <span class="checkbox-icon">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <div class="checkbox-text">
+                                            <span class="checkbox-title">
+                                                {% if checkbox.name == 'house_staff' %}House Staff
+                                                {% elif checkbox.name == 'askari' %}Askari (Guard)
+                                                {% elif checkbox.name == 'caretaker' %}Caretaker
                                                 {% endif %}
                                             </span>
                                         </div>
@@ -1602,31 +2128,96 @@
                         </div>
                     </div>
 
-                    <!-- Step 4: Pricing & Listing Type -->
-                    <div class="form-step" id="step4">
+                    <!-- Step 5: Pricing -->
+                    <div class="form-step" id="step5">
                         <div class="step-header">
                             <h2><i class="fas fa-tag"></i> Pricing & Listing Type</h2>
                             <p>Set your pricing and choose how to list your property</p>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label" for="{{ form.price_per_night.id_for_label }}">
-                                <i class="fas fa-money-bill-wave"></i>
-                                Price Per Night (KES)<span class="required">*</span>
-                            </label>
-                            <div class="input-group">
-                                <i class="fas fa-money-bill input-icon"></i>
-                                {{ form.price_per_night }}
+                        <div class="form-section">
+                            <h3><i class="fas fa-money-bill-wave"></i> Pricing</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.price.id_for_label }}">
+                                        <i class="fas fa-tag"></i>
+                                        Price (KES)<span class="required">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <i class="fas fa-money-bill input-icon"></i>
+                                        {{ form.price }}
+                                    </div>
+                                    {% if form.price.errors %}
+                                    <span class="error-message">{{ form.price.errors.0 }}</span>
+                                    {% endif %}
+                                    <span class="help-text">
+                                        {% if form.transaction_type.value == 'rent' %}
+                                            Monthly rent amount
+                                        {% elif form.transaction_type.value == 'sale' %}
+                                            Total sale price
+                                        {% else %}
+                                            Price per night (for shortlet)
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.service_charge.id_for_label }}">
+                                        <i class="fas fa-file-invoice"></i>
+                                        Service Charge (Monthly)
+                                    </label>
+                                    <div class="input-group">
+                                        <i class="fas fa-file-invoice input-icon"></i>
+                                        {{ form.service_charge }}
+                                    </div>
+                                    {% if form.service_charge.errors %}
+                                    <span class="error-message">{{ form.service_charge.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.deposit_required.id_for_label }}">
+                                        <i class="fas fa-hand-holding-usd"></i>
+                                        Deposit Required
+                                    </label>
+                                    <div class="input-group">
+                                        <i class="fas fa-hand-holding-usd input-icon"></i>
+                                        {{ form.deposit_required }}
+                                    </div>
+                                    {% if form.deposit_required.errors %}
+                                    <span class="error-message">{{ form.deposit_required.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
                             </div>
-                            {% if form.price_per_night.errors %}
-                            <span class="error-message">{{ form.price_per_night.errors.0 }}</span>
-                            {% endif %}
-                            <span class="help-text">Enter the price per night in Kenyan Shillings (minimum 100 KES)</span>
+
+                            <div class="checkbox-group" style="margin-top: 1rem;">
+                                {% for checkbox in form %}
+                                    {% if checkbox.name in 'utilities_included,title_deed,loan_available'|split:',' %}
+                                    <input type="checkbox"
+                                           name="{{ checkbox.name }}"
+                                           id="{{ checkbox.id_for_label }}"
+                                           class="checkbox-input"
+                                           {% if checkbox.value %}checked{% endif %}>
+                                    <label for="{{ checkbox.id_for_label }}" class="checkbox-item">
+                                        <span class="checkbox-icon">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <div class="checkbox-text">
+                                            <span class="checkbox-title">
+                                                {% if checkbox.name == 'utilities_included' %}Utilities Included
+                                                {% elif checkbox.name == 'title_deed' %}Title Deed Available
+                                                {% elif checkbox.name == 'loan_available' %}Financing Available
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                         </div>
 
                         <div class="form-section">
                             <h3><i class="fas fa-crown"></i> Listing Type</h3>
-                            <p class="help-text" style="margin-bottom: 1rem;">Choose how you want your listing to appear</p>
                             <div class="radio-group">
                                 <div class="radio-option">
                                     <input type="radio" name="listing_type" id="free" value="free" class="radio-input"
@@ -1655,15 +2246,78 @@
                                             Priority support
                                             Featured badge
                                         </div>
-                                        <div class="radio-price">KES 1,000/month</div>
+                                        <div class="radio-price">KES 1,000</div>
                                     </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-map-marked-alt"></i> Virtual Tour & Map</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.virtual_tour_url.id_for_label }}">
+                                        <i class="fas fa-vr-cardboard"></i>
+                                        Virtual Tour URL
+                                    </label>
+                                    {{ form.virtual_tour_url }}
+                                    {% if form.virtual_tour_url.errors %}
+                                    <span class="error-message">{{ form.virtual_tour_url.errors.0 }}</span>
+                                    {% endif %}
+                                    <span class="help-text">Link to Matterport, 3D tour, or video walkthrough</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.youtube_video_id.id_for_label }}">
+                                        <i class="fab fa-youtube"></i>
+                                        YouTube Video ID
+                                    </label>
+                                    {{ form.youtube_video_id }}
+                                    {% if form.youtube_video_id.errors %}
+                                    <span class="error-message">{{ form.youtube_video_id.errors.0 }}</span>
+                                    {% endif %}
+                                    <span class="help-text">e.g., dQw4w9WgXcQ</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.latitude.id_for_label }}">
+                                        <i class="fas fa-map-pin"></i>
+                                        Latitude
+                                    </label>
+                                    {{ form.latitude }}
+                                    {% if form.latitude.errors %}
+                                    <span class="error-message">{{ form.latitude.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.longitude.id_for_label }}">
+                                        <i class="fas fa-map-pin"></i>
+                                        Longitude
+                                    </label>
+                                    {{ form.longitude }}
+                                    {% if form.longitude.errors %}
+                                    <span class="error-message">{{ form.longitude.errors.0 }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group" style="grid-column: 1 / -1;">
+                                    <label class="form-label" for="{{ form.whatsapp_group_link.id_for_label }}">
+                                        <i class="fab fa-whatsapp"></i>
+                                        WhatsApp Group Link (Optional)
+                                    </label>
+                                    {{ form.whatsapp_group_link }}
+                                    {% if form.whatsapp_group_link.errors %}
+                                    <span class="error-message">{{ form.whatsapp_group_link.errors.0 }}</span>
+                                    {% endif %}
+                                    <span class="help-text">Link to WhatsApp group for property inquiries</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Step 5: Photos -->
-                    <div class="form-step" id="step5">
+                    <!-- Step 6: Photos -->
+                    <div class="form-step" id="step6">
                         <div class="step-header">
                             <h2><i class="fas fa-images"></i> Property Photos</h2>
                             <p>Upload high-quality photos to showcase your property</p>
@@ -1678,7 +2332,7 @@
 
                             <div class="image-upload-grid">
                                 <!-- Main Image -->
-                                <div class="upload-box has-image" id="mainImageBox">
+                                <div class="upload-box {% if listing.main_image %}has-image{% endif %}" id="mainImageBox">
                                     {% if listing.main_image %}
                                     <img src="{{ listing.main_image.url }}" alt="Main Image" class="upload-image" id="mainImagePreview">
                                     <div class="upload-remove" onclick="removeImage('main', true)">
@@ -1752,6 +2406,82 @@
                                     <input type="file" name="image_4" id="image4" accept="image/*" class="image-input" style="display: none;" onchange="previewImage(this, '4')">
                                     <div class="upload-label">Photo 4 (Optional)</div>
                                 </div>
+
+                                <!-- Image 5 -->
+                                <div class="upload-box {% if listing.image_5 %}has-image{% endif %}" id="image5Box">
+                                    {% if listing.image_5 %}
+                                    <img src="{{ listing.image_5.url }}" alt="Image 5" class="upload-image" id="image5Preview">
+                                    <div class="upload-remove" onclick="removeImage('5', true)">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                    {% else %}
+                                    <div class="upload-icon">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <div class="upload-text">
+                                        Click to add photo
+                                    </div>
+                                    {% endif %}
+                                    <input type="file" name="image_5" id="image5" accept="image/*" class="image-input" style="display: none;" onchange="previewImage(this, '5')">
+                                    <div class="upload-label">Photo 5 (Optional)</div>
+                                </div>
+
+                                <!-- Image 6 -->
+                                <div class="upload-box {% if listing.image_6 %}has-image{% endif %}" id="image6Box">
+                                    {% if listing.image_6 %}
+                                    <img src="{{ listing.image_6.url }}" alt="Image 6" class="upload-image" id="image6Preview">
+                                    <div class="upload-remove" onclick="removeImage('6', true)">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                    {% else %}
+                                    <div class="upload-icon">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <div class="upload-text">
+                                        Click to add photo
+                                    </div>
+                                    {% endif %}
+                                    <input type="file" name="image_6" id="image6" accept="image/*" class="image-input" style="display: none;" onchange="previewImage(this, '6')">
+                                    <div class="upload-label">Photo 6 (Optional)</div>
+                                </div>
+
+                                <!-- Image 7 -->
+                                <div class="upload-box {% if listing.image_7 %}has-image{% endif %}" id="image7Box">
+                                    {% if listing.image_7 %}
+                                    <img src="{{ listing.image_7.url }}" alt="Image 7" class="upload-image" id="image7Preview">
+                                    <div class="upload-remove" onclick="removeImage('7', true)">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                    {% else %}
+                                    <div class="upload-icon">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <div class="upload-text">
+                                        Click to add photo
+                                    </div>
+                                    {% endif %}
+                                    <input type="file" name="image_7" id="image7" accept="image/*" class="image-input" style="display: none;" onchange="previewImage(this, '7')">
+                                    <div class="upload-label">Photo 7 (Optional)</div>
+                                </div>
+
+                                <!-- Image 8 -->
+                                <div class="upload-box {% if listing.image_8 %}has-image{% endif %}" id="image8Box">
+                                    {% if listing.image_8 %}
+                                    <img src="{{ listing.image_8.url }}" alt="Image 8" class="upload-image" id="image8Preview">
+                                    <div class="upload-remove" onclick="removeImage('8', true)">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                    {% else %}
+                                    <div class="upload-icon">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <div class="upload-text">
+                                        Click to add photo
+                                    </div>
+                                    {% endif %}
+                                    <input type="file" name="image_8" id="image8" accept="image/*" class="image-input" style="display: none;" onchange="previewImage(this, '8')">
+                                    <div class="upload-label">Photo 8 (Optional)</div>
+                                </div>
                             </div>
 
                             <div class="help-text" style="margin-top: 1rem; padding: 1rem; background: var(--glass-light); border-radius: 8px; border-left: 3px solid var(--warning-color);">
@@ -1776,14 +2506,10 @@
                                 <i class="fas fa-save"></i>
                                 Save Changes
                             </button>
-                            <button type="button" class="btn btn-warning" id="previewBtn" onclick="showPreview()" style="display: none;">
-                                <i class="fas fa-eye"></i>
-                                Preview
-                            </button>
                         </div>
 
                         <div class="form-progress-text">
-                            <span id="currentStep">Step 1</span> of 5 • <span id="stepDescription">Basic Information</span>
+                            <span id="currentStep">Step 1</span> of 6 • <span id="stepDescription">Basic Information</span>
                         </div>
                     </div>
                 </form>
@@ -1809,10 +2535,11 @@
     <script>
         // Multi-step form functionality
         let currentStep = 1;
-        const totalSteps = 5;
+        const totalSteps = 6;
         const stepDescriptions = [
             "Basic Information",
-            "Property Details",
+            "Property Details & Contact",
+            "Size, Condition & Rooms",
             "Amenities & Features",
             "Pricing & Listing Type",
             "Property Photos"
@@ -1822,29 +2549,32 @@
             // Update step indicators
             for (let i = 1; i <= totalSteps; i++) {
                 const step = document.getElementById(`step${i}-indicator`);
-                if (i < currentStep) {
-                    step.className = 'step completed';
-                    step.innerHTML = '<i class="fas fa-check"></i>';
-                } else if (i === currentStep) {
-                    step.className = 'step active';
-                    step.innerHTML = i;
-                } else {
-                    step.className = 'step';
-                    step.innerHTML = i;
+                if (step) {
+                    if (i < currentStep) {
+                        step.className = 'step completed';
+                        step.innerHTML = '<i class="fas fa-check"></i>';
+                    } else if (i === currentStep) {
+                        step.className = 'step active';
+                        step.innerHTML = i;
+                    } else {
+                        step.className = 'step';
+                        step.innerHTML = i;
+                    }
                 }
             }
 
             // Show current step
             for (let i = 1; i <= totalSteps; i++) {
                 const stepForm = document.getElementById(`step${i}`);
-                stepForm.style.display = i === currentStep ? 'block' : 'none';
+                if (stepForm) {
+                    stepForm.style.display = i === currentStep ? 'block' : 'none';
+                }
             }
 
             // Update navigation buttons
             document.getElementById('prevBtn').style.display = currentStep === 1 ? 'none' : 'inline-flex';
             document.getElementById('nextBtn').style.display = currentStep === totalSteps ? 'none' : 'inline-flex';
             document.getElementById('submitBtn').style.display = currentStep === totalSteps ? 'inline-flex' : 'none';
-            document.getElementById('previewBtn').style.display = currentStep === totalSteps ? 'inline-flex' : 'none';
 
             // Update step text
             document.getElementById('currentStep').textContent = `Step ${currentStep}`;
@@ -1874,34 +2604,36 @@
             let isValid = true;
             clearStepErrors(step);
 
-            // Add validation logic for each step
             switch(step) {
                 case 1:
                     const title = document.querySelector('input[name="title"]');
+                    const transactionType = document.querySelector('select[name="transaction_type"]');
                     const propertyType = document.querySelector('select[name="property_type"]');
                     const location = document.querySelector('select[name="location"]');
+                    const specificLocation = document.querySelector('input[name="specific_location"]');
 
-                    if (!title.value.trim()) {
-                        showFieldError(title, 'Title is required');
-                        isValid = false;
-                    } else if (title.value.trim().length > 200) {
-                        showFieldError(title, 'Title must be 200 characters or less');
+                    if (!title || !title.value.trim()) {
+                        if (title) showFieldError(title, 'Title is required');
                         isValid = false;
                     }
 
-                    if (!propertyType.value) {
+                    if (transactionType && !transactionType.value) {
+                        showFieldError(transactionType, 'Transaction type is required');
+                        isValid = false;
+                    }
+
+                    if (propertyType && !propertyType.value) {
                         showFieldError(propertyType, 'Property type is required');
                         isValid = false;
                     }
 
-                    if (!location.value) {
+                    if (location && !location.value) {
                         showFieldError(location, 'Location is required');
                         isValid = false;
                     }
 
-                    const description = document.getElementById('description');
-                    if (description.value.length > 2000) {
-                        showFieldError(description, 'Description must be 2000 characters or less');
+                    if (specificLocation && !specificLocation.value.trim()) {
+                        showFieldError(specificLocation, 'Specific location is required');
                         isValid = false;
                     }
                     break;
@@ -1914,62 +2646,41 @@
                     const phone = document.querySelector('input[name="host_phone"]');
                     const whatsapp = document.querySelector('input[name="host_whatsapp"]');
 
-                    if (!guests.value || parseInt(guests.value) < 1) {
+                    if (guests && (!guests.value || parseInt(guests.value) < 1)) {
                         showFieldError(guests, 'Please enter a valid number of guests (minimum 1)');
                         isValid = false;
-                    } else if (parseInt(guests.value) > 50) {
-                        showFieldError(guests, 'Maximum 50 guests allowed');
-                        isValid = false;
                     }
 
-                    if (!bedrooms.value || parseInt(bedrooms.value) < 0) {
+                    if (bedrooms && (!bedrooms.value || parseInt(bedrooms.value) < 0)) {
                         showFieldError(bedrooms, 'Please enter a valid number of bedrooms');
                         isValid = false;
-                    } else if (parseInt(bedrooms.value) > 20) {
-                        showFieldError(bedrooms, 'Maximum 20 bedrooms allowed');
-                        isValid = false;
                     }
 
-                    if (!beds.value || parseInt(beds.value) < 1) {
+                    if (beds && (!beds.value || parseInt(beds.value) < 1)) {
                         showFieldError(beds, 'Please enter a valid number of beds (minimum 1)');
                         isValid = false;
-                    } else if (parseInt(beds.value) > 40) {
-                        showFieldError(beds, 'Maximum 40 beds allowed');
-                        isValid = false;
                     }
 
-                    if (!bathrooms.value || parseInt(bathrooms.value) < 0) {
+                    if (bathrooms && (!bathrooms.value || parseInt(bathrooms.value) < 0)) {
                         showFieldError(bathrooms, 'Please enter a valid number of bathrooms');
                         isValid = false;
-                    } else if (parseInt(bathrooms.value) > 20) {
-                        showFieldError(bathrooms, 'Maximum 20 bathrooms allowed');
-                        isValid = false;
                     }
 
-                    if (!phone.value.trim()) {
+                    if (phone && !phone.value.trim()) {
                         showFieldError(phone, 'Phone number is required');
                         isValid = false;
-                    } else if (!isValidPhone(phone.value)) {
-                        showFieldError(phone, 'Please enter a valid phone number (format: +2547XXXXXXXX)');
-                        isValid = false;
                     }
 
-                    if (!whatsapp.value.trim()) {
+                    if (whatsapp && !whatsapp.value.trim()) {
                         showFieldError(whatsapp, 'WhatsApp number is required');
-                        isValid = false;
-                    } else if (!isValidPhone(whatsapp.value)) {
-                        showFieldError(whatsapp, 'Please enter a valid WhatsApp number (format: +2547XXXXXXXX)');
                         isValid = false;
                     }
                     break;
 
-                case 4:
-                    const price = document.querySelector('input[name="price_per_night"]');
-                    if (!price.value || parseFloat(price.value) < 100) {
-                        showFieldError(price, 'Price must be at least 100 KES per night');
-                        isValid = false;
-                    } else if (parseFloat(price.value) > 1000000) {
-                        showFieldError(price, 'Maximum price is 1,000,000 KES per night');
+                case 5:
+                    const price = document.querySelector('input[name="price"]');
+                    if (price && (!price.value || parseFloat(price.value) < 100)) {
+                        showFieldError(price, 'Price must be at least 100');
                         isValid = false;
                     }
 
@@ -1980,23 +2691,14 @@
                     }
                     break;
 
-                case 5:
+                case 6:
                     const mainImage = document.getElementById('mainImage');
                     const mainImageBox = document.getElementById('mainImageBox');
-                    const hasExistingMainImage = mainImageBox.classList.contains('has-image');
+                    const hasExistingMainImage = mainImageBox && mainImageBox.classList.contains('has-image');
 
-                    if (!mainImage.files[0] && !hasExistingMainImage) {
+                    if ((!mainImage || !mainImage.files[0]) && !hasExistingMainImage) {
                         showMessage('Please upload at least the main photo', 'warning');
                         isValid = false;
-                    }
-
-                    // Validate image sizes
-                    const imageInputs = document.querySelectorAll('.image-input');
-                    for (const input of imageInputs) {
-                        if (input.files[0] && input.files[0].size > 5 * 1024 * 1024) {
-                            showFieldError(input, `Image ${input.id} is too large (max 5MB)`);
-                            isValid = false;
-                        }
                     }
                     break;
             }
@@ -2004,12 +2706,9 @@
             return isValid;
         }
 
-        function isValidPhone(phone) {
-            const phoneRegex = /^\+?[0-9]{10,15}$/;
-            return phoneRegex.test(phone);
-        }
-
         function showFieldError(element, message) {
+            if (!element) return;
+
             element.classList.add('field-error');
 
             let errorElement = element.nextElementSibling;
@@ -2034,17 +2733,12 @@
 
         function clearStepErrors(step) {
             const stepElement = document.getElementById(`step${step}`);
-            stepElement.querySelectorAll('.field-error').forEach(el => {
-                el.classList.remove('field-error');
-            });
-            stepElement.querySelectorAll('.error-message').forEach(el => el.remove());
-        }
-
-        function clearAllErrors() {
-            document.querySelectorAll('.field-error').forEach(el => {
-                el.classList.remove('field-error');
-            });
-            document.querySelectorAll('.error-message').forEach(el => el.remove());
+            if (stepElement) {
+                stepElement.querySelectorAll('.field-error').forEach(el => {
+                    el.classList.remove('field-error');
+                });
+                stepElement.querySelectorAll('.error-message').forEach(el => el.remove());
+            }
         }
 
         function scrollToTop() {
@@ -2064,7 +2758,6 @@
 
             messagesContainer.appendChild(alert);
 
-            // Auto-remove after 5 seconds
             setTimeout(() => {
                 alert.style.opacity = '0';
                 setTimeout(() => alert.remove(), 300);
@@ -2076,13 +2769,11 @@
             const file = input.files[0];
             if (!file) return;
 
-            // Validate file type
             if (!file.type.match('image.*')) {
                 showFieldError(input, 'Please select an image file');
                 return;
             }
 
-            // Validate file size (5MB max)
             if (file.size > 5 * 1024 * 1024) {
                 showFieldError(input, 'Image must be less than 5MB');
                 return;
@@ -2090,11 +2781,12 @@
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                // Handle different naming for main image
                 const boxId = imageNumber === 'main' ? 'mainImageBox' : `image${imageNumber}Box`;
                 const previewId = imageNumber === 'main' ? 'mainImagePreview' : `image${imageNumber}Preview`;
 
                 const box = document.getElementById(boxId);
+                if (!box) return;
+
                 let preview = document.getElementById(previewId);
 
                 if (!preview) {
@@ -2107,13 +2799,11 @@
                 preview.src = e.target.result;
                 box.classList.add('has-image');
 
-                // Remove upload icon and text
                 const uploadIcon = box.querySelector('.upload-icon');
                 const uploadText = box.querySelector('.upload-text');
-                if (uploadIcon) uploadIcon.remove();
-                if (uploadText) uploadText.remove();
+                if (uploadIcon) uploadIcon.style.display = 'none';
+                if (uploadText) uploadText.style.display = 'none';
 
-                // Show remove button
                 let removeBtn = box.querySelector('.upload-remove');
                 if (!removeBtn) {
                     removeBtn = document.createElement('div');
@@ -2123,7 +2813,6 @@
                     box.appendChild(removeBtn);
                 }
 
-                // Clear any errors
                 input.classList.remove('field-error');
                 const error = input.nextElementSibling;
                 if (error && error.classList.contains('error-message')) {
@@ -2135,18 +2824,15 @@
         }
 
         function removeImage(imageNumber, isExisting = false) {
-            // Handle different naming for main image
             const boxId = imageNumber === 'main' ? 'mainImageBox' : `image${imageNumber}Box`;
             const inputId = imageNumber === 'main' ? 'mainImage' : `image${imageNumber}`;
-            const previewId = imageNumber === 'main' ? 'mainImagePreview' : `image${imageNumber}Preview`;
 
             const box = document.getElementById(boxId);
             const input = document.getElementById(inputId);
-            const preview = document.getElementById(previewId);
-            const removeBtn = box.querySelector('.upload-remove');
+            const preview = box ? box.querySelector('.upload-image') : null;
+            const removeBtn = box ? box.querySelector('.upload-remove') : null;
 
             if (isExisting && confirm('Are you sure you want to remove this image? This action cannot be undone.')) {
-                // For existing images, we need to mark them for deletion
                 const deleteInput = document.createElement('input');
                 deleteInput.type = 'hidden';
                 deleteInput.name = imageNumber === 'main' ? 'delete_main_image' : `delete_image_${imageNumber}`;
@@ -2154,171 +2840,46 @@
                 document.getElementById('editListingForm').appendChild(deleteInput);
             }
 
-            // Reset input
             if (input) input.value = '';
-
-            // Remove preview and remove button
             if (preview) preview.remove();
             if (removeBtn) removeBtn.remove();
 
-            // Reset box state
-            box.classList.remove('has-image');
+            if (box) {
+                box.classList.remove('has-image');
 
-            // Show upload icon/text if they were removed
-            if (!box.querySelector('.upload-icon')) {
-                const uploadIcon = document.createElement('div');
-                uploadIcon.className = 'upload-icon';
-                uploadIcon.innerHTML = imageNumber === 'main' ?
-                    '<i class="fas fa-camera"></i>' :
-                    '<i class="fas fa-plus"></i>';
-                box.appendChild(uploadIcon);
-            }
-
-            if (!box.querySelector('.upload-text')) {
-                const uploadText = document.createElement('div');
-                uploadText.className = 'upload-text';
-                uploadText.textContent = imageNumber === 'main' ?
-                    'Click to upload main photo' :
-                    'Click to add photo';
-                box.appendChild(uploadText);
+                const uploadIcon = box.querySelector('.upload-icon');
+                const uploadText = box.querySelector('.upload-text');
+                if (uploadIcon) uploadIcon.style.display = 'block';
+                if (uploadText) uploadText.style.display = 'block';
             }
         }
 
         // Setup click events for upload boxes
-        document.querySelectorAll('.upload-box').forEach(box => {
-            box.addEventListener('click', function(e) {
-                if (e.target.classList.contains('upload-remove')) return;
-
-                const boxId = this.id;
-                let imageNumber;
-
-                // Extract image number from box ID
-                if (boxId === 'mainImageBox') {
-                    imageNumber = 'main';
-                } else {
-                    // Extract number from 'image2Box', 'image3Box', etc.
-                    imageNumber = boxId.replace('image', '').replace('Box', '');
-                }
-
-                const inputId = imageNumber === 'main' ? 'mainImage' : `image${imageNumber}`;
-                document.getElementById(inputId).click();
-            });
-        });
-
-        // Preview functionality
-        function showPreview() {
-            if (!validateStep(currentStep)) return;
-
-            // Collect form data
-            const formData = new FormData(document.getElementById('editListingForm'));
-            let previewHTML = `
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                    <div>
-                        <h4 style="margin-bottom: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem;">Property Details</h4>
-                        <div style="background: var(--glass-light); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--glass-border);">
-                            <p><strong>Title:</strong> ${formData.get('title') || 'Not set'}</p>
-                            <p><strong>Type:</strong> ${getDisplayValue('property_type', formData.get('property_type'))}</p>
-                            <p><strong>Location:</strong> ${getDisplayValue('location', formData.get('location'))}</p>
-                            <p><strong>Specific Location:</strong> ${formData.get('specific_location') || 'Not specified'}</p>
-                            <p><strong>Guests:</strong> ${formData.get('guests') || '0'}</p>
-                            <p><strong>Bedrooms:</strong> ${formData.get('bedrooms') || '0'}</p>
-                            <p><strong>Beds:</strong> ${formData.get('beds') || '0'}</p>
-                            <p><strong>Bathrooms:</strong> ${formData.get('bathrooms') || '0'}</p>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h4 style="margin-bottom: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem;">Pricing & Contact</h4>
-                        <div style="background: var(--glass-light); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--glass-border);">
-                            <p><strong>Price:</strong> KES ${formData.get('price_per_night') || '0'}/night</p>
-                            <p><strong>Listing Type:</strong> ${formData.get('listing_type') === 'featured' ? '⭐ Featured' : 'Free'}</p>
-                            <p><strong>Phone:</strong> ${formData.get('host_phone') || 'Not set'}</p>
-                            <p><strong>WhatsApp:</strong> ${formData.get('host_whatsapp') || 'Not set'}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="margin-top: 2rem;">
-                    <h4 style="margin-bottom: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem;">Amenities</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 1rem; background: var(--glass-light); border-radius: 12px; border: 1px solid var(--glass-border);">
-                        ${formData.get('wifi') ? '<span style="background: var(--glass-white); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-wifi"></i> WiFi</span>' : ''}
-                        ${formData.get('parking') ? '<span style="background: var(--glass-white); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-parking"></i> Parking</span>' : ''}
-                        ${formData.get('kitchen') ? '<span style="background: var(--glass-white); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-utensils"></i> Kitchen</span>' : ''}
-                        ${formData.get('pool') ? '<span style="background: var(--glass-white); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-swimming-pool"></i> Pool</span>' : ''}
-                        ${formData.get('ac') ? '<span style="background: var(--glass-white); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-snowflake"></i> AC</span>' : ''}
-                        ${formData.get('tv') ? '<span style="background: var(--glass-white); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-tv"></i> TV</span>' : ''}
-                        ${!formData.get('wifi') && !formData.get('parking') && !formData.get('kitchen') && !formData.get('pool') && !formData.get('ac') && !formData.get('tv') ? '<span style="color: var(--text-muted);">No amenities selected</span>' : ''}
-                    </div>
-                </div>
-
-                <div style="margin-top: 2rem;">
-                    <h4 style="margin-bottom: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem;">Description</h4>
-                    <div style="padding: 1rem; background: var(--glass-light); border-radius: 12px; border: 1px solid var(--glass-border); min-height: 100px;">
-                        ${formData.get('description') || '<span style="color: var(--text-muted);">No description provided</span>'}
-                    </div>
-                </div>
-
-                <div style="margin-top: 2rem; text-align: center;">
-                    <button type="button" class="btn" onclick="submitForm()" style="margin-right: 1rem;">
-                        <i class="fas fa-check"></i>
-                        Confirm & Save
-                    </button>
-                    <button type="button" class="btn btn-secondary" onclick="hidePreview()">
-                        <i class="fas fa-edit"></i>
-                        Edit Changes
-                    </button>
-                </div>
-            `;
-
-            document.getElementById('previewContent').innerHTML = previewHTML;
-            document.getElementById('previewSection').style.display = 'block';
-            document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function getDisplayValue(fieldName, value) {
-            // This function would map field values to display names
-            // For now, just return the value
-            return value || 'Not set';
-        }
-
-        function hidePreview() {
-            document.getElementById('previewSection').style.display = 'none';
-        }
-
-        function submitForm() {
-            const form = document.getElementById('editListingForm');
-            const submitBtn = document.getElementById('submitBtn');
-
-            // Show loading
-            document.getElementById('loadingOverlay').classList.add('active');
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-            submitBtn.disabled = true;
-
-            // Submit form
-            setTimeout(() => {
-                form.submit();
-            }, 1000);
-        }
-
-        // Initialize form
         document.addEventListener('DOMContentLoaded', function() {
-            updateStepIndicator();
+            document.querySelectorAll('.upload-box').forEach(box => {
+                box.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('upload-remove')) return;
+
+                    const boxId = this.id;
+                    let imageNumber;
+
+                    if (boxId === 'mainImageBox') {
+                        imageNumber = 'main';
+                    } else if (boxId) {
+                        imageNumber = boxId.replace('image', '').replace('Box', '');
+                    } else {
+                        return;
+                    }
+
+                    const inputId = imageNumber === 'main' ? 'mainImage' : `image${imageNumber}`;
+                    const input = document.getElementById(inputId);
+                    if (input) input.click();
+                });
+            });
 
             // Add step navigation
             document.getElementById('nextBtn').addEventListener('click', nextStep);
             document.getElementById('prevBtn').addEventListener('click', prevStep);
-
-            // Add enter key navigation
-            document.querySelectorAll('.form-control').forEach(input => {
-                input.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        if (currentStep < totalSteps) {
-                            nextStep();
-                        }
-                    }
-                });
-            });
 
             // Clear errors on input
             document.querySelectorAll('.form-control, select, textarea').forEach(input => {
@@ -2333,7 +2894,6 @@
 
             // Form submission handler
             document.getElementById('editListingForm').addEventListener('submit', function(e) {
-                // Validate all steps
                 let allValid = true;
                 for (let i = 1; i <= totalSteps; i++) {
                     if (!validateStep(i)) {
@@ -2348,32 +2908,11 @@
                     e.preventDefault();
                     showMessage('Please fix the errors in the form before submitting.', 'warning');
                 } else {
-                    // Show loading
                     document.getElementById('loadingOverlay').classList.add('active');
                 }
             });
 
-            // Auto-hide messages after 5 seconds
-            setTimeout(() => {
-                document.querySelectorAll('.alert').forEach(alert => {
-                    setTimeout(() => {
-                        alert.style.opacity = '0';
-                        setTimeout(() => alert.remove(), 300);
-                    }, 5000);
-                });
-            }, 100);
-        });
-
-        // Allow direct access to steps via URL hash
-        window.addEventListener('hashchange', function() {
-            const hash = window.location.hash.substring(1);
-            if (hash && hash.startsWith('step')) {
-                const stepNum = parseInt(hash.replace('step', ''));
-                if (stepNum >= 1 && stepNum <= totalSteps) {
-                    currentStep = stepNum;
-                    updateStepIndicator();
-                }
-            }
+            updateStepIndicator();
         });
     </script>
 </body>

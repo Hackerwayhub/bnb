@@ -29,7 +29,7 @@ body {
 .create-listing-container {
     min-height: 80vh;
     padding: 20px 16px;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
 }
 
@@ -300,7 +300,7 @@ body {
     margin-left: 2px;
 }
 
-.form-control {
+.form-control, select, textarea {
     width: 100%;
     padding: 14px 16px;
     background: var(--glass-white);
@@ -314,17 +314,15 @@ body {
     min-height: 52px;
 }
 
-.form-control::placeholder {
+.form-control::placeholder, select::placeholder, textarea::placeholder {
     color: var(--text-muted);
 }
 
-.form-control:focus {
+.form-control:focus, select:focus, textarea:focus {
     outline: none;
     background: var(--glass-white);
     border-color: rgba(148, 163, 184, 0.5);
-    box-shadow:
-        0 0 0 3px rgba(148, 163, 184, 0.1),
-        0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.1), 0 4px 20px rgba(0, 0, 0, 0.08);
     transform: translateY(-2px);
 }
 
@@ -1065,7 +1063,7 @@ body {
         font-size: 13px;
     }
 
-    .form-control {
+    .form-control, select, textarea {
         padding: 12px 14px;
         font-size: 15px;
         min-height: 48px;
@@ -1272,6 +1270,11 @@ body {
                 <div class="step-connector active"></div>
                 <div class="step active">
                     <div class="step-number">3</div>
+                    <div class="step-label">Amenities</div>
+                </div>
+                <div class="step-connector active"></div>
+                <div class="step active">
+                    <div class="step-number">4</div>
                     <div class="step-label">Pricing & Photos</div>
                 </div>
             </div>
@@ -1304,7 +1307,7 @@ body {
                         {{ form.title }}
                         <div class="form-tip">
                             <i class="fa fa-lightbulb"></i>
-                            <small>Make it catchy! Example: "Beautiful 3-Bedroom Apartment with City View"</small>
+                            <small>Make it catchy! Example: "Luxury 3-Bedroom Apartment with City View"</small>
                         </div>
                         {% if form.title.errors %}
                             <div class="error-message">
@@ -1316,7 +1319,7 @@ body {
                         {% endif %}
                     </div>
 
-                    <!-- Property Type and Location -->
+                    <!-- Property Type and Transaction Type -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
@@ -1331,6 +1334,24 @@ body {
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">
+                                    <i class="fa fa-exchange-alt"></i>
+                                    Transaction Type
+                                    <span class="required-star">*</span>
+                                </label>
+                                {{ form.transaction_type }}
+                                <div class="form-tip">
+                                    <i class="fa fa-info-circle"></i>
+                                    <small>Rent: Monthly, Sale: Purchase, Shortlet: Vacation/Nightly</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
                                     <i class="fa fa-map-marker-alt"></i>
                                     Location
                                     <span class="required-star">*</span>
@@ -1338,16 +1359,29 @@ body {
                                 {{ form.location }}
                             </div>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-map-pin"></i>
+                                    Specific Location
+                                    <span class="required-star">*</span>
+                                </label>
+                                {{ form.specific_location }}
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Specific Location -->
+                    <!-- Full Address -->
                     <div class="form-group">
                         <label class="form-label">
-                            <i class="fa fa-map-pin"></i>
-                            Specific Location
-                            <span class="required-star">*</span>
+                            <i class="fa fa-address-card"></i>
+                            Full Address (Optional)
                         </label>
-                        {{ form.specific_location }}
+                        {{ form.address }}
+                        <div class="form-tip">
+                            <i class="fa fa-map-marked-alt"></i>
+                            <small>Street name, building name, estate (helps with Google Maps)</small>
+                        </div>
                     </div>
                 </div>
 
@@ -1361,16 +1395,6 @@ body {
                             <h3 class="section-title">Host Information</h3>
                             <p class="section-subtitle">How guests can contact you</p>
                         </div>
-                    </div>
-
-                    <!-- Host Name -->
-                    <div class="form-group">
-                        <label class="form-label">
-                            <i class="fa fa-user-circle"></i>
-                            Host Name
-                            <span class="required-star">*</span>
-                        </label>
-                        {{ form.host_name }}
                     </div>
 
                     <!-- Phone Numbers -->
@@ -1398,19 +1422,182 @@ body {
                     </div>
                 </div>
 
-                <!-- Property Details Section -->
+                <!-- Property Size & Details Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fa fa-ruler-combined"></i>
+                        </div>
+                        <div class="section-content">
+                            <h3 class="section-title">Property Size & Details</h3>
+                            <p class="section-subtitle">Dimensions and specifications</p>
+                        </div>
+                    </div>
+
+                    <!-- Size Fields -->
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-tree"></i>
+                                    Land Size
+                                </label>
+                                {{ form.land_size }}
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-ruler"></i>
+                                    Unit
+                                </label>
+                                {{ form.land_size_unit }}
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-building"></i>
+                                    Floor Area (sqm)
+                                </label>
+                                {{ form.floor_area }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Property Condition -->
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-calendar"></i>
+                                    Year Built
+                                </label>
+                                {{ form.year_built }}
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-check-circle"></i>
+                                    Condition
+                                </label>
+                                {{ form.condition }}
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-couch"></i>
+                                    Furnishing
+                                </label>
+                                {{ form.furnishing }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floors -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-arrow-up"></i>
+                                    Total Floors in Building
+                                </label>
+                                {{ form.total_floors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-layer-group"></i>
+                                    Floor Number (for apartments)
+                                </label>
+                                {{ form.floor_number }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Availability Dates -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-calendar-check"></i>
+                                    Available From
+                                </label>
+                                {{ form.available_from }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-calendar-times"></i>
+                                    Available To
+                                </label>
+                                {{ form.available_to }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Minimum/Maximum Stay -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-clock"></i>
+                                    Minimum Stay (nights)
+                                </label>
+                                {{ form.minimum_stay }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-hourglass-end"></i>
+                                    Maximum Stay (nights)
+                                </label>
+                                {{ form.maximum_stay }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Coordinates -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-map-pin"></i>
+                                    Latitude
+                                </label>
+                                {{ form.latitude }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-map-pin"></i>
+                                    Longitude
+                                </label>
+                                {{ form.longitude }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rooms & Capacity Section -->
                 <div class="form-section">
                     <div class="section-header">
                         <div class="section-icon">
                             <i class="fa fa-bed"></i>
                         </div>
                         <div class="section-content">
-                            <h3 class="section-title">Property Details</h3>
-                            <p class="section-subtitle">Accommodation capacity and layout</p>
+                            <h3 class="section-title">Rooms & Capacity</h3>
+                            <p class="section-subtitle">Accommodation layout</p>
                         </div>
                     </div>
 
-                    <!-- Capacity Grid -->
+                    <!-- Main Capacity Grid -->
                     <div class="capacity-grid">
                         <div class="capacity-item">
                             <div class="capacity-icon">
@@ -1441,9 +1628,73 @@ body {
                             {{ form.bathrooms }}
                         </div>
                     </div>
+
+                    <!-- Additional Rooms -->
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">En-suite Bathrooms</label>
+                                {{ form.en_suites }}
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Living Rooms</label>
+                                {{ form.living_rooms }}
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Kitchens</label>
+                                {{ form.kitchens }}
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Parking Spots</label>
+                                {{ form.parking_spots }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Room Checkboxes -->
+                    <div class="row mt-3">
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                {{ form.servant_quarters }}
+                                <label class="form-check-label" for="{{ form.servant_quarters.id_for_label }}">
+                                    Servant Quarters
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                {{ form.store_rooms }}
+                                <label class="form-check-label" for="{{ form.store_rooms.id_for_label }}">
+                                    Store Rooms
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                {{ form.covered_parking }}
+                                <label class="form-check-label" for="{{ form.covered_parking.id_for_label }}">
+                                    Covered Parking
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                {{ form.visitor_parking }}
+                                <label class="form-check-label" for="{{ form.visitor_parking.id_for_label }}">
+                                    Visitor Parking
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Amenities Section -->
+                <!-- Amenities Section - COMPLETELY REDESIGNED -->
                 <div class="form-section">
                     <div class="section-header">
                         <div class="section-icon">
@@ -1455,9 +1706,12 @@ body {
                         </div>
                     </div>
 
-                    <!-- Amenities Grid -->
+                    <!-- Basic Amenities -->
+                    <h5 class="mt-3 mb-3" style="color: var(--text-primary);">
+                        <i class="fa fa-check-circle me-2"></i>Basic Amenities
+                    </h5>
                     <div class="amenities-grid">
-                        {% for field_name in 'wifi parking kitchen pool ac tv'|split %}
+                        {% for field_name in 'wifi parking kitchen'|split %}
                             {% with form|get_item:field_name as field %}
                                 <div class="amenity-item">
                                     <div class="amenity-content">
@@ -1468,20 +1722,324 @@ body {
                                                 <i class="fa fa-car"></i>
                                             {% elif field_name == 'kitchen' %}
                                                 <i class="fa fa-utensils"></i>
-                                            {% elif field_name == 'pool' %}
-                                                <i class="fa fa-swimming-pool"></i>
-                                            {% elif field_name == 'ac' %}
-                                                <i class="fa fa-snowflake"></i>
-                                            {% elif field_name == 'tv' %}
-                                                <i class="fa fa-tv"></i>
                                             {% endif %}
                                         </div>
-                                        <label class="amenity-label">{{ field.label }}</label>
+                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                                     </div>
                                     {{ field }}
                                 </div>
                             {% endwith %}
                         {% endfor %}
+                    </div>
+
+                    <!-- Fitness & Wellness -->
+                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
+                        <i class="fa fa-heartbeat me-2"></i>Fitness & Wellness
+                    </h5>
+                    <div class="amenities-grid">
+                        {% for field_name in 'gym pool spa sauna steam_room'|split %}
+                            {% with form|get_item:field_name as field %}
+                                {% if field %}
+                                <div class="amenity-item">
+                                    <div class="amenity-content">
+                                        <div class="amenity-icon">
+                                            {% if field_name == 'gym' %}
+                                                <i class="fa fa-dumbbell"></i>
+                                            {% elif field_name == 'pool' %}
+                                                <i class="fa fa-swimming-pool"></i>
+                                            {% elif field_name == 'spa' %}
+                                                <i class="fa fa-spa"></i>
+                                            {% elif field_name == 'sauna' %}
+                                                <i class="fa fa-hot-tub"></i>
+                                            {% elif field_name == 'steam_room' %}
+                                                <i class="fa fa-water"></i>
+                                            {% endif %}
+                                        </div>
+                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    </div>
+                                    {{ field }}
+                                </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Climate Control -->
+                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
+                        <i class="fa fa-thermometer-half me-2"></i>Climate Control
+                    </h5>
+                    <div class="amenities-grid">
+                        {% for field_name in 'ac heating ceiling_fans fireplace'|split %}
+                            {% with form|get_item:field_name as field %}
+                                {% if field %}
+                                <div class="amenity-item">
+                                    <div class="amenity-content">
+                                        <div class="amenity-icon">
+                                            {% if field_name == 'ac' %}
+                                                <i class="fa fa-snowflake"></i>
+                                            {% elif field_name == 'heating' %}
+                                                <i class="fa fa-fire"></i>
+                                            {% elif field_name == 'ceiling_fans' %}
+                                                <i class="fa fa-fan"></i>
+                                            {% elif field_name == 'fireplace' %}
+                                                <i class="fa fa-fireplace"></i>
+                                            {% endif %}
+                                        </div>
+                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    </div>
+                                    {{ field }}
+                                </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Entertainment -->
+                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
+                        <i class="fa fa-tv me-2"></i>Entertainment
+                    </h5>
+                    <div class="amenities-grid">
+                        {% for field_name in 'tv sound_system home_theater'|split %}
+                            {% with form|get_item:field_name as field %}
+                                {% if field %}
+                                <div class="amenity-item">
+                                    <div class="amenity-content">
+                                        <div class="amenity-icon">
+                                            {% if field_name == 'tv' %}
+                                                <i class="fa fa-tv"></i>
+                                            {% elif field_name == 'sound_system' %}
+                                                <i class="fa fa-music"></i>
+                                            {% elif field_name == 'home_theater' %}
+                                                <i class="fa fa-film"></i>
+                                            {% endif %}
+                                        </div>
+                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    </div>
+                                    {{ field }}
+                                </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Outdoor Features -->
+                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
+                        <i class="fa fa-tree me-2"></i>Outdoor Features
+                    </h5>
+                    <div class="amenities-grid">
+                        {% for field_name in 'balcony terrace garden roof_terrace bbq_area outdoor_shower'|split %}
+                            {% with form|get_item:field_name as field %}
+                                {% if field %}
+                                <div class="amenity-item">
+                                    <div class="amenity-content">
+                                        <div class="amenity-icon">
+                                            {% if field_name == 'balcony' %}
+                                                <i class="fa fa-home"></i>
+                                            {% elif field_name == 'terrace' %}
+                                                <i class="fa fa-sun"></i>
+                                            {% elif field_name == 'garden' %}
+                                                <i class="fa fa-leaf"></i>
+                                            {% elif field_name == 'roof_terrace' %}
+                                                <i class="fa fa-cloud-sun"></i>
+                                            {% elif field_name == 'bbq_area' %}
+                                                <i class="fa fa-utensils"></i>
+                                            {% elif field_name == 'outdoor_shower' %}
+                                                <i class="fa fa-shower"></i>
+                                            {% endif %}
+                                        </div>
+                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    </div>
+                                    {{ field }}
+                                </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Security Features -->
+                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
+                        <i class="fa fa-shield-alt me-2"></i>Security
+                    </h5>
+                    <div class="amenities-grid">
+                        {% for field_name in 'cctv security_guards electric_fence secure_compound alarm_system'|split %}
+                            {% with form|get_item:field_name as field %}
+                                {% if field %}
+                                <div class="amenity-item">
+                                    <div class="amenity-content">
+                                        <div class="amenity-icon">
+                                            {% if field_name == 'cctv' %}
+                                                <i class="fa fa-video"></i>
+                                            {% elif field_name == 'security_guards' %}
+                                                <i class="fa fa-user-shield"></i>
+                                            {% elif field_name == 'electric_fence' %}
+                                                <i class="fa fa-bolt"></i>
+                                            {% elif field_name == 'secure_compound' %}
+                                                <i class="fa fa-lock"></i>
+                                            {% elif field_name == 'alarm_system' %}
+                                                <i class="fa fa-bell"></i>
+                                            {% endif %}
+                                        </div>
+                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    </div>
+                                    {{ field }}
+                                </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Utilities -->
+                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
+                        <i class="fa fa-plug me-2"></i>Utilities
+                    </h5>
+                    <div class="amenities-grid">
+                        {% for field_name in 'generator solar_panels water_tank borehole backup_water internet_fiber'|split %}
+                            {% with form|get_item:field_name as field %}
+                                {% if field %}
+                                <div class="amenity-item">
+                                    <div class="amenity-content">
+                                        <div class="amenity-icon">
+                                            {% if field_name == 'generator' %}
+                                                <i class="fa fa-bolt"></i>
+                                            {% elif field_name == 'solar_panels' %}
+                                                <i class="fa fa-solar-panel"></i>
+                                            {% elif field_name == 'water_tank' %}
+                                                <i class="fa fa-water"></i>
+                                            {% elif field_name == 'borehole' %}
+                                                <i class="fa fa-well"></i>
+                                            {% elif field_name == 'backup_water' %}
+                                                <i class="fa fa-tint"></i>
+                                            {% elif field_name == 'internet_fiber' %}
+                                                <i class="fa fa-globe"></i>
+                                            {% endif %}
+                                        </div>
+                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    </div>
+                                    {{ field }}
+                                </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Building Amenities -->
+                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
+                        <i class="fa fa-building me-2"></i>Building Amenities
+                    </h5>
+                    <div class="amenities-grid">
+                        {% for field_name in 'elevator wheelchair_accessible reception lobby concierge laundry_room play_area pet_friendly'|split %}
+                            {% with form|get_item:field_name as field %}
+                                {% if field %}
+                                <div class="amenity-item">
+                                    <div class="amenity-content">
+                                        <div class="amenity-icon">
+                                            {% if field_name == 'elevator' %}
+                                                <i class="fa fa-arrow-up"></i>
+                                            {% elif field_name == 'wheelchair_accessible' %}
+                                                <i class="fa fa-wheelchair"></i>
+                                            {% elif field_name == 'reception' %}
+                                                <i class="fa fa-desk"></i>
+                                            {% elif field_name == 'lobby' %}
+                                                <i class="fa fa-couch"></i>
+                                            {% elif field_name == 'concierge' %}
+                                                <i class="fa fa-bell-concierge"></i>
+                                            {% elif field_name == 'laundry_room' %}
+                                                <i class="fa fa-washer"></i>
+                                            {% elif field_name == 'play_area' %}
+                                                <i class="fa fa-child"></i>
+                                            {% elif field_name == 'pet_friendly' %}
+                                                <i class="fa fa-paw"></i>
+                                            {% endif %}
+                                        </div>
+                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    </div>
+                                    {{ field }}
+                                </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Staff -->
+                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
+                        <i class="fa fa-users me-2"></i>Staff Included
+                    </h5>
+                    <div class="amenities-grid">
+                        {% for field_name in 'house_staff askari caretaker'|split %}
+                            {% with form|get_item:field_name as field %}
+                                {% if field %}
+                                <div class="amenity-item">
+                                    <div class="amenity-content">
+                                        <div class="amenity-icon">
+                                            {% if field_name == 'house_staff' %}
+                                                <i class="fa fa-broom"></i>
+                                            {% elif field_name == 'askari' %}
+                                                <i class="fa fa-shield"></i>
+                                            {% elif field_name == 'caretaker' %}
+                                                <i class="fa fa-tools"></i>
+                                            {% endif %}
+                                        </div>
+                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    </div>
+                                    {{ field }}
+                                </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Virtual Tour Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fa fa-vr-cardboard"></i>
+                        </div>
+                        <div class="section-content">
+                            <h3 class="section-title">Virtual Tour & Media</h3>
+                            <p class="section-subtitle">Help guests visualize your property</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-link"></i>
+                                    Virtual Tour URL
+                                </label>
+                                {{ form.virtual_tour_url }}
+                                <div class="form-tip">
+                                    <i class="fa fa-info-circle"></i>
+                                    <small>Link to Matterport, 3D tour, or video walkthrough</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-youtube"></i>
+                                    YouTube Video ID
+                                </label>
+                                {{ form.youtube_video_id }}
+                                <div class="form-tip">
+                                    <i class="fa fa-info-circle"></i>
+                                    <small>e.g., dQw4w9WgXcQ from youtu.be/dQw4w9WgXcQ</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fa fa-whatsapp"></i>
+                            WhatsApp Group Link (Optional)
+                        </label>
+                        {{ form.whatsapp_group_link }}
+                        <div class="form-tip">
+                            <i class="fa fa-info-circle"></i>
+                            <small>Link to WhatsApp group for property inquiries</small>
+                        </div>
                     </div>
                 </div>
 
@@ -1508,8 +2066,8 @@ body {
                             <div class="card-features">
                                 <ul>
                                     <li>Basic listing on the site</li>
-                                    <li>10% PER BOOKING</li>
-                                    <li>No stats,No direct customer contact and booking</li>
+                                    <li>10% commission per booking</li>
+                                    <li>Standard visibility</li>
                                 </ul>
                             </div>
                             <div>
@@ -1528,9 +2086,9 @@ body {
                                 <ul>
                                     <li><strong>Appears at the TOP</strong> of search results</li>
                                     <li><strong>10x more visibility</strong></li>
-                                     <li><strong>Direct customer contact & booking</strong></li>
+                                    <li><strong>Direct customer contact & booking</strong></li>
                                     <li>Higher booking conversion</li>
-                                    <li>Social media ads & content</li>
+                                    <li>Social media promotion</li>
                                 </ul>
                             </div>
                             <div>
@@ -1549,23 +2107,88 @@ body {
                         </div>
                         <div class="section-content">
                             <h3 class="section-title">Pricing</h3>
-                            <p class="section-subtitle">Set your nightly rate</p>
+                            <p class="section-subtitle">Set your price</p>
                         </div>
                     </div>
 
+                    <!-- Price -->
                     <div class="form-group">
                         <label class="form-label">
                             <i class="fa fa-tag"></i>
-                            Price per Night
+                            Price (KES)
                             <span class="required-star">*</span>
                         </label>
                         <div class="price-input-container">
                             <span class="price-prefix">KES</span>
-                            {{ form.price_per_night }}
+                            {{ form.price }}
                         </div>
                         <div class="form-tip">
-                            <i class="fa fa-chart-line"></i>
-                            <small>Average nightly rate in this area: KES 5,000 - 15,000</small>
+                            <i class="fa fa-info-circle"></i>
+                            <small>
+                                {% if form.transaction_type.value == 'rent' %}
+                                    Monthly rent amount
+                                {% elif form.transaction_type.value == 'sale' %}
+                                    Total sale price
+                                {% else %}
+                                    Price per night (for shortlet)
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Additional Costs -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-file-invoice"></i>
+                                    Service Charge (Monthly)
+                                </label>
+                                <div class="price-input-container">
+                                    <span class="price-prefix">KES</span>
+                                    {{ form.service_charge }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa fa-hand-holding-usd"></i>
+                                    Deposit Required
+                                </label>
+                                <div class="price-input-container">
+                                    <span class="price-prefix">KES</span>
+                                    {{ form.deposit_required }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pricing Checkboxes -->
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                {{ form.utilities_included }}
+                                <label class="form-check-label" for="{{ form.utilities_included.id_for_label }}">
+                                    Utilities Included
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                {{ form.title_deed }}
+                                <label class="form-check-label" for="{{ form.title_deed.id_for_label }}">
+                                    Title Deed Available
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                {{ form.loan_available }}
+                                <label class="form-check-label" for="{{ form.loan_available.id_for_label }}">
+                                    Financing Available
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1595,6 +2218,7 @@ body {
                                     <li>Show all rooms and key features</li>
                                     <li>Keep images under 5MB each</li>
                                     <li>Upload at least 3 photos</li>
+                                    <li>Include exterior shots</li>
                                 </ul>
                             </div>
                         </div>
@@ -1602,8 +2226,9 @@ body {
 
                     <!-- Image Uploads -->
                     <div class="photo-upload-grid">
-                        {% for field_name in 'main_image image_2 image_3 image_4'|split %}
+                        {% for field_name in 'main_image image_2 image_3 image_4 image_5 image_6 image_7 image_8'|split %}
                             {% with form|get_item:field_name as field %}
+                                {% if field %}
                                 <div class="photo-upload-item">
                                     <div class="upload-icon">
                                         {% if forloop.first %}
@@ -1613,7 +2238,7 @@ body {
                                         {% endif %}
                                     </div>
                                     <label class="upload-label" for="{{ field.id_for_label }}">
-                                        {{ field.label }}
+                                        {% if forloop.first %}Main Photo{% else %}Photo {{ forloop.counter }}{% endif %}
                                         {% if forloop.first %}<span class="required-star">*</span>{% endif %}
                                     </label>
                                     {{ field }}
@@ -1627,6 +2252,7 @@ body {
                                         {% endif %}
                                     </div>
                                 </div>
+                                {% endif %}
                             {% endwith %}
                         {% endfor %}
                     </div>
@@ -1663,6 +2289,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('form');
     const inputs = form.querySelectorAll('input, select, textarea');
 
+    // Transaction type change handler
+    const transactionType = document.getElementById('id_transaction_type');
+    const priceLabel = document.querySelector('label[for="id_price"]');
+    const priceHelp = document.querySelector('.form-tip small');
+
+    if (transactionType) {
+        transactionType.addEventListener('change', function() {
+            const selected = this.value;
+            const priceField = document.getElementById('id_price');
+
+            if (selected === 'rent') {
+                priceField.placeholder = 'Monthly rent amount';
+                if (priceHelp) priceHelp.textContent = 'Monthly rent amount';
+            } else if (selected === 'sale') {
+                priceField.placeholder = 'Total sale price';
+                if (priceHelp) priceHelp.textContent = 'Total sale price';
+            } else {
+                priceField.placeholder = 'Price per night';
+                if (priceHelp) priceHelp.textContent = 'Price per night (for shortlet)';
+            }
+        });
+    }
+
     // Listing type selection
     const freeCard = document.getElementById('free-listing-card');
     const featuredCard = document.getElementById('featured-listing-card');
@@ -1687,9 +2336,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateSubmitButton() {
         if (submitBtn) {
             if (featuredRadio && featuredRadio.checked) {
-                submitBtn.innerHTML = '<i class="fa fa-crown"></i>Submit Featured Listing (KES 1,000)';
+                submitBtn.innerHTML = '<i class="fa fa-crown"></i> Submit Featured Listing (KES 1,000)';
             } else {
-                submitBtn.innerHTML = '<i class="fa fa-paper-plane"></i>Submit Property Listing';
+                submitBtn.innerHTML = '<i class="fa fa-paper-plane"></i> Submit Property Listing';
             }
         }
     }
@@ -1770,7 +2419,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show loading state
         if (submitBtn) {
             const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i>Submitting...';
+            submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Submitting...';
             submitBtn.disabled = true;
 
             // Re-enable button after 5 seconds in case submission fails
@@ -1803,11 +2452,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add focus effects to form controls
     inputs.forEach(input => {
         input.addEventListener('focus', function() {
-            this.parentElement.style.transform = 'translateY(-2px)';
+            this.style.transform = 'translateY(-2px)';
         });
 
         input.addEventListener('blur', function() {
-            this.parentElement.style.transform = 'translateY(0)';
+            this.style.transform = 'translateY(0)';
         });
     });
 

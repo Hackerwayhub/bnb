@@ -141,7 +141,7 @@
                         0 0 35px rgba(255, 0, 0, 0.2);
                     display: inline-block;
                     line-height: 1;
-                ">βnb</span>
+                ">βnb. </br>co.ke</span>
             </a>
 
              <!-- Compact Filter Controls -->
@@ -916,7 +916,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <div style="text-align: center; margin: 5px 0 20px 0;">
         {% if selected_location != 'all' %}
          <h1 class="clean-heading">
-          <span class="clean-text">Bnb <span class="clean-location">{{ location_name }}</span> </span>
+          <span class="clean-text"><span class="clean-location">{{ location_name }}</span> </span>
 
         </h1>
 
@@ -1063,10 +1063,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 </div>
 
-                <!-- Price -->
-                <p class="price-tag" style="font-size: 1.2rem; font-weight: 700; color: #28a745; margin: 10px 0;">
-                  KSh {{ listing.price_per_night }} <small style="font-size: 0.9rem; color: #666;">/ night</small>
-                </p>
+              <p class="price-tag" style="font-size: 1.2rem; font-weight: 700; color: #28a745; margin: 10px 0;">
+  {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
+    KSh {{ listing.price_per_night|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ night</small>
+  {% elif listing.transaction_type == 'rent' and listing.price_per_month %}
+    KSh {{ listing.price_per_month|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ month</small>
+  {% elif listing.transaction_type == 'sale' and listing.price %}
+    KSh {{ listing.price|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">total price</small>
+  {% else %}
+    Price on request
+  {% endif %}
+</p>
 
                 <!-- Amenities Section (ADDED - shows all amenities) -->
                 {% if listing.wifi or listing.parking or listing.kitchen or listing.pool or listing.ac or listing.tv %}
@@ -1126,7 +1133,7 @@ document.addEventListener('DOMContentLoaded', function() {
      onmouseout="this.style.backgroundColor='#25D366'; this.style.transform='translateY(0)';"
      title="Contact admin to book on behalf of client">
     <i class="fab fa-whatsapp" aria-hidden="true"></i>
-    <span>Book via WhatsApp</span>
+    <span>Inquire/Book via WhatsApp</span>
   </a>
 
 
@@ -1137,7 +1144,7 @@ document.addEventListener('DOMContentLoaded', function() {
      onmouseout="this.style.backgroundColor='#ff5a5f'; this.style.transform='translateY(0)';"
      title="Book this property online">
     <i class="fa fa-calendar" aria-hidden="true"></i>
-    <span>Book Now</span>
+    <span>Book/Inquiry form</span>
   </a>
 
 </div>
@@ -1295,9 +1302,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 </span>
               </div>
 
-              <p style="font-size: 1.2rem; font-weight: 700; color: #28a745; margin-bottom: 10px;">
-                KSh {{ listing.price_per_night }} <small style="font-size: 0.9rem; color: #666;">/ night</small>
-              </p>
+             <p class="price-tag" style="font-size: 1.2rem; font-weight: 700; color: #28a745; margin: 10px 0;">
+  {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
+    KSh {{ listing.price_per_night|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ night</small>
+  {% elif listing.transaction_type == 'rent' and listing.price_per_month %}
+    KSh {{ listing.price_per_month|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ month</small>
+  {% elif listing.transaction_type == 'sale' and listing.price %}
+    KSh {{ listing.price|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">total price</small>
+  {% else %}
+    Price on request
+  {% endif %}
+</p>
 
               <p class="location" style="font-size: 0.95rem; color: #666; margin-bottom: 10px;">
                 <i class="fa fa-map-marker" style="color: #007bff;" aria-hidden="true"></i>
@@ -1366,7 +1381,7 @@ document.addEventListener('DOMContentLoaded', function() {
      onmouseout="this.style.backgroundColor='#25D366'; this.style.transform='translateY(0)';"
      title="Contact admin to book on behalf of client">
     <i class="fab fa-whatsapp" aria-hidden="true"></i>
-    <span>Book via WhatsApp</span>
+    <span>Inquire/Book via WhatsApp</span>
   </a>
 
 
@@ -1377,7 +1392,7 @@ document.addEventListener('DOMContentLoaded', function() {
      onmouseout="this.style.backgroundColor='#ff5a5f'; this.style.transform='translateY(0)';"
      title="Book this property online">
     <i class="fa fa-calendar" aria-hidden="true"></i>
-    <span>Book Now</span>
+    <span>Book/Inquiry form</span>
   </a>
 
 </div>
@@ -1429,9 +1444,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         <p style="color: #000000; margin-bottom: 20px;">
           {% if selected_location != 'all' %}
-            No Bnb  in {{ location_name }} at the moment.Please check another location
+            No units  in {{ location_name }} at the moment.Please check another location
           {% else %}
-            No Bnb available at the moment.Please check again later
+            No units available at the moment.Please check again later
           {% endif %}
         </p>
       </div>
@@ -1838,22 +1853,17 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="main-content-card" style="margin">
           <div class="content-grid">
             <p class="content-paragraph">
-              Discover the finest selection of <strong> BnB staycations in kenya {{ location_name }}</strong>.
+              Discover the finest selection of <strong> Bnb,staycations,holiday homes & houses for rent  in Kenya!{{ location_name }}</strong>.
               Our curated collection of properties in {{ location_name }} offers premium accommodation
               with complete comfort and professional hosting. Whether you're looking for a cozy studio,
               spacious apartment, or luxurious villa for your stay, our <strong>verified BnBs in {{ location_name }}</strong>
               provide exceptional service tailored to your travel needs.
             </p>
 
-            <p class="content-paragraph">
-              With {{ total_listings }} active listings in {{ location_name }}, you'll find the perfect
-              <strong>BnB  staycations in  {{ location_name }}</strong> to suit your preferences and budget.
-              All our properties are verified by hosts and maintain the highest standards of cleanliness and comfort,
-              ensuring a safe and enjoyable experience for travelers seeking quality accommodation in {{ location_name }}.
-            </p>
+
 
             <p class="content-paragraph">
-              Our <strong>featured BnB in {{ location_name }}</strong> are available for various occasions
+              Our <strong>featured Bnb,  staycations,holiday homes & houses for rent  in Kenya! in {{ location_name }}</strong> are available for various occasions
               including business trips, family vacations, weekend getaways, and extended stays.
               Each property undergoes thorough verification to ensure quality and reliability for
               travelers seeking premium accommodation in the {{ location_name }} area.
@@ -1888,14 +1898,14 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="content-grid">
 
             <p class="content-paragraph">
-              Explore our extensive collection of <strong> BnB  staycations in kenya</strong>.
+              Explore our extensive collection of <strong>Bnb,staycations,holiday homes & houses for rent  in Kenya!</strong>.
               Whether you're planning a beach getaway in Diani, a business trip in Nairobi, a safari adventure in Maasai Mara,
               or a mountain retreat in Nanyuki, we offer premium accommodation options across the country.
             </p>
 
 
             <p class="content-paragraph">
-              Our <strong>featured BnB across Kenya</strong> cater to various travel needs including family vacations,
+              Our <strong>Bnb,staycations,holiday homes & houses for rent  in Kenya!</strong> cater to various travel needs including family vacations,
               romantic getaways, corporate stays, and group retreats. Each property is carefully selected to provide
               exceptional experiences with professional hosting and modern amenities.
             </p>
@@ -1905,7 +1915,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <!-- Top Destinations Section -->
         <div class="nearby-areas-card">
           <h3 class="nearby-title">
-            Popular BnB Destinations in Kenya
+          Explore more locations!
           </h3>
           <div class="nearby-links-container">
             {% for location in all_locations %}

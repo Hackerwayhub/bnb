@@ -337,7 +337,7 @@
                         0 0 35px rgba(255, 0, 0, 0.2);
                     display: inline-block;
                     line-height: 1;
-                ">βnb</span>
+                ">βnb.co.ke</span>
             </a>
            </h1>
 
@@ -379,7 +379,7 @@
                             <i class="fa fa-home" aria-hidden="true" style="font-size: 18px; color: #FF5A5F;"></i>
                         </div>
                         <div class="link-content">
-                            <div style="font-size: 20px; margin-bottom: 4px;">BnB</div>
+                            <div style="font-size: 20px; margin-bottom: 4px;">βnb.co.ke</div>
                             <div style="font-size: 14px; color: rgba(255, 255, 255, 0.6);">Discover amazing stays</div>
                         </div>
                         <div class="link-arrow" style="
@@ -467,8 +467,8 @@
                             <i class="fas fa-bullhorn" aria-hidden="true" style="font-size: 18px; color: #007bff;"></i>
                         </div>
                         <div class="link-content">
-                            <div style="font-size: 20px; margin-bottom: 4px;">Market & Manage BnBs</div>
-                            <div style="font-size: 14px; color: rgba(255, 255, 255, 0.6);">Reach thousands of guests</div>
+                            <div style="font-size: 20px; margin-bottom: 4px;">List,Market & Manage </div>
+                            <div style="font-size: 14px; color: rgba(255, 255, 255, 0.6);">Reach thousands of clients</div>
                         </div>
                         <div class="link-arrow" style="
                             margin-left: auto;
@@ -527,293 +527,6 @@
 
 
 
-                 <a href="{% url 'house_party' %}" class="nav-link" onclick="toggleNav()" style="
-    color: #FFFFFF;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    font-size: 20px;
-    background: linear-gradient(135deg, rgba(255, 56, 92, 0.15) 0%, rgba(255, 107, 53, 0.15) 100%);
-    border-radius: 16px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(255, 56, 92, 0.2);
-    backdrop-filter: blur(10px);
-    transform: translateX(-20px);
-    opacity: 0;
-    animation-delay: 0.2s;
-    position: relative;
-    overflow: hidden;
-">
-    <!-- Animated background effect -->
-    <div class="party-sparkle" style="
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle at 30% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
-        z-index: 0;
-    "></div>
-
-    <!-- Unique Party Icon Container -->
-    <div class="link-icon" style="
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, #FF385C 0%, #FF6B35 100%);
-        border-radius: 10px;
-        margin-right: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        position: relative;
-        z-index: 1;
-        box-shadow: 0 4px 15px rgba(255, 56, 92, 0.3);
-    ">
-        <!-- Custom Party Icon - Glass with Bubbles -->
-        <div style="position: relative; width: 24px; height: 24px;">
-            <!-- Glass -->
-            <div style="
-                position: absolute;
-                bottom: 0;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 16px;
-                height: 20px;
-                background: rgba(255, 255, 255, 0.9);
-                border-radius: 3px 3px 8px 8px;
-                overflow: hidden;
-            ">
-                <!-- Liquid -->
-                <div style="
-                    position: absolute;
-                    bottom: 0;
-                    width: 100%;
-                    height: 70%;
-                    background: linear-gradient(to top, #FFD700, #FFA500);
-                    border-radius: 0 0 8px 8px;
-                "></div>
-
-                <!-- Bubbles -->
-                <div style="
-                    position: absolute;
-                    top: 4px;
-                    left: 4px;
-                    width: 4px;
-                    height: 4px;
-                    background: rgba(255, 255, 255, 0.8);
-                    border-radius: 50%;
-                    animation: bubble-float 2s infinite ease-in-out;
-                "></div>
-                <div style="
-                    position: absolute;
-                    top: 8px;
-                    right: 4px;
-                    width: 3px;
-                    height: 3px;
-                    background: rgba(255, 255, 255, 0.8);
-                    border-radius: 50%;
-                    animation: bubble-float 2.5s infinite ease-in-out 0.5s;
-                "></div>
-            </div>
-
-            <!-- BnB Symbol -->
-            <div style="
-                position: absolute;
-                top: -8px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 12px;
-                height: 8px;
-                background: #FF385C;
-                border-radius: 4px 4px 0 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            ">
-                <div style="
-                    width: 6px;
-                    height: 4px;
-                    background: white;
-                    border-radius: 2px;
-                "></div>
-            </div>
-
-            <!-- Sparkle effect -->
-            <div style="
-                position: absolute;
-                top: -6px;
-                right: -6px;
-                width: 8px;
-                height: 8px;
-                background: #FFD700;
-                border-radius: 50%;
-                animation: sparkle 1.5s infinite alternate;
-            "></div>
-        </div>
-    </div>
-
-    <div class="link-content" style="position: relative; z-index: 1;">
-        <div style="font-size: 20px; margin-bottom: 4px; background: linear-gradient(45deg, #FFD700, #FFFFFF);
-                   -webkit-background-clip: text;
-                   background-clip: text;
-                   color: transparent;
-                   font-weight: 700;">
-            BnBHOUSEPARTY
-        </div>
-        <div style="font-size: 14px; color: rgba(255, 255, 255, 0.8);">
-            party indoors with friends!
-        </div>
-    </div>
-
-    <!-- Party badge -->
-    <div class="party-badge" style="
-        position: absolute;
-        top: -8px;
-        right: -8px;
-        background: linear-gradient(45deg, #FF385C, #FFD700);
-        color: white;
-        font-size: 10px;
-        font-weight: 800;
-        padding: 4px 8px;
-        border-radius: 12px;
-        z-index: 2;
-        box-shadow: 0 3px 10px rgba(255, 56, 92, 0.4);
-    ">
-        <i class="fa fa-fire" style="margin-right: 3px; font-size: 8px;"></i>HOT
-    </div>
-
-    <div class="link-arrow" style="
-        margin-left: auto;
-        opacity: 0;
-        transform: translateX(-10px);
-        transition: all 0.3s ease;
-        position: relative;
-        z-index: 1;
-    ">
-        <i class="fa fa-chevron-right" aria-hidden="true" style="color: #FFD700;"></i>
-    </div>
-
-    <!-- Hover effect -->
-    <div class="hover-effect" style="
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        transition: 0.5s;
-    "></div>
-</a>
-
-<style>
-    @keyframes bubble-float {
-        0%, 100% { transform: translateY(0); opacity: 0.8; }
-        50% { transform: translateY(-3px); opacity: 1; }
-    }
-
-    @keyframes sparkle {
-        0% { transform: scale(1); opacity: 0.8; }
-        100% { transform: scale(1.3); opacity: 1; }
-    }
-
-    @keyframes party-pulse {
-        0% { box-shadow: 0 4px 15px rgba(255, 56, 92, 0.3); }
-        50% { box-shadow: 0 4px 20px rgba(255, 56, 92, 0.5), 0 0 20px rgba(255, 215, 0, 0.3); }
-        100% { box-shadow: 0 4px 15px rgba(255, 56, 92, 0.3); }
-    }
-
-    /* Icon animation */
-    .link-icon {
-        animation: party-pulse 2s infinite;
-    }
-
-    /* Link hover effects */
-    .nav-link:hover {
-        transform: translateX(-10px) !important;
-        border-color: rgba(255, 215, 0, 0.4) !important;
-        box-shadow: 0 8px 30px rgba(255, 56, 92, 0.25) !important;
-    }
-
-    .nav-link:hover .link-icon {
-        transform: rotate(5deg) scale(1.1);
-        animation: none;
-    }
-
-    .nav-link:hover .link-arrow {
-        opacity: 1 !important;
-        transform: translateX(0) !important;
-    }
-
-    .nav-link:hover .hover-effect {
-        left: 100%;
-    }
-
-    .nav-link:hover .party-badge {
-        animation: badge-bounce 0.5s ease;
-    }
-
-    @keyframes badge-bounce {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-    }
-
-    /* Slide-in animation */
-    @keyframes slideInRight {
-        from {
-            transform: translateX(-20px);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-</style>
-
-<script>
-    // Add animation when menu opens
-    document.addEventListener('DOMContentLoaded', function() {
-        const partyLink = document.querySelector('a[href*="house_party"]');
-        if (partyLink) {
-            // Set animation based on delay
-            setTimeout(() => {
-                partyLink.style.animation = 'slideInRight 0.5s ease forwards';
-            }, 200);
-
-            // Add hover effect for bubbles
-            partyLink.addEventListener('mouseenter', function() {
-                const icon = this.querySelector('.link-icon');
-                if (icon) {
-                    // Add more bubbles on hover
-                    const iconContainer = icon.querySelector('div');
-                    for (let i = 0; i < 3; i++) {
-                        const bubble = document.createElement('div');
-                        bubble.style.cssText = `
-                            position: absolute;
-                            width: ${Math.random() * 3 + 2}px;
-                            height: ${Math.random() * 3 + 2}px;
-                            background: rgba(255, 255, 255, 0.9);
-                            border-radius: 50%;
-                            animation: bubble-float ${Math.random() * 2 + 1}s infinite ease-in-out;
-                            left: ${Math.random() * 16}px;
-                            top: ${Math.random() * 10 + 5}px;
-                        `;
-                        iconContainer.appendChild(bubble);
-
-                        // Remove bubble after animation
-                        setTimeout(() => {
-                            bubble.remove();
-                        }, 1000);
-                    }
-                }
-            });
-        }
-    });
-</script>
-
                 </div>
 
                 <!-- Menu Footer -->
@@ -850,7 +563,7 @@
     display: block !important;
     visibility: visible !important;
     position: fixed !important;
-    top: -1px;
+    top: 15px;
     right: 25px;
     z-index: 1001;
 }
@@ -968,7 +681,7 @@
 /* Responsive Design */
 @media (min-width: 1200px) {
     .custom_menu-btn {
-        top: 1px;
+        top: 15px;
         right: 30px;
     }
 

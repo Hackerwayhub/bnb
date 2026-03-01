@@ -96,8 +96,8 @@ The BnB Ke Team"""
 
     context = {
         'form': form,
-        'title': 'Register - BnB Ke',
-        'page_title': 'Create Account'
+        'title': 'Register | Bnb.co.ke',
+        'page_title': 'Register | Bnb.co.ke'
     }
     return render(request, 'auth/register.html', context)
 
@@ -130,7 +130,7 @@ def login_view(request):
 
     context = {
         'form': form,
-        'title': 'Login - BnB Ke',
+        'title': 'Login | Bnb.co.ke',
         'page_title': 'Sign In'
     }
     return render(request, 'auth/login.html', context)
@@ -209,7 +209,7 @@ def profile(request):
         'bookings_count': bookings_count,
         'approved_listings_count': approved_listings_count,
         'featured_listings_count': featured_listings_count,
-        'title': 'Profile - BnB Ke',
+        'title': 'Profile | Bnb.co.ke',
         'page_title': 'My Profile'
     }
     return render(request, 'auth/profile.html', context)
@@ -233,7 +233,7 @@ Your account will be permanently deleted in 7 days.
 If you did not request this, please contact our support team immediately at {settings.ADMIN_EMAIL}.
 
 Best regards,
-The BnB Ke Team"""
+The BnB  Team"""
 
             send_mail(
                 subject=subject,
@@ -274,7 +274,7 @@ def my_listings(request):
         'active_listings': active_listings,
         'featured_listings': featured_listings,
         'pending_bookings': 0,  # You can add this later
-        'title': 'My Listings - BnB Ke',
+        'title': 'My Listings | Bnb.co.ke',
         'page_title': 'My Listings'
     }
     return render(request, 'auth/profile.html', context)

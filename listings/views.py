@@ -212,7 +212,7 @@ def listing_list(request, location_slug=None):
         'location_specific': location_specific,
         'page_type': 'location',
         'page_title': f'Bnb,staycations,holiday homes &  houses for rent in {display_location_name}! | Bnb.co.ke' if selected_location != 'all' else 'Bnb.co.ke | Bnb,staycations, Holiday homes &  houses for rent in Kenya!',
-        'meta_description': f'Find properties in {display_location_name}. Browse verified listings with photos, amenities, and booking details.' if selected_location != 'all' else 'Find the best properties in Kenya. Browse verified listings for rent, sale, and shortlet.',
+        'meta_description': f' Bnb,staycations,Holiday homes & houses for rent in {display_location_name}. Browse verified listings with photos, amenities, and booking details.' if selected_location != 'all' else 'Bnb,staycations,Holiday homes & houses for rent in Kenya. Browse verified listings with photos, amenities, and booking details.',
     }
 
     context = prepare_listing_context(request, queryset, context_extra)
@@ -329,7 +329,7 @@ def all_property_types(request):
         'land_types': land,
         'other_types': other,
         'page_title': 'All Property Types | Condo.co.ke',
-        'meta_description': 'Browse all property types in Kenya including residential, commercial, and land.',
+        'meta_description': 'Bnb,staycations,holidayhomes & houses for rent in Kenya! Browse verified listings with photos, amenities, and booking details.',
     }
     return render(request, 'listings/all_property_types.html', context)
 
@@ -362,7 +362,7 @@ def submit_listing(request):
 
             context = {
                 'form': form,
-                'title': 'Submit New Listing - Bnb.co.ke',
+                'title': 'Submit New Listing | Bnb.co.ke',
                 'featured_price': 1000.00,
             }
             return render(request, 'listings/create_listing.html', context)
@@ -418,7 +418,7 @@ def submit_listing(request):
 
             context = {
                 'form': form,
-                'title': 'Submit New Listing - Condo.co.ke',
+                'title': 'Submit New Listing | Bnb.co.ke',
                 'featured_price': 1000.00,
             }
             return render(request, 'listings/create_listing.html', context)
@@ -428,7 +428,7 @@ def submit_listing(request):
 
     context = {
         'form': form,
-        'title': 'Submit New Listing - Condo.co.ke',
+        'title': 'Submit New Listing | Bnb.co.ke',
         'featured_price': 1000.00,
     }
     return render(request, 'listings/create_listing.html', context)
@@ -439,7 +439,7 @@ def book_via_whatsapp(request):
     Simple WhatsApp booking page - Just a big WhatsApp button
     """
     context = {
-        'page_title': 'Book via WhatsApp - Instant Booking | Bnb.co.ke',
+        'page_title': 'Book via WhatsApp | Bnb.co.ke',
         'meta_description': 'Book your property directly on WhatsApp. Chat with hosts instantly, get quick responses.',
         'whatsapp_number': '+254798246467',  # Your business WhatsApp number
     }
@@ -612,7 +612,7 @@ def delete_listing(request, listing_id):
 
     context = {
         'listing': listing,
-        'title': f'Delete {listing.title} - Bnb.co.ke',
+        'title': f'Delete {listing.title} | Bnb.co.ke',
         'page_title': 'Delete Listing'
     }
     return render(request, 'listings/delete_listing.html', context)

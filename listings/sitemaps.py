@@ -14,7 +14,7 @@ class StaticSitemap(Sitemap):
             'home',  # Main homepage
             'advertise_bnb',  # Submit listing page
             'whatsapp_booking',  # WhatsApp booking page
-            'all_property_types',  # Property types overview page
+
             'login',  # Login page
             'register',  # Registration page
             'password_reset',  # Password reset page
@@ -149,20 +149,6 @@ class PropertyTypeSitemap(Sitemap):
         return 0.5
 
 
-class PropertyTypeOverviewSitemap(Sitemap):
-    """Sitemap for the all property types overview page"""
-    changefreq = 'daily'
-    priority = 0.8
-
-    def items(self):
-        return ['all_property_types']
-
-    def location(self, item):
-        return reverse(item)
-
-    def lastmod(self, item):
-        return timezone.now()
-
 
 class ListingTypeSitemap(Sitemap):
     """Sitemap for listing type filter pages (free/featured)"""
@@ -235,7 +221,6 @@ sitemaps = {
     'locations': LocationSitemap,
     'listings': ListingSitemap,
     'property_types': PropertyTypeSitemap,  # Clean URLs for each property type
-    'property_overview': PropertyTypeOverviewSitemap,  # Overview page of all property types
     'listing_types': ListingTypeSitemap,
     'transaction_types': TransactionTypeSitemap,
     'user_pages': UserSitemap,

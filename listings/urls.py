@@ -30,7 +30,9 @@ urlpatterns = [
     path('book-via-whatsapp/', views.book_via_whatsapp, name='whatsapp_booking'),
 
     # Property type URLs (clean URLs)
-    path('property-type/', views.all_property_types, name='all_property_types'),
+
+
+
     path('property-type/<slug:property_type_slug>/', views.listings_by_property_type, name='listings_by_property_type'),
 
     # Keep legacy URLs for backward compatibility

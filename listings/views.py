@@ -279,61 +279,6 @@ def listings_by_property_type(request, property_type_slug):
     context = prepare_listing_context(request, queryset, context_extra)
     return render(request, 'listings/listings.html', context)
 
-def all_property_types(request):
-    """
-    Display all property types with counts (category view)
-    Uses a separate template for the category listing
-    """
-    # Get all property types
-    property_types = []
-
-    for code, display_name in Listing.PROPERTY_TYPES:
-        # Count active listings for this property type
-        count = Listing.objects.filter(
-            is_approved=True,
-            property_type=code
-        ).count()
-
-        # Determine category (residential, commercial, land)
-        if code.startswith('rent_') or code.startswith('buy_'):
-            category = 'Residential'
-            icon = 'fa-home'
-        elif code.startswith('commercial') or 'office' in code or 'coworking' in code:
-            category = 'Commercial'
-            icon = 'fa-building'
-        elif 'land' in code:
-            category = 'Land'
-            icon = 'fa-map'
-        else:
-            category = 'Other'
-            icon = 'fa-tag'
-
-        property_types.append({
-            'code': code,
-            'name': display_name,
-            'slug': code.replace('_', '-'),
-            'count': count,
-            'category': category,
-            'icon': icon,
-        })
-
-    # Group by category
-    residential = [p for p in property_types if p['category'] == 'Residential']
-    commercial = [p for p in property_types if p['category'] == 'Commercial']
-    land = [p for p in property_types if p['category'] == 'Land']
-    other = [p for p in property_types if p['category'] == 'Other']
-
-    context = {
-        'residential_types': residential,
-        'commercial_types': commercial,
-        'land_types': land,
-        'other_types': other,
-        'page_title': 'All Property Types | Condo.co.ke',
-        'meta_description': 'Bnb,staycations,holidayhomes & houses for rent in Kenya! Browse verified listings with photos, amenities, and booking details.',
-    }
-    return render(request, 'listings/all_property_types.html', context)
-
-
 # ============================================================================
 # LISTING MANAGEMENT VIEWS (Unchanged)
 # ============================================================================

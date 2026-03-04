@@ -14,12 +14,12 @@ class Listing(models.Model):
         ('three_bedroom_staycation', ' Bnb | Three Bedroom staycation'),
         ('Own_compound_staycation', 'Bnb | Own compound/villa staycation'),
         ('beach_house_staycation', 'Bnb| beach house staycation'),
-        ('studio', ' Houses for rent | Studio  '),
-        ('one_bedroom', ' Houses for rent | One Bedroom '),
-        ('two_bedroom', 'Houses for rent | Two Bedroom '),
-        ('three_bedroom', 'Houses for rent | Three Bedroom  '),
-        ('Own_compound', 'Houses for rent | Own compound'),
-        ('beach_house', 'Houses for rent | beach house '),
+        ('studio', ' Furnished Houses for rent | Studio  '),
+        ('one_bedroom', 'Furnished Houses for rent | One Bedroom '),
+        ('two_bedroom', 'Furnished Houses for rent | Two Bedroom '),
+        ('three_bedroom', 'Furnished Houses for rent | Three Bedroom  '),
+        ('Own_compound', 'Furnished Houses for rent | Own compound'),
+        ('beach_house', 'Furnished Houses for rent | beach house '),
     ]
 
     LOCATIONS = [

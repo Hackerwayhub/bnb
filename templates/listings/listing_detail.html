@@ -895,11 +895,7 @@ body {
         </h1>
 
         <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 15px; color: #666; font-size: 0.95rem;">
-          <span style="display: flex; align-items: center; gap: 5px;">
-            <i class="fa fa-star" style="color: #ffc107;" aria-hidden="true"></i>
-            5.0 ({{ listing.views_count|default:"0" }} views)
-          </span>
-          <span>•</span>
+
           <span style="display: flex; align-items: center; gap: 5px;">
             <i class="fa fa-map-marker" style="color: #FF0000;" aria-hidden="true"></i>
             {{ listing.get_location_display }}, {{ listing.specific_location }}
@@ -933,11 +929,7 @@ body {
             {{ listing.get_property_type_display }}
           </div>
 
-          {% if listing.listing_type == 'featured' %}
-          <div style="position: absolute; top: 20px; left: 20px; background: #ffc107; color: #000; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem;">
-            <i class="fa fa-crown" aria-hidden="true"></i> FEATURED
-          </div>
-          {% endif %}
+
         </div>
 
         <!-- Thumbnail Images -->
@@ -1671,42 +1663,6 @@ body {
           </a>
         </div>
 
-        <!-- Contact Host -->
-        <div class="host-contact-section" style="border-top: 1px solid #e0e0e0; padding-top: 20px;">
-          <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #222;">Contact Host</h3>
-
-          {% if listing.host_name %}
-          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-            <div style="width: 40px; height: 40px; background: #FF0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
-              {{ listing.host_name|first|upper }}
-            </div>
-            <div>
-              <div style="font-weight: 600;">{{ listing.host_name }}</div>
-              <div style="font-size: 0.85rem; color: #666;">Host</div>
-            </div>
-          </div>
-          {% endif %}
-
-          {% if listing.host_phone %}
-          <a href="tel:{{ listing.host_phone }}"
-             class="btn btn-call"
-             style="background-color: #007bff; color: white; padding: 12px; text-decoration: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; margin-bottom: 10px; transition: all 0.3s ease;">
-            <i class="fa fa-phone" aria-hidden="true"></i> Call Host
-          </a>
-          {% endif %}
-
-          {% if listing.host_email %}
-          <div style="font-size: 0.9rem; color: #666; margin-top: 10px; padding: 8px; background: #f8f9fa; border-radius: 5px;">
-            <i class="fa fa-envelope" aria-hidden="true"></i>
-            {{ listing.host_email }}
-          </div>
-          {% endif %}
-
-          <div class="secure-booking" style="color: #666; font-size: 0.9rem; text-align: center; padding: 12px; background: #f8f9fa; border-radius: 8px; margin-top: 15px;">
-            <i class="fa fa-shield-alt" aria-hidden="true"></i>
-            Secure booking with instant confirmation
-          </div>
-        </div>
 
       </div>
 
@@ -1769,11 +1725,11 @@ body {
       <div class="review-card" style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
         <div class="review-header" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
           <div class="review-avatar" style="width: 40px; height: 40px; background: #FF0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
-            JD
+            BC
           </div>
           <div>
-            <div style="font-weight: 600;">John D.</div>
-            <div style="color: #666; font-size: 0.9rem;">December 2024</div>
+            <div style="font-weight: 600;">B.chris  C.E.O.</div>
+
           </div>
         </div>
         <div class="review-stars" style="color: #ffc107; margin-bottom: 10px;">
@@ -1789,12 +1745,7 @@ body {
       <!-- Add more reviews as needed -->
     </div>
 
-    <!-- Leave Review Button -->
-    <div class="reviews-actions" style="text-align: center; margin-top: 30px;">
-      <button class="btn-review" style="background: #FF0000; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
-        <i class="fa fa-pen" aria-hidden="true"></i> Write a Review
-      </button>
-    </div>
+
   </div>
 
   {% else %}
@@ -1817,17 +1768,6 @@ body {
 
 </div>
 
-<!-- Similar Listings Section -->
-{% if listing %}
-<div class="similar-properties" style="background: #f8f9fa; padding: 60px 0; margin-top: 50px;">
-  <div class="similar-properties-container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-    <h2 style="font-size: 1.8rem; font-weight: 600; margin-bottom: 30px; text-align: center; color: #222;">
-      Similar Properties in {{ listing.get_location_display }}
-    </h2>
-    <!-- Add similar properties loop here -->
-  </div>
-</div>
-{% endif %}
 
 <script>
 // Image gallery functionality

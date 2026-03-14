@@ -974,6 +974,7 @@ document.addEventListener('DOMContentLoaded', function() {
                            data-listing-guests="{{ listing.guests }}"
                            data-listing-bedrooms="{{ listing.bedrooms }}"
                            data-listing-bathrooms="{{ listing.bathrooms }}"
+                           data-listing-description="{{ listing.description|default:'No description available'|escapejs }}"
                            data-all-images='{% for img in images %}{{ img.url }}{% if not forloop.last %},{% endif %}{% endfor %}'>
 
                       <!-- Navigation Arrows for Gallery -->
@@ -1237,6 +1238,7 @@ document.addEventListener('DOMContentLoaded', function() {
                          data-listing-guests="{{ listing.guests }}"
                          data-listing-bedrooms="{{ listing.bedrooms }}"
                          data-listing-bathrooms="{{ listing.bathrooms }}"
+                         data-listing-description="{{ listing.description|default:'No description available'|escapejs }}"
                          data-all-images='{% for img in images %}{{ img.url }}{% if not forloop.last %},{% endif %}{% endfor %}'>
 
                     <!-- Navigation Arrows for Gallery -->
@@ -1444,9 +1446,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         <p style="color: #000000; margin-bottom: 20px;">
           {% if selected_location != 'all' %}
-            No units  in {{ location_name }} at the moment.Please check another location
+           Contact BnB support for fast,secure and seamless booking!
           {% else %}
-            No units available at the moment.Please check again later
+            Contact BnB support for fast,secure and seamless booking!
           {% endif %}
         </p>
       </div>

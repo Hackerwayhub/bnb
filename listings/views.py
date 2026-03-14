@@ -211,8 +211,8 @@ def listing_list(request, location_slug=None):
         'current_location_slug': current_location_slug,
         'location_specific': location_specific,
         'page_type': 'location',
-        'page_title': f'Bnb,staycations,holiday homes &  houses for rent in {display_location_name}! | Bnb.co.ke' if selected_location != 'all' else 'Bnb.co.ke | Bnb,staycations, Holiday homes & furnished houses in Kenya!',
-        'meta_description': f' Bnb,staycations,Holiday homes & houses for rent in {display_location_name}. Browse verified listings with photos, amenities, and booking details.' if selected_location != 'all' else 'Bnb,staycations,Holiday homes & houses for rent in Kenya. Browse verified listings with photos, amenities, and booking details.',
+        'page_title': f'Bnb,staycations,holiday homes &  Furnished houses for rent in {display_location_name}! | Bnb.co.ke' if selected_location != 'all' else 'Bnb.co.ke | Book & Advertise Bnb,staycations, Holiday homes & furnished houses in Kenya!',
+        'meta_description': f' Bnb,staycations,Holiday homes & Furnished houses for rent in {display_location_name}. Browse verified listings with photos, amenities, and booking details.' if selected_location != 'all' else 'Bnb,staycations,Holiday homes & houses for rent in Kenya. Browse verified listings with photos, amenities, and booking details.',
     }
 
     context = prepare_listing_context(request, queryset, context_extra)

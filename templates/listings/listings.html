@@ -1817,6 +1817,106 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 </script>
+
+
+
+<!-- Pagination Section -->
+{% if page_obj.has_other_pages %}
+<section class="pagination-section" style="margin: 40px 0 20px 0;">
+    <div class="container-fluid">
+        <div class="pagination-wrapper" style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap;">
+
+            <!-- Previous Page Link -->
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}"
+               class="pagination-btn prev"
+               style="background: white; color: #333; padding: 10px 20px; text-decoration: none; border-radius: 30px; border: 1px solid #ddd; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);"
+               onmouseover="this.style.background='#f8f9fa'; this.style.borderColor='#FF0000'; this.style.color='#FF0000';"
+               onmouseout="this.style.background='white'; this.style.borderColor='#ddd'; this.style.color='#333';">
+                <i class="fa fa-chevron-left" aria-hidden="true" style="font-size: 12px;"></i>
+                Previous
+            </a>
+            {% endif %}
+
+            <!-- Page Numbers -->
+            <div class="page-numbers" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+                {% for page_num in page_obj.paginator.page_range %}
+                    {% if page_num == page_obj.number %}
+                        <span class="current-page"
+                              style="background: #FF0000; color: white; min-width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; box-shadow: 0 4px 12px rgba(255,0,0,0.3);">
+                            {{ page_num }}
+                        </span>
+                    {% elif page_num > page_obj.number|add:'-3' and page_num < page_obj.number|add:'3' %}
+                        <a href="?page={{ page_num }}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}"
+                           class="page-link"
+                           style="background: white; color: #333; min-width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; border: 1px solid #ddd; font-weight: 500; transition: all 0.3s ease;"
+                           onmouseover="this.style.background='#f8f9fa'; this.style.borderColor='#FF0000'; this.style.color='#FF0000';"
+                           onmouseout="this.style.background='white'; this.style.borderColor='#ddd'; this.style.color='#333';">
+                            {{ page_num }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Next Page Link -->
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}"
+               class="pagination-btn next"
+               style="background: white; color: #333; padding: 10px 20px; text-decoration: none; border-radius: 30px; border: 1px solid #ddd; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);"
+               onmouseover="this.style.background='#f8f9fa'; this.style.borderColor='#FF0000'; this.style.color='#FF0000';"
+               onmouseout="this.style.background='white'; this.style.borderColor='#ddd'; this.style.color='#333';">
+                Next
+                <i class="fa fa-chevron-right" aria-hidden="true" style="font-size: 12px;"></i>
+            </a>
+            {% endif %}
+        </div>
+
+        <!-- Results Info -->
+        <div class="pagination-info" style="text-align: center; margin-top: 15px; color: #666; font-size: 0.9rem;">
+            Showing <strong>{{ page_obj.start_index }}</strong> - <strong>{{ page_obj.end_index }}</strong> of <strong>{{ page_obj.paginator.count }}</strong> properties
+        </div>
+    </div>
+</section>
+
+<!-- Mobile Responsive Pagination Styles -->
+<style>
+@media (max-width: 768px) {
+    .pagination-wrapper {
+        gap: 8px !important;
+        padding: 0 10px;
+    }
+
+    .pagination-btn {
+        padding: 8px 16px !important;
+        font-size: 0.9rem !important;
+    }
+
+    .page-numbers {
+        gap: 5px !important;
+    }
+
+    .page-link, .current-page {
+        min-width: 35px !important;
+        height: 35px !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .pagination-btn span {
+        display: none; /* Hide text on very small screens */
+    }
+
+    .pagination-btn.prev, .pagination-btn.next {
+        padding: 8px 12px !important;
+    }
+
+    .pagination-btn i {
+        margin: 0 !important;
+    }
+}
+</style>
+{% endif %}
 <!-- Location-Specific SEO Content Section for BnB -->
 {% if selected_location != 'all' %}
 <section class="seo-location-section">
@@ -2634,6 +2734,8 @@ body.modal-open {
     }
   }
 </script>
+
+
 
 {% endblock %}
 

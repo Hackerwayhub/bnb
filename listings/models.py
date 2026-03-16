@@ -166,7 +166,7 @@ class Listing(models.Model):
     # Default admin contact
     admin_contact = models.CharField(
         max_length=15,
-        default='+254798246467',
+        default='+254745653945',
         validators=[phone_validator],
         help_text="Default admin contact number"
     )
@@ -238,7 +238,7 @@ class Listing(models.Model):
     year_built = models.PositiveIntegerField(blank=True, null=True, help_text="Year property was built")
     condition = models.CharField(max_length=20, choices=PROPERTY_CONDITION_CHOICES, default='good', blank=True,
                                  null=True)
-    furnishing = models.CharField(max_length=20, choices=FURNISHING_CHOICES, default='unfurnished', blank=True,
+    furnishing = models.CharField(max_length=20, choices=FURNISHING_CHOICES, default='furnished', blank=True,
                                   null=True)
 
     # Parking

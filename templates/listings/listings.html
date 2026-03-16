@@ -1016,14 +1016,14 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>
 
               <!-- Property Type Badge -->
-              <div class="property-type-badge {{ listing.property_type }}">
-                {{ listing.get_property_type_display }}
-              </div>
+              <div class="property-type-badge {{ listing.property_type }}" style="top: 15px; right: 15px; padding: 5px 12px; font-size: 0.6rem;">
+              {{ listing.get_property_type_display }}
+            </div>
 
 
 
               <div class="listing-info">
-                <h3>
+                <h3 style="  font-size: 1.0rem;">
                   {{ listing.title }}
                   {% if listing.is_approved %}
                   <span class="verified-badge" title="Verified property">
@@ -1279,11 +1279,11 @@ document.addEventListener('DOMContentLoaded', function() {
               {% endif %}
             </div>
 
-            <div class="property-type-badge {{ listing.property_type }}" style="top: 15px; right: 15px; padding: 5px 12px; font-size: 0.75rem;">
+            <div class="property-type-badge {{ listing.property_type }}" style="top: 15px; right: 15px; padding: 5px 12px; font-size: 0.6rem;">
               {{ listing.get_property_type_display }}
             </div>
             <div class="listing-info" style="padding: 20px;">
-              <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; color: #222;">
+              <h3 style="font-size: 1.0rem; font-weight: 700; margin-bottom: 8px; color: #222;">
                 {{ listing.title }}
                 {% if listing.is_approved %}
                 <span class="verified-badge" style="color: #34a853; font-size: 1rem;" title="Verified property">

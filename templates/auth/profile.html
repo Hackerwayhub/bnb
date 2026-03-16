@@ -386,7 +386,7 @@
     }
 
     .nav-link:hover i, .nav-link.active i {
-        color: #8b5cf6;
+        color: #ff0000;
     }
 
     /* Content Area */
@@ -1290,7 +1290,7 @@
                     </div>
                     <div class="stat-item" onclick="switchTab('bookings')">
                         <span class="stat-number">{{ user.user_bookings.count }}</span>
-                        <span class="stat-label">Bookings</span>
+                        <span class="stat-label">Inquiries</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-number">{{ approved_listings_count }}</span>
@@ -1325,7 +1325,7 @@
                         <li class="nav-item">
                             <a href="#bookings" class="nav-link" data-tab="bookings">
                                 <i class="fas fa-calendar-check"></i>
-                                My Bookings
+                                Inquiries
                             </a>
                         </li>
                         <li class="nav-item">
@@ -1354,16 +1354,7 @@
             <div class="content-area">
                 <!-- My Listings Tab -->
                 <div class="content-card" id="listings-tab">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <i class="fas fa-home"></i>
-                            My Listings
-                        </h2>
-                        <a href="{% url 'advertise_bnb' %}" class="btn">
-                            <i class="fas fa-plus"></i>
-                            New Listing
-                        </a>
-                    </div>
+
 
                     {% if user.user_listings.all %}
                     <div class="listings-grid">
@@ -1567,11 +1558,7 @@
                                                 {{ booking.get_status_display }}
                                             </span>
                                         </td>
-                                        <td style="padding: 1rem;">
-                                            <button class="action-btn" onclick="viewBooking({{ booking.id }})">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </td>
+
                                     </tr>
                                     {% endfor %}
                                 </tbody>

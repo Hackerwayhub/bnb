@@ -42,6 +42,7 @@ class Listing(models.Model):
         ('kitisuru', 'Kitisuru'),
         ('lavington', 'Lavington'),
         ('loresho', 'Loresho'),
+        ('kiambu_road', 'Kiambu Road'),
         ('zimmerman', 'Zimmerman'),
         ('kahawa_sukari', 'Kahawa Sukari'),
         ('kahawa_wendani', 'Kahawa Wendani'),
@@ -51,7 +52,7 @@ class Listing(models.Model):
         ('ruiru', 'Ruiru'),
         ('kiambu', 'Kiambu'),
         ('thome', 'Thome'),
-        ('kiambu_road', 'Kiambu Road'),
+
         ('ngong', 'Ngong'),
         ('rongai', 'Rongai'),
         ('gwakairu', 'Gwakairu'),

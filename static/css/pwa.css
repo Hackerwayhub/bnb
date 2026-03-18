@@ -86,7 +86,7 @@
 
 .pwa-install-btn {
   flex: 1;
-  background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%);
+  background: #FF0000;
   color: white;
   border: none;
   border-radius: 12px;

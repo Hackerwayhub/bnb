@@ -461,7 +461,7 @@ class Listing(models.Model):
             message += f"Price: KSh {self.price}\n"
 
         message += f"Property Type: {self.get_property_type_display()}\n"
-        message += f"Listing Type: {self.get_listing_type_display()}\n\n"
+
 
         import urllib.parse
         encoded_message = urllib.parse.quote(message)

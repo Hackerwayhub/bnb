@@ -8,12 +8,12 @@ from django.conf import settings
 class Listing(models.Model):
     # Property Types
     PROPERTY_TYPES = [
-        ('studio_staycation', 'Bnb | studio'),
+        ('studio_staycation', 'Bnb | studio staycation'),
         ('one_bedroom_staycation', 'Bnb | One Bedroom staycation'),
         ('two_bedroom_staycation', 'Bnb | Two Bedroom staycation'),
         ('three_bedroom_staycation', ' Bnb | Three Bedroom staycation'),
         ('Own_compound_staycation', 'Bnb | Own compound/villa staycation'),
-        ('beach_house_staycation', 'Bnb| beach house staycation'),
+        ('beach_house_staycation', 'Bnb | beach house staycation'),
         ('studio', ' Furnished Houses for rent | Studio  '),
         ('one_bedroom', 'Furnished Houses for rent | One Bedroom '),
         ('two_bedroom', 'Furnished Houses for rent | Two Bedroom '),

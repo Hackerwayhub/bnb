@@ -18,7 +18,7 @@ class ListingSubmissionForm(forms.ModelForm):
     class Meta:
         model = Listing
         fields = [
-            'title', 'property_type', 'transaction_type', 'location', 'specific_location', 'address',
+            'title',  'description',  'property_type', 'transaction_type', 'location', 'specific_location', 'address',
             'host_phone', 'host_whatsapp',
             # Property details
             'guests', 'bedrooms', 'beds', 'bathrooms', 'en_suites', 'living_rooms', 'kitchens',

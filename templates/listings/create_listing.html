@@ -1319,6 +1319,30 @@ body {
                         {% endif %}
                     </div>
 
+
+    <!-- ADD DESCRIPTION FIELD HERE -->
+    <div class="form-group">
+        <label class="form-label">
+            <i class="fa fa-align-left"></i>
+            Property Description
+            <span class="required-star">*</span>
+        </label>
+        {{ form.description }}
+        <div class="form-tip">
+            <i class="fa fa-lightbulb"></i>
+            <small>Describe your property in detail - highlight unique features, nearby attractions, and what makes it special</small>
+        </div>
+        {% if form.description.errors %}
+            <div class="error-message">
+                <i class="fa fa-exclamation-circle"></i>
+                {% for error in form.description.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+
                     <!-- Property Type and Transaction Type -->
                     <div class="row">
                         <div class="col-md-6 mb-3">

@@ -167,7 +167,7 @@ class Listing(models.Model):
     # Default admin contact
     admin_contact = models.CharField(
         max_length=15,
-        default='+254745653945',
+        default='+254798246467',
         validators=[phone_validator],
         help_text="Default admin contact number"
     )

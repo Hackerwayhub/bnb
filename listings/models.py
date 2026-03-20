@@ -8,6 +8,7 @@ from django.conf import settings
 class Listing(models.Model):
     # Property Types
     PROPERTY_TYPES = [
+        ('hidden_gems', 'Hidden gems/Cabins/Vacation Holiday homes'),
         ('studio_staycation', 'Bnb | studio staycation'),
         ('one_bedroom_staycation', 'Bnb | One Bedroom staycation'),
         ('two_bedroom_staycation', 'Bnb | Two Bedroom staycation'),
@@ -52,7 +53,8 @@ class Listing(models.Model):
         ('ruiru', 'Ruiru'),
         ('kiambu', 'Kiambu'),
         ('thome', 'Thome'),
-
+        ('kinoo', 'Kinoo'),
+        ('muthiga', 'Muthiga'),
         ('ngong', 'Ngong'),
         ('rongai', 'Rongai'),
         ('gwakairu', 'Gwakairu'),

@@ -951,15 +951,21 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="hero-content">
             <div class="hero-category">{{ listing.get_property_type_display }}</div>
             <h2 class="hero-title">{{ listing.title }}</h2>
-            <div class="hero-price">
-              {% if listing.price %}
-                KSh {{ listing.price|floatformat:0 }}
-              {% else %}
-                Price on request
-              {% endif %}
-            </div>
+
+
+             <p class="price-tag" style="font-size: 1.2rem; font-weight: 700; color: #28a745; margin: 10px 0;">
+  {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
+    KSh {{ listing.price_per_night|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ night</small>
+  {% elif listing.transaction_type == 'rent' and listing.price_per_month %}
+    KSh {{ listing.price_per_month|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ month</small>
+  {% elif listing.transaction_type == 'sale' and listing.price %}
+    KSh {{ listing.price|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">total price</small>
+  {% else %}
+    Price on request
+  {% endif %}
+</p>
             <div class="hero-delivery">
-              <i class="fa fa-truck"></i> Same day delivery available!
+              <i class="fa fa-truck"></i> Crazy deals just for you!
             </div>
             <div class="hero-buttons">
 

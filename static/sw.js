@@ -96,7 +96,7 @@ self.addEventListener('fetch', (event) => {
 // Push notifications
 self.addEventListener('push', (event) => {
   const options = {
-    body: event.data?.text() || 'New update from BNBKE',
+    body: event.data?.text() || 'New update from Bnb.co.ke',
     icon: '/static/images/android-chrome-192x192.png',
     badge: '/static/images/badge.png',
     vibrate: [100, 50, 100],
@@ -119,7 +119,7 @@ self.addEventListener('push', (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification('BNBKE', options)
+    self.registration.showNotification('Bnb.co.ke', options)
   );
 });
 

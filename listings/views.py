@@ -363,7 +363,8 @@ def submit_listing(request):
 
             context = {
                 'form': form,
-                'title': 'Submit New Listing | Bnb.co.ke',
+                'title': 'Submit Listing | Bnb.co.ke',
+                'page_title': 'Submit  listing | Bnb.co.ke',
                 'featured_price': 1000.00,
             }
             return render(request, 'listings/create_listing.html', context)
@@ -373,7 +374,8 @@ def submit_listing(request):
 
     context = {
         'form': form,
-        'title': 'Submit New Listing | Bnb.co.ke',
+        'title': 'Submit Listing | Bnb.co.ke',
+        'page_title': 'Submit Listing | Bnb.co.ke',
         'featured_price': 1000.00,
     }
     return render(request, 'listings/create_listing.html', context)

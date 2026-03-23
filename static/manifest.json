@@ -1,7 +1,7 @@
 {
-  "name": "BnB",
-  "short_name": "BnB",
-  "description": "BnB & vacation homes",
+  "name": "Bnb.co.ke",
+  "short_name": "Bnb.co.ke",
+  "description": "Bnb & vacation homes",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FFFFFF",

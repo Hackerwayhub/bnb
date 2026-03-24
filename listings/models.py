@@ -64,6 +64,7 @@ class Listing(models.Model):
         ('thika', 'Thika'),
         ('kahawa_west', 'Kahawa West'),
         ('kitengela', 'Kitengela'),
+        ('kikuyu_road', 'Kikuyu road'),
 
         ('watamu', 'Watamu'),
         ('diani', 'Diani'),

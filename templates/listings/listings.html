@@ -67,23 +67,19 @@
 }
 </style>
 
-<!-- Liquid Glass Filters Section - Single Line Layout -->
+<!-- Liquid Glass Filters Section with Skeleton UI -->
 <section class="mobile-spacing" style="
     background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.9) 100%);
     margin: -15px 6px 1px 6px;
     border-radius: 20px;
     padding: 10px 10px;
     box-shadow:
-        /* Primary elevation shadow */
         0 20px 40px rgba(0, 0, 0, 0.12),
         0 8px 16px rgba(0, 0, 0, 0.08),
-        /* 3D inset shadow for depth */
         inset 0 -2px 4px rgba(0, 0, 0, 0.05),
         inset 0 2px 4px rgba(255, 255, 255, 0.8),
-        /* Colored accent glow */
         0 0 0 1px rgba(255, 0, 0, 0.03),
         0 0 20px rgba(255, 0, 0, 0.05),
-        /* Floating effect */
         0 30px 50px -20px rgba(0, 0, 0, 0.15);
     position: relative;
     overflow: hidden;
@@ -91,7 +87,8 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     min-height: 70px;
 ">
-    <!-- Subtle background pattern -->
+
+    <!-- Subtle background pattern (shared) -->
     <div style="
         position: absolute;
         top: 0;
@@ -105,239 +102,351 @@
         z-index: 1;
     "></div>
 
-    <div class="filters-container" style="
-        position: relative;
-        z-index: 2;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 15px;
-        flex-wrap: nowrap;
-        width: 100%;
-    ">
-        <!-- Brand Logo - Compact -->
-        <div class="logo-section" style="
-            flex-shrink: 0;
-            margin: 5px;
+    <!-- SKELETON UI (visible while loading) -->
+    <div id="skeletonFiltersSection" style="position: relative; z-index: 2;">
+        <div class="filters-container" style="
             display: flex;
             align-items: center;
-            min-width: 120px;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: nowrap;
+            width: 100%;
         ">
-            <a class="navbar-brand" href="{% url 'home' %}" style="
-                text-decoration: none;
+            <!-- Logo skeleton -->
+            <div class="logo-section skeleton-logo" style="flex-shrink: 0; margin: 5px; min-width: 120px;">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div class="skeleton-shimmer" style="width: 50px; height: 32px; background: #e0e0e0; border-radius: 8px;"></div>
+                    <div class="skeleton-shimmer" style="width: 70px; height: 28px; background: #e0e0e0; border-radius: 8px;"></div>
+                </div>
+            </div>
+
+            <!-- Filters skeleton -->
+            <div class="filters-section" style="
                 display: flex;
                 align-items: center;
-                gap: 5px;
+                gap: 10px;
+                margin-right: 400px;
+                flex: 1;
+                min-width: 0;
+                justify-content: flex-end;
             ">
-                <span style="
-                    color: #FF0000;
-                    font-weight: 900;
-                    text-transform: none;
-                    font-family: 'Poppins', sans-serif;
-                    font-size: 2em;
-                    text-shadow:
-                        0 0 15px rgba(255, 0, 0, 0.4),
-                        0 0 25px rgba(255, 0, 0, 0.3),
-                        0 0 35px rgba(255, 0, 0, 0.2);
-                    display: inline-block;
-                    line-height: 1;
-                ">βnb </span>   <span style="
-                    color: #FF0000;
-                    font-weight: 900;
-                    text-transform: none;
-                    font-family: 'Poppins', sans-serif;
-                    font-size: 1.5em;
-                    text-shadow:
-                        0 0 15px rgba(255, 0, 0, 0.4),
-                        0 0 25px rgba(255, 0, 0, 0.3),
-                        0 0 35px rgba(255, 0, 0, 0.2);
-                    display: inline-block;
-                    line-height: 1;
-                "> .co.ke</span>
-            </a>
+                <!-- Location dropdown skeleton -->
+                <div style="position: relative; min-width: 180px; flex: 1; max-width: 220px;">
+                    <div class="skeleton-shimmer" style="
+                        width: 100%;
+                        height: 42px;
+                        background: #e0e0e0;
+                        border-radius: 12px;
+                    "></div>
+                </div>
 
+                <!-- Property type dropdown skeleton -->
+                <div style="position: relative; min-width: 160px; flex: 1; max-width: 200px;">
+                    <div class="skeleton-shimmer" style="
+                        width: 100%;
+                        height: 42px;
+                        background: #e0e0e0;
+                        border-radius: 12px;
+                    "></div>
+                </div>
 
+                <!-- Button skeleton -->
+                <div class="skeleton-shimmer" style="
+                    width: 100px;
+                    height: 42px;
+                    background: #e0e0e0;
+                    border-radius: 12px;
+                    flex-shrink: 0;
+                "></div>
+            </div>
         </div>
+    </div>
 
-      <!-- Compact Filter Controls -->
-        <div class="filters-section" style="
+    <!-- ACTUAL FILTERS (hidden until fully loaded) -->
+    <div id="actualFiltersSection" style="position: relative; z-index: 2; display: none;">
+        <div class="filters-container" style="
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-right: 400px;
-            flex: 1;
-            min-width: 0;
-            justify-content: flex-end;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: nowrap;
+            width: 100%;
         ">
-            <!-- Location Dropdown - Compact -->
-            <div class="filter-dropdown" style="position: relative; min-width: 180px; flex: 1; max-width: 220px;">
-                <div style="
-                    position: relative;
-                    background: rgba(255, 255, 255, 0.7);
-                    backdrop-filter: blur(20px);
-                    border-radius: 12px;
-                    padding: 2px;
-                    box-shadow:
-                        0 4px 15px rgba(0, 0, 0, 0.1),
-                        inset 0 1px 1px rgba(255, 255, 255, 0.8),
-                        inset 0 -1px 1px rgba(0, 0, 0, 0.05);
-                    border: 1px solid rgba(255, 255, 255, 0.3);
-                ">
-                    <div style="
-                        background: rgba(255, 255, 255, 0.85);
-                        border-radius: 10px;
-                        overflow: hidden;
-                    ">
-                        <select id="locationFilter" style="
-                            width: 100%;
-                            padding: 10px 35px 10px 12px;
-                            font-size: 13px;
-                            font-weight: 500;
-                            color: #333;
-                            background: transparent;
-                            border: none;
-                            appearance: none;
-                            cursor: pointer;
-                            outline: none;
-                            font-family: 'Poppins', 'Inter', sans-serif;
-                            white-space: nowrap;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                        ">
-                            <option value="all" {% if selected_location == 'all' %}selected{% endif %}>
-
-          <span class="clean-text"> <span class="clean-location">Explore locations! </span>  </span>
-
-                            </option>
-                            {% for location in all_locations %}
-                                <option value="{{ location.slug }}"
-                                        {% if current_location_slug == location.slug %}selected{% endif %}
-                                        data-url="{{ location.url }}">
-                                     {{ location.name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-
-                        <div style="
-                            position: absolute;
-                            right: 10px;
-                            top: 50%;
-                            transform: translateY(-50%);
-                            pointer-events: none;
-                            color: #FF0000;
-                            font-size: 11px;
-                        ">
-                            <i class="fa fa-chevron-down" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Property Type Dropdown - Compact -->
-            <div class="filter-dropdown" style="position: relative; min-width: 160px; flex: 1; max-width: 200px;">
-                <div style="
-                    position: relative;
-                    background: rgba(255, 255, 255, 0.7);
-                    backdrop-filter: blur(20px);
-                    border-radius: 12px;
-                    padding: 2px;
-                    box-shadow:
-                        0 4px 15px rgba(0, 0, 0, 0.1),
-                        inset 0 1px 1px rgba(255, 255, 255, 0.8),
-                        inset 0 -1px 1px rgba(0, 0, 0, 0.05);
-                    border: 1px solid rgba(255, 255, 255, 0.3);
-                ">
-                    <div style="
-                        background: rgba(255, 255, 255, 0.85);
-                        border-radius: 10px;
-                        overflow: hidden;
-                    ">
-                        <select id="propertyTypeFilter" style="
-                            width: 100%;
-                            padding: 10px 35px 10px 12px;
-                            font-size: 13px;
-                            font-weight: 500;
-                            color: #333;
-                            background: transparent;
-                            border: none;
-                            appearance: none;
-                            cursor: pointer;
-                            outline: none;
-                            font-family: 'Poppins', 'Inter', sans-serif;
-                            white-space: nowrap;
-                        ">
-                            <option value="">select 🏠 type</option>
-                            {% for type_code, type_name in property_types %}
-                                <option value="{{ type_code }}"
-                                        {% if current_filters.property_type == type_code %}selected{% endif %}>
-                                    {% if type_code == 'apartment' %}🏢
-                                    {% elif type_code == 'house' %}🏡
-                                    {% elif type_code == 'villa' %}🏰
-                                    {% elif type_code == 'cottage' %}🏠
-                                    {% elif type_code == 'studio' %}🎨
-                                    {% elif type_code == 'bungalow' %}🏘️
-                                    {% elif type_code == 'townhouse' %}🏘️
-                                    {% elif type_code == 'penthouse' %}🏙️
-                                    {% elif type_code == 'guesthouse' %}🏠
-                                    {% elif type_code == 'hostel' %}🛏️
-                                    {% elif type_code == 'hotel' %}🏨
-                                    {% elif type_code == 'resort' %}🌴
-                                    {% elif type_code == 'cabin' %}🏡
-                                    {% elif type_code == 'farm' %}🚜
-                                    {% elif type_code == 'castle' %}🏰
-                                    {% else %}🏠{% endif %}
-                                    {{ type_name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-
-                        <div style="
-                            position: absolute;
-                            right: 10px;
-                            top: 50%;
-                            transform: translateY(-50%);
-                            pointer-events: none;
-                            color: #FF0000;
-                            font-size: 11px;
-                        ">
-                            <i class="fa fa-chevron-down" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Apply Filters Button - Compact -->
-            <button id="applyFilters" class="apply-button" style="
-                background: #FF0000;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 12px;
-                font-weight: 600;
-                font-size: 13px;
-                cursor: pointer;
+            <!-- Brand Logo -->
+            <div class="logo-section" style="
+                flex-shrink: 0;
+                margin: 5px;
                 display: flex;
                 align-items: center;
-                gap: 6px;
-                transition: all 0.3s ease;
-                box-shadow:
-                    0 4px 15px rgba(255, 0, 0, 0.2),
-                    0 2px 4px rgba(0, 0, 0, 0.1),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-                font-family: 'Poppins', 'Inter', sans-serif;
-                white-space: nowrap;
-                flex-shrink: 0;
-                min-width: 100px;
-                justify-content: center;
-                height: 38px;
-            " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(255, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)';"
-            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)';">
-                <i class="fa fa-filter" aria-hidden="true" style="font-size: 12px;"></i>
-                search
-            </button>
+                min-width: 120px;
+            ">
+                <a class="navbar-brand" href="{% url 'home' %}" style="
+                    text-decoration: none;
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                ">
+                    <span style="
+                        color: #FF0000;
+                        font-weight: 900;
+                        text-transform: none;
+                        font-family: 'Poppins', sans-serif;
+                        font-size: 2em;
+                        text-shadow:
+                            0 0 15px rgba(255, 0, 0, 0.4),
+                            0 0 25px rgba(255, 0, 0, 0.3),
+                            0 0 35px rgba(255, 0, 0, 0.2);
+                        display: inline-block;
+                        line-height: 1;
+                    ">βnb </span>
+                    <span style="
+                        color: #FF0000;
+                        font-weight: 900;
+                        text-transform: none;
+                        font-family: 'Poppins', sans-serif;
+                        font-size: 1.5em;
+                        text-shadow:
+                            0 0 15px rgba(255, 0, 0, 0.4),
+                            0 0 25px rgba(255, 0, 0, 0.3),
+                            0 0 35px rgba(255, 0, 0, 0.2);
+                        display: inline-block;
+                        line-height: 1;
+                    "> .co.ke</span>
+                </a>
+            </div>
+
+            <!-- Compact Filter Controls -->
+            <div class="filters-section" style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-right: 400px;
+                flex: 1;
+                min-width: 0;
+                justify-content: flex-end;
+            ">
+                <!-- Location Dropdown -->
+                <div class="filter-dropdown" style="position: relative; min-width: 180px; flex: 1; max-width: 220px;">
+                    <div style="
+                        position: relative;
+                        background: rgba(255, 255, 255, 0.7);
+                        backdrop-filter: blur(20px);
+                        border-radius: 12px;
+                        padding: 2px;
+                        box-shadow:
+                            0 4px 15px rgba(0, 0, 0, 0.1),
+                            inset 0 1px 1px rgba(255, 255, 255, 0.8),
+                            inset 0 -1px 1px rgba(0, 0, 0, 0.05);
+                        border: 1px solid rgba(255, 255, 255, 0.3);
+                    ">
+                        <div style="
+                            background: rgba(255, 255, 255, 0.85);
+                            border-radius: 10px;
+                            overflow: hidden;
+                        ">
+                            <select id="locationFilter" style="
+                                width: 100%;
+                                padding: 10px 35px 10px 12px;
+                                font-size: 13px;
+                                font-weight: 500;
+                                color: #333;
+                                background: transparent;
+                                border: none;
+                                appearance: none;
+                                cursor: pointer;
+                                outline: none;
+                                font-family: 'Poppins', 'Inter', sans-serif;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                            ">
+                                <option value="all" {% if selected_location == 'all' %}selected{% endif %}>
+                                    <span class="clean-text"> <span class="clean-location">Explore locations! </span> </span>
+                                </option>
+                                {% for location in all_locations %}
+                                    <option value="{{ location.slug }}"
+                                            {% if current_location_slug == location.slug %}selected{% endif %}
+                                            data-url="{{ location.url }}">
+                                         {{ location.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <div style="
+                                position: absolute;
+                                right: 10px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                pointer-events: none;
+                                color: #FF0000;
+                                font-size: 11px;
+                            ">
+                                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property Type Dropdown -->
+                <div class="filter-dropdown" style="position: relative; min-width: 160px; flex: 1; max-width: 200px;">
+                    <div style="
+                        position: relative;
+                        background: rgba(255, 255, 255, 0.7);
+                        backdrop-filter: blur(20px);
+                        border-radius: 12px;
+                        padding: 2px;
+                        box-shadow:
+                            0 4px 15px rgba(0, 0, 0, 0.1),
+                            inset 0 1px 1px rgba(255, 255, 255, 0.8),
+                            inset 0 -1px 1px rgba(0, 0, 0, 0.05);
+                        border: 1px solid rgba(255, 255, 255, 0.3);
+                    ">
+                        <div style="
+                            background: rgba(255, 255, 255, 0.85);
+                            border-radius: 10px;
+                            overflow: hidden;
+                        ">
+                            <select id="propertyTypeFilter" style="
+                                width: 100%;
+                                padding: 10px 35px 10px 12px;
+                                font-size: 13px;
+                                font-weight: 500;
+                                color: #333;
+                                background: transparent;
+                                border: none;
+                                appearance: none;
+                                cursor: pointer;
+                                outline: none;
+                                font-family: 'Poppins', 'Inter', sans-serif;
+                                white-space: nowrap;
+                            ">
+                                <option value="">select 🏠 type</option>
+                                {% for type_code, type_name in property_types %}
+                                    <option value="{{ type_code }}"
+                                            {% if current_filters.property_type == type_code %}selected{% endif %}>
+                                        {% if type_code == 'apartment' %}🏢
+                                        {% elif type_code == 'house' %}🏡
+                                        {% elif type_code == 'villa' %}🏰
+                                        {% elif type_code == 'cottage' %}🏠
+                                        {% elif type_code == 'studio' %}🎨
+                                        {% elif type_code == 'bungalow' %}🏘️
+                                        {% elif type_code == 'townhouse' %}🏘️
+                                        {% elif type_code == 'penthouse' %}🏙️
+                                        {% elif type_code == 'guesthouse' %}🏠
+                                        {% elif type_code == 'hostel' %}🛏️
+                                        {% elif type_code == 'hotel' %}🏨
+                                        {% elif type_code == 'resort' %}🌴
+                                        {% elif type_code == 'cabin' %}🏡
+                                        {% elif type_code == 'farm' %}🚜
+                                        {% elif type_code == 'castle' %}🏰
+                                        {% else %}🏠{% endif %}
+                                        {{ type_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <div style="
+                                position: absolute;
+                                right: 10px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                pointer-events: none;
+                                color: #FF0000;
+                                font-size: 11px;
+                            ">
+                                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Apply Filters Button -->
+                <button id="applyFilters" class="apply-button" style="
+                    background: #FF0000;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 12px;
+                    font-weight: 600;
+                    font-size: 13px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    transition: all 0.3s ease;
+                    box-shadow:
+                        0 4px 15px rgba(255, 0, 0, 0.2),
+                        0 2px 4px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+                    font-family: 'Poppins', 'Inter', sans-serif;
+                    white-space: nowrap;
+                    flex-shrink: 0;
+                    min-width: 100px;
+                    justify-content: center;
+                    height: 38px;
+                " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(255, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)';"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)';">
+                    <i class="fa fa-filter" aria-hidden="true" style="font-size: 12px;"></i>
+                    search
+                </button>
+            </div>
         </div>
     </div>
 </section>
+
+<!-- Skeleton shimmer animation and swap logic -->
+<style>
+    .skeleton-shimmer {
+        background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.2s infinite linear;
+        border-radius: 12px;
+    }
+
+    @keyframes shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    /* Optional: adjust skeleton sizing on smaller screens */
+    @media (max-width: 768px) {
+        .skeleton-logo .skeleton-shimmer {
+            width: 40px !important;
+            height: 28px !important;
+        }
+        .skeleton-logo .skeleton-shimmer:last-child {
+            width: 60px !important;
+        }
+        .filters-section .skeleton-shimmer {
+            height: 38px !important;
+        }
+    }
+</style>
+
+<script>
+    (function() {
+        // Wait for the page to be fully loaded (including images, fonts, etc.)
+        function showActualContent() {
+            var skeleton = document.getElementById('skeletonFiltersSection');
+            var actual = document.getElementById('actualFiltersSection');
+            if (skeleton && actual) {
+                skeleton.style.display = 'none';
+                actual.style.display = 'block';
+            }
+        }
+
+        // If the page is already loaded, show actual content immediately
+        if (document.readyState === 'complete') {
+            showActualContent();
+        } else {
+            window.addEventListener('load', showActualContent);
+            // Fallback: show actual content after max 2 seconds (prevents skeleton staying forever)
+            setTimeout(showActualContent, 2000);
+        }
+    })();
+</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

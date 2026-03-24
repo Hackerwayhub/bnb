@@ -64,14 +64,21 @@ class Listing(models.Model):
         ('thika', 'Thika'),
         ('kahawa_west', 'Kahawa West'),
         ('kitengela', 'Kitengela'),
+
         ('watamu', 'Watamu'),
         ('diani', 'Diani'),
+        ('nyali', 'Nyali'),
+        ('mtwapa', 'Mtwapa'),
+        ('mombasa', 'Mombasa'),
+        ('malindi', 'Malindi'),
+        ('kilifi_town', 'Kilifi Town'),
+
         ('embakasi', 'Embakasi'),
         ('fedha', 'Fedha'),
         ('south_b', 'South B'),
         ('south_c', 'South C'),
         ('utawala', 'Utawala'),
-        ('mombasa', 'Mombasa'),
+
         ('eldoret', 'Eldoret'),
         ('nakuru', 'Nakuru'),
         ('naivasha', 'Naivasha'),
@@ -109,12 +116,12 @@ class Listing(models.Model):
         ('bomet', 'Bomet'),
         ('kakamega_town', 'Kakamega Town'),
         ('limuru', 'Limuru'),
-        ('malindi', 'Malindi'),
+
         ('nyahururu', 'Nyahururu'),
         ('migori_town', 'Migori Town'),
         ('kitui_town', 'Kitui Town'),
         ('bungoma_town', 'Bungoma Town'),
-        ('kilifi_town', 'Kilifi Town'),
+
         ('wangige', 'Wangige'),
         ('kericho_town', 'Kericho Town'),
     ]

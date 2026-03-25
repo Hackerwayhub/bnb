@@ -1193,7 +1193,7 @@
 
                             <div class="listing-footer">
                                 <div class="listing-status">
-                                    <div class="status-dot {% if listing.is_active %}active{% else %}inactive{% endif %}"></div>
+                                  <div class="status-dot {% if listing.is_approved %}active{% else %}inactive{% endif %}"></div>
                                     <span>{% if listing.is_approved %}Active{% else %}Inactive{% endif %}</span>
                                     <span style="margin-left: 0.5rem; color: var(--text-muted); font-size: 0.85rem;">
                                         {{ listing.created_at|date:"M d, Y" }}

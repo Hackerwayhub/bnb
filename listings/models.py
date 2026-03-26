@@ -44,6 +44,7 @@ class Listing(models.Model):
         ('lavington', 'Lavington'),
         ('loresho', 'Loresho'),
         ('kiambu_road', 'Kiambu Road'),
+        ('thindigua', 'thindigua'),
         ('zimmerman', 'Zimmerman'),
         ('kahawa_sukari', 'Kahawa Sukari'),
         ('kahawa_wendani', 'Kahawa Wendani'),

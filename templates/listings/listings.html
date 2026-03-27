@@ -1638,7 +1638,7 @@ document.addEventListener('DOMContentLoaded', function() {
   {% if listings %}
     <!-- Display listings in grid, starting from the 4th listing -->
     {% for listing in listings %}
-      {% if forloop.counter > 3 %}  <!-- Skip first 3 since they're in the slider -->
+      {% if forloop.counter > 0 %}  <!-- Skip first 3 since they're in the slider -->
         <div class="col-md-4 col-sm-6 mb-4" data-location="{{ listing.location }}" style="margin-bottom: 15px !important;">
           <div class="listing-card">
 

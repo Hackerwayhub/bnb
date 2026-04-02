@@ -65,6 +65,56 @@
         gap: 6px !important;
     }
 }
+
+/* Fix dropdown z-index issues */
+.filter-dropdown {
+    position: relative;
+    z-index: 100;
+}
+
+.custom-dropdown {
+    position: relative;
+    z-index: 1000;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    margin-top: 8px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    z-index: 9999 !important;
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Ensure parent containers don't clip the dropdown */
+.filters-section,
+.filters-container,
+section.mobile-spacing {
+    overflow: visible !important;
+}
+
+/* For mobile responsive dropdown */
+@media (max-width: 768px) {
+    .dropdown-menu {
+        position: fixed !important;
+        top: auto !important;
+        left: 10px !important;
+        right: 10px !important;
+        width: auto !important;
+        max-width: calc(100% - 20px);
+        z-index: 99999 !important;
+    }
+
+    .custom-dropdown {
+        position: static;
+    }
+}
 </style>
 
 <!-- Liquid Glass Filters Section with Skeleton UI -->
@@ -82,10 +132,11 @@
         0 0 20px rgba(255, 0, 0, 0.05),
         0 30px 50px -20px rgba(0, 0, 0, 0.15);
     position: relative;
-    overflow: hidden;
+    overflow: visible !important;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     min-height: 70px;
+    z-index: 10;
 ">
 
     <!-- Subtle background pattern (shared) -->
@@ -111,6 +162,7 @@
             gap: 15px;
             flex-wrap: nowrap;
             width: 100%;
+            overflow: visible !important;
         ">
             <!-- Logo skeleton -->
             <div class="logo-section skeleton-logo" style="flex-shrink: 0; margin: 5px; min-width: 120px;">
@@ -129,6 +181,7 @@
                 flex: 1;
                 min-width: 0;
                 justify-content: flex-end;
+                overflow: visible !important;
             ">
                 <!-- Location dropdown skeleton -->
                 <div style="position: relative; min-width: 180px; flex: 1; max-width: 220px;">
@@ -171,6 +224,7 @@
             gap: 15px;
             flex-wrap: nowrap;
             width: 100%;
+            overflow: visible !important;
         ">
             <!-- Brand Logo -->
             <div class="logo-section" style="
@@ -192,7 +246,6 @@
                         text-transform: none;
                         font-family: 'Poppins', sans-serif;
                         font-size: 2em;
-
                         display: inline-block;
                         line-height: 1;
                     ">βnb </span>
@@ -202,7 +255,6 @@
                         text-transform: none;
                         font-family: 'Poppins', sans-serif;
                         font-size: 0.75em;
-
                         display: inline-block;
                         line-height: 1;
                     "> .co.ke</span></sub>
@@ -218,9 +270,12 @@
                 flex: 1;
                 min-width: 0;
                 justify-content: flex-end;
+                overflow: visible !important;
+                position: relative;
+                z-index: 50;
             ">
-                <!-- Location Dropdown -->
-                <div class="filter-dropdown" style="position: relative; min-width: 180px; flex: 1; max-width: 220px;">
+                <!-- Location Dropdown with Red Location Icon -->
+                <div class="filter-dropdown" style="position: relative; min-width: 180px; flex: 1; max-width: 220px; z-index: 100;">
                     <div style="
                         position: relative;
                         background: rgba(255, 255, 255, 0.7);
@@ -237,10 +292,11 @@
                             background: rgba(255, 255, 255, 0.85);
                             border-radius: 10px;
                             overflow: hidden;
+                            position: relative;
                         ">
                             <select id="locationFilter" style="
                                 width: 100%;
-                                padding: 10px 35px 10px 12px;
+                                padding: 10px 35px 10px 35px;
                                 font-size: 13px;
                                 font-weight: 500;
                                 color: #333;
@@ -255,16 +311,31 @@
                                 text-overflow: ellipsis;
                             ">
                                 <option value="all" {% if selected_location == 'all' %}selected{% endif %}>
-                                    <span class="clean-text"> <span class="clean-location">Explore locations! </span> </span>
+                                    All Locations
                                 </option>
                                 {% for location in all_locations %}
                                     <option value="{{ location.slug }}"
                                             {% if current_location_slug == location.slug %}selected{% endif %}
                                             data-url="{{ location.url }}">
-                                         {{ location.name }}
+                                        {{ location.name }}
                                     </option>
                                 {% endfor %}
                             </select>
+
+                            <!-- Location Icon (Red) -->
+                            <div style="
+                                position: absolute;
+                                left: 12px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                pointer-events: none;
+                                color: #FF0000;
+                                font-size: 12px;
+                            ">
+                                <i class="fa fa-location-dot" aria-hidden="true"></i>
+                            </div>
+
+                            <!-- Chevron Icon -->
                             <div style="
                                 position: absolute;
                                 right: 10px;
@@ -280,8 +351,8 @@
                     </div>
                 </div>
 
-                <!-- Property Type Dropdown -->
-                <div class="filter-dropdown" style="position: relative; min-width: 160px; flex: 1; max-width: 200px;">
+                <!-- Property Type Dropdown with Font Awesome Icons -->
+                <div class="filter-dropdown" style="position: relative; min-width: 160px; flex: 1; max-width: 200px; z-index: 100;">
                     <div style="
                         position: relative;
                         background: rgba(255, 255, 255, 0.7);
@@ -298,10 +369,11 @@
                             background: rgba(255, 255, 255, 0.85);
                             border-radius: 10px;
                             overflow: hidden;
+                            position: relative;
                         ">
                             <select id="propertyTypeFilter" style="
                                 width: 100%;
-                                padding: 10px 35px 10px 12px;
+                                padding: 10px 35px 10px 35px;
                                 font-size: 13px;
                                 font-weight: 500;
                                 color: #333;
@@ -313,30 +385,29 @@
                                 font-family: 'Poppins', 'Inter', sans-serif;
                                 white-space: nowrap;
                             ">
-                                <option value="">select 🏠 type</option>
+                                <option value="">Property Type</option>
                                 {% for type_code, type_name in property_types %}
                                     <option value="{{ type_code }}"
                                             {% if current_filters.property_type == type_code %}selected{% endif %}>
-                                        {% if type_code == 'apartment' %}🏢
-                                        {% elif type_code == 'house' %}🏡
-                                        {% elif type_code == 'villa' %}🏰
-                                        {% elif type_code == 'cottage' %}🏠
-                                        {% elif type_code == 'studio' %}🎨
-                                        {% elif type_code == 'bungalow' %}🏘️
-                                        {% elif type_code == 'townhouse' %}🏘️
-                                        {% elif type_code == 'penthouse' %}🏙️
-                                        {% elif type_code == 'guesthouse' %}🏠
-                                        {% elif type_code == 'hostel' %}🛏️
-                                        {% elif type_code == 'hotel' %}🏨
-                                        {% elif type_code == 'resort' %}🌴
-                                        {% elif type_code == 'cabin' %}🏡
-                                        {% elif type_code == 'farm' %}🚜
-                                        {% elif type_code == 'castle' %}🏰
-                                        {% else %}🏠{% endif %}
                                         {{ type_name }}
                                     </option>
                                 {% endfor %}
                             </select>
+
+                            <!-- Property Icon -->
+                            <div style="
+                                position: absolute;
+                                left: 12px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                pointer-events: none;
+                                color: #FF0000;
+                                font-size: 12px;
+                            ">
+                                <i class="fa fa-building" aria-hidden="true"></i>
+                            </div>
+
+                            <!-- Chevron Icon -->
                             <div style="
                                 position: absolute;
                                 right: 10px;
@@ -378,8 +449,8 @@
                     height: 38px;
                 " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(255, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)';"
                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)';">
-                    <i class="fa fa-filter" aria-hidden="true" style="font-size: 12px;"></i>
-                    search
+                    <i class="fa fa-search" aria-hidden="true" style="font-size: 12px;"></i>
+                    Search
                 </button>
             </div>
         </div>
@@ -447,26 +518,35 @@ document.addEventListener('DOMContentLoaded', function() {
     const locationFilter = document.getElementById('locationFilter');
     const propertyTypeFilter = document.getElementById('propertyTypeFilter');
     const applyFiltersBtn = document.getElementById('applyFilters');
-    const filterStatus = document.getElementById('filterStatus');
 
     // Apply filters button click handler
-    applyFiltersBtn.addEventListener('click', function() {
-        applyFilters();
-    });
+    if (applyFiltersBtn) {
+        applyFiltersBtn.addEventListener('click', function() {
+            applyFilters();
+        });
+    }
 
     // Add Enter key support for dropdowns
-    [locationFilter, propertyTypeFilter].forEach(select => {
-        select.addEventListener('keypress', function(e) {
+    if (locationFilter) {
+        locationFilter.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 applyFilters();
             }
         });
-    });
+    }
+
+    if (propertyTypeFilter) {
+        propertyTypeFilter.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                applyFilters();
+            }
+        });
+    }
 
     // Apply filters function
     function applyFilters() {
-        const locationSlug = locationFilter.value;
-        const propertyType = propertyTypeFilter.value;
+        const locationSlug = locationFilter ? locationFilter.value : 'all';
+        const propertyType = propertyTypeFilter ? propertyTypeFilter.value : '';
 
         // Get current URL parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -476,8 +556,8 @@ document.addEventListener('DOMContentLoaded', function() {
             urlParams.delete('location');
         } else {
             // Navigate to location-specific page
-            const selectedOption = locationFilter.options[locationFilter.selectedIndex];
-            const locationUrl = selectedOption.getAttribute('data-url');
+            const selectedOption = locationFilter ? locationFilter.options[locationFilter.selectedIndex] : null;
+            const locationUrl = selectedOption ? selectedOption.getAttribute('data-url') : null;
 
             if (locationUrl) {
                 // Build new URL with property type filter
@@ -508,14 +588,14 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeFilters() {
         // Property type filter is already set by template
         // Add visual feedback for active filters
-        if (locationFilter.value !== 'all') {
+        if (locationFilter && locationFilter.value !== 'all') {
             locationFilter.style.fontWeight = '600';
             locationFilter.style.color = '#FF0000';
         }
 
-        if (propertyTypeFilter.value) {
+        if (propertyTypeFilter && propertyTypeFilter.value) {
             propertyTypeFilter.style.fontWeight = '600';
-            propertyTypeFilter.style.color = '#007bff';
+            propertyTypeFilter.style.color = '#FF0000';
         }
     }
 
@@ -523,6 +603,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFilters();
 });
 </script>
+
 <style>
 .clean-heading {
   font-size: clamp(1.8rem, 4vw, 2.8rem);
@@ -539,56 +620,7 @@ document.addEventListener('DOMContentLoaded', function() {
   align-items: center;
   gap: 8px;
 }
-
-.clean-text {
-  font-weight: 900;
-  color: #ff5a5 ;
-  position: relative;
-  display: inline-block;
-}
-
-.clean-text::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 10%;
-  right: 10%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #ddd, transparent);
-}
-
-.clean-location {
-  color: #FF0000;
-  font-size: 0.9em;
-  font-weight: 900;
-  background: white;
-  padding: 12px 30px;
-  border-radius: 60px;
-  box-shadow:
-    0 4px 20px rgba(255,0,0,0.08),
-    0 0 0 1px rgba(255,0,0,0.05) inset;
-  position: relative;
-  transition: all 0.3s ease;
-  display: inline-block;
-  margin-top: 5px;
-}
-
-.clean-location:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 6px 25px rgba(255,0,0,0.15),
-    0 0 0 1px rgba(255,0,0,0.1) inset;
-}
-
-.clean-location::before {
-  content: '📍';
-  margin-right: 8px;
-  font-size: 0.9em;
-}
 </style>
-
-
-
 
 <!-- Image Gallery CSS -->
 <style>
@@ -688,7 +720,6 @@ document.addEventListener('DOMContentLoaded', function() {
     pointer-events: none;
   }
 </style>
-
 
 <!-- Add CSS for the optimized desktop slider -->
 <style>
@@ -1027,8 +1058,6 @@ document.addEventListener('DOMContentLoaded', function() {
   <div style="border-radius: 32px 32px 32px 32px; box-shadow: 0 4px 8px rgba(0,0,0,0.1), 0 6px 20px rgba(0,0,0,0.1); margin-top: 10px;">
     <div class="container-fluid">
 
-
-
 <!-- Hero Carousel for Top 3 Listings (Mobile Optimized) -->
 {% if listings|length > 0 %}
 <section class="hero-carousel-section">
@@ -1082,34 +1111,33 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
 
             <div class="hero-buttons">
-
-                  <!-- Share Button - Glassmorphism Icon Only -->
-<button type="button" class="share-btn"
-        data-url="{% url 'listing_detail' listing.slug %}"
-        data-title="{{ listing.title }}"
-        aria-label="Share this listing"
-        style="
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: #FFFFFF;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            color: #333;
-            font-size: 1.2rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            flex-shrink: 0;
-            padding: 0;
-        "
-        onmouseover="this.style.background='rgba(255,255,255,0.35)'; this.style.transform='translateY(-2px)';"
-        onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
-    <i class="fa fa-share-alt" aria-hidden="true" style="color: #555;"></i>
-</button>
+              <!-- Share Button - Glassmorphism Icon Only -->
+              <button type="button" class="share-btn"
+                      data-url="{% url 'listing_detail' listing.slug %}"
+                      data-title="{{ listing.title }}"
+                      aria-label="Share this listing"
+                      style="
+                          width: 44px;
+                          height: 44px;
+                          border-radius: 50%;
+                          background: #FFFFFF;
+                          backdrop-filter: blur(8px);
+                          border: 1px solid rgba(255, 255, 255, 0.3);
+                          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                          color: #333;
+                          font-size: 1.2rem;
+                          display: inline-flex;
+                          align-items: center;
+                          justify-content: center;
+                          transition: all 0.3s ease;
+                          cursor: pointer;
+                          flex-shrink: 0;
+                          padding: 0;
+                      "
+                      onmouseover="this.style.background='rgba(255,255,255,0.35)'; this.style.transform='translateY(-2px)';"
+                      onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
+                  <i class="fa fa-share-alt" aria-hidden="true" style="color: #555;"></i>
+              </button>
               <a href="{{ listing.admin_whatsapp_link }}" target="_blank" class="hero-btn hero-btn-success" rel="noopener noreferrer">
                 <i class="fab fa-whatsapp"></i> Book via WhatsApp
               </a>
@@ -1168,15 +1196,15 @@ document.addEventListener('DOMContentLoaded', function() {
   .hero-carousel-container {
     position: relative;
     width: 100%;
-    height: 500px; /* Fallback */
+    height: 500px;
     overflow: hidden;
-    aspect-ratio: 16 / 9; /* Better for responsiveness, overridden by height on desktop */
+    aspect-ratio: 16 / 9;
   }
 
   @media (max-width: 768px) {
     .hero-carousel-container {
       height: 600px;
-      aspect-ratio: auto; /* Let height control */
+      aspect-ratio: auto;
     }
   }
 
@@ -1375,7 +1403,7 @@ document.addEventListener('DOMContentLoaded', function() {
     color: white;
     text-align: center;
     justify-content: center;
-    min-width: 44px; /* Touch target */
+    min-width: 44px;
     min-height: 44px;
   }
 
@@ -1600,7 +1628,7 @@ document.addEventListener('DOMContentLoaded', function() {
       carousel.addEventListener('touchend', (e) => {
         touchEndX = e.changedTouches[0].screenX;
         const diff = touchEndX - touchStartX;
-        if (Math.abs(diff) > 50) { // swipe threshold
+        if (Math.abs(diff) > 50) {
           if (diff > 0) {
             prevSlide();
           } else {
@@ -1620,7 +1648,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
       if (prefersReducedMotion.matches) {
         stopAutoSlide();
-        // Optionally disable transitions
         slides.forEach(slide => {
           slide.style.transition = 'none';
         });
@@ -1631,6 +1658,43 @@ document.addEventListener('DOMContentLoaded', function() {
       startAutoSlide();
     });
   })();
+</script>
+
+<!-- Share functionality script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Share button functionality
+    const shareButtons = document.querySelectorAll('.share-btn');
+
+    shareButtons.forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const url = this.dataset.url;
+            const title = this.dataset.title;
+            const fullUrl = window.location.origin + url;
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: title,
+                        text: `Check out this amazing property: ${title}`,
+                        url: fullUrl
+                    });
+                } catch (err) {
+                    console.log('Share cancelled or failed');
+                }
+            } else {
+                // Fallback - copy to clipboard
+                try {
+                    await navigator.clipboard.writeText(fullUrl);
+                    alert('Link copied to clipboard!');
+                } catch (err) {
+                    alert('Please copy the link manually');
+                }
+            }
+        });
+    });
+});
 </script>
 
 <!-- All Listings Grid -->

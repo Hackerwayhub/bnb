@@ -31,6 +31,7 @@ class Listing(models.Model):
         ('westlands', 'Westlands'),
         ('kilimani', 'Kilimani'),
         ('kileleshwa', 'Kileleshwa'),
+        ('riverside', 'Riverside'),
         ('pangani', 'Pangani'),
         ('parklands', 'Parklands'),
         ('ngara', 'Ngara'),

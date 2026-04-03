@@ -116,8 +116,7 @@ section.mobile-spacing {
     }
 }
 </style>
-
-<!-- Liquid Glass Filters Section with Skeleton UI -->
+<!-- Liquid Glass Filters Section - Single Line Layout (Cleaned) -->
 <section class="mobile-spacing" style="
     background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.9) 100%);
     margin: -15px 6px 1px 6px;
@@ -138,8 +137,7 @@ section.mobile-spacing {
     min-height: 70px;
     z-index: 10;
 ">
-
-    <!-- Subtle background pattern (shared) -->
+    <!-- Subtle background pattern -->
     <div style="
         position: absolute;
         top: 0;
@@ -153,414 +151,427 @@ section.mobile-spacing {
         z-index: 1;
     "></div>
 
-    <!-- SKELETON UI (visible while loading) -->
-    <div id="skeletonFiltersSection" style="position: relative; z-index: 2;">
-        <div class="filters-container" style="
+    <div class="filters-container" style="
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        flex-wrap: nowrap;
+        width: 100%;
+        overflow: visible !important;
+    ">
+        <!-- Brand Logo - Compact -->
+        <div class="logo-section" style="
+            flex-shrink: 0;
+            margin: 5px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            flex-wrap: nowrap;
-            width: 100%;
-            overflow: visible !important;
+            min-width: 120px;
         ">
-            <!-- Logo skeleton -->
-            <div class="logo-section skeleton-logo" style="flex-shrink: 0; margin: 5px; min-width: 120px;">
-                <div style="display: flex; align-items: center; gap: 5px;">
-                    <div class="skeleton-shimmer" style="width: 50px; height: 32px; background: #e0e0e0; border-radius: 8px;"></div>
-                    <div class="skeleton-shimmer" style="width: 70px; height: 28px; background: #e0e0e0; border-radius: 8px;"></div>
-                </div>
-            </div>
-
-            <!-- Filters skeleton -->
-            <div class="filters-section" style="
+            <a class="navbar-brand" href="{% url 'home' %}" style="
+                text-decoration: none;
                 display: flex;
                 align-items: center;
-                gap: 10px;
-                margin-right: 400px;
-                flex: 1;
-                min-width: 0;
-                justify-content: flex-end;
-                overflow: visible !important;
+                gap: 5px;
             ">
-                <!-- Location dropdown skeleton -->
-                <div style="position: relative; min-width: 180px; flex: 1; max-width: 220px;">
-                    <div class="skeleton-shimmer" style="
-                        width: 100%;
-                        height: 42px;
-                        background: #e0e0e0;
-                        border-radius: 12px;
-                    "></div>
-                </div>
-
-                <!-- Property type dropdown skeleton -->
-                <div style="position: relative; min-width: 160px; flex: 1; max-width: 200px;">
-                    <div class="skeleton-shimmer" style="
-                        width: 100%;
-                        height: 42px;
-                        background: #e0e0e0;
-                        border-radius: 12px;
-                    "></div>
-                </div>
-
-                <!-- Button skeleton -->
-                <div class="skeleton-shimmer" style="
-                    width: 100px;
-                    height: 42px;
-                    background: #e0e0e0;
-                    border-radius: 12px;
-                    flex-shrink: 0;
-                "></div>
-            </div>
+                <span style="
+                    color: #FF0000;
+                    font-weight: 900;
+                    text-transform: none;
+                    font-family: 'Poppins', sans-serif;
+                    font-size: 2em;
+                    display: inline-block;
+                    line-height: 1;
+                ">βnb </span>
+                <sub><span style="
+                    color: #FF0000;
+                    font-weight: 900;
+                    text-transform: none;
+                    font-family: 'Poppins', sans-serif;
+                    font-size: 0.75em;
+                    display: inline-block;
+                    line-height: 1;
+                "> .co.ke</span></sub>
+            </a>
         </div>
-    </div>
 
-    <!-- ACTUAL FILTERS (hidden until fully loaded) -->
-    <div id="actualFiltersSection" style="position: relative; z-index: 2; display: none;">
-        <div class="filters-container" style="
+        <!-- Compact Filter Controls -->
+        <div class="filters-section" style="
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            flex-wrap: nowrap;
-            width: 100%;
+            gap: 10px;
+            margin-right: 400px;
+            flex: 1;
+            min-width: 0;
+            justify-content: flex-end;
             overflow: visible !important;
+            position: relative;
+            z-index: 50;
         ">
-            <!-- Brand Logo -->
-            <div class="logo-section" style="
+            <!-- Location Custom Dropdown -->
+            <div class="filter-dropdown" style="position: relative; min-width: 180px; flex: 1; max-width: 220px; z-index: 100;">
+                <div class="location-dropdown" style="position: relative; z-index: 1000;">
+                    <div class="dropdown-trigger-location" style="
+                        background: rgba(255, 255, 255, 0.7);
+                        backdrop-filter: blur(20px);
+                        border-radius: 12px;
+                        padding: 10px 35px 10px 12px;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                        border: 1px solid rgba(255, 255, 255, 0.3);
+                        cursor: pointer;
+                        font-size: 13px;
+                        font-weight: 500;
+                        color: #333;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    ">
+                        <i class="fa fa-map-marker-alt" style="color: #FF0000;"></i>
+                        <span class="selected-location-text">Kenya</span>
+                        <i class="fa fa-chevron-down" style="margin-left: auto; color: #FF0000; font-size: 11px;"></i>
+                    </div>
+
+                    <div class="dropdown-menu-location" style="
+                        position: absolute;
+                        top: 100%;
+                        left: 0;
+                        right: 0;
+                        background: white;
+                        border-radius: 12px;
+                        margin-top: 8px;
+                        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+                        z-index: 9999;
+                        display: none;
+                        max-height: 300px;
+                        overflow-y: auto;
+                    ">
+                        <div class="dropdown-option-location" data-value="all" data-url="" style="
+                            padding: 10px 12px;
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            cursor: pointer;
+                            transition: background 0.2s;
+                            font-size: 13px;
+                        " onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
+                            <i class="fa fa-globe-africa" style="width: 20px; color: #FF0000;"></i>
+                            <span>All Locations</span>
+                        </div>
+                        {% for location in all_locations %}
+                            <div class="dropdown-option-location" data-value="{{ location.slug }}" data-url="{{ location.url }}" style="
+                                padding: 10px 12px;
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                                cursor: pointer;
+                                transition: background 0.2s;
+                                font-size: 13px;
+                            " onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
+                                <i class="fa fa-location-dot" style="width: 20px; color: #FF0000;"></i>
+                                <span>{{ location.name }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Type Custom Dropdown -->
+            <div class="filter-dropdown" style="position: relative; min-width: 200px; flex: 1; max-width: 240px; z-index: 100;">
+                <div class="property-dropdown" style="position: relative; z-index: 1000;">
+                    <div class="dropdown-trigger-property" style="
+                        background: rgba(255, 255, 255, 0.7);
+                        backdrop-filter: blur(20px);
+                        border-radius: 12px;
+                        padding: 10px 35px 10px 12px;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                        border: 1px solid rgba(255, 255, 255, 0.3);
+                        cursor: pointer;
+                        font-size: 13px;
+                        font-weight: 500;
+                        color: #333;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    ">
+                        <i class="fa fa-building" style="color: #FF0000;"></i>
+                        <span class="selected-property-text">Property Type</span>
+                        <i class="fa fa-chevron-down" style="margin-left: auto; color: #FF0000; font-size: 11px;"></i>
+                    </div>
+
+                    <div class="dropdown-menu-property" style="
+                        position: absolute;
+                        top: 100%;
+                        left: 0;
+                        right: 0;
+                        background: white;
+                        border-radius: 12px;
+                        margin-top: 8px;
+                        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+                        z-index: 9999;
+                        display: none;
+                        max-height: 300px;
+                        overflow-y: auto;
+                    ">
+                        <div class="dropdown-option-property" data-value="" style="
+                            padding: 10px 12px;
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            cursor: pointer;
+                            transition: background 0.2s;
+                            font-size: 13px;
+                        " onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
+                            <i class="fa fa-list" style="width: 20px; color: #FF0000;"></i>
+                            <span>All Properties</span>
+                        </div>
+                        {% for type_code, type_name in property_types %}
+                            <div class="dropdown-option-property" data-value="{{ type_code }}" style="
+                                padding: 10px 12px;
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                                cursor: pointer;
+                                transition: background 0.2s;
+                                font-size: 13px;
+                            " onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
+                                {% if type_code == 'apartment' %}
+                                    <i class="fa fa-building" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'house' %}
+                                    <i class="fa fa-home" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'villa' %}
+                                    <i class="fa fa-landmark" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'cottage' %}
+                                    <i class="fa fa-tree" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'studio' %}
+                                    <i class="fa fa-paint-brush" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'bungalow' %}
+                                    <i class="fa fa-home" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'townhouse' %}
+                                    <i class="fa fa-city" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'penthouse' %}
+                                    <i class="fa fa-building" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'guesthouse' %}
+                                    <i class="fa fa-bed" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'hostel' %}
+                                    <i class="fa fa-bed" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'hotel' %}
+                                    <i class="fa fa-hotel" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'resort' %}
+                                    <i class="fa fa-umbrella-beach" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'cabin' %}
+                                    <i class="fa fa-tree" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'farm' %}
+                                    <i class="fa fa-tractor" style="width: 20px; color: #FF0000;"></i>
+                                {% elif type_code == 'castle' %}
+                                    <i class="fa fa-fort-awesome" style="width: 20px; color: #FF0000;"></i>
+                                {% else %}
+                                    <i class="fa fa-home" style="width: 20px; color: #FF0000;"></i>
+                                {% endif %}
+                                <span>{{ type_name }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden filters for form submission -->
+            <select id="locationFilter" style="display: none;">
+                <option value="all" {% if selected_location == 'all' %}selected{% endif %}>All Locations</option>
+                {% for location in all_locations %}
+                    <option value="{{ location.slug }}" data-url="{{ location.url }}"
+                            {% if current_location_slug == location.slug %}selected{% endif %}>
+                        {{ location.name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select id="propertyTypeFilter" style="display: none;">
+                <option value="">Property Type</option>
+                {% for type_code, type_name in property_types %}
+                    <option value="{{ type_code }}"
+                            {% if current_filters.property_type == type_code %}selected{% endif %}>
+                        {{ type_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- Apply Filters Button - Compact -->
+            <button id="applyFilters" class="apply-button" style="
+                background: #FF0000;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 12px;
+                font-weight: 600;
+                font-size: 13px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+                font-family: 'Poppins', 'Inter', sans-serif;
+                white-space: nowrap;
                 flex-shrink: 0;
-                margin: 5px;
-                display: flex;
-                align-items: center;
-                min-width: 120px;
-            ">
-                <a class="navbar-brand" href="{% url 'home' %}" style="
-                    text-decoration: none;
-                    display: flex;
-                    align-items: center;
-                    gap: 5px;
-                ">
-                    <span style="
-                        color: #FF0000;
-                        font-weight: 900;
-                        text-transform: none;
-                        font-family: 'Poppins', sans-serif;
-                        font-size: 2em;
-                        display: inline-block;
-                        line-height: 1;
-                    ">βnb </span>
-                   <sub><span style="
-                        color: #FF0000;
-                        font-weight: 900;
-                        text-transform: none;
-                        font-family: 'Poppins', sans-serif;
-                        font-size: 0.75em;
-                        display: inline-block;
-                        line-height: 1;
-                    "> .co.ke</span></sub>
-                </a>
-            </div>
-
-            <!-- Compact Filter Controls -->
-            <div class="filters-section" style="
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                margin-right: 400px;
-                flex: 1;
-                min-width: 0;
-                justify-content: flex-end;
-                overflow: visible !important;
-                position: relative;
-                z-index: 50;
-            ">
-                <!-- Location Dropdown with Red Location Icon -->
-                <div class="filter-dropdown" style="position: relative; min-width: 180px; flex: 1; max-width: 220px; z-index: 100;">
-                    <div style="
-                        position: relative;
-                        background: rgba(255, 255, 255, 0.7);
-                        backdrop-filter: blur(20px);
-                        border-radius: 12px;
-                        padding: 2px;
-                        box-shadow:
-                            0 4px 15px rgba(0, 0, 0, 0.1),
-                            inset 0 1px 1px rgba(255, 255, 255, 0.8),
-                            inset 0 -1px 1px rgba(0, 0, 0, 0.05);
-                        border: 1px solid rgba(255, 255, 255, 0.3);
-                    ">
-                        <div style="
-                            background: rgba(255, 255, 255, 0.85);
-                            border-radius: 10px;
-                            overflow: hidden;
-                            position: relative;
-                        ">
-                            <select id="locationFilter" style="
-                                width: 100%;
-                                padding: 10px 35px 10px 35px;
-                                font-size: 13px;
-                                font-weight: 500;
-                                color: #333;
-                                background: transparent;
-                                border: none;
-                                appearance: none;
-                                cursor: pointer;
-                                outline: none;
-                                font-family: 'Poppins', 'Inter', sans-serif;
-                                white-space: nowrap;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                            ">
-                                <option value="all" {% if selected_location == 'all' %}selected{% endif %}>
-                                    All Locations
-                                </option>
-                                {% for location in all_locations %}
-                                    <option value="{{ location.slug }}"
-                                            {% if current_location_slug == location.slug %}selected{% endif %}
-                                            data-url="{{ location.url }}">
-                                        {{ location.name }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-
-                            <!-- Location Icon (Red) -->
-                            <div style="
-                                position: absolute;
-                                left: 12px;
-                                top: 50%;
-                                transform: translateY(-50%);
-                                pointer-events: none;
-                                color: #FF0000;
-                                font-size: 12px;
-                            ">
-                                <i class="fa fa-location-dot" aria-hidden="true"></i>
-                            </div>
-
-                            <!-- Chevron Icon -->
-                            <div style="
-                                position: absolute;
-                                right: 10px;
-                                top: 50%;
-                                transform: translateY(-50%);
-                                pointer-events: none;
-                                color: #FF0000;
-                                font-size: 11px;
-                            ">
-                                <i class="fa fa-chevron-down" aria-hidden="true"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Property Type Dropdown with Font Awesome Icons -->
-                <div class="filter-dropdown" style="position: relative; min-width: 160px; flex: 1; max-width: 200px; z-index: 100;">
-                    <div style="
-                        position: relative;
-                        background: rgba(255, 255, 255, 0.7);
-                        backdrop-filter: blur(20px);
-                        border-radius: 12px;
-                        padding: 2px;
-                        box-shadow:
-                            0 4px 15px rgba(0, 0, 0, 0.1),
-                            inset 0 1px 1px rgba(255, 255, 255, 0.8),
-                            inset 0 -1px 1px rgba(0, 0, 0, 0.05);
-                        border: 1px solid rgba(255, 255, 255, 0.3);
-                    ">
-                        <div style="
-                            background: rgba(255, 255, 255, 0.85);
-                            border-radius: 10px;
-                            overflow: hidden;
-                            position: relative;
-                        ">
-                            <select id="propertyTypeFilter" style="
-                                width: 100%;
-                                padding: 10px 35px 10px 35px;
-                                font-size: 13px;
-                                font-weight: 500;
-                                color: #333;
-                                background: transparent;
-                                border: none;
-                                appearance: none;
-                                cursor: pointer;
-                                outline: none;
-                                font-family: 'Poppins', 'Inter', sans-serif;
-                                white-space: nowrap;
-                            ">
-                                <option value="">Property Type</option>
-                                {% for type_code, type_name in property_types %}
-                                    <option value="{{ type_code }}"
-                                            {% if current_filters.property_type == type_code %}selected{% endif %}>
-                                        {{ type_name }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-
-                            <!-- Property Icon -->
-                            <div style="
-                                position: absolute;
-                                left: 12px;
-                                top: 50%;
-                                transform: translateY(-50%);
-                                pointer-events: none;
-                                color: #FF0000;
-                                font-size: 12px;
-                            ">
-                                <i class="fa fa-building" aria-hidden="true"></i>
-                            </div>
-
-                            <!-- Chevron Icon -->
-                            <div style="
-                                position: absolute;
-                                right: 10px;
-                                top: 50%;
-                                transform: translateY(-50%);
-                                pointer-events: none;
-                                color: #FF0000;
-                                font-size: 11px;
-                            ">
-                                <i class="fa fa-chevron-down" aria-hidden="true"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Apply Filters Button -->
-                <button id="applyFilters" class="apply-button" style="
-                    background: #FF0000;
-                    color: white;
-                    border: none;
-                    padding: 10px 20px;
-                    border-radius: 12px;
-                    font-weight: 600;
-                    font-size: 13px;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
-                    transition: all 0.3s ease;
-                    box-shadow:
-                        0 4px 15px rgba(255, 0, 0, 0.2),
-                        0 2px 4px rgba(0, 0, 0, 0.1),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-                    font-family: 'Poppins', 'Inter', sans-serif;
-                    white-space: nowrap;
-                    flex-shrink: 0;
-                    min-width: 100px;
-                    justify-content: center;
-                    height: 38px;
-                " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(255, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)';"
-                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)';">
-                    <i class="fa fa-search" aria-hidden="true" style="font-size: 12px;"></i>
-                    Search
-                </button>
-            </div>
+                min-width: 100px;
+                justify-content: center;
+                height: 38px;
+            " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(255, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)';"
+            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)';">
+                <i class="fa fa-search" aria-hidden="true" style="font-size: 12px;"></i>
+                Search
+            </button>
         </div>
     </div>
 </section>
 
-<!-- Skeleton shimmer animation and swap logic -->
-<style>
-    .skeleton-shimmer {
-        background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
-        background-size: 200% 100%;
-        animation: shimmer 1.2s infinite linear;
-        border-radius: 12px;
-    }
-
-    @keyframes shimmer {
-        0% {
-            background-position: -200% 0;
-        }
-        100% {
-            background-position: 200% 0;
-        }
-    }
-
-    /* Optional: adjust skeleton sizing on smaller screens */
-    @media (max-width: 768px) {
-        .skeleton-logo .skeleton-shimmer {
-            width: 40px !important;
-            height: 28px !important;
-        }
-        .skeleton-logo .skeleton-shimmer:last-child {
-            width: 60px !important;
-        }
-        .filters-section .skeleton-shimmer {
-            height: 38px !important;
-        }
-    }
-</style>
-
 <script>
-    (function() {
-        // Wait for the page to be fully loaded (including images, fonts, etc.)
-        function showActualContent() {
-            var skeleton = document.getElementById('skeletonFiltersSection');
-            var actual = document.getElementById('actualFiltersSection');
-            if (skeleton && actual) {
-                skeleton.style.display = 'none';
-                actual.style.display = 'block';
+document.addEventListener('DOMContentLoaded', function() {
+    // ==================== LOCATION CUSTOM DROPDOWN ====================
+    const locationDropdown = document.querySelector('.location-dropdown');
+    if (locationDropdown) {
+        const trigger = locationDropdown.querySelector('.dropdown-trigger-location');
+        const menu = locationDropdown.querySelector('.dropdown-menu-location');
+        const selectedText = locationDropdown.querySelector('.selected-location-text');
+        const options = locationDropdown.querySelectorAll('.dropdown-option-location');
+        const hiddenLocationSelect = document.getElementById('locationFilter');
+
+        function closeLocationDropdown(e) {
+            if (!locationDropdown.contains(e.target)) {
+                if (menu) menu.style.display = 'none';
             }
         }
 
-        // If the page is already loaded, show actual content immediately
-        if (document.readyState === 'complete') {
-            showActualContent();
-        } else {
-            window.addEventListener('load', showActualContent);
-            // Fallback: show actual content after max 2 seconds (prevents skeleton staying forever)
-            setTimeout(showActualContent, 2000);
+        if (trigger) {
+            trigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isVisible = menu.style.display === 'block';
+                // Close all other dropdowns
+                document.querySelectorAll('.dropdown-menu-location, .dropdown-menu-property').forEach(m => {
+                    if (m !== menu) m.style.display = 'none';
+                });
+                menu.style.display = isVisible ? 'none' : 'block';
+            });
         }
-    })();
-</script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
+        options.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const value = this.dataset.value;
+                const text = this.querySelector('span').innerText;
+                const icon = this.querySelector('i').cloneNode(true);
+                const url = this.dataset.url;
+
+                selectedText.innerText = text;
+                const oldIcon = trigger.querySelector('i:first-child');
+                if (oldIcon) oldIcon.replaceWith(icon);
+
+                // Update hidden select
+                if (hiddenLocationSelect) {
+                    for (let i = 0; i < hiddenLocationSelect.options.length; i++) {
+                        if (hiddenLocationSelect.options[i].value === value) {
+                            hiddenLocationSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    // Store URL for navigation
+                    if (url && hiddenLocationSelect.options[hiddenLocationSelect.selectedIndex]) {
+                        hiddenLocationSelect.options[hiddenLocationSelect.selectedIndex].setAttribute('data-url', url);
+                    }
+                    const changeEvent = new Event('change', { bubbles: true });
+                    hiddenLocationSelect.dispatchEvent(changeEvent);
+                }
+
+                menu.style.display = 'none';
+            });
+        });
+
+        document.addEventListener('click', closeLocationDropdown);
+    }
+
+    // ==================== PROPERTY TYPE CUSTOM DROPDOWN ====================
+    const propertyDropdown = document.querySelector('.property-dropdown');
+    if (propertyDropdown) {
+        const trigger = propertyDropdown.querySelector('.dropdown-trigger-property');
+        const menu = propertyDropdown.querySelector('.dropdown-menu-property');
+        const selectedText = propertyDropdown.querySelector('.selected-property-text');
+        const options = propertyDropdown.querySelectorAll('.dropdown-option-property');
+        const hiddenPropertySelect = document.getElementById('propertyTypeFilter');
+
+        function closePropertyDropdown(e) {
+            if (!propertyDropdown.contains(e.target)) {
+                if (menu) menu.style.display = 'none';
+            }
+        }
+
+        if (trigger) {
+            trigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isVisible = menu.style.display === 'block';
+                // Close all other dropdowns
+                document.querySelectorAll('.dropdown-menu-location, .dropdown-menu-property').forEach(m => {
+                    if (m !== menu) m.style.display = 'none';
+                });
+                menu.style.display = isVisible ? 'none' : 'block';
+            });
+        }
+
+        options.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const value = this.dataset.value;
+                const text = this.querySelector('span').innerText;
+                const icon = this.querySelector('i').cloneNode(true);
+
+                selectedText.innerText = text;
+                const oldIcon = trigger.querySelector('i:first-child');
+                if (oldIcon) oldIcon.replaceWith(icon);
+
+                // Update hidden select
+                if (hiddenPropertySelect) {
+                    for (let i = 0; i < hiddenPropertySelect.options.length; i++) {
+                        if (hiddenPropertySelect.options[i].value === value) {
+                            hiddenPropertySelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    const changeEvent = new Event('change', { bubbles: true });
+                    hiddenPropertySelect.dispatchEvent(changeEvent);
+                }
+
+                menu.style.display = 'none';
+            });
+        });
+
+        document.addEventListener('click', closePropertyDropdown);
+    }
+
+    // ==================== APPLY FILTERS ====================
     const locationFilter = document.getElementById('locationFilter');
     const propertyTypeFilter = document.getElementById('propertyTypeFilter');
     const applyFiltersBtn = document.getElementById('applyFilters');
 
-    // Apply filters button click handler
     if (applyFiltersBtn) {
         applyFiltersBtn.addEventListener('click', function() {
             applyFilters();
         });
     }
 
-    // Add Enter key support for dropdowns
-    if (locationFilter) {
-        locationFilter.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                applyFilters();
-            }
-        });
-    }
-
-    if (propertyTypeFilter) {
-        propertyTypeFilter.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                applyFilters();
-            }
-        });
-    }
-
-    // Apply filters function
     function applyFilters() {
         const locationSlug = locationFilter ? locationFilter.value : 'all';
         const propertyType = propertyTypeFilter ? propertyTypeFilter.value : '';
 
-        // Get current URL parameters
         const urlParams = new URLSearchParams(window.location.search);
 
-        // Update parameters
         if (locationSlug === 'all' || !locationSlug) {
             urlParams.delete('location');
         } else {
-            // Navigate to location-specific page
             const selectedOption = locationFilter ? locationFilter.options[locationFilter.selectedIndex] : null;
             const locationUrl = selectedOption ? selectedOption.getAttribute('data-url') : null;
 
             if (locationUrl) {
-                // Build new URL with property type filter
                 let newUrl = locationUrl;
                 if (propertyType) {
                     newUrl += `?property_type=${propertyType}`;
@@ -576,34 +587,79 @@ document.addEventListener('DOMContentLoaded', function() {
             urlParams.delete('property_type');
         }
 
-        // Remove page parameter when changing filters
         urlParams.delete('page');
-
-        // Build new URL
         const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
         window.location.href = newUrl;
     }
 
-    // Update dropdowns based on current filters
-    function initializeFilters() {
-        // Property type filter is already set by template
-        // Add visual feedback for active filters
+    // ==================== INITIALIZE SELECTED VALUES ====================
+    function initializeSelectedValues() {
+        // Initialize location dropdown
         if (locationFilter && locationFilter.value !== 'all') {
-            locationFilter.style.fontWeight = '600';
-            locationFilter.style.color = '#FF0000';
+            const locationDropdownContainer = document.querySelector('.location-dropdown');
+            if (locationDropdownContainer) {
+                const selectedText = locationDropdownContainer.querySelector('.selected-location-text');
+                const selectedOption = locationFilter.options[locationFilter.selectedIndex];
+                if (selectedText && selectedOption) {
+                    selectedText.innerText = selectedOption.text;
+                }
+            }
         }
 
+        // Initialize property dropdown
         if (propertyTypeFilter && propertyTypeFilter.value) {
-            propertyTypeFilter.style.fontWeight = '600';
-            propertyTypeFilter.style.color = '#FF0000';
+            const propertyDropdownContainer = document.querySelector('.property-dropdown');
+            if (propertyDropdownContainer) {
+                const selectedText = propertyDropdownContainer.querySelector('.selected-property-text');
+                const selectedOption = propertyTypeFilter.options[propertyTypeFilter.selectedIndex];
+                if (selectedText && selectedOption) {
+                    selectedText.innerText = selectedOption.text;
+
+                    // Update icon
+                    const trigger = propertyDropdownContainer.querySelector('.dropdown-trigger-property');
+                    const options = propertyDropdownContainer.querySelectorAll('.dropdown-option-property');
+                    options.forEach(option => {
+                        if (option.dataset.value === propertyTypeFilter.value) {
+                            const newIcon = option.querySelector('i').cloneNode(true);
+                            const oldIcon = trigger.querySelector('i:first-child');
+                            if (oldIcon) oldIcon.replaceWith(newIcon);
+                        }
+                    });
+                }
+            }
         }
     }
 
-    // Initialize on load
-    initializeFilters();
+    initializeSelectedValues();
+
+    // Handle window resize for mobile
+    function adjustMobileDropdowns() {
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.dropdown-menu-location, .dropdown-menu-property').forEach(menu => {
+                if (menu.style.display === 'block') {
+                    const rect = menu.parentElement.getBoundingClientRect();
+                    menu.style.position = 'fixed';
+                    menu.style.top = rect.bottom + 5 + 'px';
+                    menu.style.left = '10px';
+                    menu.style.right = '10px';
+                    menu.style.width = 'auto';
+                }
+            });
+        } else {
+            document.querySelectorAll('.dropdown-menu-location, .dropdown-menu-property').forEach(menu => {
+                menu.style.position = 'absolute';
+                menu.style.top = '100%';
+                menu.style.left = '0';
+                menu.style.right = '0';
+                menu.style.width = '';
+            });
+        }
+    }
+
+    window.addEventListener('resize', adjustMobileDropdowns);
+    adjustMobileDropdowns();
 });
 </script>
-
 <style>
 .clean-heading {
   font-size: clamp(1.8rem, 4vw, 2.8rem);

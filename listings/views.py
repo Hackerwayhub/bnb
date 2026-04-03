@@ -211,7 +211,7 @@ def listing_list(request, location_slug=None):
         'current_location_slug': current_location_slug,
         'location_specific': location_specific,
         'page_type': 'location',
-        'page_title': f'βnb,staycations,holiday homes &  Furnished houses for rent in {display_location_name}! | βnb.co.ke' if selected_location != 'all' else 'βnb.co.ke - βooking site - You do the stayin\',We do the booking! Bnb,Staycations, Holiday homes & furnished houses in Kenya!',
+        'page_title': f'βnb,staycations,holiday homes &  Furnished houses for rent in {display_location_name}! | βnb.co.ke' if selected_location != 'all' else 'βnb.co.ke - βooking site - You do the stayin\',We do the booking! βnb,Staycations, Holiday homes & furnished houses in Kenya!',
         'meta_description': f'you do the stayin\',We do the booking! Bnb,staycations,Holiday homes & Furnished houses for rent in {display_location_name}. Browse verified listings with photos, amenities, and booking details.' if selected_location != 'all' else ' you do the stayin\',We do the booking!  Bnb,staycations,Holiday homes & furnished houses for rent in Kenya. Browse verified listings with photos, amenities, and booking details.',
     }
 
@@ -272,7 +272,7 @@ def listings_by_property_type(request, property_type_slug):
         'current_location_slug': current_location_slug,
         'page_type': 'property_type',
         'is_property_type_page': True,
-        'page_title': f'{property_display_name} | Bnb.co.ke',
+        'page_title': f'{property_display_name} | βnb.co.ke',
         'meta_description': f'Find the best {property_display_name} properties in Kenya. Browse listings for bnb,staycations, rent, and shortlet.',
     }
 
@@ -307,7 +307,7 @@ def submit_listing(request):
 
             context = {
                 'form': form,
-                'title': 'Submit New Listing | Bnb.co.ke',
+                'title': 'Submit New Listing | βnb.co.ke',
                 'featured_price': 1000.00,
             }
             return render(request, 'listings/create_listing.html', context)
@@ -363,7 +363,7 @@ def submit_listing(request):
 
             context = {
                 'form': form,
-                'title': 'Submit Listing | Bnb.co.ke',
+                'title': 'Submit Listing | βnb.co.ke',
                 'page_title': 'Submit  listing | Bnb.co.ke',
                 'featured_price': 1000.00,
             }
@@ -374,8 +374,8 @@ def submit_listing(request):
 
     context = {
         'form': form,
-        'title': 'Submit Listing | Bnb.co.ke',
-        'page_title': 'Submit Listing | Bnb.co.ke',
+        'title': 'Submit Listing | βnb.co.ke',
+        'page_title': 'Submit Listing | βnb.co.ke',
         'featured_price': 1000.00,
     }
     return render(request, 'listings/create_listing.html', context)
@@ -386,7 +386,7 @@ def book_via_whatsapp(request):
     Simple WhatsApp booking page - Just a big WhatsApp button
     """
     context = {
-        'page_title': 'Book via WhatsApp | Bnb.co.ke',
+        'page_title': 'Book via WhatsApp | βnb.co.ke',
         'meta_description': 'Book your property directly on WhatsApp. Chat with hosts instantly, get quick responses.',
         'whatsapp_number': '+254798246467',  # Your business WhatsApp number
     }
@@ -423,7 +423,7 @@ def booking_view(request, listing_id):
     context = {
         'form': form,
         'listing': listing,
-        'page_title': f' Book{listing.title} | Bnb.co.ke',
+        'page_title': f' Book{listing.title} | βnb.co.ke',
     }
     return render(request, 'listings/booking_form.html', context)
 
@@ -463,7 +463,7 @@ def my_listings(request):
         'active_listings': active_listings,
         'featured_listings': featured_listings,
         'pending_bookings': 0,  # You can add this later
-        'title': 'My Listings | Bnb.co.ke',
+        'title': 'My Listings | βnb.co.ke',
         'page_title': 'My Listings'
     }
     return render(request, 'listings/my_listings.html', context)
@@ -536,7 +536,7 @@ def edit_listing(request, listing_id):
     context = {
         'form': form,
         'listing': listing,
-        'title': f'Edit {listing.title} | Bnb.co.ke',
+        'title': f'Edit {listing.title} | βnb.co.ke',
         'page_title': 'Edit Listing'
     }
     return render(request, 'listings/edit_listing.html', context)
@@ -559,7 +559,7 @@ def delete_listing(request, listing_id):
 
     context = {
         'listing': listing,
-        'title': f'Delete {listing.title} | Bnb.co.ke',
+        'title': f'Delete {listing.title} | βnb.co.ke',
         'page_title': 'Delete Listing'
     }
     return render(request, 'listings/delete_listing.html', context)
@@ -577,7 +577,7 @@ def listing_detail(request, slug):
     context = {
         'listing': listing,
         'is_owner': is_owner,
-        'page_title': f' {listing.title} | Bnb.co.ke',
+        'page_title': f' {listing.title} | βnb.co.ke',
         'meta_description': f'Book {listing.title} in {listing.get_location_display()}. {listing.guests} guests, {listing.bedrooms} bedrooms, KES {listing.price_per_night}/night.',
     }
     return render(request, 'listings/listing_detail.html', context)

@@ -80,7 +80,7 @@ def prepare_listing_context(request, queryset, context_extra=None):
     all_listings_shuffled = featured_listings + non_featured_listings
 
     # Pagination
-    paginator = Paginator(all_listings_shuffled, 12)  # 12 listings per page for better UX
+    paginator = Paginator(all_listings_shuffled, 6)  # 6 listings per page for better UX
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

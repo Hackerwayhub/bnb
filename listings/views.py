@@ -80,7 +80,7 @@ def prepare_listing_context(request, queryset, context_extra=None):
     all_listings_shuffled = featured_listings + non_featured_listings
 
     # Pagination
-    paginator = Paginator(all_listings_shuffled, 9)  # 9 listings per page for better UX
+    paginator = Paginator(all_listings_shuffled, 6)  # 9 listings per page for better UX
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -445,6 +445,7 @@ def booking_confirmation(request, booking_id):
         'check_out_formatted': booking.check_out.strftime('%B %d, %Y'),
         'total_price_formatted': f"{booking.total_price:,.2f}",
         'number_of_nights': (booking.check_out - booking.check_in).days,
+        'title':  f'Booking Confirmation - BK{booking.id:06d} | Bnb.co.ke',
         'page_title': f'Booking Confirmation - BK{booking.id:06d} | Bnb.co.ke',
     }
     return render(request, 'booking_confirmation.html', context)
@@ -580,6 +581,7 @@ def listing_detail(request, slug):
     context = {
         'listing': listing,
         'is_owner': is_owner,
+        'title':  f' {listing.title} | βnb.co.ke',
         'page_title': f' {listing.title} | βnb.co.ke',
         'meta_description': f'Book {listing.title} in {listing.get_location_display()}. {listing.guests} guests, {listing.bedrooms} bedrooms, KES {listing.price_per_night}/night.',
     }

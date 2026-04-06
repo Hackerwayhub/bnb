@@ -273,6 +273,7 @@ def listings_by_property_type(request, property_type_slug):
         'current_location_slug': current_location_slug,
         'page_type': 'property_type',
         'is_property_type_page': True,
+        'title':  f'{property_display_name} | βnb.co.ke',
         'page_title': f'{property_display_name} | βnb.co.ke',
         'meta_description': f'Find the best {property_display_name} properties in Kenya. Browse listings for bnb,staycations, rent, and shortlet.',
     }

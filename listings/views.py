@@ -211,6 +211,7 @@ def listing_list(request, location_slug=None):
         'current_location_slug': current_location_slug,
         'location_specific': location_specific,
         'page_type': 'location',
+        'title': f'βnb,staycations,holiday homes &  Furnished houses for rent in {display_location_name}! | βnb.co.ke' if selected_location != 'all' else 'βnb.co.ke - βooking site - You do the stayin\',We do the booking! βnb,Staycations, Holiday homes & furnished houses in Kenya!',
         'page_title': f'βnb,staycations,holiday homes &  Furnished houses for rent in {display_location_name}! | βnb.co.ke' if selected_location != 'all' else 'βnb.co.ke - βooking site - You do the stayin\',We do the booking! βnb,Staycations, Holiday homes & furnished houses in Kenya!',
         'meta_description': f'you do the stayin\',We do the booking! Bnb,staycations,Holiday homes & Furnished houses for rent in {display_location_name}. Browse verified listings with photos, amenities, and booking details.' if selected_location != 'all' else ' you do the stayin\',We do the booking!  Bnb,staycations,Holiday homes & furnished houses for rent in Kenya. Browse verified listings with photos, amenities, and booking details.',
     }
@@ -364,7 +365,7 @@ def submit_listing(request):
             context = {
                 'form': form,
                 'title': 'Submit Listing | βnb.co.ke',
-                'page_title': 'Submit  listing | Bnb.co.ke',
+                'page_title': 'Submit  listing | βnb.co.ke',
                 'featured_price': 1000.00,
             }
             return render(request, 'listings/create_listing.html', context)
@@ -386,7 +387,8 @@ def book_via_whatsapp(request):
     Simple WhatsApp booking page - Just a big WhatsApp button
     """
     context = {
-        'page_title': 'Book via WhatsApp | βnb.co.ke',
+        'page_title': 'ook via WhatsApp | βnb.co.ke',
+        'title':  'βook via WhatsApp | βnb.co.ke',
         'meta_description': 'Book your property directly on WhatsApp. Chat with hosts instantly, get quick responses.',
         'whatsapp_number': '+254798246467',  # Your business WhatsApp number
     }
@@ -423,6 +425,7 @@ def booking_view(request, listing_id):
     context = {
         'form': form,
         'listing': listing,
+        'title':  f' Book{listing.title} | βnb.co.ke',
         'page_title': f' Book{listing.title} | βnb.co.ke',
     }
     return render(request, 'listings/booking_form.html', context)

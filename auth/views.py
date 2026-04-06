@@ -60,9 +60,9 @@ def register(request):
                 html_message = render_to_string('auth/welcome_email.html', welcome_context)
 
                 # Plain text version
-                plain_message = f"""Welcome to BnB Ke, {username}!
+                plain_message = f"""Welcome to  βnb.co.ke, {username}!
 
-Thank you for registering with BnB Ke. You can now:
+Thank you for registering with  βnb.co.ke . You can now:
 
 • Create and manage property listings
 • Book properties for your staycations
@@ -74,7 +74,7 @@ Get started by creating your first listing: {welcome_context['listings_url']}
 If you have any questions, feel free to contact our support team.
 
 Best regards,
-The BnB Ke Team"""
+The  βnb.co.keTeam"""
 
                 send_mail(
                     subject=subject,
@@ -233,7 +233,7 @@ Your account will be permanently deleted in 7 days.
 If you did not request this, please contact our support team immediately at {settings.ADMIN_EMAIL}.
 
 Best regards,
-The BnB  Team"""
+The  βnb.co.ke Team"""
 
             send_mail(
                 subject=subject,

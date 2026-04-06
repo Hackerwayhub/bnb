@@ -9,10 +9,10 @@
   <meta http-equiv='content-language' content='en-gb'>
 
   <!-- PWA Meta Tags -->
-  <meta name="theme-color" content="#FF5A5F"/>
+  <meta name="theme-color" content="#FF0000"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="BnB">
+  <meta name="apple-mobile-web-app-title" content=" βnb.co.ke">
 
 
   <!-- Web App Manifest -->
@@ -20,24 +20,24 @@
 
 
     <!-- Dynamic SEO Meta Tags -->
-  <title>{{ page_title|default:"Bnb.co.ke | you do the stayin\',We do the booking! Bnb,Staycations, Holiday homes & furnished houses in Kenya!" }}</title>
+  <title>{{ title|default:"βnb.co.ke - βooking site - You do the stayin\',We do the booking! βnb,Staycations, Holiday homes & furnished houses in Kenya!" }}</title>
   <meta name="description" content="{{ meta_description|default:'Find perfect vacation rentals and holiday homes on Bnb. Browse verified properties with photos, amenities, and booking details. Safe, reliable accommodation booking.'|truncatechars:160 }}" />
 
   <meta name="keywords" content="BNB, staycations, holiday homes, accommodation booking, travel Kenya{% if location_display %}, rentals in {{ location_display }}, {{ location_display }} accommodations{% endif %}" />
-  <meta name="author" content="BNB" />
+  <meta name="author" content=" βnb.co.ke" />
   <meta name="robots" content="index, follow" />
 
 
-  <meta name="author" content="BnB" />
+  <meta name="author" content=" βnb.co.ke" />
   <meta name="robots" content="index, follow" />
 
   <!-- Open Graph / Social Media Meta Tags -->
 <meta property="og:title" content="{% if page_title %}{{ page_title }}{% else %}BnB | Vacation Rentals & Holiday Homes{% endif %}" />
-<meta property="og:description" content="{% if meta_description %}{{ meta_description }}{% else %}BnB - Kenya\'s premier vacation rental platform. Find beautiful, verified accommodations for your perfect holiday. Safe, reliable booking services.{% endif %}" />
+<meta property="og:description" content="{% if meta_description %}{{ meta_description }}{% else %} βnb.co.ke - Kenya\'s premier vacation rental platform. Find beautiful, verified accommodations for your perfect holiday. Safe, reliable booking services.{% endif %}" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://bnb.co.ke{% if selected_location and selected_location != 'all' %}{% url 'listings_by_location' selected_location %}{% else %}{% url 'home' %}{% endif %}" />
 <meta property="og:image" content="{% static 'images/open.jpg' %}" />
-<meta property="og:site_name" content="BnB" />
+<meta property="og:site_name" content=" βnb.co.ke" />
 
 <!-- Canonical URL -->
   <link rel="canonical" href="https://bnb.co.ke{% if selected_location and selected_location != 'all' %}{% url 'listings_by_location' selected_location %}{% else %}{% url 'home' %}{% endif %}" />
@@ -99,7 +99,7 @@
       "description": "Premium vacation rentals and holiday homes across Kenya",
       "provider": {
         "@type": "Organization",
-        "name": "BnB"
+        "name": " βnb.co.ke"
       },
       "areaServed": "{% if location_display %}{{ location_display }}{% else %}Kenya{% endif %}",
       "serviceType": "Vacation Rentals",
@@ -136,11 +136,11 @@
 {
   "@context": "https://schema.org",
   "@type": "Service",
-  "name": "BnB Vacation Rentals in {{ location_name }}",
+  "name": " βnb.co.ke Vacation Rentals in {{ location_name }}",
   "description": "Premium verified vacation rentals and holiday homes in {{ location_name }}, Kenya. Find beautiful accommodations for holidays, vacations, and getaways.",
   "provider": {
     "@type": "Organization",
-    "name": "BnB",
+    "name": " βnb.co.ke",
     "url": "https://bnb.co.ke"
   },
   "areaServed": {

@@ -132,56 +132,40 @@ section.mobile-spacing {
     height: 320px;
   }
 
- /* Hero-style Gallery Navigation Buttons with White Arrows */
-.gallery-nav {
+  .gallery-nav {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.3);
+     background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(5px);
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    border: none;
-    color: white;  /* White arrows */
-    font-size: 1.5rem;
-    cursor: pointer;
-    z-index: 10;
-    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
-}
+    cursor: pointer;
+    z-index: 10;
+    border: none;
+    font-size: 1.2rem;
+    color: #333;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+  }
 
-.gallery-nav:hover {
-    background: rgba(255, 255, 255, 0.6);
-    color: white;  /* Keep white on hover */
+  .gallery-nav:hover {
+    background: white;
     transform: translateY(-50%) scale(1.1);
-}
+  }
 
-.gallery-nav.prev {
+  .gallery-nav.prev {
     left: 10px;
-}
+  }
 
-.gallery-nav.next {
+  .gallery-nav.next {
     right: 10px;
-}
+  }
 
-@media (max-width: 768px) {
-    .gallery-nav {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-    .gallery-nav.prev {
-        left: 5px;
-    }
-    .gallery-nav.next {
-        right: 5px;
-    }
-}
   .gallery-thumbnails {
     position: absolute;
     bottom: 10px;
@@ -233,7 +217,6 @@ section.mobile-spacing {
     pointer-events: none;
   }
 </style>
-
 
 
 <style>

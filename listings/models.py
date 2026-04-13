@@ -28,8 +28,9 @@ class Listing(models.Model):
         ('dubai', 'Dubai'),
         ('usa', 'usa'),
         ('Kenya', 'Kenya'),
-        ('westlands', 'Westlands'),
         ('kilimani', 'Kilimani'),
+        ('westlands', 'Westlands'),
+
         ('kileleshwa', 'Kileleshwa'),
         ('riverside', 'Riverside'),
         ('pangani', 'Pangani'),
@@ -53,6 +54,7 @@ class Listing(models.Model):
         ('bypass', 'Bypass'),
         ('Membley', 'Membley'),
         ('ruiru', 'Ruiru'),
+        ('kamakis', 'Kamakis'),
         ('kiambu', 'Kiambu'),
         ('thome', 'Thome'),
         ('kinoo', 'Kinoo'),

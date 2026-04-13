@@ -2336,9 +2336,7 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
 
       <!-- Navigation Arrows (hidden if only one slide) -->
-      <button class="hero-carousel-control hero-carousel-control-prev" aria-label="Previous slide">
-        <i class="fa fa-chevron-left"></i>
-      </button>
+     
       <button class="hero-carousel-control hero-carousel-control-next" aria-label="Next slide">
         <i class="fa fa-chevron-right"></i>
       </button>
@@ -2526,9 +2524,7 @@ document.addEventListener('DOMContentLoaded', function() {
               {% if listing.main_image %}
                 {% with listing.all_images as images %}
                   {% if images|length > 0 %}
-                    <div class="image-counter">
-                      <i class="fa fa-camera" aria-hidden="true"></i> {{ images|length }}
-                    </div>
+
 
                     <!-- Main Image Display -->
                     <img src="{{ images.0.url }}"

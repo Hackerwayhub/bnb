@@ -828,6 +828,93 @@
 }
 </style>
 
+<script>
+// Enhanced toggleNav function with animations
+function toggleNav() {
+    const nav = document.getElementById("myNav");
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    const menuLabel = document.querySelector('.menu-label');
+
+    if (nav.style.width === "100%") {
+        // Close menu
+        nav.style.width = "0";
+        hamburgerBtn.classList.remove("menu_btn-style");
+
+        // Hide menu label
+        if (menuLabel) {
+            menuLabel.style.opacity = "0";
+            menuLabel.style.transform = "translateY(-10px)";
+        }
+
+        // Reset animations
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.style.transitionDelay = "0s";
+        });
+    } else {
+        // Open menu
+        nav.style.width = "100%";
+        hamburgerBtn.classList.add("menu_btn-style");
+
+        // Show menu label
+        if (menuLabel) {
+            menuLabel.style.opacity = "1";
+            menuLabel.style.transform = "translateY(0)";
+        }
+
+        // Add animation delays for menu items
+        document.querySelectorAll('.nav-link').forEach((link, index) => {
+            link.style.transitionDelay = `${0.3 + (index * 0.1)}s`;
+        });
+
+        // Animate menu header and footer
+        setTimeout(() => {
+            const menuHeader = document.querySelector('.menu-header');
+            const menuFooter = document.querySelector('.menu-footer');
+            if (menuHeader) menuHeader.style.transitionDelay = "0.2s";
+            if (menuFooter) menuFooter.style.transitionDelay = "0.4s";
+        }, 100);
+    }
+}
+
+// Close menu when clicking outside (optional)
+document.addEventListener('click', function(event) {
+    const nav = document.getElementById("myNav");
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+
+    if (nav.style.width === "100%" &&
+        !nav.contains(event.target) &&
+        !hamburgerBtn.contains(event.target)) {
+        toggleNav();
+    }
+});
+
+// Close menu with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const nav = document.getElementById("myNav");
+        if (nav.style.width === "100%") {
+            toggleNav();
+        }
+    }
+});
+
+// Add hover effects for menu items
+document.addEventListener('DOMContentLoaded', function() {
+    const menuItems = document.querySelectorAll('.nav-link');
+
+    menuItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(10px)';
+        });
+
+        item.addEventListener('mouseleave', function() {
+            if (document.getElementById("myNav").style.width === "100%") {
+                this.style.transform = 'translateX(0)';
+            }
+        });
+    });
+});
+</script>
 
 <script>
 // Override or extend the existing openNav function to create a toggle function

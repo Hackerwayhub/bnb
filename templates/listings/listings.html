@@ -229,7 +229,7 @@ section.mobile-spacing {
   height: 320px;
   overflow: hidden;
   border-radius: 28px 28px 24px 24px;
-  background: linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%);
+   background: transparent;
   cursor: pointer;
 }
 
@@ -308,7 +308,7 @@ section.mobile-spacing {
   gap: 10px;
   z-index: 15;
   pointer-events: auto;
-  background: rgba(0, 0, 0, 0.3);
+   background: transparent;
   backdrop-filter: blur(8px);
   padding: 8px 16px;
   border-radius: 60px;
@@ -2334,12 +2334,6 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         {% endfor %}
       </div>
-
-      <!-- Navigation Arrows (hidden if only one slide) -->
-     
-      <button class="hero-carousel-control hero-carousel-control-next" aria-label="Next slide">
-        <i class="fa fa-chevron-right"></i>
-      </button>
 
       <!-- Indicators (hidden if only one slide) -->
       <div class="hero-carousel-indicators">

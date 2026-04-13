@@ -13,6 +13,75 @@
     overflow-x: hidden;
   }
 </style>
+<style>
+/* Fix for listings grid on mobile */
+@media (max-width: 768px) {
+    /* Fix the row that contains all listing cards */
+    #gallery-container.row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+    }
+
+    /* Fix each listing column */
+    #gallery-container [class*="col-"] {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Ensure listing cards take full width of their column */
+    .listing-card {
+        width: 100% !important;
+        margin: 0 !important;
+        display: block !important;
+    }
+
+    /* Fix the container-fluid that wraps the grid */
+    .container-fluid {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Ensure no horizontal scroll on any parent containers */
+    section > div,
+    .container-fluid,
+    .row {
+        overflow-x: hidden !important;
+    }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    #gallery-container [class*="col-"] {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+
+    .container-fluid {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+}
+
+/* Base fix for all screen sizes */
+#gallery-container.row {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+}
+
+/* Ensure listing cards don't overflow */
+.listing-card {
+    overflow: hidden;
+    max-width: 100%;
+}
+</style>
 
 <style>
 /* Mobile responsiveness styles */

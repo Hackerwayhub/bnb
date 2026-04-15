@@ -887,7 +887,7 @@ section.mobile-spacing {
 }
 
 .hero-title {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 800;
   margin-bottom: 12px;
   line-height: 1.2;
@@ -1673,6 +1673,59 @@ body.modal-open {
 
 </style>
 <!-- Liquid Glass Filters Section - Single Line Layout (Cleaned) -->
+<style>
+    /* Claymorphic Playful Styles */
+    .claymorphic-search {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 40px;
+        box-shadow:
+            0 8px 20px rgba(0, 0, 0, 0.1),
+            inset 0 2px 4px rgba(255, 255, 255, 0.8),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.05),
+            0 0 0 1px rgba(255, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .claymorphic-search:focus-within {
+        transform: translateY(-2px);
+        box-shadow:
+            0 12px 25px rgba(0, 0, 0, 0.15),
+            inset 0 2px 4px rgba(255, 255, 255, 0.9),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.05),
+            0 0 0 2px rgba(255, 0, 0, 0.2);
+    }
+
+    .claymorphic-option {
+        margin: 4px 8px;
+        border-radius: 30px;
+        transition: all 0.2s ease;
+    }
+
+    .claymorphic-option:hover {
+        transform: translateX(5px);
+        background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+        box-shadow: 0 4px 12px rgba(255, 0, 0, 0.15);
+    }
+
+    .playful-icon {
+        animation: bounce 0.5s ease;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-3px); }
+    }
+
+    .dropdown-trigger-location, .dropdown-trigger-property {
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .dropdown-trigger-location:hover, .dropdown-trigger-property:hover {
+        transform: scale(1.02);
+        background: rgba(255, 255, 255, 0.85);
+    }
+</style>
+
 <section class="mobile-spacing" style="
     background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.9) 100%);
     margin: -15px 6px 1px 6px;
@@ -1766,15 +1819,15 @@ body.modal-open {
             position: relative;
             z-index: 50;
         ">
-            <!-- Location Custom Dropdown -->
+            <!-- Location Custom Dropdown with Claymorphic Search -->
             <div class="filter-dropdown" style="position: relative; min-width: 180px; flex: 1; max-width: 220px; z-index: 100;">
                 <div class="location-dropdown" style="position: relative; z-index: 1000;">
                     <div class="dropdown-trigger-location" style="
                         background: rgba(255, 255, 255, 0.7);
                         backdrop-filter: blur(20px);
-                        border-radius: 12px;
+                        border-radius: 40px;
                         padding: 10px 35px 10px 12px;
-                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.05);
                         border: 1px solid rgba(255, 255, 255, 0.3);
                         cursor: pointer;
                         font-size: 13px;
@@ -1784,9 +1837,9 @@ body.modal-open {
                         align-items: center;
                         gap: 8px;
                     ">
-                        <i class="fa fa-map-marker-alt" style="color: #FF0000;"></i>
-                        <span class="selected-location-text">Kenya</span>
-                        <i class="fa fa-chevron-down" style="margin-left: auto; color: #FF0000; font-size: 11px;"></i>
+
+                        <span class="selected-location-text">Kilimani,Diani,Nanyuki...</span>
+                        <i class="fa fa-map-marker-alt" style="margin-left: auto; color: #FF0000; font-size: 11px;"></i>
                     </div>
 
                     <div class="dropdown-menu-location" style="
@@ -1794,54 +1847,81 @@ body.modal-open {
                         top: 100%;
                         left: 0;
                         right: 0;
-                        background: white;
-                        border-radius: 12px;
-                        margin-top: 8px;
-                        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+                        background: rgba(255, 255, 255, 0.98);
+                        backdrop-filter: blur(10px);
+                        border-radius: 24px;
+                        margin-top: 12px;
+                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.6);
                         z-index: 9999;
                         display: none;
-                        max-height: 300px;
+                        max-height: 380px;
                         overflow-y: auto;
+                        border: 1px solid rgba(255, 255, 255, 0.5);
                     ">
-                        <div class="dropdown-option-location" data-value="all" data-url="" style="
-                            padding: 10px 12px;
-                            display: flex;
-                            align-items: center;
-                            gap: 10px;
-                            cursor: pointer;
-                            transition: background 0.2s;
-                            font-size: 13px;
-                        " onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
-                            <i class="fa fa-globe-africa" style="width: 20px; color: #FF0000;"></i>
-                            <span>All Locations</span>
+                        <!-- Claymorphic Search input -->
+                        <div style="padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); z-index: 10; border-radius: 24px 24px 0 0;">
+                            <div class="claymorphic-search" style="position: relative; background: rgba(255, 255, 255, 0.9); border-radius: 40px; padding: 4px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.05);">
+                                <i class="fa fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #FF0000; font-size: 12px; opacity: 0.7;"></i>
+                                <input type="text" class="location-search-input" placeholder="🔍 Find your paradise..." style="
+                                    width: 100%;
+                                    padding: 10px 15px 10px 40px;
+                                    border: none;
+                                    border-radius: 40px;
+                                    font-size: 12px;
+                                    outline: none;
+                                    font-family: 'Poppins', 'Inter', sans-serif;
+                                    background: transparent;
+                                    color: #333;
+                                ">
+                            </div>
                         </div>
-                        {% for location in all_locations %}
-                            <div class="dropdown-option-location" data-value="{{ location.slug }}" data-url="{{ location.url }}" style="
-                                padding: 10px 12px;
+                        <div class="location-options-container" style="padding: 8px 4px;">
+                            <div class="dropdown-option-location claymorphic-option" data-value="all" data-url="" style="
+                                padding: 10px 16px;
+                                margin: 4px 8px;
                                 display: flex;
                                 align-items: center;
-                                gap: 10px;
+                                gap: 12px;
                                 cursor: pointer;
-                                transition: background 0.2s;
+                                transition: all 0.2s ease;
                                 font-size: 13px;
-                            " onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
-                                <i class="fa fa-location-dot" style="width: 20px; color: #FF0000;"></i>
-                                <span>{{ location.name }}</span>
+                                border-radius: 30px;
+                                background: rgba(255, 255, 255, 0.6);
+                            " onmouseover="this.style.background='linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%)'; this.style.transform='translateX(5px)'; this.style.boxShadow='0 4px 12px rgba(255,0,0,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.6)'; this.style.transform='translateX(0)'; this.style.boxShadow='none'">
+                                <i class="fa fa-globe-africa" style="width: 20px; color: #FF0000;"></i>
+                                <span>✨ All Locations ✨</span>
                             </div>
-                        {% endfor %}
+                            {% for location in all_locations %}
+                                <div class="dropdown-option-location claymorphic-option" data-value="{{ location.slug }}" data-url="{{ location.url }}" style="
+                                    padding: 10px 16px;
+                                    margin: 4px 8px;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 12px;
+                                    cursor: pointer;
+                                    transition: all 0.2s ease;
+                                    font-size: 13px;
+                                    border-radius: 30px;
+                                    background: rgba(255, 255, 255, 0.6);
+                                " onmouseover="this.style.background='linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%)'; this.style.transform='translateX(5px)'; this.style.boxShadow='0 4px 12px rgba(255,0,0,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.6)'; this.style.transform='translateX(0)'; this.style.boxShadow='none'">
+                                    <i class="fa fa-location-dot" style="width: 20px; color: #FF0000;"></i>
+                                    <span> {{ location.name }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Property Type Custom Dropdown -->
+            <!-- Property Type Custom Dropdown with Claymorphic Search -->
             <div class="filter-dropdown" style="position: relative; min-width: 200px; flex: 1; max-width: 240px; z-index: 100;">
                 <div class="property-dropdown" style="position: relative; z-index: 1000;">
                     <div class="dropdown-trigger-property" style="
                         background: rgba(255, 255, 255, 0.7);
                         backdrop-filter: blur(20px);
-                        border-radius: 12px;
+                        border-radius: 40px;
                         padding: 10px 35px 10px 12px;
-                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.05);
                         border: 1px solid rgba(255, 255, 255, 0.3);
                         cursor: pointer;
                         font-size: 13px;
@@ -1851,9 +1931,9 @@ body.modal-open {
                         align-items: center;
                         gap: 8px;
                     ">
-                        <i class="fa fa-building" style="color: #FF0000;"></i>
-                        <span class="selected-property-text">Property Type</span>
-                        <i class="fa fa-chevron-down" style="margin-left: auto; color: #FF0000; font-size: 11px;"></i>
+                        
+                        <span class="selected-property-text">Hidden gems,Studio,one bedroom ...</span>
+                        <i class="fa fa-building"  style="margin-left: auto; color: #FF0000; font-size: 11px;"></i>
                     </div>
 
                     <div class="dropdown-menu-property" style="
@@ -1861,73 +1941,100 @@ body.modal-open {
                         top: 100%;
                         left: 0;
                         right: 0;
-                        background: white;
-                        border-radius: 12px;
-                        margin-top: 8px;
-                        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+                        background: rgba(255, 255, 255, 0.98);
+                        backdrop-filter: blur(10px);
+                        border-radius: 24px;
+                        margin-top: 12px;
+                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.6);
                         z-index: 9999;
                         display: none;
-                        max-height: 300px;
+                        max-height: 380px;
                         overflow-y: auto;
+                        border: 1px solid rgba(255, 255, 255, 0.5);
                     ">
-                        <div class="dropdown-option-property" data-value="" style="
-                            padding: 10px 12px;
-                            display: flex;
-                            align-items: center;
-                            gap: 10px;
-                            cursor: pointer;
-                            transition: background 0.2s;
-                            font-size: 13px;
-                        " onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
-                            <i class="fa fa-list" style="width: 20px; color: #FF0000;"></i>
-                            <span>All Properties</span>
+                        <!-- Claymorphic Search input -->
+                        <div style="padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); z-index: 10; border-radius: 24px 24px 0 0;">
+                            <div class="claymorphic-search" style="position: relative; background: rgba(255, 255, 255, 0.9); border-radius: 40px; padding: 4px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.05);">
+                                <i class="fa fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #FF0000; font-size: 12px; opacity: 0.7;"></i>
+                                <input type="text" class="property-search-input" placeholder="🔍 Search dream home..." style="
+                                    width: 100%;
+                                    padding: 10px 15px 10px 40px;
+                                    border: none;
+                                    border-radius: 40px;
+                                    font-size: 12px;
+                                    outline: none;
+                                    font-family: 'Poppins', 'Inter', sans-serif;
+                                    background: transparent;
+                                    color: #333;
+                                ">
+                            </div>
                         </div>
-                        {% for type_code, type_name in property_types %}
-                            <div class="dropdown-option-property" data-value="{{ type_code }}" style="
-                                padding: 10px 12px;
+                        <div class="property-options-container" style="padding: 8px 4px;">
+                            <div class="dropdown-option-property claymorphic-option" data-value="" style="
+                                padding: 10px 16px;
+                                margin: 4px 8px;
                                 display: flex;
                                 align-items: center;
-                                gap: 10px;
+                                gap: 12px;
                                 cursor: pointer;
-                                transition: background 0.2s;
+                                transition: all 0.2s ease;
                                 font-size: 13px;
-                            " onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
-                                {% if type_code == 'apartment' %}
-                                    <i class="fa fa-building" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'house' %}
-                                    <i class="fa fa-home" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'villa' %}
-                                    <i class="fa fa-landmark" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'cottage' %}
-                                    <i class="fa fa-tree" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'studio' %}
-                                    <i class="fa fa-paint-brush" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'bungalow' %}
-                                    <i class="fa fa-home" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'townhouse' %}
-                                    <i class="fa fa-city" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'penthouse' %}
-                                    <i class="fa fa-building" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'guesthouse' %}
-                                    <i class="fa fa-bed" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'hostel' %}
-                                    <i class="fa fa-bed" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'hotel' %}
-                                    <i class="fa fa-hotel" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'resort' %}
-                                    <i class="fa fa-umbrella-beach" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'cabin' %}
-                                    <i class="fa fa-tree" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'farm' %}
-                                    <i class="fa fa-tractor" style="width: 20px; color: #FF0000;"></i>
-                                {% elif type_code == 'castle' %}
-                                    <i class="fa fa-fort-awesome" style="width: 20px; color: #FF0000;"></i>
-                                {% else %}
-                                    <i class="fa fa-home" style="width: 20px; color: #FF0000;"></i>
-                                {% endif %}
-                                <span>{{ type_name }}</span>
+                                border-radius: 30px;
+                                background: rgba(255, 255, 255, 0.6);
+                            " onmouseover="this.style.background='linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%)'; this.style.transform='translateX(5px)'; this.style.boxShadow='0 4px 12px rgba(255,0,0,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.6)'; this.style.transform='translateX(0)'; this.style.boxShadow='none'">
+                                <i class="fa fa-list" style="width: 20px; color: #FF0000;"></i>
+                                <span>🏠 All Properties</span>
                             </div>
-                        {% endfor %}
+                            {% for type_code, type_name in property_types %}
+                                <div class="dropdown-option-property claymorphic-option" data-value="{{ type_code }}" style="
+                                    padding: 10px 16px;
+                                    margin: 4px 8px;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 12px;
+                                    cursor: pointer;
+                                    transition: all 0.2s ease;
+                                    font-size: 13px;
+                                    border-radius: 30px;
+                                    background: rgba(255, 255, 255, 0.6);
+                                " onmouseover="this.style.background='linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%)'; this.style.transform='translateX(5px)'; this.style.boxShadow='0 4px 12px rgba(255,0,0,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.6)'; this.style.transform='translateX(0)'; this.style.boxShadow='none'">
+                                    {% if type_code == 'apartment' %}
+                                        <i class="fa fa-building" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'house' %}
+                                        <i class="fa fa-home" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'villa' %}
+                                        <i class="fa fa-landmark" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'cottage' %}
+                                        <i class="fa fa-tree" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'studio' %}
+                                        <i class="fa fa-paint-brush" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'bungalow' %}
+                                        <i class="fa fa-home" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'townhouse' %}
+                                        <i class="fa fa-city" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'penthouse' %}
+                                        <i class="fa fa-building" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'guesthouse' %}
+                                        <i class="fa fa-bed" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'hostel' %}
+                                        <i class="fa fa-bed" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'hotel' %}
+                                        <i class="fa fa-hotel" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'resort' %}
+                                        <i class="fa fa-umbrella-beach" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'cabin' %}
+                                        <i class="fa fa-tree" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'farm' %}
+                                        <i class="fa fa-tractor" style="width: 20px; color: #FF0000;"></i>
+                                    {% elif type_code == 'castle' %}
+                                        <i class="fa fa-fort-awesome" style="width: 20px; color: #FF0000;"></i>
+                                    {% else %}
+                                        <i class="fa fa-home" style="width: 20px; color: #FF0000;"></i>
+                                    {% endif %}
+                                    <span>{{ type_name }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1959,7 +2066,7 @@ body.modal-open {
                 color: white;
                 border: none;
                 padding: 10px 20px;
-                border-radius: 12px;
+                border-radius: 40px;
                 font-weight: 600;
                 font-size: 13px;
                 cursor: pointer;
@@ -1967,16 +2074,16 @@ body.modal-open {
                 align-items: center;
                 gap: 6px;
                 transition: all 0.3s ease;
-                box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+                box-shadow: 0 8px 20px rgba(255, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
                 font-family: 'Poppins', 'Inter', sans-serif;
                 white-space: nowrap;
                 flex-shrink: 0;
                 min-width: 100px;
                 justify-content: center;
                 height: 38px;
-            " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(255, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)';"
-            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)';">
-                <i class="fa fa-search" aria-hidden="true" style="font-size: 12px;"></i>
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 25px rgba(255, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)';"
+            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(255, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)';">
+
                 Search
             </button>
         </div>
@@ -1985,34 +2092,59 @@ body.modal-open {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // ==================== LOCATION CUSTOM DROPDOWN ====================
+    // ==================== LOCATION CUSTOM DROPDOWN WITH CLAYMORPHIC SEARCH ====================
     const locationDropdown = document.querySelector('.location-dropdown');
     if (locationDropdown) {
         const trigger = locationDropdown.querySelector('.dropdown-trigger-location');
         const menu = locationDropdown.querySelector('.dropdown-menu-location');
         const selectedText = locationDropdown.querySelector('.selected-location-text');
-        const options = locationDropdown.querySelectorAll('.dropdown-option-location');
+        const optionsContainer = locationDropdown.querySelector('.location-options-container');
+        const allLocationOptions = Array.from(optionsContainer.querySelectorAll('.dropdown-option-location'));
+        const searchInput = locationDropdown.querySelector('.location-search-input');
         const hiddenLocationSelect = document.getElementById('locationFilter');
 
         function closeLocationDropdown(e) {
             if (!locationDropdown.contains(e.target)) {
                 if (menu) menu.style.display = 'none';
+                if (searchInput) searchInput.value = '';
+                filterLocationOptions('');
             }
+        }
+
+        function filterLocationOptions(searchTerm) {
+            const term = searchTerm.toLowerCase();
+            allLocationOptions.forEach(option => {
+                const text = option.querySelector('span').innerText.toLowerCase();
+                if (term === '' || text.includes(term)) {
+                    option.style.display = 'flex';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function(e) {
+                filterLocationOptions(e.target.value);
+            });
         }
 
         if (trigger) {
             trigger.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const isVisible = menu.style.display === 'block';
-                // Close all other dropdowns
                 document.querySelectorAll('.dropdown-menu-location, .dropdown-menu-property').forEach(m => {
                     if (m !== menu) m.style.display = 'none';
                 });
                 menu.style.display = isVisible ? 'none' : 'block';
+                if (!isVisible && searchInput) {
+                    setTimeout(() => searchInput.focus(), 100);
+                    filterLocationOptions('');
+                }
             });
         }
 
-        options.forEach(option => {
+        allLocationOptions.forEach(option => {
             option.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const value = this.dataset.value;
@@ -2020,11 +2152,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const icon = this.querySelector('i').cloneNode(true);
                 const url = this.dataset.url;
 
-                selectedText.innerText = text;
+                selectedText.innerText = text.replace(/[✨📍🏠]/g, '').trim();
                 const oldIcon = trigger.querySelector('i:first-child');
                 if (oldIcon) oldIcon.replaceWith(icon);
 
-                // Update hidden select
                 if (hiddenLocationSelect) {
                     for (let i = 0; i < hiddenLocationSelect.options.length; i++) {
                         if (hiddenLocationSelect.options[i].value === value) {
@@ -2032,7 +2163,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             break;
                         }
                     }
-                    // Store URL for navigation
                     if (url && hiddenLocationSelect.options[hiddenLocationSelect.selectedIndex]) {
                         hiddenLocationSelect.options[hiddenLocationSelect.selectedIndex].setAttribute('data-url', url);
                     }
@@ -2041,40 +2171,67 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 menu.style.display = 'none';
+                if (searchInput) searchInput.value = '';
+                filterLocationOptions('');
             });
         });
 
         document.addEventListener('click', closeLocationDropdown);
     }
 
-    // ==================== PROPERTY TYPE CUSTOM DROPDOWN ====================
+    // ==================== PROPERTY TYPE CUSTOM DROPDOWN WITH CLAYMORPHIC SEARCH ====================
     const propertyDropdown = document.querySelector('.property-dropdown');
     if (propertyDropdown) {
         const trigger = propertyDropdown.querySelector('.dropdown-trigger-property');
         const menu = propertyDropdown.querySelector('.dropdown-menu-property');
         const selectedText = propertyDropdown.querySelector('.selected-property-text');
-        const options = propertyDropdown.querySelectorAll('.dropdown-option-property');
+        const optionsContainer = propertyDropdown.querySelector('.property-options-container');
+        const allPropertyOptions = Array.from(optionsContainer.querySelectorAll('.dropdown-option-property'));
+        const searchInput = propertyDropdown.querySelector('.property-search-input');
         const hiddenPropertySelect = document.getElementById('propertyTypeFilter');
 
         function closePropertyDropdown(e) {
             if (!propertyDropdown.contains(e.target)) {
                 if (menu) menu.style.display = 'none';
+                if (searchInput) searchInput.value = '';
+                filterPropertyOptions('');
             }
+        }
+
+        function filterPropertyOptions(searchTerm) {
+            const term = searchTerm.toLowerCase();
+            allPropertyOptions.forEach(option => {
+                const text = option.querySelector('span').innerText.toLowerCase();
+                if (term === '' || text.includes(term)) {
+                    option.style.display = 'flex';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function(e) {
+                filterPropertyOptions(e.target.value);
+            });
         }
 
         if (trigger) {
             trigger.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const isVisible = menu.style.display === 'block';
-                // Close all other dropdowns
                 document.querySelectorAll('.dropdown-menu-location, .dropdown-menu-property').forEach(m => {
                     if (m !== menu) m.style.display = 'none';
                 });
                 menu.style.display = isVisible ? 'none' : 'block';
+                if (!isVisible && searchInput) {
+                    setTimeout(() => searchInput.focus(), 100);
+                    filterPropertyOptions('');
+                }
             });
         }
 
-        options.forEach(option => {
+        allPropertyOptions.forEach(option => {
             option.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const value = this.dataset.value;
@@ -2085,7 +2242,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const oldIcon = trigger.querySelector('i:first-child');
                 if (oldIcon) oldIcon.replaceWith(icon);
 
-                // Update hidden select
                 if (hiddenPropertySelect) {
                     for (let i = 0; i < hiddenPropertySelect.options.length; i++) {
                         if (hiddenPropertySelect.options[i].value === value) {
@@ -2098,6 +2254,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 menu.style.display = 'none';
+                if (searchInput) searchInput.value = '';
+                filterPropertyOptions('');
             });
         });
 
@@ -2150,7 +2308,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ==================== INITIALIZE SELECTED VALUES ====================
     function initializeSelectedValues() {
-        // Initialize location dropdown
         if (locationFilter && locationFilter.value !== 'all') {
             const locationDropdownContainer = document.querySelector('.location-dropdown');
             if (locationDropdownContainer) {
@@ -2162,7 +2319,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Initialize property dropdown
         if (propertyTypeFilter && propertyTypeFilter.value) {
             const propertyDropdownContainer = document.querySelector('.property-dropdown');
             if (propertyDropdownContainer) {
@@ -2171,7 +2327,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (selectedText && selectedOption) {
                     selectedText.innerText = selectedOption.text;
 
-                    // Update icon
                     const trigger = propertyDropdownContainer.querySelector('.dropdown-trigger-property');
                     const options = propertyDropdownContainer.querySelectorAll('.dropdown-option-property');
                     options.forEach(option => {
@@ -2216,8 +2371,6 @@ document.addEventListener('DOMContentLoaded', function() {
     adjustMobileDropdowns();
 });
 </script>
-
-
 <!-- listings gallery section -->
 <section>
   <div style="border-radius: 32px 32px 32px 32px; box-shadow: 0 4px 8px rgba(0,0,0,0.1), 0 6px 20px rgba(0,0,0,0.1); margin-top: 10px;">

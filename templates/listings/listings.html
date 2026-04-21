@@ -1752,6 +1752,7 @@ body.modal-open {
     .apply-button {
         min-width: 120px !important;
         flex: 0 0 auto !important;
+         margin-right: auto !important;
     }
 }
 
@@ -1865,8 +1866,87 @@ body.modal-open {
             font-size: 12px !important;
         }
     }
-</style>
 
+
+/* Mobile styles - makes the search bar full width like desktop */
+@media (max-width: 768px) {
+    .filters-container {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+
+    .logo-section {
+        width: 100% !important;
+        justify-content: center !important;
+        margin-bottom: 5px !important;
+    }
+
+    .filters-section {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .apply-button {
+        width: 100% !important;
+        margin-top: 5px !important;
+    }
+
+    /* Keep the search bars side by side on mobile too */
+    .filters-section {
+        flex-direction: row !important;
+    }
+
+    .filter-dropdown {
+        min-width: 0 !important;
+    }
+
+    .dropdown-trigger-location,
+    .dropdown-trigger-property {
+        padding: 8px 10px !important;
+    }
+
+    .selected-location-text,
+    .selected-property-text {
+        font-size: 11px !important;
+        max-width: 80px !important;
+    }
+}
+
+/* Desktop styles - centers the search bar */
+@media (min-width: 769px) {
+    .filters-container {
+        justify-content: center !important;
+    }
+
+    .logo-section {
+        margin-right: auto !important;
+    }
+
+    .filters-section {
+        margin: 0 auto !important;
+        justify-content: center !important;
+    }
+
+
+}
+
+/* Small phone adjustments */
+@media (max-width: 480px) {
+    .selected-location-text,
+    .selected-property-text {
+        max-width: 60px !important;
+        font-size: 10px !important;
+    }
+
+    .dropdown-trigger-location i,
+    .dropdown-trigger-property i {
+        font-size: 12px !important;
+    }
+}
+
+
+</style>
 <section class="mobile-spacing" style="
     background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.9) 100%);
     margin: -15px 6px 1px 6px;
@@ -1947,28 +2027,32 @@ body.modal-open {
             </a>
         </div>
 
-        <!-- Compact Filter Controls -->
+        <!-- Compact Filter Controls - Two Search Bars Merged -->
         <div class="filters-section" style="
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0px;
             flex: 1;
             min-width: 0;
-            justify-content: flex-end;
             overflow: visible !important;
             position: relative;
             z-index: 50;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 2px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-width: 500px;
+            margin: 0 auto;
         ">
-            <!-- Location Custom Dropdown with Claymorphic Search -->
-            <div class="filter-dropdown" style="position: relative; min-width: 180px; flex: 1; max-width: 220px; z-index: 100;">
+            <!-- Location Search Bar - No Border -->
+            <div class="filter-dropdown" style="position: relative; flex: 1; min-width: 0; z-index: 100;">
                 <div class="location-dropdown" style="position: relative; z-index: 1000;">
                     <div class="dropdown-trigger-location" style="
-                        background: rgba(255, 255, 255, 0.7);
-                        backdrop-filter: blur(20px);
-                        border-radius: 40px;
-                        padding: 10px 35px 10px 12px;
-                        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.05);
-                        border: 1px solid rgba(255, 255, 255, 0.3);
+                        background: transparent;
+                        border-radius: 40px 0 0 40px;
+                        padding: 10px 15px 10px 15px;
                         cursor: pointer;
                         font-size: 13px;
                         font-weight: 500;
@@ -1976,16 +2060,20 @@ body.modal-open {
                         display: flex;
                         align-items: center;
                         gap: 8px;
+                        border: none;
+                        box-shadow: none;
                     ">
-                        <span class="selected-location-text">Kilimani, Diani, Nanyuki...</span>
-                        <i class="fa fa-map-marker-alt" style="margin-left: auto; color: #FF0000; font-size: 11px;"></i>
+                        <i class="fa fa-map-marker-alt" style="color: #FF0000; font-size: 14px;"></i>
+                        <span class="selected-location-text" style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Location</span>
+                        <i class="fa fa-chevron-down" style="color: #FF0000; font-size: 11px;"></i>
                     </div>
 
                     <div class="dropdown-menu-location" style="
                         position: absolute;
                         top: 100%;
                         left: 0;
-                        right: 0;
+                        right: auto;
+                        min-width: 260px;
                         background: rgba(255, 255, 255, 0.98);
                         backdrop-filter: blur(10px);
                         border-radius: 24px;
@@ -1997,11 +2085,10 @@ body.modal-open {
                         overflow-y: auto;
                         border: 1px solid rgba(255, 255, 255, 0.5);
                     ">
-                        <!-- Claymorphic Search input -->
                         <div style="padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); z-index: 10; border-radius: 24px 24px 0 0;">
                             <div class="claymorphic-search" style="position: relative; background: rgba(255, 255, 255, 0.9); border-radius: 40px; padding: 4px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.05);">
                                 <i class="fa fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #FF0000; font-size: 12px; opacity: 0.7;"></i>
-                                <input type="text" class="location-search-input" placeholder="🔍 Find your paradise..." style="
+                                <input type="text" class="location-search-input" placeholder="🔍 Search locations..." style="
                                     width: 100%;
                                     padding: 10px 15px 10px 40px;
                                     border: none;
@@ -2052,16 +2139,16 @@ body.modal-open {
                 </div>
             </div>
 
-            <!-- Property Type Custom Dropdown with Claymorphic Search -->
-            <div class="filter-dropdown" style="position: relative; min-width: 200px; flex: 1; max-width: 240px; z-index: 100;">
+            <!-- Divider Line -->
+            <div style="width: 1px; height: 30px; background: rgba(0,0,0,0.1);"></div>
+
+            <!-- Property Type Search Bar - No Border -->
+            <div class="filter-dropdown" style="position: relative; flex: 1; min-width: 0; z-index: 100;">
                 <div class="property-dropdown" style="position: relative; z-index: 1000;">
                     <div class="dropdown-trigger-property" style="
-                        background: rgba(255, 255, 255, 0.7);
-                        backdrop-filter: blur(20px);
-                        border-radius: 40px;
-                        padding: 10px 35px 10px 12px;
-                        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.05);
-                        border: 1px solid rgba(255, 255, 255, 0.3);
+                        background: transparent;
+                        border-radius: 0 40px 40px 0;
+                        padding: 10px 15px 10px 15px;
                         cursor: pointer;
                         font-size: 13px;
                         font-weight: 500;
@@ -2069,16 +2156,20 @@ body.modal-open {
                         display: flex;
                         align-items: center;
                         gap: 8px;
+                        border: none;
+                        box-shadow: none;
                     ">
-                        <span class="selected-property-text">Hidden gems, Studio, one bedroom...</span>
-                        <i class="fa fa-building" style="margin-left: auto; color: #FF0000; font-size: 11px;"></i>
+                        <i class="fa fa-building" style="color: #FF0000; font-size: 14px;"></i>
+                        <span class="selected-property-text" style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Property Type</span>
+                        <i class="fa fa-chevron-down" style="color: #FF0000; font-size: 11px;"></i>
                     </div>
 
                     <div class="dropdown-menu-property" style="
                         position: absolute;
                         top: 100%;
-                        left: 0;
                         right: 0;
+                        left: auto;
+                        min-width: 260px;
                         background: rgba(255, 255, 255, 0.98);
                         backdrop-filter: blur(10px);
                         border-radius: 24px;
@@ -2090,11 +2181,10 @@ body.modal-open {
                         overflow-y: auto;
                         border: 1px solid rgba(255, 255, 255, 0.5);
                     ">
-                        <!-- Claymorphic Search input -->
                         <div style="padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); z-index: 10; border-radius: 24px 24px 0 0;">
                             <div class="claymorphic-search" style="position: relative; background: rgba(255, 255, 255, 0.9); border-radius: 40px; padding: 4px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.05);">
                                 <i class="fa fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #FF0000; font-size: 12px; opacity: 0.7;"></i>
-                                <input type="text" class="property-search-input" placeholder="🔍 Search dream home..." style="
+                                <input type="text" class="property-search-input" placeholder="🔍 Search property types..." style="
                                     width: 100%;
                                     padding: 10px 15px 10px 40px;
                                     border: none;
@@ -2176,61 +2266,62 @@ body.modal-open {
                     </div>
                 </div>
             </div>
-
-            <!-- Hidden filters for form submission -->
-            <select id="locationFilter" style="display: none;">
-                <option value="all" {% if selected_location == 'all' %}selected{% endif %}>All Locations</option>
-                {% for location in all_locations %}
-                    <option value="{{ location.slug }}" data-url="{{ location.url }}"
-                            {% if current_location_slug == location.slug %}selected{% endif %}>
-                        {{ location.name }}
-                    </option>
-                {% endfor %}
-            </select>
-
-            <select id="propertyTypeFilter" style="display: none;">
-                <option value="">Property Type</option>
-                {% for type_code, type_name in property_types %}
-                    <option value="{{ type_code }}"
-                            {% if current_filters.property_type == type_code %}selected{% endif %}>
-                        {{ type_name }}
-                    </option>
-                {% endfor %}
-            </select>
-
-            <!-- Apply Filters Button - Compact -->
-            <button id="applyFilters" class="apply-button" style="
-                background: #FF0000;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 40px;
-                font-weight: 600;
-                font-size: 13px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                transition: all 0.3s ease;
-                box-shadow: 0 8px 20px rgba(255, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-                font-family: 'Poppins', 'Inter', sans-serif;
-                white-space: nowrap;
-                flex-shrink: 0;
-                min-width: 100px;
-                justify-content: center;
-                height: 38px;
-            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 25px rgba(255, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)';"
-            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(255, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)';">
-                <i class="fa fa-search" aria-hidden="true" style="font-size: 12px;"></i>
-                Search
-            </button>
         </div>
+
+        <!-- Hidden filters for form submission -->
+        <select id="locationFilter" style="display: none;">
+            <option value="all" {% if selected_location == 'all' %}selected{% endif %}>All Locations</option>
+            {% for location in all_locations %}
+                <option value="{{ location.slug }}" data-url="{{ location.url }}"
+                        {% if current_location_slug == location.slug %}selected{% endif %}>
+                    {{ location.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select id="propertyTypeFilter" style="display: none;">
+            <option value="">Property Type</option>
+            {% for type_code, type_name in property_types %}
+                <option value="{{ type_code }}"
+                        {% if current_filters.property_type == type_code %}selected{% endif %}>
+                    {{ type_name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- Apply Filters Button - Compact -->
+        <button id="applyFilters" class="apply-button" style="
+            background: #FF0000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            font-family: 'Poppins', 'Inter', sans-serif;
+            white-space: nowrap;
+            flex-shrink: 0;
+            min-width: 100px;
+            justify-content: center;
+            height: 38px;
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 25px rgba(255, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)';"
+        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(255, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)';">
+            <i class="fa fa-search" aria-hidden="true" style="font-size: 12px;"></i>
+            Search
+        </button>
     </div>
 </section>
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // ==================== LOCATION CUSTOM DROPDOWN WITH CLAYMORPHIC SEARCH ====================
+    // ==================== LOCATION CUSTOM DROPDOWN ====================
     const locationDropdown = document.querySelector('.location-dropdown');
     if (locationDropdown) {
         const trigger = locationDropdown.querySelector('.dropdown-trigger-location');
@@ -2322,7 +2413,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', closeLocationDropdown);
     }
 
-    // ==================== PROPERTY TYPE CUSTOM DROPDOWN WITH CLAYMORPHIC SEARCH ====================
+    // ==================== PROPERTY TYPE CUSTOM DROPDOWN ====================
     const propertyDropdown = document.querySelector('.property-dropdown');
     if (propertyDropdown) {
         const trigger = propertyDropdown.querySelector('.dropdown-trigger-property');
@@ -2490,62 +2581,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     initializeSelectedValues();
-
-    // Handle window resize for mobile - IMPROVED ACCESSIBILITY WITH HORIZONTAL LAYOUT
-    function adjustMobileDropdowns() {
-        if (window.innerWidth <= 768) {
-            document.querySelectorAll('.dropdown-menu-location, .dropdown-menu-property').forEach(menu => {
-                if (menu.style.display === 'block') {
-                    const trigger = menu.parentElement.querySelector('.dropdown-trigger-location, .dropdown-trigger-property');
-                    const triggerRect = trigger.getBoundingClientRect();
-
-                    // Position dropdown below each respective trigger
-                    menu.style.position = 'fixed';
-                    menu.style.top = (triggerRect.bottom + 10) + 'px';
-                    menu.style.left = '15px';
-                    menu.style.right = '15px';
-                    menu.style.width = 'auto';
-                    menu.style.maxHeight = '55vh';
-                    menu.style.borderRadius = '24px';
-                    menu.style.zIndex = '10000';
-
-                    // Ensure search input is sticky and accessible
-                    const searchContainer = menu.querySelector('div[style*="position: sticky"]');
-                    if (searchContainer) {
-                        searchContainer.style.position = 'sticky';
-                        searchContainer.style.top = '0';
-                        searchContainer.style.background = 'rgba(255, 255, 255, 0.98)';
-                        searchContainer.style.zIndex = '20';
-                        searchContainer.style.borderRadius = '24px 24px 0 0';
-                    }
-
-                    // Auto-focus and scroll to search input
-                    const searchInput = menu.querySelector('.location-search-input, .property-search-input');
-                    if (searchInput) {
-                        setTimeout(() => {
-                            searchInput.focus();
-                            if (window.innerWidth <= 768) {
-                                searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            }
-                        }, 150);
-                    }
-                }
-            });
-        } else {
-            document.querySelectorAll('.dropdown-menu-location, .dropdown-menu-property').forEach(menu => {
-                menu.style.position = 'absolute';
-                menu.style.top = '100%';
-                menu.style.left = '0';
-                menu.style.right = '0';
-                menu.style.width = '';
-                menu.style.maxHeight = '380px';
-                menu.style.zIndex = '9999';
-            });
-        }
-    }
-
-    window.addEventListener('resize', adjustMobileDropdowns);
-    adjustMobileDropdowns();
 });
 </script>
 <!-- listings gallery section -->

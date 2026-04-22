@@ -74,6 +74,7 @@ class Listing(models.Model):
         ('diani', 'Diani'),
         ('nyali', 'Nyali'),
         ('mtwapa', 'Mtwapa'),
+        ('shanzu', 'Shanzu'),
         ('mombasa', 'Mombasa'),
         ('malindi', 'Malindi'),
         ('kilifi_town', 'Kilifi Town'),

@@ -636,7 +636,7 @@ section.mobile-spacing {
 }
 
 .listing-slide .location {
-  font-size: 0.95rem;
+  font-size: 0.55rem;
   color: #666;
   margin-bottom: 12px;
   display: flex;
@@ -887,7 +887,7 @@ section.mobile-spacing {
 }
 
 .hero-title {
-  font-size: 1.5rem;
+  font-size: 1.0rem;
   font-weight: 800;
   margin-bottom: 12px;
   line-height: 1.2;
@@ -917,7 +917,7 @@ section.mobile-spacing {
 
 @media (max-width: 768px) {
   .hero-title {
-    font-size: 1.8rem;
+    font-size: 0.9rem;
   }
   .hero-price {
     font-size: 1.6rem;
@@ -1794,7 +1794,7 @@ body.modal-open {
         /* Make selected text smaller to fit side by side */
         .selected-location-text,
         .selected-property-text {
-            font-size: 11px !important;
+            font-size: 9px !important;
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
@@ -1928,6 +1928,11 @@ body.modal-open {
         justify-content: center !important;
     }
 
+   .apply-button {
+        min-width: 120px !important;
+        flex: 0 0 auto !important;
+         margin-right: auto !important;
+    }
 
 }
 
@@ -2964,7 +2969,7 @@ document.addEventListener('DOMContentLoaded', function() {
   {% endif %}
 </p>
 
-              <p class="location" style="font-size: 0.95rem; color: #666; margin-bottom: 10px;">
+              <p class="location" style="font-size: 0.75rem; color: #666; margin-bottom: 10px;">
                 <i class="fa fa-map-marker" style="color: #007bff;" aria-hidden="true"></i>
                 {{ listing.get_location_display }} • {{ listing.specific_location }}
               </p>

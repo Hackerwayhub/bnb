@@ -32,6 +32,7 @@ class Listing(models.Model):
         ('westlands', 'Westlands'),
 
         ('kileleshwa', 'Kileleshwa'),
+        ('waiyaki_way', 'Waiyaki way'),
         ('riverside', 'Riverside'),
         ('pangani', 'Pangani'),
         ('parklands', 'Parklands'),

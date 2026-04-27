@@ -1,3 +1,29 @@
+/* 1. Hamburger lines – black by default */
+#hamburgerBtn span {
+    background-color: #333 !important;  /* or black #000 */
+}
+
+/* 2. Prevent hamburger from turning white on hover */
+.custom_menu-btn:hover span {
+    background-color: #333 !important;  /* keep black */
+}
+
+/* 3. Close button – white and stays white */
+.closebtn,
+.closebtn:hover,
+.closebtn:focus,
+.overlay .closebtn {
+    color: white !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+/* 4. If close button uses an icon font (e.g. Font Awesome) */
+.closebtn i,
+.closebtn svg {
+    color: white !important;
+}
+
 
     /* Remove square border / focus outline from the hamburger button */
 #hamburgerBtn:focus,
@@ -28,7 +54,7 @@
 }
 
 .custom_menu-btn:hover span {
-    background-color: white !important;
+    background-color: #333 !important;
 }
 
 /* Enhanced Overlay Menu */
@@ -85,6 +111,7 @@
 
     transform: rotate(90deg) scale(1.1);
     box-shadow: 0 10px 35px rgba(255, 90, 95, 0.5);
+
 }
 
 /* Enhanced Hamburger Animation */
@@ -1032,14 +1059,14 @@ section.mobile-spacing {
 
 @media (max-width: 768px) {
   .hero-carousel-container {
-    height: 550px;
+    height: 510px;
     aspect-ratio: auto;
   }
 }
 
 @media (max-width: 480px) {
   .hero-carousel-container {
-    height: 550px;
+    height: 510px;
   }
 }
 
@@ -1155,7 +1182,7 @@ section.mobile-spacing {
 }
 
 .hero-title {
-  font-size: 2.0rem;
+  font-size: 1.5rem;
   font-family: 'Poppins', 'Inter', sans-serif;
   font-weight: 800;
   margin-bottom: 12px;
@@ -1186,7 +1213,7 @@ section.mobile-spacing {
 
 @media (max-width: 768px) {
   .hero-title {
-    font-size: 1.25rem;
+    font-size: 0.95rem;
     font-family: 'Poppins', 'Inter', sans-serif;
   }
   .hero-price {
@@ -1199,7 +1226,7 @@ section.mobile-spacing {
 
 @media (max-width: 480px) {
   .hero-title {
-    font-size: 1.25rem;
+    font-size: 0..95rem;
     font-family: 'Poppins', 'Inter', sans-serif;
   }
   .hero-price {

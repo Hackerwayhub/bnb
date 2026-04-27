@@ -760,14 +760,14 @@ section.mobile-spacing {
 
 @media (max-width: 768px) {
   .hero-carousel-container {
-    height: 5800px;
+    height: 550px;
     aspect-ratio: auto;
   }
 }
 
 @media (max-width: 480px) {
   .hero-carousel-container {
-    height: 580px;
+    height: 550px;
   }
 }
 
@@ -883,7 +883,8 @@ section.mobile-spacing {
 }
 
 .hero-title {
-  font-size: 2.5rem;
+  font-size: 2.0rem;
+  font-family: 'Poppins', 'Inter', sans-serif;
   font-weight: 800;
   margin-bottom: 12px;
   line-height: 1.2;
@@ -913,7 +914,8 @@ section.mobile-spacing {
 
 @media (max-width: 768px) {
   .hero-title {
-    font-size: 1.75rem;
+    font-size: 1.25rem;
+    font-family: 'Poppins', 'Inter', sans-serif;
   }
   .hero-price {
     font-size: 1.6rem;
@@ -925,7 +927,8 @@ section.mobile-spacing {
 
 @media (max-width: 480px) {
   .hero-title {
-    font-size: 1.75rem;
+    font-size: 1.25rem;
+    font-family: 'Poppins', 'Inter', sans-serif;
   }
   .hero-price {
     font-size: 1.3rem;
@@ -2349,7 +2352,7 @@ body.modal-open {
           <div class="hero-overlay"></div>
           <!-- Content -->
           <div class="hero-content">
-           
+            <div class="hero-category">{{ listing.get_property_type_display }}</div>
             <h2 class="hero-title">{{ listing.title }}</h2>
             <p class="hero-price">
               {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}

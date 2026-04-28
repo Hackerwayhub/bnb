@@ -417,7 +417,10 @@
           <!-- Content -->
           <div class="hero-content">
             <div class="hero-category">{{ listing.get_property_type_display }}</div>
-            <h2 class="hero-title">{{ listing.title }}</h2>
+
+               <div class="hero-delivery">
+              <i class="fa fa-gem"></i> Great deals just for you!
+            </div>
             <p class="hero-price">
               {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
                 KSh {{ listing.price_per_night|floatformat:0 }} <small>/ night</small>
@@ -429,9 +432,7 @@
                 Price on request
               {% endif %}
             </p>
-            <div class="hero-delivery">
-              <i class="fa fa-gem"></i> Crazy deals just for you!
-            </div>
+
 
             <div class="hero-buttons">
               <!-- Share Button - Glassmorphism Icon Only -->

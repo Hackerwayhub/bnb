@@ -72,15 +72,17 @@
                     display: inline-block;
                     line-height: 1;
                 ">βnβ</span>
-                <sub><span style="
-                    color: #FF0000;
-                    font-weight: 900;
-                    text-transform: none;
-                    font-family: 'Poppins', sans-serif;
-                    font-size: 0.75em;
-                    display: inline-block;
-                    line-height: 1;
-                ">.co.ke</span></sub>
+                <span style="
+            color: #FF0000;
+            font-weight: 900;
+            text-transform: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.75em;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: super;  /* Changed from default sub/sup behavior */
+            /* Alternative: use vertical-align: top; with relative positioning */
+        ">.co.ke</span>
             </a>
         </div>
 
@@ -791,13 +793,13 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="no-listings" style="text-align: center; padding: 40px 20px;">
 
 
-          <span class="clean-text"> 🏠  </span>
+
 
         <p style="color: #000000; margin-bottom: 20px;">
           {% if selected_location != 'all' %}
-           Contact βnβ support for fast,secure and seamless booking!
+           Contact βnb support for fast,secure and seamless booking!
           {% else %}
-            Contact βnβ support for fast,secure and seamless booking!
+            Contact βnb support for fast,secure and seamless booking!
           {% endif %}
         </p>
       </div>

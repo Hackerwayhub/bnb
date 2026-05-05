@@ -25,9 +25,6 @@ class Listing(models.Model):
 
     LOCATIONS = [
 
-        ('dubai', 'Dubai'),
-        ('usa', 'usa'),
-        ('Kenya', 'Kenya'),
         ('kilimani', 'Kilimani'),
         ('westlands', 'Westlands'),
 
@@ -131,6 +128,10 @@ class Listing(models.Model):
 
         ('wangige', 'Wangige'),
         ('kericho_town', 'Kericho Town'),
+
+        ('dubai', 'Dubai'),
+        ('usa', 'usa'),
+        ('Kenya', 'Kenya'),
     ]
 
     LISTING_TYPE_CHOICES = [

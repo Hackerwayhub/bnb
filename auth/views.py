@@ -96,7 +96,7 @@ The  βnb.co.keTeam"""
 
     context = {
         'form': form,
-        'title': 'Register | βnb.co.ke',
+        'title': 'Sign up / Login',
         'page_title': 'Register | βnb.co.ke'
     }
     return render(request, 'auth/register.html', context)
@@ -130,7 +130,7 @@ def login_view(request):
 
     context = {
         'form': form,
-        'title': 'Login | βnb.co.ke',
+        'title': 'Sign up / Login',
         'page_title': 'Sign In'
     }
     return render(request, 'auth/login.html', context)
@@ -209,7 +209,7 @@ def profile(request):
         'bookings_count': bookings_count,
         'approved_listings_count': approved_listings_count,
         'featured_listings_count': featured_listings_count,
-        'title': 'Profile | βnb.co.ke',
+        'title': 'Profile / βnb.co.ke',
         'page_title': 'My Profile'
     }
     return render(request, 'auth/profile.html', context)
@@ -274,7 +274,7 @@ def my_listings(request):
         'active_listings': active_listings,
         'featured_listings': featured_listings,
         'pending_bookings': 0,  # You can add this later
-        'title': 'My Listings | βnb.co.ke',
+        'title': 'My Listings / βnb.co.ke',
         'page_title': 'My Listings'
     }
     return render(request, 'auth/profile.html', context)

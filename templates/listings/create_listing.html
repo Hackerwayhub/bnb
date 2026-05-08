@@ -133,97 +133,10 @@ body {
     transform: rotate(90deg);
 }
 
-/* Progress Steps - Glassmorphism */
-.progress-steps {
-    padding: 20px 16px;
-    background: var(--glass-light);
-    border-bottom: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-}
-
-.step-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-}
-
-.step {
-    text-align: center;
-    flex: 1;
-    min-width: 0;
-    position: relative;
-    z-index: 2;
-}
-
-.step-number {
-    background: var(--glass-white);
-    backdrop-filter: blur(10px);
-    color: var(--text-primary);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 6px;
-    font-weight: 700;
-    font-size: 15px;
-    border: 2px solid var(--glass-border);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.step.active .step-number {
-    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
-    color: white;
-    border-color: rgba(45, 55, 72, 0.3);
-}
-
-.step-label {
-    font-size: 12px;
-    color: var(--text-secondary);
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.2;
-}
-
-.step.active .step-label {
-    color: var(--text-primary);
-    font-weight: 700;
-}
-
-.step-connector {
-    flex: 1;
-    height: 3px;
-    background: var(--glass-border);
-    margin: 0 8px;
-    min-width: 20px;
-    position: relative;
-    overflow: hidden;
-}
-
-.step-connector::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, #2d3748, #4a5568);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-}
-
-.step-connector.active::after {
-    transform: scaleX(1);
-}
-
+.
 /* Form Sections - Glassmorphism */
 .form-section {
-    margin-bottom: 25px;
+    margin: 15px;
     padding: 20px;
     background: var(--glass-light);
     border-radius: 16px;
@@ -1254,31 +1167,6 @@ body {
                 </div>
             {% endfor %}
         {% endif %}
-
-        <!-- Progress Steps -->
-        <div class="progress-steps">
-            <div class="step-container">
-                <div class="step active">
-                    <div class="step-number">1</div>
-                    <div class="step-label">Property Info</div>
-                </div>
-                <div class="step-connector active"></div>
-                <div class="step active">
-                    <div class="step-number">2</div>
-                    <div class="step-label">Details</div>
-                </div>
-                <div class="step-connector active"></div>
-                <div class="step active">
-                    <div class="step-number">3</div>
-                    <div class="step-label">Amenities</div>
-                </div>
-                <div class="step-connector active"></div>
-                <div class="step active">
-                    <div class="step-number">4</div>
-                    <div class="step-label">Pricing & Photos</div>
-                </div>
-            </div>
-        </div>
 
         <!-- Form Body -->
         <div style="padding: 30px;">

@@ -1280,7 +1280,7 @@
                         </div>
                         <div class="profile-email">
                             <i class="fas fa-phone"></i>
-                            {{ user.profile.phone|default:"No phone number set" }}
+                            {{ user.profile.phone|default:"-" }}
                         </div>
                         {% if user.profile.whatsapp %}
                         <div class="profile-email">

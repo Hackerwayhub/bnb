@@ -395,6 +395,7 @@ def book_via_whatsapp(request):
     }
     return render(request, 'listings/book_via_whatsapp.html', context)
 
+# listings/views.py - inside booking_view
 
 def booking_view(request, listing_id):
     listing = get_object_or_404(Listing, id=listing_id)
@@ -404,21 +405,56 @@ def booking_view(request, listing_id):
         if form.is_valid():
             booking = form.save(commit=False)
             booking.listing = listing
-
-            # REMOVED: No more date calculations
-            # booking.total_price is no longer needed as it's removed from model
-
             booking.save()
 
-            # Updated success message for inquiry
+            # --- Send booking confirmation emails ---
+            try:
+                # Prepare context for email
+                context = {
+                    'booking': booking,
+                    'listing': listing,
+                    'booking_ref': f"BK{booking.id:06d}",
+                    'guest_name': booking.guest_name,
+                    'guest_email': booking.guest_email,
+                    'guest_phone': booking.guest_phone,
+                    'inquiry_type': booking.get_inquiry_type_display(),
+                    'message': booking.message,
+                    'site_url': getattr(settings, 'SITE_URL', 'https://bnb.co.ke'),
+                }
+
+                subject = f'Booking Confirmation - {booking.inquiry_ref}'
+
+                html_message = render_to_string('emails/booking_confirmation.html', context)
+                plain_message = strip_tags(html_message)
+
+                # Recipients: guest + admin email (instead of host)
+                admin_email = 'booking.bnb.co.ke@gmail.com'
+                recipient_list = [booking.guest_email, admin_email]
+
+                send_mail(
+                    subject=subject,
+                    message=plain_message,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=recipient_list,
+                    html_message=html_message,
+                    fail_silently=False,
+                )
+                logger.info(f"Booking confirmation email sent to {recipient_list} for booking {booking.id}")
+
+            except Exception as e:
+                logger.error(f"Failed to send booking confirmation email for booking {booking.id}: {str(e)}",
+                             exc_info=True)
+                messages.warning(request,
+                                 'Your booking was saved, but we could not send the confirmation email. Please contact support if you do not receive it.')
+            # --- End email sending ---
+
             messages.success(
                 request,
                 f"🎉 Your inquiry has been sent successfully! "
                 f"Your inquiry reference is {booking.inquiry_ref}. "
                 f"The host will contact you shortly on {booking.guest_phone} or {booking.guest_email}."
             )
-
-            return redirect('listing_detail', slug=listing.slug)  # Redirect back to listing page
+            return redirect('listing_detail', slug=listing.slug)
     else:
         form = BookingForm(initial={'listing_id': listing.id}, listing=listing,
                            user=request.user if request.user.is_authenticated else None)
@@ -426,10 +462,11 @@ def booking_view(request, listing_id):
     context = {
         'form': form,
         'listing': listing,
-        'title':  f' Book{listing.title} | βnb.co.ke',
+        'title': f' Book{listing.title} | βnb.co.ke',
         'page_title': f' Book{listing.title} | βnb.co.ke',
     }
     return render(request, 'listings/booking_form.html', context)
+
 
 def booking_confirmation(request, booking_id):
     """

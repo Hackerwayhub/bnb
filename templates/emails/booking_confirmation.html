@@ -119,7 +119,7 @@
 
             <div class="highlight-box">
                 <h4>📋 Important Information</h4>
-                <p>This is a booking <strong>request</strong>. Your booking will be confirmed by the property owner within 24 hours. You will receive another email once it's fully confirmed.</p>
+                <p>This is a booking <strong>request</strong>. Your booking will be confirmed by the property owner within a few minutes. You will receive another email once it's fully confirmed.</p>
             </div>
 
             <div class="section">
@@ -138,25 +138,6 @@
                 </div>
             </div>
 
-            <div class="section">
-                <h3>📅 Booking Dates</h3>
-                <div class="detail-row">
-                    <div class="detail-label">Check-in Date:</div>
-                    <div class="detail-value">{{ check_in }}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Check-out Date:</div>
-                    <div class="detail-value">{{ check_out }}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Number of Nights:</div>
-                    <div class="detail-value">{{ number_of_nights }}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Number of Guests:</div>
-                    <div class="detail-value">{{ booking.number_of_guests }}</div>
-                </div>
-            </div>
 
             <div class="section">
                 <h3>💰 Price Summary</h3>
@@ -192,7 +173,7 @@
             <div class="section">
                 <h3>📝 Next Steps</h3>
                 <ul style="padding-left: 20px;">
-                    <li>You will receive a confirmation email from the property owner within 24 hours</li>
+                    <li>You will receive a confirmation email from the property owner within a few minutes</li>
                     <li>Keep your booking reference (BK{{ booking.id|stringformat:"06d" }}) for all future communications</li>
                     <li>Contact the property directly if you have any questions about your stay</li>
                     <li>Review the property's cancellation policy before your stay</li>
@@ -203,15 +184,15 @@
                 <h3>❓ Need Help?</h3>
                 <p>If you have any questions about your booking, please contact us:</p>
                 <ul style="padding-left: 20px;">
-                    <li>Email: support@bnbwebsite.com</li>
-                    <li>Phone: +254 700 000 000</li>
-                    <li>WhatsApp: +254 712 345 678</li>
+                    <li>Email: booking.bnb.co.ke@gmail.com</li>
+                    <li>Phone: +254 798 246 467</li>
+                    <li>WhatsApp: +254 798 246 467</li>
                 </ul>
             </div>
         </div>
 
         <div class="footer">
-            <p>© {% now "Y" %} BnB Website. All rights reserved.</p>
+            <p>© {% now "Y" %} Bnb.co.ke Website. All rights reserved.</p>
             <p>This is an automated message, please do not reply to this email.</p>
         </div>
     </div>

@@ -211,8 +211,7 @@ def listing_list(request, location_slug=None):
         'current_location_slug': current_location_slug,
         'location_specific': location_specific,
         'page_type': 'location',
-        'title': f'βnb,staycations,holiday homes &  Furnished houses for rent in {display_location_name}! | βnb.co.ke' if selected_location != 'all' else 'βnb.co.ke - You do the stayin\',We do the booking! - βnb,Staycations, Holiday homes & furnished houses for rent in Kenya!',
-        'page_title': f'βnb,staycations,holiday homes &  Furnished houses for rent in {display_location_name}! | βnb.co.ke' if selected_location != 'all' else 'βnb.co.ke - βooking site - You do the stayin\',We do the booking! βnb,Staycations, Holiday homes & furnished houses in Kenya!',
+        'title': f'βnb,staycations,holiday homes &  Furnished houses for rent in {display_location_name}! | βnb.co.ke' if selected_location != 'all' else 'βnb.co.ke - You do the stayin\',We do the booking! ',
         'meta_description': f'you do the stayin\',We do the booking! Bnb,staycations,Holiday homes & Furnished houses for rent in {display_location_name}. Browse verified listings with photos, amenities, and booking details.' if selected_location != 'all' else ' you do the stayin\',We do the booking!  Bnb,staycations,Holiday homes & furnished houses for rent in Kenya. Browse verified listings with photos, amenities, and booking details.',
     }
 

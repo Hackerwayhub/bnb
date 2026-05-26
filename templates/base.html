@@ -32,7 +32,7 @@
   <meta name="robots" content="index, follow" />
 
   <!-- Open Graph / Social Media Meta Tags -->
-<meta property="og:title" content="{% if page_title %}{{ page_title }}{% else %}BnB | Vacation Rentals & Holiday Homes{% endif %}" />
+<meta property="og:title" content="{% if title %}{{ title }}{% else %} βnb.co.ke - You do the stayin',We do the booking!{% endif %}" />
 <meta property="og:description" content="{% if meta_description %}{{ meta_description }}{% else %} βnb.co.ke - Kenya\'s premier vacation rental platform. Find beautiful, verified accommodations for your perfect holiday. Safe, reliable booking services.{% endif %}" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://bnb.co.ke{% if selected_location and selected_location != 'all' %}{% url 'listings_by_location' selected_location %}{% else %}{% url 'home' %}{% endif %}" />

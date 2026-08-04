@@ -9,18 +9,18 @@ class Listing(models.Model):
     # Property Types
     PROPERTY_TYPES = [
         ('hidden_gems', 'Hidden gems/Cabins/Vacation Holiday homes'),
-        ('studio_staycation', 'Bnb | studio staycation'),
-        ('one_bedroom_staycation', 'Bnb | One Bedroom staycation'),
-        ('two_bedroom_staycation', 'Bnb | Two Bedroom staycation'),
-        ('three_bedroom_staycation', ' Bnb | Three Bedroom staycation'),
-        ('Own_compound_staycation', 'Bnb | Own compound/villa staycation'),
-        ('beach_house_staycation', 'Bnb | beach house staycation'),
-        ('studio', ' Furnished Houses for rent | Studio  '),
-        ('one_bedroom', 'Furnished Houses for rent | One Bedroom '),
-        ('two_bedroom', 'Furnished Houses for rent | Two Bedroom '),
-        ('three_bedroom', 'Furnished Houses for rent | Three Bedroom  '),
-        ('Own_compound', 'Furnished Houses for rent | Own compound'),
-        ('beach_house', 'Furnished Houses for rent | beach house '),
+        ('studio_staycation', ' studio '),
+        ('one_bedroom_staycation', ' One Bedroom '),
+        ('two_bedroom_staycation', ' Two Bedroom '),
+        ('three_bedroom_staycation', 'Three Bedroom '),
+        ('Own_compound_staycation', 'Own compound/villa staycation'),
+        ('beach_house_staycation', ' Beach house staycation'),
+        ('studio', ' Furnished Houses for rent - Studio  '),
+        ('one_bedroom', 'Furnished Houses for rent - One Bedroom '),
+        ('two_bedroom', 'Furnished Houses for rent - Two Bedroom '),
+        ('three_bedroom', 'Furnished Houses for rent - Three Bedroom  '),
+        ('Own_compound', 'Furnished Houses for rent - Own compound'),
+        ('beach_house', 'Furnished Houses for rent - beach house '),
     ]
 
     LOCATIONS = [

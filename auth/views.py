@@ -50,7 +50,7 @@ def register(request):
                 welcome_context = {
                     'user': user,
                     'username': username,
-                    'site_name': 'BnB Ke',
+                    'site_name': 'BnB.co.ke',
                     'login_url': request.build_absolute_uri(reverse('login')),
                     'profile_url': request.build_absolute_uri(reverse('profile')),
                     'listings_url': request.build_absolute_uri(reverse('advertise_bnb')),
@@ -60,9 +60,9 @@ def register(request):
                 html_message = render_to_string('auth/welcome_email.html', welcome_context)
 
                 # Plain text version
-                plain_message = f"""Welcome to  βnb.co.ke, {username}!
+                plain_message = f"""Welcome to  BnB.co.ke, {username}!
 
-Thank you for registering with  βnb.co.ke . You can now:
+Thank you for registering with  BnB.co.ke . You can now:
 
 • Create and manage property listings
 • Book properties for your staycations
@@ -74,7 +74,7 @@ Get started by creating your first listing: {welcome_context['listings_url']}
 If you have any questions, feel free to contact our support team.
 
 Best regards,
-The  βnb.co.keTeam"""
+The  BnB.co.ke Team"""
 
                 send_mail(
                     subject=subject,
@@ -97,7 +97,7 @@ The  βnb.co.keTeam"""
     context = {
         'form': form,
         'title': 'Sign up / Login',
-        'page_title': 'Register | βnb.co.ke'
+        'page_title': 'Sign up / Login'
     }
     return render(request, 'auth/register.html', context)
 
@@ -209,7 +209,7 @@ def profile(request):
         'bookings_count': bookings_count,
         'approved_listings_count': approved_listings_count,
         'featured_listings_count': featured_listings_count,
-        'title': 'Profile / βnb.co.ke',
+        'title': 'Profile ~ BnB.co.ke',
         'page_title': 'My Profile'
     }
     return render(request, 'auth/profile.html', context)
@@ -233,7 +233,7 @@ Your account will be permanently deleted in 7 days.
 If you did not request this, please contact our support team immediately at {settings.ADMIN_EMAIL}.
 
 Best regards,
-The  βnb.co.ke Team"""
+The  BnB.co.ke Team"""
 
             send_mail(
                 subject=subject,
@@ -274,7 +274,7 @@ def my_listings(request):
         'active_listings': active_listings,
         'featured_listings': featured_listings,
         'pending_bookings': 0,  # You can add this later
-        'title': 'My Listings / βnb.co.ke',
+        'title': 'My Listings ~ BnB.co.ke',
         'page_title': 'My Listings'
     }
     return render(request, 'auth/profile.html', context)

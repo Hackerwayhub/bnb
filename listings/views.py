@@ -272,8 +272,8 @@ def listings_by_property_type(request, property_type_slug):
         'current_location_slug': current_location_slug,
         'page_type': 'property_type',
         'is_property_type_page': True,
-        'title':  f'{property_display_name} | βnb.co.ke',
-        'page_title': f'{property_display_name} | βnb.co.ke',
+        'title':  f'{property_display_name} ~ BnB.co.ke',
+        'page_title': f'{property_display_name} ~ BnB.co.ke',
         'meta_description': f'Find the best {property_display_name} properties in Kenya. Browse listings for bnb,staycations, rent, and shortlet.',
     }
 
@@ -308,7 +308,7 @@ def submit_listing(request):
 
             context = {
                 'form': form,
-                'title': 'Submit New Listing | βnb.co.ke',
+                'title': 'Submit New Listing ~ BnB.co.ke',
                 'featured_price': 1000.00,
             }
             return render(request, 'listings/create_listing.html', context)
@@ -364,8 +364,8 @@ def submit_listing(request):
 
             context = {
                 'form': form,
-                'title': 'Submit Listing | βnb.co.ke',
-                'page_title': 'Submit  listing | βnb.co.ke',
+                'title': 'Submit Listing ~ BnB.co.ke',
+                'page_title': 'Submit  listing ~ BnB.co.ke',
                 'featured_price': 1000.00,
             }
             return render(request, 'listings/create_listing.html', context)
@@ -387,8 +387,8 @@ def book_via_whatsapp(request):
     Simple WhatsApp booking page - Just a big WhatsApp button
     """
     context = {
-        'page_title': 'ook via WhatsApp | βnb.co.ke',
-        'title':  'βook via WhatsApp | βnb.co.ke',
+        'page_title': 'Book via WhatsApp ~ BnB.co.ke',
+        'title':  'Book via WhatsApp ~ BnB.co.ke',
         'meta_description': 'Book your property directly on WhatsApp. Chat with hosts instantly, get quick responses.',
         'whatsapp_number': '+254798246467',  # Your business WhatsApp number
     }
@@ -461,8 +461,8 @@ def booking_view(request, listing_id):
     context = {
         'form': form,
         'listing': listing,
-        'title': f' Book{listing.title} | βnb.co.ke',
-        'page_title': f' Book{listing.title} | βnb.co.ke',
+        'title': f' Book{listing.title} ~ BnB.co.ke',
+        'page_title': f' Book{listing.title} ~ BnB.co.ke',
     }
     return render(request, 'listings/booking_form.html', context)
 
@@ -504,7 +504,7 @@ def my_listings(request):
         'active_listings': active_listings,
         'featured_listings': featured_listings,
         'pending_bookings': 0,  # You can add this later
-        'title': 'My Listings | βnb.co.ke',
+        'title': 'My Listings ~ BnB.co.ke',
         'page_title': 'My Listings'
     }
     return render(request, 'listings/my_listings.html', context)
@@ -577,7 +577,7 @@ def edit_listing(request, listing_id):
     context = {
         'form': form,
         'listing': listing,
-        'title': f'Edit {listing.title} | βnb.co.ke',
+        'title': f'Edit {listing.title} ~ BnB.co.ke',
         'page_title': 'Edit Listing'
     }
     return render(request, 'listings/edit_listing.html', context)
@@ -600,7 +600,7 @@ def delete_listing(request, listing_id):
 
     context = {
         'listing': listing,
-        'title': f'Delete {listing.title} | βnb.co.ke',
+        'title': f'Delete {listing.title} ~ BnB.co.ke',
         'page_title': 'Delete Listing'
     }
     return render(request, 'listings/delete_listing.html', context)
@@ -618,8 +618,8 @@ def listing_detail(request, slug):
     context = {
         'listing': listing,
         'is_owner': is_owner,
-        'title':  f' {listing.title} | βnb.co.ke',
-        'page_title': f' {listing.title} | βnb.co.ke',
+        'title':  f' {listing.title} ~ BnB.co.ke',
+        'page_title': f' {listing.title} ~ BnB.co.ke',
         'meta_description': f'Book {listing.title} in {listing.get_location_display()}. {listing.guests} guests, {listing.bedrooms} bedrooms, KES {listing.price_per_night}/night.',
     }
     return render(request, 'listings/listing_detail.html', context)

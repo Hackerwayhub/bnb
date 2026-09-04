@@ -465,18 +465,21 @@ class Listing(models.Model):
         return f"tel:{self.host_phone}"
 
     def admin_whatsapp_link(self):
-        """WhatsApp link with admin number and booking message"""
-        from django.contrib.sites.models import Site
+        """WhatsApp link with admin number, booking message, and listing URL"""
+        from django.urls import reverse
 
-        # Get the full URL with domain
-        current_site = Site.objects.get_current()
-        full_url = f"https://{current_site.domain}{self.get_absolute_url()}"
+        # Get the absolute URL for the listing
+        listing_url = self.get_absolute_url()
 
-        message = f"Hello! I'd like to inquire about this property:\n"
-        message += f"Property: {self.title}\n"
-        message += f"Location: {self.get_location_display()} - {self.specific_location}\n"
-        message += f"Host: {self.host_name}\n"
+        # Build the message
+        message = (
+            f"Hello! I'd like to inquire about this property:\n"
+            f"Property: {self.title}\n"
+            f"Location: {self.get_location_display()} - {self.specific_location}\n"
+            f"Host: {self.host_name}\n"
+        )
 
+        # Add price information
         if self.transaction_type == 'shortlet' and self.price_per_night:
             message += f"Price: KSh {self.price_per_night}/night\n"
         elif self.transaction_type == 'rent' and self.price_per_month:
@@ -484,8 +487,11 @@ class Listing(models.Model):
         elif self.price:
             message += f"Price: KSh {self.price}\n"
 
-        message += f"Property Type: {self.get_property_type_display()}\n"
-        message += f"View Listing: {full_url}"  # Add the full listing URL
+        # Add property type and listing URL
+        message += (
+            f"Property Type: {self.get_property_type_display()}\n"
+            f"View Listing: {listing_url}"
+        )
 
         import urllib.parse
         encoded_message = urllib.parse.quote(message)

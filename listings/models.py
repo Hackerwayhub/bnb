@@ -466,6 +466,12 @@ class Listing(models.Model):
 
     def admin_whatsapp_link(self):
         """WhatsApp link with admin number and booking message"""
+        from django.contrib.sites.models import Site
+
+        # Get the full URL with domain
+        current_site = Site.objects.get_current()
+        full_url = f"https://{current_site.domain}{self.get_absolute_url()}"
+
         message = f"Hello! I'd like to inquire about this property:\n"
         message += f"Property: {self.title}\n"
         message += f"Location: {self.get_location_display()} - {self.specific_location}\n"
@@ -479,13 +485,13 @@ class Listing(models.Model):
             message += f"Price: KSh {self.price}\n"
 
         message += f"Property Type: {self.get_property_type_display()}\n"
-
+        message += f"View Listing: {full_url}"  # Add the full listing URL
 
         import urllib.parse
         encoded_message = urllib.parse.quote(message)
 
         return f"https://wa.me/{self.admin_contact.replace('+', '')}?text={encoded_message}"
-
+    
     def admin_call_link(self):
         """Direct call link to admin number"""
         return f"tel:{self.admin_contact}"

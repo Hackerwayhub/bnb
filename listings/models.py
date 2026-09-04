@@ -465,7 +465,7 @@ class Listing(models.Model):
         return f"tel:{self.host_phone}"
 
     def admin_whatsapp_link(self):
-        """WhatsApp link with admin number and booking message"""
+        """WhatsApp link with admin number, booking message, and property link"""
         message = f"Hello! I'd like to inquire about this property:\n"
         message += f"Property: {self.title}\n"
         message += f"Location: {self.get_location_display()} - {self.specific_location}\n"
@@ -480,12 +480,25 @@ class Listing(models.Model):
 
         message += f"Property Type: {self.get_property_type_display()}\n"
 
+        # Add the listing URL
+        from django.urls import reverse
+        from django.contrib.sites.shortcuts import get_current_site
+
+        # Get domain (you may want to make this dynamic or set in settings)
+        domain = "bnb.co.ke"  # Replace with your domain or use settings.SITE_URL
+
+        # Check if we're in a request context for dynamic domain
+        # If you have request available, use: domain = request.get_host()
+        # For now, we'll use a simple approach
+
+        listing_url = f"https://{domain}/listing/{self.slug}/"
+        message += f"\nView Property: {listing_url}"
 
         import urllib.parse
         encoded_message = urllib.parse.quote(message)
 
         return f"https://wa.me/{self.admin_contact.replace('+', '')}?text={encoded_message}"
-
+    
     def admin_call_link(self):
         """Direct call link to admin number"""
         return f"tel:{self.admin_contact}"

@@ -465,34 +465,29 @@ class Listing(models.Model):
         return f"tel:{self.host_phone}"
 
     def admin_whatsapp_link(self):
-        """WhatsApp link with admin number, booking message, and property link"""
-        message = f"Hello! I'd like to inquire about this property:\n"
-        message += f"Property: {self.title}\n"
-        message += f"Location: {self.get_location_display()} - {self.specific_location}\n"
-        message += f"Host: {self.host_name}\n"
+        """WhatsApp link with image preview and property details"""
+        from django.conf import settings
 
+        # Build the message
+        message = f"🏠 {self.title}\n"
+        message += f"📍 {self.get_location_display()} - {self.specific_location}\n"
+
+        # Price
         if self.transaction_type == 'shortlet' and self.price_per_night:
-            message += f"Price: KSh {self.price_per_night}/night\n"
+            message += f"💰 KSh {self.price_per_night}/night\n"
         elif self.transaction_type == 'rent' and self.price_per_month:
-            message += f"Price: KSh {self.price_per_month}/month\n"
+            message += f"💰 KSh {self.price_per_month}/month\n"
         elif self.price:
-            message += f"Price: KSh {self.price}\n"
+            message += f"💰 KSh {self.price}\n"
 
-        message += f"Property Type: {self.get_property_type_display()}\n"
+        # Add the image URL for preview
+        if self.main_image:
+            image_url = f"{settings.SITE_URL}{self.main_image.url}"
+            message += f"\n{image_url}"  # WhatsApp will show preview of this URL
 
-        # Add the listing URL
-        from django.urls import reverse
-        from django.contrib.sites.shortcuts import get_current_site
-
-        # Get domain (you may want to make this dynamic or set in settings)
-        domain = "bnb.co.ke"  # Replace with your domain or use settings.SITE_URL
-
-        # Check if we're in a request context for dynamic domain
-        # If you have request available, use: domain = request.get_host()
-        # For now, we'll use a simple approach
-
-        listing_url = f"https://{domain}/listing/{self.slug}/"
-        message += f"\nView Property: {listing_url}"
+        # Add the listing link
+        listing_url = f"{settings.SITE_URL}/listing/{self.slug}/"
+        message += f"\n🔗 {listing_url}"
 
         import urllib.parse
         encoded_message = urllib.parse.quote(message)

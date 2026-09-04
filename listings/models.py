@@ -465,35 +465,27 @@ class Listing(models.Model):
         return f"tel:{self.host_phone}"
 
     def admin_whatsapp_link(self):
-        """WhatsApp link with image preview and property details"""
-        from django.conf import settings
+        """WhatsApp link with admin number and booking message"""
+        message = f"Hello! I'd like to inquire about this property:\n"
+        message += f"Property: {self.title}\n"
+        message += f"Location: {self.get_location_display()} - {self.specific_location}\n"
+        message += f"Host: {self.host_name}\n"
 
-        # Build the message
-        message = f"🏠 {self.title}\n"
-        message += f"📍 {self.get_location_display()} - {self.specific_location}\n"
-
-        # Price
         if self.transaction_type == 'shortlet' and self.price_per_night:
-            message += f"💰 KSh {self.price_per_night}/night\n"
+            message += f"Price: KSh {self.price_per_night}/night\n"
         elif self.transaction_type == 'rent' and self.price_per_month:
-            message += f"💰 KSh {self.price_per_month}/month\n"
+            message += f"Price: KSh {self.price_per_month}/month\n"
         elif self.price:
-            message += f"💰 KSh {self.price}\n"
+            message += f"Price: KSh {self.price}\n"
 
-        # Add the image URL for preview
-        if self.main_image:
-            image_url = f"{settings.SITE_URL}{self.main_image.url}"
-            message += f"\n{image_url}"  # WhatsApp will show preview of this URL
+        message += f"Property Type: {self.get_property_type_display()}\n"
 
-        # Add the listing link
-        listing_url = f"{settings.SITE_URL}/listing/{self.slug}/"
-        message += f"\n🔗 {listing_url}"
 
         import urllib.parse
         encoded_message = urllib.parse.quote(message)
 
         return f"https://wa.me/{self.admin_contact.replace('+', '')}?text={encoded_message}"
-    
+
     def admin_call_link(self):
         """Direct call link to admin number"""
         return f"tel:{self.admin_contact}"

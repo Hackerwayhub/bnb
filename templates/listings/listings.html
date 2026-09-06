@@ -102,6 +102,11 @@
 
                        <span class="selected-location-text" contenteditable="true" data-placeholder="kilimani / westlands" style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #999;">
 </span>
+                        <style>.selected-location-text:empty:before {
+    content: attr(data-placeholder);
+    color: #999;
+    font-style: italic;
+}</style>
                     </div>
 
                     <div class="dropdown-menu-location" style="

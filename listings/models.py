@@ -498,7 +498,7 @@ class Listing(models.Model):
         encoded_message = urllib.parse.quote(message)
 
         return f"https://wa.me/{self.admin_contact.replace('+', '')}?text={encoded_message}"
-    
+
     def admin_call_link(self):
         """Direct call link to admin number"""
         return f"tel:{self.admin_contact}"

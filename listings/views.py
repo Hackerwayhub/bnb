@@ -211,8 +211,8 @@ def listing_list(request, location_slug=None):
         'current_location_slug': current_location_slug,
         'location_specific': location_specific,
         'page_type': 'location',
-        'title': f'BnB,staycations & holiday homes in {display_location_name}' if selected_location != 'all' else 'BnB, staycations & holiday homes in Kenya! ',
-        'meta_description': f'BnB,staycations & holiday homes in {display_location_name}. Browse verified listings with photos, amenities, and booking details.' if selected_location != 'all' else ' Bnb,staycations & holiday homes in Kenya. Browse verified listings with photos, amenities, and booking details.',
+        'title': f'bnb, staycations & holiday homes in {display_location_name}' if selected_location != 'all' else 'bnb, staycations & holiday homes in Kenya!',
+        'meta_description': f'Book bnb, staycations & holiday homes in {display_location_name}. Browse verified listings with photos, amenities, and booking details.' if selected_location != 'all' else 'Book bnb, staycations & holiday homes in Kenya. Browse verified listings with photos, amenities, and booking details.',
     }
 
     context = prepare_listing_context(request, queryset, context_extra)

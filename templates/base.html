@@ -1,53 +1,46 @@
 <!DOCTYPE html>
 <html lang="en-gb">
+
 <head>
   {% load static %}
   <!-- Basic Meta Tags -->
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta http-equiv='content-language' content='en-gb'>
+  <meta http-equiv="content-language" content="en-ke">
+  <meta name="google-site-verification" content="qxFc2ur8Dxbxmx7iDW_a3ObLGMJvv9m1evH0-FfBrls" />
 
   <!-- PWA Meta Tags -->
   <meta name="theme-color" content="#FFFFFF"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content=" βnb.co.ke">
-
+  <meta name="apple-mobile-web-app-title" content="bnb.co.ke">
 
   <!-- Web App Manifest -->
   <link rel="manifest" href="{% static 'manifest.json' %}">
 
-
-    <!-- Dynamic SEO Meta Tags -->
-  <title>{{ title|default:"ᏰᏁᏰ.co.ke - BnB\'s, Staycations & Holiday Homes in Kenya!" }}</title>
-  <meta name="description" content="{{ meta_description|default:'Find perfect vacation rentals and holiday homes on Bnb. Browse verified properties with photos, amenities, and booking details. Safe, reliable accommodation booking.'|truncatechars:160 }}" />
-
-  <meta name="keywords" content="BNB, staycations, holiday homes, accommodation booking, travel Kenya{% if location_display %}, rentals in {{ location_display }}, {{ location_display }} accommodations{% endif %}" />
-  <meta name="author" content=" βnb.co.ke" />
+  <!-- Dynamic SEO Meta Tags - FIXED TO SMALL b -->
+  <title>{{ title|default:"bnb.co.ke - Verified bnbs, staycations & holiday homes in Kenya" }}</title>
+  <meta name="description" content="{{ meta_description|default:'Find verified bnbs, staycations and holiday homes across Kenya. Browse photos, amenities and book direct with verified hosts on bnb.co.ke.' }}" />
+  <meta name="author" content="bnb.co.ke" />
   <meta name="robots" content="index, follow" />
 
-
-  <meta name="author" content=" ᏰᏁᏰ.co.ke" />
-  <meta name="robots" content="index, follow" />
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://bnb.co.ke{% if current_location_slug %}/rentals-in-{{ current_location_slug }}/{% else %}/{% endif %}" />
 
   <!-- Open Graph / Social Media Meta Tags -->
-<meta property="og:title" content="{% if title %}{{ title }}{% else %} βnb.co.ke - You do the stayin',We do the booking!{% endif %}" />
-<meta property="og:description" content="{% if meta_description %}{{ meta_description }}{% else %} βnb.co.ke - Kenya\'s premier vacation rental platform. Find beautiful, verified accommodations for your perfect holiday. Safe, reliable booking services.{% endif %}" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://bnb.co.ke{% if selected_location and selected_location != 'all' %}{% url 'listings_by_location' selected_location %}{% else %}{% url 'home' %}{% endif %}" />
-<meta property="og:image" content="{% static 'images/open.jpg' %}" />
-<meta property="og:site_name" content=" βnb.co.ke" />
+  <meta property="og:title" content="{{ title|default:'bnb.co.ke - Verified bnbs, staycations & holiday homes in Kenya' }}" />
+  <meta property="og:description" content="{{ meta_description|default:'Find verified bnbs, staycations and holiday homes across Kenya. Browse photos, amenities and book direct with verified hosts.' }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://bnb.co.ke{% if current_location_slug %}/rentals-in-{{ current_location_slug }}/{% else %}/{% endif %}" />
+  <meta property="og:image" content="https://bnb.co.ke{% static 'images/open.jpg' %}" />
+  <meta property="og:site_name" content="bnb.co.ke" />
 
-<!-- Canonical URL -->
-  <link rel="canonical" href="https://bnb.co.ke{% if selected_location and selected_location != 'all' %}{% url 'listings_by_location' selected_location %}{% else %}{% url 'home' %}{% endif %}" />
-    <meta name="google-site-verification" content="qxFc2ur8Dxbxmx7iDW_a3ObLGMJvv9m1evH0-FfBrls" />
   <!-- Favicon files -->
   <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
   <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
-  <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
@@ -66,95 +59,92 @@
 
   <!-- Custom CSS -->
   <link href="{% static 'css/style.css' %}" rel="stylesheet" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Responsive CSS -->
-
   <link href="{% static 'css/bnb.css' %}" rel="stylesheet" />
 
-
-<!-- Structured Data -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebSite",
-      "@id": "https://bnb.co.ke/#website",
-      "name": "BnB",
-      "alternateName": ["BnB Kenya", "BnB.co.ke"],
-      "url": "https://bnb.co.ke/",
-      "description": "{% if meta_description %}{{ meta_description }}{% else %}Kenya\'s premier vacation rental platform. Find beautiful, verified accommodations for holidays, vacations, and getaways.{% endif %}",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://bnb.co.ke/#search?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    },
-    {
-      "@type": "Service",
-      "@id": "https://bnb.co.ke/",
-      "name": "BnB staycations in Kenya",
-      "description": "Premium vacation rentals and holiday homes across Kenya",
-      "provider": {
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://bnb.co.ke/#website",
+        "name": "bnb.co.ke",
+        "alternateName": ["bnb Kenya", "bnb.co.ke"],
+        "url": "https://bnb.co.ke/",
+        "description": "{{ meta_description|default:'Kenya premier vacation rental platform. Find beautiful, verified accommodations for holidays, vacations, and getaways.'|escapejs }}",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://bnb.co.ke/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Service",
+        "@id": "https://bnb.co.ke/#service",
+        "name": "bnb staycations in Kenya",
+        "description": "Premium vacation rentals and holiday homes across Kenya",
+        "provider": {
+          "@type": "Organization",
+          "name": "bnb.co.ke"
+        },
+        "areaServed": "Kenya",
+        "serviceType": "Vacation Rentals",
+        "offers": {
+          "@type": "Offer",
+          "description": "Professional accommodation booking"
+        }
+      },
+      {
         "@type": "Organization",
-        "name": " βnb.co.ke"
-      },
-      "areaServed": "{% if location_display %}{{ location_display }}{% else %}Kenya{% endif %}",
-      "serviceType": "Vacation Rentals",
-      "offers": {
-        "@type": "Offer",
-        "description": "Professional accommodation booking"
+        "@id": "https://bnb.co.ke/#organization",
+        "name": "bnb.co.ke",
+        "url": "https://bnb.co.ke/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://bnb.co.ke{% static 'images/logo.png' %}",
+          "width": "300",
+          "height": "100"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "Customer Service",
+          "areaServed": "KE",
+          "availableLanguage": ["English", "Swahili"]
+        }
       }
-    },
-    {
-      "@type": "Organization",
-      "@id": "https://bnb.co.ke/",
-      "name": "BnB",
-      "url": "https://bnb.co.ke/",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "{% static 'images/logo.png' %}",
-        "width": "300",
-        "height": "100"
-      },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "Customer Service",
-        "areaServed": "KE",
-        "availableLanguage": ["English", "Swahili"]
-      }
-    }
-  ]
-}
-</script>
-
- <!-- ADD LOCATION-SPECIFIC SCHEMA HERE -->
-{% if selected_location != 'all' %}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Service",
-  "name": " βnb.co.ke Vacation Rentals in {{ location_name }}",
-  "description": "Premium verified vacation rentals and holiday homes in {{ location_name }}, Kenya. Find beautiful accommodations for holidays, vacations, and getaways.",
-  "provider": {
-    "@type": "Organization",
-    "name": " βnb.co.ke",
-    "url": "https://bnb.co.ke"
-  },
-  "areaServed": {
-    "@type": "City",
-    "name": "{{ location_name }}"
-  },
-  "serviceType": "Vacation Rentals",
-  "availableChannel": {
-    "@type": "ServiceChannel",
-    "serviceUrl": "https://bnb.co.ke/rentals-in-{{ selected_location }}/"
+    ]
   }
-}
-</script>
-{% endif %}
+  </script>
+
+  <!-- Location-specific Schema -->
+  {% if selected_location != 'all' and location_name %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "bnb.co.ke vacation rentals in {{ location_name|escapejs }}",
+    "description": "Premium verified vacation rentals and holiday homes in {{ location_name|escapejs }}, Kenya. Find beautiful accommodations for holidays, vacations, and getaways.",
+    "provider": {
+      "@type": "Organization",
+      "name": "bnb.co.ke",
+      "url": "https://bnb.co.ke"
+    },
+    "areaServed": {
+      "@type": "City",
+      "name": "{{ location_name|escapejs }}"
+    },
+    "serviceType": "Vacation Rentals",
+    "availableChannel": {
+      "@type": "ServiceChannel",
+      "serviceUrl": "https://bnb.co.ke{% if current_location_slug %}/rentals-in-{{ current_location_slug }}/{% else %}/{% endif %}"
+    }
+  }
+  </script>
+  {% endif %}
 
   {% block extra_head %}{% endblock %}
 </head>

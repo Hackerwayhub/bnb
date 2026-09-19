@@ -398,7 +398,7 @@
             </p>
 
 
-           
+
           </div>
         </div>
         {% endfor %}
@@ -552,17 +552,7 @@ document.addEventListener('DOMContentLoaded', function() {
   {% endif %}
 </h3>
 
-              <!-- 5-Star Rating for Grid -->
-              <div class="star-rating" style="margin: 5px 0 10px 0;">
-                <span class="stars" style="color: #ffc107; font-size: 0.9rem;">
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                </span>
-              </div>
-
+              
              <p class="price-tag" style="font-size: 1.2rem; font-weight: 700; color: #28a745; margin: 10px 0;">
   {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
     KSh {{ listing.price_per_night|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ night</small>

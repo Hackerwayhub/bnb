@@ -27,7 +27,7 @@
         overflow: visible !important;
     ">
         <!-- Brand Logo - Compact -->
-        <div class="logo-section" style="
+        <div class="logo-section" data-nosnippet style="
             flex-shrink: 0;
             margin: 5px;
             display: flex;
@@ -40,7 +40,7 @@
                 align-items: center;
                 gap: 5px;
             ">
-                <span style="
+                <span data-nosnippet style="
                     color: #FF0000;
                     font-weight: 900;
                     text-transform: none;
@@ -49,7 +49,7 @@
                     display: inline-block;
                     line-height: 1;
                 ">ᏰᏁᏰ</span>
-                <span style="
+                <span data-nosnippet style="
             color:#FF0000;
             font-weight: 900;
             text-transform: none;
@@ -100,7 +100,7 @@
                         box-shadow: none;
                     ">
 
-                        <span class="selected-location-text" style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">kilimani ...</span>
+                        <span class="selected-location-text" style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Address</span>
 
                     </div>
 
@@ -552,7 +552,7 @@ document.addEventListener('DOMContentLoaded', function() {
   {% endif %}
 </h3>
 
-              
+
              <p class="price-tag" style="font-size: 1.2rem; font-weight: 700; color: #28a745; margin: 10px 0;">
   {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
     KSh {{ listing.price_per_night|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ night</small>

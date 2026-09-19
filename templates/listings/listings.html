@@ -426,12 +426,7 @@
                       onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
                   <i class="fa fa-share-alt" aria-hidden="true" style="color: #555;"></i>
               </button>
-              <a href="{{ listing.admin_whatsapp_link }}" target="_blank" class="hero-btn hero-btn-success" rel="noopener noreferrer">
-                <i class="fab fa-whatsapp"></i> Book via WhatsApp
-              </a>
-              <a href="{% url 'booking_form' listing.id %}" class="hero-btn hero-btn-book">
-                <i class="fa fa-calendar"></i> <span>Book Now</span>
-              </a>
+             
               <a href="{% url 'listing_detail' listing.slug %}" class="hero-btn hero-btn-primary">
                 <i class="fa fa-search"></i> View Details
               </a>

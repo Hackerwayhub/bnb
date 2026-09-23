@@ -345,45 +345,58 @@
 <section>
   <div style="border-radius: 32px 32px 32px 32px; box-shadow: 0 4px 8px rgba(0,0,0,0.1), 0 6px 20px rgba(0,0,0,0.1); margin-top: 10px;">
     <div class="container-fluid">
-
-<!-- Hero Carousel for Top 3 Listings (Mobile Optimized) -->
+<!-- ============================================
+     HERO CAROUSEL WITH SKELETON UI
+     ============================================ -->
 {% if listings|length > 0 %}
 <section class="hero-carousel-section">
   <div class="hero-carousel-container">
     <div class="hero-carousel" id="heroCarousel">
-      <!-- Slides -->
+
+      <!-- ===== SKELETON UI ===== -->
+      <div class="hero-skeleton" id="heroSkeleton" aria-hidden="true">
+        <div class="hero-skeleton-item">
+          <div class="hero-skeleton-img shimmer"></div>
+          <div class="hero-skeleton-overlay"></div>
+          <div class="hero-skeleton-content">
+            <div class="hero-skeleton-line shimmer" style="width: 28%;"></div>
+            <div class="hero-skeleton-line shimmer" style="width: 55%; height: 22px;"></div>
+            <div class="hero-skeleton-line shimmer" style="width: 38%; height: 26px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== REAL CAROUSEL ===== -->
       <div class="hero-carousel-inner" id="heroCarouselInner">
         {% for listing in listings|slice:":3" %}
         <div class="hero-carousel-item {% if forloop.first %}active{% endif %}" data-slide-index="{{ forloop.counter0 }}">
-          <!-- Image -->
           <div class="hero-img-wrapper">
             {% if listing.main_image %}
               {% with listing.all_images as images %}
                 <img
                   class="hero-img"
                   src="{{ images.0.url }}"
-                  srcset="{{ images.0.url }} 800w, {{ images.0.url }} 1200w"
-                  sizes="(max-width: 768px) 100vw, 1200px"
                   alt="{{ listing.title }}"
+                  width="1200"
+                  height="675"
+                  decoding="async"
                   {% if forloop.first %}
                     loading="eager"
                     fetchpriority="high"
                   {% else %}
                     loading="lazy"
                   {% endif %}
+                  onload="this.classList.add('loaded')"
                 >
               {% endwith %}
             {% else %}
               <div class="hero-bg-gradient"></div>
             {% endif %}
           </div>
-          <!-- Dark overlay -->
           <div class="hero-overlay"></div>
-          <!-- Content -->
           <div class="hero-content">
             <div class="hero-category">{{ listing.get_property_type_display }}</div>
-
-               <div class="hero-delivery">
+            <div class="hero-delivery">
               <i class="fa fa-gem"></i> Great deals just for you!
             </div>
             <p class="hero-price">
@@ -397,25 +410,202 @@
                 Price on request
               {% endif %}
             </p>
-
-
-
           </div>
         </div>
         {% endfor %}
       </div>
 
-      <!-- Indicators (hidden if only one slide) -->
+      <!-- ===== INDICATORS ===== -->
       <div class="hero-carousel-indicators">
         {% for listing in listings|slice:":3" %}
         <span class="hero-indicator {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}" aria-label="Go to slide {{ forloop.counter }}"></span>
         {% endfor %}
       </div>
+
     </div>
   </div>
 </section>
 {% endif %}
 
+<!-- ============================================
+     STYLES
+     ============================================ -->
+<style>
+/* --- Container needs positioning context for the skeleton --- */
+.hero-carousel {
+  position: relative;
+}
+
+/* ===== SKELETON UI ===== */
+.hero-skeleton {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  overflow: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.hero-skeleton-item {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-skeleton-img {
+  position: absolute;
+  inset: 0;
+  background-color: #d8d8d8;
+}
+
+.hero-skeleton-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.35) 40%,
+    rgba(0, 0, 0, 0.10) 100%
+  );
+}
+
+.hero-skeleton-content {
+  position: absolute;
+  left: 1.25rem;
+  right: 1.25rem;
+  bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 2;
+}
+
+.hero-skeleton-line {
+  height: 14px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.30);
+}
+
+/* Shimmer animation */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.22);
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 100%
+  );
+  animation: heroShimmer 1.4s infinite;
+}
+
+@keyframes heroShimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* Hide skeleton once real content is ready */
+.hero-skeleton.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ===== REAL CAROUSEL FADE-IN ===== */
+#heroCarouselInner {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+#heroCarouselInner.ready {
+  opacity: 1;
+}
+
+.hero-img {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.hero-img.loaded {
+  opacity: 1;
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+  .shimmer::after { animation: none; }
+  .hero-img,
+  #heroCarouselInner,
+  .hero-skeleton {
+    transition: none;
+  }
+}
+
+/* ===== MOBILE TWEAKS ===== */
+@media (max-width: 768px) {
+  .hero-skeleton-content {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1.5rem;
+  }
+  .hero-skeleton-line {
+    height: 12px;
+  }
+}
+</style>
+
+<!-- ============================================
+     SCRIPT — Reveal carousel when first image loads
+     ============================================ -->
+<script>
+(function () {
+  const skeleton = document.getElementById('heroSkeleton');
+  const inner = document.getElementById('heroCarouselInner');
+  if (!skeleton || !inner) return;
+
+  const firstImg = inner.querySelector('.hero-img');
+  let revealed = false;
+
+  function reveal() {
+    if (revealed) return;
+    revealed = true;
+
+    inner.classList.add('ready');
+    skeleton.classList.add('hidden');
+
+    // Remove skeleton from DOM after fade-out completes
+    setTimeout(function () {
+      if (skeleton && skeleton.parentNode) {
+        skeleton.parentNode.removeChild(skeleton);
+      }
+    }, 400);
+  }
+
+  // No image → reveal immediately
+  if (!firstImg) {
+    reveal();
+    return;
+  }
+
+  // Already cached / loaded
+  if (firstImg.complete && firstImg.naturalWidth > 0) {
+    reveal();
+    return;
+  }
+
+  // Wait for load (or error) then reveal
+  firstImg.addEventListener('load', reveal, { once: true });
+  firstImg.addEventListener('error', reveal, { once: true });
+
+  // Safety timeout — never leave skeleton hanging
+  setTimeout(reveal, 4000);
+})();
+</script>
 <!-- Share functionality script -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {

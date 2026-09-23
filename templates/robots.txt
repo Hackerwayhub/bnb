@@ -1,23 +1,30 @@
 User-agent: *
 Allow: /
-Allow: /submit-listing/
-Allow: /book-on-whatsapp/
-Allow: /bnb-house-party//
+Allow: /advertise/
+Allow: /book-via-whatsapp/
 Allow: /location/
+Allow: /property-type/
+Allow: /listing/
 
 # Disallow admin and backend areas
 Disallow: /admin/
-Disallow: /admin
 Disallow: /accounts/
 Disallow: /login/
 Disallow: /logout/
 Disallow: /signup/
 Disallow: /password-reset/
 Disallow: /api/
-Disallow: /api/
 Disallow: /static/admin/
 Disallow: /media/admin/
 Disallow: /django-admin/
+
+# Disallow transactional / private pages
+Disallow: /book/
+Disallow: /booking/
+Disallow: /my-listings/
+Disallow: /edit/
+Disallow: /delete/
+Disallow: /submit-listing/
 
 # Allow search engines to crawl CSS, JS, and images
 Allow: /static/
@@ -32,30 +39,30 @@ Allow: *.svg
 Allow: *.webp
 
 # Disallow query parameters that might create duplicate content
-Disallow: /*?*
-Disallow: /*&*
-Disallow: /*=*
-Disallow: /*?
-Disallow: /*page=
-Disallow: /*sort=
-Disallow: /*filter=
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+Disallow: /*?page=
+Disallow: /*?listing_type=
+Disallow: /*?transaction_type=
 
-# Sitemap location (update with your actual domain in production)
-Sitemap: http://127.0.0.1:8000/sitemap.xml
-Sitemap: https://yourdomain.com/sitemap.xml  # Production domain
+# Sitemap location
+Sitemap: https://bnb.co.ke/sitemap.xml
 
-# Crawl delay for respectful crawling (adjust based on your server capacity)
+# Crawl delay for respectful crawling
 Crawl-delay: 2
 
 # Additional directives for specific search engines
 User-agent: Googlebot
 Allow: /
-Allow: /submit-listing/
-Allow: /book-on-whatsapp/
-Allow: /house-party/
+Allow: /advertise/
+Allow: /book-via-whatsapp/
 Allow: /location/
+Allow: /property-type/
 Disallow: /admin/
 Disallow: /accounts/
+Disallow: /book/
+Disallow: /booking/
+Disallow: /my-listings/
 Crawl-delay: 1
 
 User-agent: Googlebot-Image
@@ -69,12 +76,15 @@ Allow: /*.webp$
 
 User-agent: Bingbot
 Allow: /
-Allow: /submit-listing/
-Allow: /book-on-whatsapp/
-Allow: /house-party/
+Allow: /advertise/
+Allow: /book-via-whatsapp/
 Allow: /location/
+Allow: /property-type/
 Disallow: /admin/
 Disallow: /accounts/
+Disallow: /book/
+Disallow: /booking/
+Disallow: /my-listings/
 Crawl-delay: 2
 
 User-agent: Baiduspider
@@ -83,17 +93,23 @@ Disallow: /
 User-agent: YandexBot
 Disallow: /admin/
 Disallow: /accounts/
+Disallow: /book/
+Disallow: /booking/
 Crawl-delay: 3
 
 User-agent: DuckDuckBot
 Allow: /
 Disallow: /admin/
 Disallow: /accounts/
+Disallow: /book/
+Disallow: /booking/
 
 User-agent: Applebot
 Allow: /
 Disallow: /admin/
 Disallow: /accounts/
+Disallow: /book/
+Disallow: /booking/
 
 # Block scrapers and bad bots
 User-agent: AhrefsBot
@@ -167,9 +183,6 @@ User-agent: WebZip
 Disallow: /
 
 User-agent: moget
-Disallow: /
-
-User-agent: WebZip
 Disallow: /
 
 User-agent: WebStripper

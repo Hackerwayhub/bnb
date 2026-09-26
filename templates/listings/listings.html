@@ -305,7 +305,7 @@
         locationPlaceholder.style.opacity = '0';
         setTimeout(function() {
             if (locationLocked) return;
-            locationPlaceholder.textContent = locationWords[locationIndex] + ' ...';
+            locationPlaceholder.textContent = locationWords[locationIndex];
             locationPlaceholder.style.opacity = '1';
         }, 200);
     }

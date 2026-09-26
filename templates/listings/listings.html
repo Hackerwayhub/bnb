@@ -2307,13 +2307,47 @@ document.addEventListener('DOMContentLoaded', function() {
     var locationIndex = 0;
     var propertyIndex = 0;
 
-    // Locked flags — once true, rotation NEVER runs again
     var locationLocked = false;
     var propertyLocked = false;
 
-    // Track user-selected values (null = nothing chosen yet)
-    var selectedLocation = null;
-    var selectedProperty = null;
+    // ===== CHECK IF A FILTER IS ALREADY APPLIED (from server-rendered selects) =====
+    // Your Django template already marks the correct <option selected> in the hidden
+    // selects based on the current URL params. So if any non-default option is
+    // selected, we know a filter is active and should lock immediately.
+
+    var hiddenLoc = document.getElementById('locationFilter');
+    var hiddenProp = document.getElementById('propertyTypeFilter');
+
+    if (hiddenLoc && hiddenLoc.value && hiddenLoc.value !== 'all') {
+        var locOpt = hiddenLoc.querySelector('option[value="' + hiddenLoc.value + '"]');
+        if (locOpt) {
+            locationPlaceholder.textContent = locOpt.textContent.trim();
+            locationLocked = true;
+        }
+    }
+
+    if (hiddenProp && hiddenProp.value) {
+        var propOpt = hiddenProp.querySelector('option[value="' + hiddenProp.value + '"]');
+        if (propOpt) {
+            propertyPlaceholder.textContent = propOpt.textContent.trim();
+            propertyLocked = true;
+        }
+    }
+
+    // Also check sessionStorage as a backup lock (in case hidden selects are empty
+    // but user previously filtered). This survives across page reloads.
+    try {
+        if (sessionStorage.getItem('bnb_location_locked') === '1') {
+            locationLocked = true;
+            var savedLoc = sessionStorage.getItem('bnb_location_text');
+            if (savedLoc) locationPlaceholder.textContent = savedLoc;
+        }
+        if (sessionStorage.getItem('bnb_property_locked') === '1') {
+            propertyLocked = true;
+            var savedProp = sessionStorage.getItem('bnb_property_text');
+            if (savedProp) propertyPlaceholder.textContent = savedProp;
+        }
+    } catch (e) { /* sessionStorage may be disabled */ }
 
     // ===== ROTATION FUNCTIONS =====
     function rotateLocation() {
@@ -2342,25 +2376,52 @@ document.addEventListener('DOMContentLoaded', function() {
     locationPlaceholder.style.transition = 'opacity 0.3s ease';
     propertyPlaceholder.style.transition = 'opacity 0.3s ease';
 
-    // ===== START INTERVALS =====
-    var locationInterval = setInterval(rotateLocation, 2500);
-    var propertyInterval = setInterval(rotateProperty, 2500);
+    // ===== START INTERVALS ONLY IF NOT LOCKED =====
+    var locationInterval = null;
+    var propertyInterval = null;
 
-    // ===== LOCK ON CLICK OF TRIGGER =====
+    if (!locationLocked) {
+        locationInterval = setInterval(rotateLocation, 2500);
+    }
+    if (!propertyLocked) {
+        propertyInterval = setInterval(rotateProperty, 2500);
+    }
+
+    // Helper to lock & persist
+    function lockLocation(text) {
+        locationLocked = true;
+        if (locationInterval) clearInterval(locationInterval);
+        if (text) locationPlaceholder.textContent = text;
+        locationPlaceholder.style.opacity = '1';
+        try {
+            sessionStorage.setItem('bnb_location_locked', '1');
+            if (text) sessionStorage.setItem('bnb_location_text', text);
+        } catch (e) {}
+    }
+
+    function lockProperty(text) {
+        propertyLocked = true;
+        if (propertyInterval) clearInterval(propertyInterval);
+        if (text) propertyPlaceholder.textContent = text;
+        propertyPlaceholder.style.opacity = '1';
+        try {
+            sessionStorage.setItem('bnb_property_locked', '1');
+            if (text) sessionStorage.setItem('bnb_property_text', text);
+        } catch (e) {}
+    }
+
+    // ===== LOCK ON TRIGGER CLICK =====
     var locationTrigger = document.querySelector('.dropdown-trigger-location');
     var propertyTrigger = document.querySelector('.dropdown-trigger-property');
 
     if (locationTrigger) {
         locationTrigger.addEventListener('click', function() {
-            locationLocked = true;
-            clearInterval(locationInterval);
+            lockLocation(locationPlaceholder.textContent);
         });
     }
-
     if (propertyTrigger) {
         propertyTrigger.addEventListener('click', function() {
-            propertyLocked = true;
-            clearInterval(propertyInterval);
+            lockProperty(propertyPlaceholder.textContent);
         });
     }
 
@@ -2368,35 +2429,18 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.dropdown-option-location').forEach(function(option) {
         option.addEventListener('click', function(e) {
             e.stopPropagation();
-            locationLocked = true;
-            clearInterval(locationInterval);
             var selectedText = this.querySelector('span').textContent.trim();
-            selectedLocation = selectedText;
-            locationPlaceholder.textContent = selectedText;
-            locationPlaceholder.style.opacity = '1';
-
-            // Update the hidden select so Apply Filters picks it up
-            var hiddenLoc = document.getElementById('locationFilter');
-            if (hiddenLoc) {
-                hiddenLoc.value = this.getAttribute('data-value') || 'all';
-            }
+            lockLocation(selectedText);
+            if (hiddenLoc) hiddenLoc.value = this.getAttribute('data-value') || 'all';
         });
     });
 
     document.querySelectorAll('.dropdown-option-property').forEach(function(option) {
         option.addEventListener('click', function(e) {
             e.stopPropagation();
-            propertyLocked = true;
-            clearInterval(propertyInterval);
             var selectedText = this.querySelector('span').textContent.trim();
-            selectedProperty = selectedText;
-            propertyPlaceholder.textContent = selectedText;
-            propertyPlaceholder.style.opacity = '1';
-
-            var hiddenProp = document.getElementById('propertyTypeFilter');
-            if (hiddenProp) {
-                hiddenProp.value = this.getAttribute('data-value') || '';
-            }
+            lockProperty(selectedText);
+            if (hiddenProp) hiddenProp.value = this.getAttribute('data-value') || '';
         });
     });
 
@@ -2406,53 +2450,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (locInput) {
         locInput.addEventListener('focus', function() {
-            locationLocked = true;
-            clearInterval(locationInterval);
+            lockLocation(locationPlaceholder.textContent);
         });
     }
     if (propInput) {
         propInput.addEventListener('focus', function() {
-            propertyLocked = true;
-            clearInterval(propertyInterval);
+            lockProperty(propertyPlaceholder.textContent);
         });
     }
 
     // ===== APPLY FILTERS BUTTON =====
-    // When the user clicks "Apply Filters", freeze the placeholders on
-    // whatever they currently show (so the user sees what they're filtering by).
     var applyBtn = document.getElementById('applyFilters');
     if (applyBtn) {
-        applyBtn.addEventListener('click', function(e) {
-            // Lock both placeholders permanently
-            locationLocked = true;
-            propertyLocked = true;
-            clearInterval(locationInterval);
-            clearInterval(propertyInterval);
-
-            // If a location was selected, show it. Otherwise keep current text.
-            var hiddenLoc = document.getElementById('locationFilter');
+        applyBtn.addEventListener('click', function() {
+            // Resolve the display text from the hidden selects (source of truth)
+            var locText = null;
             if (hiddenLoc && hiddenLoc.value && hiddenLoc.value !== 'all') {
-                var locOption = hiddenLoc.querySelector('option[value="' + hiddenLoc.value + '"]');
-                if (locOption) {
-                    locationPlaceholder.textContent = locOption.textContent.trim();
-                }
+                var lo = hiddenLoc.querySelector('option[value="' + hiddenLoc.value + '"]');
+                if (lo) locText = lo.textContent.trim();
             }
-
-            // If a property type was selected, show it.
-            var hiddenProp = document.getElementById('propertyTypeFilter');
+            var propText = null;
             if (hiddenProp && hiddenProp.value) {
-                var propOption = hiddenProp.querySelector('option[value="' + hiddenProp.value + '"]');
-                if (propOption) {
-                    propertyPlaceholder.textContent = propOption.textContent.trim();
-                }
-            } else if (selectedProperty) {
-                propertyPlaceholder.textContent = selectedProperty;
-            } else {
-                // No property chosen — show current visible text so it's frozen
+                var po = hiddenProp.querySelector('option[value="' + hiddenProp.value + '"]');
+                if (po) propText = po.textContent.trim();
             }
 
-            locationPlaceholder.style.opacity = '1';
-            propertyPlaceholder.style.opacity = '1';
+            // Lock BOTH (persisted to sessionStorage so it survives the page reload)
+            lockLocation(locText || locationPlaceholder.textContent);
+            lockProperty(propText || propertyPlaceholder.textContent);
         });
     }
 

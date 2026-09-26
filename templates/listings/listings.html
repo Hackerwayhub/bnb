@@ -101,7 +101,8 @@
             box-shadow: none;
         ">
 
-            <span class="selected-location-text" id="locationPlaceholder" style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"> </span>
+            <i class="fa fa-location-dot" style="color: #FF0000; font-size: 13px;"></i>
+            <span class="selected-location-text" id="locationPlaceholder" style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Kenya ...</span>
 
         </div>
 
@@ -183,7 +184,8 @@
             box-shadow: none;
         ">
 
-            <span class="selected-property-text" id="propertyPlaceholder" style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"> </span>
+            <i class="fa fa-paint-brush" style="color: #FF0000; font-size: 13px;"></i>
+            <span class="selected-property-text" id="propertyPlaceholder" style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Cabins ...</span>
 
         </div>
 
@@ -279,100 +281,112 @@
 
 <script>
 (function() {
-    // ===== DYNAMIC PLACEHOLDER TEXT =====
+    'use strict';
+
+    // ===== ELEMENTS =====
     var locationPlaceholder = document.getElementById('locationPlaceholder');
     var propertyPlaceholder = document.getElementById('propertyPlaceholder');
 
+    // ===== DYNAMIC WORDS =====
     var locationWords = ['Kilimani', 'Kileleshwa', 'Westlands', 'Karen', 'Lavington', 'Parklands', 'Runda', 'Muthaiga'];
     var propertyWords = ['Cabin', 'Studio', 'Apartment', 'Villa', 'Cottage', 'Bungalow', 'Penthouse', 'Townhouse'];
 
     var locationIndex = 0;
     var propertyIndex = 0;
-    var locationInterval = null;
-    var propertyInterval = null;
-    var locationPaused = false;
-    var propertyPaused = false;
 
+    // Locked flags — once true, rotation NEVER runs again
+    var locationLocked = false;
+    var propertyLocked = false;
+
+    // ===== ROTATION FUNCTIONS =====
     function rotateLocation() {
-        if (locationPaused) return;
+        if (locationLocked) return;
         locationIndex = (locationIndex + 1) % locationWords.length;
         locationPlaceholder.style.opacity = '0';
         setTimeout(function() {
+            if (locationLocked) return;
             locationPlaceholder.textContent = locationWords[locationIndex] + ' ...';
-            locationPlaceholder.style.transition = 'opacity 0.3s ease';
             locationPlaceholder.style.opacity = '1';
         }, 200);
     }
 
     function rotateProperty() {
-        if (propertyPaused) return;
+        if (propertyLocked) return;
         propertyIndex = (propertyIndex + 1) % propertyWords.length;
         propertyPlaceholder.style.opacity = '0';
         setTimeout(function() {
+            if (propertyLocked) return;
             propertyPlaceholder.textContent = propertyWords[propertyIndex] + ' ...';
-            propertyPlaceholder.style.transition = 'opacity 0.3s ease';
             propertyPlaceholder.style.opacity = '1';
         }, 200);
     }
 
-    // Start the rotation intervals
-    locationInterval = setInterval(rotateLocation, 2500);
-    propertyInterval = setInterval(rotateProperty, 2500);
+    // ===== SMOOTH TRANSITION =====
+    locationPlaceholder.style.transition = 'opacity 0.3s ease';
+    propertyPlaceholder.style.transition = 'opacity 0.3s ease';
 
-    // ===== PAUSE ON CLICK =====
-    // Pause location rotation when location dropdown is clicked
-    document.querySelector('.dropdown-trigger-location').addEventListener('click', function() {
-        locationPaused = true;
-    });
+    // ===== START INTERVALS =====
+    var locationInterval = setInterval(rotateLocation, 2500);
+    var propertyInterval = setInterval(rotateProperty, 2500);
 
-    // Pause property rotation when property dropdown is clicked
-    document.querySelector('.dropdown-trigger-property').addEventListener('click', function() {
-        propertyPaused = true;
-    });
+    // ===== LOCK ON CLICK OF TRIGGER =====
+    // As soon as the user clicks either trigger, LOCK forever.
+    var locationTrigger = document.querySelector('.dropdown-trigger-location');
+    var propertyTrigger = document.querySelector('.dropdown-trigger-property');
 
-    // Resume location rotation when a location is selected
+    if (locationTrigger) {
+        locationTrigger.addEventListener('click', function() {
+            locationLocked = true;
+            clearInterval(locationInterval);
+        });
+    }
+
+    if (propertyTrigger) {
+        propertyTrigger.addEventListener('click', function() {
+            propertyLocked = true;
+            clearInterval(propertyInterval);
+        });
+    }
+
+    // ===== LOCK ON OPTION SELECTION =====
     document.querySelectorAll('.dropdown-option-location').forEach(function(option) {
-        option.addEventListener('click', function() {
-            // User made a selection — keep paused and show selected value
-            locationPaused = true;
+        option.addEventListener('click', function(e) {
+            e.stopPropagation(); // prevent trigger click from re-firing
+            locationLocked = true;
+            clearInterval(locationInterval);
             var selectedText = this.querySelector('span').textContent.trim();
             locationPlaceholder.textContent = selectedText;
             locationPlaceholder.style.opacity = '1';
         });
     });
 
-    // Resume property rotation when a property is selected
     document.querySelectorAll('.dropdown-option-property').forEach(function(option) {
-        option.addEventListener('click', function() {
-            propertyPaused = true;
+        option.addEventListener('click', function(e) {
+            e.stopPropagation();
+            propertyLocked = true;
+            clearInterval(propertyInterval);
             var selectedText = this.querySelector('span').textContent.trim();
             propertyPlaceholder.textContent = selectedText;
             propertyPlaceholder.style.opacity = '1';
         });
     });
 
-    // Optional: If user types in search, pause rotation too
-    document.querySelector('.location-search-input').addEventListener('focus', function() {
-        locationPaused = true;
-    });
-    document.querySelector('.location-search-input').addEventListener('blur', function() {
-        if (!locationPlaceholder.textContent || locationPlaceholder.textContent === 'Kenya ...') {
-            locationPaused = false;
-        }
-    });
+    // ===== LOCK ON SEARCH INPUT FOCUS =====
+    var locInput = document.querySelector('.location-search-input');
+    var propInput = document.querySelector('.property-search-input');
 
-    document.querySelector('.property-search-input').addEventListener('focus', function() {
-        propertyPaused = true;
-    });
-    document.querySelector('.property-search-input').addEventListener('blur', function() {
-        if (!propertyPlaceholder.textContent || propertyPlaceholder.textContent === 'Cabins ...') {
-            propertyPaused = false;
-        }
-    });
-
-    // ===== SMOOTH OPACITY TRANSITION =====
-    locationPlaceholder.style.transition = 'opacity 0.3s ease';
-    propertyPlaceholder.style.transition = 'opacity 0.3s ease';
+    if (locInput) {
+        locInput.addEventListener('focus', function() {
+            locationLocked = true;
+            clearInterval(locationInterval);
+        });
+    }
+    if (propInput) {
+        propInput.addEventListener('focus', function() {
+            propertyLocked = true;
+            clearInterval(propertyInterval);
+        });
+    }
 
 })();
 </script>

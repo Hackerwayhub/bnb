@@ -284,7 +284,7 @@
             border: none;
             padding: 10px 20px;
             border-radius: 40px;
-            font-weight: 500;
+            font-weight: 550;
             font-size: 9px;
             cursor: pointer;
             display: flex;
@@ -2293,7 +2293,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 </script>
-
 <script>
 (function() {
     'use strict';
@@ -2312,15 +2311,16 @@ document.addEventListener('DOMContentLoaded', function() {
     var locationLocked = false;
     var propertyLocked = false;
 
-    // ===== CHECK IF A FILTER IS ALREADY APPLIED (from server-rendered selects) =====
-    // Your Django template already marks the correct <option selected> in the hidden
-    // selects based on the current URL params. So if any non-default option is
-    // selected, we know a filter is active and should lock immediately.
-
+    // ===== HIDDEN SELECTS =====
     var hiddenLoc = document.getElementById('locationFilter');
     var hiddenProp = document.getElementById('propertyTypeFilter');
 
-    if (hiddenLoc && hiddenLoc.value && hiddenLoc.value !== 'all') {
+    // ===== DETERMINE LOCK STATE FROM SERVER-RENDERED SELECTS =====
+    // A field should be LOCKED only if a real (non-default) value is selected.
+    var locHasValue = hiddenLoc && hiddenLoc.value && hiddenLoc.value !== 'all';
+    var propHasValue = hiddenProp && hiddenProp.value && hiddenProp.value !== '';
+
+    if (locHasValue) {
         var locOpt = hiddenLoc.querySelector('option[value="' + hiddenLoc.value + '"]');
         if (locOpt) {
             locationPlaceholder.textContent = locOpt.textContent.trim();
@@ -2328,7 +2328,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    if (hiddenProp && hiddenProp.value) {
+    if (propHasValue) {
         var propOpt = hiddenProp.querySelector('option[value="' + hiddenProp.value + '"]');
         if (propOpt) {
             propertyPlaceholder.textContent = propOpt.textContent.trim();
@@ -2336,15 +2336,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Also check sessionStorage as a backup lock (in case hidden selects are empty
-    // but user previously filtered). This survives across page reloads.
+    // ===== FALLBACK: sessionStorage (only used if server-rendered selects are empty) =====
+    // Important: only lock from storage if the server didn't already tell us the state.
     try {
-        if (sessionStorage.getItem('bnb_location_locked') === '1') {
+        if (!locationLocked && sessionStorage.getItem('bnb_location_locked') === '1') {
             locationLocked = true;
             var savedLoc = sessionStorage.getItem('bnb_location_text');
             if (savedLoc) locationPlaceholder.textContent = savedLoc;
         }
-        if (sessionStorage.getItem('bnb_property_locked') === '1') {
+        if (!propertyLocked && sessionStorage.getItem('bnb_property_locked') === '1') {
             propertyLocked = true;
             var savedProp = sessionStorage.getItem('bnb_property_text');
             if (savedProp) propertyPlaceholder.textContent = savedProp;
@@ -2378,21 +2378,33 @@ document.addEventListener('DOMContentLoaded', function() {
     locationPlaceholder.style.transition = 'opacity 0.3s ease';
     propertyPlaceholder.style.transition = 'opacity 0.3s ease';
 
-    // ===== START INTERVALS ONLY IF NOT LOCKED =====
+    // ===== INTERVALS =====
     var locationInterval = null;
     var propertyInterval = null;
 
-    if (!locationLocked) {
+    function startLocationRotation() {
+        if (locationLocked) return;
+        if (locationInterval) return; // already running
         locationInterval = setInterval(rotateLocation, 2500);
     }
-    if (!propertyLocked) {
+
+    function startPropertyRotation() {
+        if (propertyLocked) return;
+        if (propertyInterval) return; // already running
         propertyInterval = setInterval(rotateProperty, 2500);
     }
 
-    // Helper to lock & persist
+    // Start only the ones that aren't locked
+    startLocationRotation();
+    startPropertyRotation();
+
+    // ===== LOCK HELPERS =====
     function lockLocation(text) {
         locationLocked = true;
-        if (locationInterval) clearInterval(locationInterval);
+        if (locationInterval) {
+            clearInterval(locationInterval);
+            locationInterval = null;
+        }
         if (text) locationPlaceholder.textContent = text;
         locationPlaceholder.style.opacity = '1';
         try {
@@ -2403,7 +2415,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function lockProperty(text) {
         propertyLocked = true;
-        if (propertyInterval) clearInterval(propertyInterval);
+        if (propertyInterval) {
+            clearInterval(propertyInterval);
+            propertyInterval = null;
+        }
         if (text) propertyPlaceholder.textContent = text;
         propertyPlaceholder.style.opacity = '1';
         try {
@@ -2413,11 +2428,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ===== LOCK ON TRIGGER CLICK =====
+    // (User opening the menu → freeze that field's placeholder on current word)
     var locationTrigger = document.querySelector('.dropdown-trigger-location');
     var propertyTrigger = document.querySelector('.dropdown-trigger-property');
 
     if (locationTrigger) {
         locationTrigger.addEventListener('click', function() {
+            // Only lock if the user is actually interacting with location
             lockLocation(locationPlaceholder.textContent);
         });
     }
@@ -2462,24 +2479,34 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ===== APPLY FILTERS BUTTON =====
+    // Only lock a field if the user actually chose a value for it.
+    // The other field keeps rotating dynamically — even across the page reload.
     var applyBtn = document.getElementById('applyFilters');
     if (applyBtn) {
         applyBtn.addEventListener('click', function() {
-            // Resolve the display text from the hidden selects (source of truth)
-            var locText = null;
+            // ----- Location -----
             if (hiddenLoc && hiddenLoc.value && hiddenLoc.value !== 'all') {
                 var lo = hiddenLoc.querySelector('option[value="' + hiddenLoc.value + '"]');
-                if (lo) locText = lo.textContent.trim();
-            }
-            var propText = null;
-            if (hiddenProp && hiddenProp.value) {
-                var po = hiddenProp.querySelector('option[value="' + hiddenProp.value + '"]');
-                if (po) propText = po.textContent.trim();
+                lockLocation(lo ? lo.textContent.trim() : locationPlaceholder.textContent);
+            } else {
+                // User did NOT filter by location → keep it dynamic
+                try {
+                    sessionStorage.removeItem('bnb_location_locked');
+                    sessionStorage.removeItem('bnb_location_text');
+                } catch (e) {}
             }
 
-            // Lock BOTH (persisted to sessionStorage so it survives the page reload)
-            lockLocation(locText || locationPlaceholder.textContent);
-            lockProperty(propText || propertyPlaceholder.textContent);
+            // ----- Property Type -----
+            if (hiddenProp && hiddenProp.value) {
+                var po = hiddenProp.querySelector('option[value="' + hiddenProp.value + '"]');
+                lockProperty(po ? po.textContent.trim() : propertyPlaceholder.textContent);
+            } else {
+                // User did NOT filter by property type → keep it dynamic
+                try {
+                    sessionStorage.removeItem('bnb_property_locked');
+                    sessionStorage.removeItem('bnb_property_text');
+                } catch (e) {}
+            }
         });
     }
 

@@ -117,11 +117,6 @@
                 <p>Thank you, {{ booking.guest_name }}, for booking with us!</p>
             </div>
 
-            <div class="highlight-box">
-                <h4>📋 Important Information</h4>
-                <p>This is a booking <strong>request</strong>. Your booking will be confirmed by the property owner within a few minutes. You will receive another email once it's fully confirmed.</p>
-            </div>
-
             <div class="section">
                 <h3>🏨 Property Details</h3>
                 <div class="detail-row">
@@ -168,16 +163,6 @@
                     <div class="detail-label">Phone Number:</div>
                     <div class="detail-value">{{ booking.guest_phone }}</div>
                 </div>
-            </div>
-
-            <div class="section">
-                <h3>📝 Next Steps</h3>
-                <ul style="padding-left: 20px;">
-                    <li>You will receive a confirmation email from the property owner within a few minutes</li>
-                    <li>Keep your booking reference (BK{{ booking.id|stringformat:"06d" }}) for all future communications</li>
-                    <li>Contact the property directly if you have any questions about your stay</li>
-                    <li>Review the property's cancellation policy before your stay</li>
-                </ul>
             </div>
 
             <div class="section">

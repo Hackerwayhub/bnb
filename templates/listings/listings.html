@@ -278,118 +278,6 @@
     </div>
 </div>
 <!-- Apply Filters Button - Compact -->
-
-<script>
-(function() {
-    'use strict';
-
-    // ===== ELEMENTS =====
-    var locationPlaceholder = document.getElementById('locationPlaceholder');
-    var propertyPlaceholder = document.getElementById('propertyPlaceholder');
-
-    // ===== DYNAMIC WORDS =====
-    var locationWords = ['Kilimani', 'Kileleshwa', 'Westlands', 'Karen', 'Lavington', 'Parklands', 'Runda', 'Muthaiga'];
-    var propertyWords = ['Cabin', 'Studio', 'Apartment', 'Villa', 'Cottage', 'Bungalow', 'Penthouse', 'Townhouse'];
-
-    var locationIndex = 0;
-    var propertyIndex = 0;
-
-    // Locked flags — once true, rotation NEVER runs again
-    var locationLocked = false;
-    var propertyLocked = false;
-
-    // ===== ROTATION FUNCTIONS =====
-    function rotateLocation() {
-        if (locationLocked) return;
-        locationIndex = (locationIndex + 1) % locationWords.length;
-        locationPlaceholder.style.opacity = '0';
-        setTimeout(function() {
-            if (locationLocked) return;
-            locationPlaceholder.textContent = locationWords[locationIndex];
-            locationPlaceholder.style.opacity = '1';
-        }, 200);
-    }
-
-    function rotateProperty() {
-        if (propertyLocked) return;
-        propertyIndex = (propertyIndex + 1) % propertyWords.length;
-        propertyPlaceholder.style.opacity = '0';
-        setTimeout(function() {
-            if (propertyLocked) return;
-            propertyPlaceholder.textContent = propertyWords[propertyIndex] + ' ...';
-            propertyPlaceholder.style.opacity = '1';
-        }, 200);
-    }
-
-    // ===== SMOOTH TRANSITION =====
-    locationPlaceholder.style.transition = 'opacity 0.3s ease';
-    propertyPlaceholder.style.transition = 'opacity 0.3s ease';
-
-    // ===== START INTERVALS =====
-    var locationInterval = setInterval(rotateLocation, 2500);
-    var propertyInterval = setInterval(rotateProperty, 2500);
-
-    // ===== LOCK ON CLICK OF TRIGGER =====
-    // As soon as the user clicks either trigger, LOCK forever.
-    var locationTrigger = document.querySelector('.dropdown-trigger-location');
-    var propertyTrigger = document.querySelector('.dropdown-trigger-property');
-
-    if (locationTrigger) {
-        locationTrigger.addEventListener('click', function() {
-            locationLocked = true;
-            clearInterval(locationInterval);
-        });
-    }
-
-    if (propertyTrigger) {
-        propertyTrigger.addEventListener('click', function() {
-            propertyLocked = true;
-            clearInterval(propertyInterval);
-        });
-    }
-
-    // ===== LOCK ON OPTION SELECTION =====
-    document.querySelectorAll('.dropdown-option-location').forEach(function(option) {
-        option.addEventListener('click', function(e) {
-            e.stopPropagation(); // prevent trigger click from re-firing
-            locationLocked = true;
-            clearInterval(locationInterval);
-            var selectedText = this.querySelector('span').textContent.trim();
-            locationPlaceholder.textContent = selectedText;
-            locationPlaceholder.style.opacity = '1';
-        });
-    });
-
-    document.querySelectorAll('.dropdown-option-property').forEach(function(option) {
-        option.addEventListener('click', function(e) {
-            e.stopPropagation();
-            propertyLocked = true;
-            clearInterval(propertyInterval);
-            var selectedText = this.querySelector('span').textContent.trim();
-            propertyPlaceholder.textContent = selectedText;
-            propertyPlaceholder.style.opacity = '1';
-        });
-    });
-
-    // ===== LOCK ON SEARCH INPUT FOCUS =====
-    var locInput = document.querySelector('.location-search-input');
-    var propInput = document.querySelector('.property-search-input');
-
-    if (locInput) {
-        locInput.addEventListener('focus', function() {
-            locationLocked = true;
-            clearInterval(locationInterval);
-        });
-    }
-    if (propInput) {
-        propInput.addEventListener('focus', function() {
-            propertyLocked = true;
-            clearInterval(propertyInterval);
-        });
-    }
-
-})();
-</script>
         <button id="applyFilters" class="apply-button" style="
             background: #FFFFFF;
             color: #FF0000;
@@ -2404,7 +2292,172 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 </script>
 
+<script>
+(function() {
+    'use strict';
 
+    // ===== ELEMENTS =====
+    var locationPlaceholder = document.getElementById('locationPlaceholder');
+    var propertyPlaceholder = document.getElementById('propertyPlaceholder');
+
+    // ===== DYNAMIC WORDS =====
+    var locationWords = ['Kilimani', 'Kileleshwa', 'Westlands', 'Karen', 'Lavington', 'Parklands', 'Runda', 'Muthaiga'];
+    var propertyWords = ['Cabin', 'Studio', 'Apartment', 'Villa', 'Cottage', 'Bungalow', 'Penthouse', 'Townhouse'];
+
+    var locationIndex = 0;
+    var propertyIndex = 0;
+
+    // Locked flags — once true, rotation NEVER runs again
+    var locationLocked = false;
+    var propertyLocked = false;
+
+    // Track user-selected values (null = nothing chosen yet)
+    var selectedLocation = null;
+    var selectedProperty = null;
+
+    // ===== ROTATION FUNCTIONS =====
+    function rotateLocation() {
+        if (locationLocked) return;
+        locationIndex = (locationIndex + 1) % locationWords.length;
+        locationPlaceholder.style.opacity = '0';
+        setTimeout(function() {
+            if (locationLocked) return;
+            locationPlaceholder.textContent = locationWords[locationIndex];
+            locationPlaceholder.style.opacity = '1';
+        }, 200);
+    }
+
+    function rotateProperty() {
+        if (propertyLocked) return;
+        propertyIndex = (propertyIndex + 1) % propertyWords.length;
+        propertyPlaceholder.style.opacity = '0';
+        setTimeout(function() {
+            if (propertyLocked) return;
+            propertyPlaceholder.textContent = propertyWords[propertyIndex];
+            propertyPlaceholder.style.opacity = '1';
+        }, 200);
+    }
+
+    // ===== SMOOTH TRANSITION =====
+    locationPlaceholder.style.transition = 'opacity 0.3s ease';
+    propertyPlaceholder.style.transition = 'opacity 0.3s ease';
+
+    // ===== START INTERVALS =====
+    var locationInterval = setInterval(rotateLocation, 2500);
+    var propertyInterval = setInterval(rotateProperty, 2500);
+
+    // ===== LOCK ON CLICK OF TRIGGER =====
+    var locationTrigger = document.querySelector('.dropdown-trigger-location');
+    var propertyTrigger = document.querySelector('.dropdown-trigger-property');
+
+    if (locationTrigger) {
+        locationTrigger.addEventListener('click', function() {
+            locationLocked = true;
+            clearInterval(locationInterval);
+        });
+    }
+
+    if (propertyTrigger) {
+        propertyTrigger.addEventListener('click', function() {
+            propertyLocked = true;
+            clearInterval(propertyInterval);
+        });
+    }
+
+    // ===== LOCK ON OPTION SELECTION =====
+    document.querySelectorAll('.dropdown-option-location').forEach(function(option) {
+        option.addEventListener('click', function(e) {
+            e.stopPropagation();
+            locationLocked = true;
+            clearInterval(locationInterval);
+            var selectedText = this.querySelector('span').textContent.trim();
+            selectedLocation = selectedText;
+            locationPlaceholder.textContent = selectedText;
+            locationPlaceholder.style.opacity = '1';
+
+            // Update the hidden select so Apply Filters picks it up
+            var hiddenLoc = document.getElementById('locationFilter');
+            if (hiddenLoc) {
+                hiddenLoc.value = this.getAttribute('data-value') || 'all';
+            }
+        });
+    });
+
+    document.querySelectorAll('.dropdown-option-property').forEach(function(option) {
+        option.addEventListener('click', function(e) {
+            e.stopPropagation();
+            propertyLocked = true;
+            clearInterval(propertyInterval);
+            var selectedText = this.querySelector('span').textContent.trim();
+            selectedProperty = selectedText;
+            propertyPlaceholder.textContent = selectedText;
+            propertyPlaceholder.style.opacity = '1';
+
+            var hiddenProp = document.getElementById('propertyTypeFilter');
+            if (hiddenProp) {
+                hiddenProp.value = this.getAttribute('data-value') || '';
+            }
+        });
+    });
+
+    // ===== LOCK ON SEARCH INPUT FOCUS =====
+    var locInput = document.querySelector('.location-search-input');
+    var propInput = document.querySelector('.property-search-input');
+
+    if (locInput) {
+        locInput.addEventListener('focus', function() {
+            locationLocked = true;
+            clearInterval(locationInterval);
+        });
+    }
+    if (propInput) {
+        propInput.addEventListener('focus', function() {
+            propertyLocked = true;
+            clearInterval(propertyInterval);
+        });
+    }
+
+    // ===== APPLY FILTERS BUTTON =====
+    // When the user clicks "Apply Filters", freeze the placeholders on
+    // whatever they currently show (so the user sees what they're filtering by).
+    var applyBtn = document.getElementById('applyFilters');
+    if (applyBtn) {
+        applyBtn.addEventListener('click', function(e) {
+            // Lock both placeholders permanently
+            locationLocked = true;
+            propertyLocked = true;
+            clearInterval(locationInterval);
+            clearInterval(propertyInterval);
+
+            // If a location was selected, show it. Otherwise keep current text.
+            var hiddenLoc = document.getElementById('locationFilter');
+            if (hiddenLoc && hiddenLoc.value && hiddenLoc.value !== 'all') {
+                var locOption = hiddenLoc.querySelector('option[value="' + hiddenLoc.value + '"]');
+                if (locOption) {
+                    locationPlaceholder.textContent = locOption.textContent.trim();
+                }
+            }
+
+            // If a property type was selected, show it.
+            var hiddenProp = document.getElementById('propertyTypeFilter');
+            if (hiddenProp && hiddenProp.value) {
+                var propOption = hiddenProp.querySelector('option[value="' + hiddenProp.value + '"]');
+                if (propOption) {
+                    propertyPlaceholder.textContent = propOption.textContent.trim();
+                }
+            } else if (selectedProperty) {
+                propertyPlaceholder.textContent = selectedProperty;
+            } else {
+                // No property chosen — show current visible text so it's frozen
+            }
+
+            locationPlaceholder.style.opacity = '1';
+            propertyPlaceholder.style.opacity = '1';
+        });
+    }
+
+})();
+</script>
 {% endblock %}
 
 {% block scripts %}

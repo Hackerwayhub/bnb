@@ -339,13 +339,13 @@ class BookingForm(forms.ModelForm):
             }),
             'guest_phone': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': '+2547XXXXXXXX',
+                'placeholder': '+254',
                 'id': 'guest_phone'
             }),
             'message': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 4,
-                'placeholder': 'Tell us about your inquiry...',
+                'placeholder': 'Message (Optional) Tell us about your inquiry, questions, or special requests',
                 'id': 'message'
             }),
             'inquiry_type': forms.Select(attrs={

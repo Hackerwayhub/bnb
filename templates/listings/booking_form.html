@@ -564,7 +564,7 @@
     </div>
 
     <div class="form-group">
-        <label class="form-label">Full Name *</label>
+
         {{ form.guest_name }}
         {% if form.guest_name.errors %}
             <div class="error-message">{{ form.guest_name.errors }}</div>
@@ -572,7 +572,7 @@
     </div>
 
     <div class="form-group">
-        <label class="form-label">Email Address *</label>
+
         {{ form.guest_email }}
         {% if form.guest_email.errors %}
             <div class="error-message">{{ form.guest_email.errors }}</div>
@@ -580,9 +580,9 @@
     </div>
 
     <div class="form-group">
-        <label class="form-label">Phone Number *</label>
+
         {{ form.guest_phone }}
-        <small style="color: var(--text-muted); font-size: 0.9rem;">{{ form.guest_phone.help_text }}</small>
+       
         {% if form.guest_phone.errors %}
             <div class="error-message">{{ form.guest_phone.errors }}</div>
         {% endif %}
@@ -591,12 +591,13 @@
 
 <!-- Message Field (replaces special_requests) -->
 <div class="form-group">
-    <label class="form-label">Your Message (Optional)</label>
+
+    <small style="color: var(--text-muted); font-size: 0.9rem;">Message (Optional) Tell us about your inquiry, questions, or special requests</small>
+
     {{ form.message }}
     {% if form.message.errors %}
         <div class="error-message">{{ form.message.errors }}</div>
     {% endif %}
-    <small style="color: var(--text-muted); font-size: 0.9rem;">Tell us about your inquiry, questions, or special requests</small>
 </div>
 
 

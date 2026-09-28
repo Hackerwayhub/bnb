@@ -349,98 +349,372 @@
 <section>
   <div style="border-radius: 32px 32px 32px 32px; box-shadow: 0 4px 8px rgba(0,0,0,0.1), 0 6px 20px rgba(0,0,0,0.1); margin-top: 10px;">
     <div class="container-fluid">
-<!-- ============================================
-     HERO CAROUSEL WITH SKELETON UI
-     ============================================ -->
-{% if listings|length > 0 %}
-<section class="hero-carousel-section">
-  <div class="hero-carousel-container">
-    <div class="hero-carousel" id="heroCarousel">
 
-      <!-- ===== SKELETON UI ===== -->
-      <div class="hero-skeleton" id="heroSkeleton" aria-hidden="true">
-        <div class="hero-skeleton-item">
-          <div class="hero-skeleton-img shimmer"></div>
-          <div class="hero-skeleton-overlay"></div>
-          <div class="hero-skeleton-content">
-            <div class="hero-skeleton-line shimmer" style="width: 28%;"></div>
-            <div class="hero-skeleton-line shimmer" style="width: 55%; height: 22px;"></div>
-            <div class="hero-skeleton-line shimmer" style="width: 38%; height: 26px;"></div>
-          </div>
-        </div>
-      </div>
+      <!-- ============================================
+           HERO CAROUSEL WITH SKELETON UI
+           ============================================ -->
+      {% if listings|length > 0 %}
+      <section class="hero-carousel-section">
+        <div class="hero-carousel-container">
+          <div class="hero-carousel" id="heroCarousel">
 
-      <!-- ===== REAL CAROUSEL ===== -->
-      <div class="hero-carousel-inner" id="heroCarouselInner">
-        {% for listing in listings|slice:":3" %}
-        <div class="hero-carousel-item {% if forloop.first %}active{% endif %}" data-slide-index="{{ forloop.counter0 }}">
-          <div class="hero-img-wrapper">
-            {% if listing.main_image %}
-              {% with listing.all_images as images %}
-                <img
-                  class="hero-img"
-                  src="{{ images.0.url }}"
-                  alt="{{ listing.title }}"
-                  width="1200"
-                  height="675"
-                  decoding="async"
-                  {% if forloop.first %}
-                    loading="eager"
-                    fetchpriority="high"
-                  {% else %}
-                    loading="lazy"
-                  {% endif %}
-                  onload="this.classList.add('loaded')"
-                >
-              {% endwith %}
-            {% else %}
-              <div class="hero-bg-gradient"></div>
-            {% endif %}
-          </div>
-          <div class="hero-overlay"></div>
-          <div class="hero-content">
-            <div class="hero-category">{{ listing.get_property_type_display }}</div>
-            <div class="hero-delivery">
-              <i class="fa fa-gem"></i> Great deals just for you!
+            <!-- SKELETON -->
+            <div class="hero-skeleton" id="heroSkeleton" aria-hidden="true">
+              <div class="hero-skeleton-item">
+                <div class="hero-skeleton-img shimmer"></div>
+                <div class="hero-skeleton-overlay"></div>
+                <div class="hero-skeleton-content">
+                  <div class="hero-skeleton-line shimmer" style="width: 28%;"></div>
+                  <div class="hero-skeleton-line shimmer" style="width: 55%; height: 22px;"></div>
+                  <div class="hero-skeleton-line shimmer" style="width: 38%; height: 26px;"></div>
+                </div>
+              </div>
             </div>
-            <p class="hero-price">
-              {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
-                KSh {{ listing.price_per_night|floatformat:0 }} <small>/ night</small>
-              {% elif listing.transaction_type == 'rent' and listing.price_per_month %}
-                KSh {{ listing.price_per_month|floatformat:0 }} <small>/ month</small>
-              {% elif listing.transaction_type == 'sale' and listing.price %}
-                KSh {{ listing.price|floatformat:0 }} <small>total price</small>
-              {% else %}
-                Price on request
-              {% endif %}
-            </p>
+
+            <!-- REAL CAROUSEL -->
+            <div class="hero-carousel-inner" id="heroCarouselInner">
+              {% for listing in listings|slice:":3" %}
+              <div class="hero-carousel-item {% if forloop.first %}active{% endif %}" data-slide-index="{{ forloop.counter0 }}">
+                <div class="hero-img-wrapper">
+                  {% if listing.main_image %}
+                    {% with listing.all_images as images %}
+                      <img
+                        class="hero-img"
+                        src="{{ images.0.url }}"
+                        alt="{{ listing.title }}"
+                        width="1200"
+                        height="675"
+                        decoding="async"
+                        {% if forloop.first %}
+                          loading="eager"
+                          fetchpriority="high"
+                        {% else %}
+                          loading="lazy"
+                        {% endif %}
+                        onload="this.classList.add('loaded')"
+                      >
+                    {% endwith %}
+                  {% else %}
+                    <div class="hero-bg-gradient"></div>
+                  {% endif %}
+                </div>
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                  <div class="hero-category">{{ listing.get_property_type_display }}</div>
+                  <div class="hero-delivery">
+                    <i class="fa fa-gem"></i> Great deals just for you!
+                  </div>
+                  <p class="hero-price">
+                    {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
+                      KSh {{ listing.price_per_night|floatformat:0 }} <small>/ night</small>
+                    {% elif listing.transaction_type == 'rent' and listing.price_per_month %}
+                      KSh {{ listing.price_per_month|floatformat:0 }} <small>/ month</small>
+                    {% elif listing.transaction_type == 'sale' and listing.price %}
+                      KSh {{ listing.price|floatformat:0 }} <small>total price</small>
+                    {% else %}
+                      Price on request
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            <!-- INDICATORS -->
+            <div class="hero-carousel-indicators">
+              {% for listing in listings|slice:":3" %}
+              <span class="hero-indicator {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}" aria-label="Go to slide {{ forloop.counter }}"></span>
+              {% endfor %}
+            </div>
+
+          </div>
+        </div>
+      </section>
+      {% endif %}
+
+      <!-- ============================================
+           LISTINGS GRID SKELETON UI
+           ============================================ -->
+      <div class="listings-skeleton" id="listingsSkeleton" aria-hidden="true">
+        {% for i in "123456" %}
+        <div class="skeleton-card">
+          <div class="skeleton-card-img shimmer"></div>
+          <div class="skeleton-card-body">
+            <div class="skeleton-card-line shimmer" style="width:35%;height:10px;"></div>
+            <div class="skeleton-card-line shimmer" style="width:70%;height:16px;margin-top:6px;"></div>
+            <div class="skeleton-card-line shimmer" style="width:45%;height:20px;margin-top:12px;"></div>
+            <div class="skeleton-card-line shimmer" style="width:80%;height:12px;margin-top:10px;"></div>
+            <div class="skeleton-card-actions">
+              <div class="skeleton-pill shimmer"></div>
+              <div class="skeleton-pill shimmer"></div>
+              <div class="skeleton-pill shimmer"></div>
+            </div>
           </div>
         </div>
         {% endfor %}
       </div>
 
-      <!-- ===== INDICATORS ===== -->
-      <div class="hero-carousel-indicators">
-        {% for listing in listings|slice:":3" %}
-        <span class="hero-indicator {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}" aria-label="Go to slide {{ forloop.counter }}"></span>
-        {% endfor %}
+      <!-- ============================================
+           ALL LISTINGS GRID (hidden until ready)
+           ============================================ -->
+      <div class="row listings-grid-loading" id="gallery-container">
+        {% if listings %}
+          {% for listing in listings %}
+            {% if forloop.counter > 0 %}
+              <div class="col-md-4 col-sm-6 mb-4" data-location="{{ listing.location }}" style="margin-bottom: 15px !important;">
+                <div class="listing-card">
+
+                  <!-- Image Gallery for Grid Items -->
+                  <div class="image-gallery" id="grid-gallery-{{ listing.id }}">
+                    {% if listing.main_image %}
+                      {% with listing.all_images as images %}
+                        {% if images|length > 0 %}
+
+                          <!-- Main Image Display -->
+                          <img src="{{ images.0.url }}"
+                               alt="{{ listing.title }} - Image 1"
+                               class="listing-img clickable-image"
+                               loading="lazy"
+                               style="width: 100%; height: 280px; object-fit: cover; object-position: center;"
+                               data-gallery-id="grid-{{ listing.id }}"
+                               data-image-index="0"
+                               data-listing-id="{{ listing.id }}"
+                               data-listing-title="{{ listing.title }}"
+                               data-listing-location="{{ listing.get_location_display }}"
+                               data-listing-phone="{{ listing.host_phone }}"
+                               data-listing-price="{{ listing.price_per_night }}"
+                               data-listing-type="{{ listing.property_type }}"
+                               data-listing-image="{{ images.0.url }}"
+                               data-listing-guests="{{ listing.guests }}"
+                               data-listing-bedrooms="{{ listing.bedrooms }}"
+                               data-listing-bathrooms="{{ listing.bathrooms }}"
+                               data-listing-description="{{ listing.description|default:'No description available'|escapejs }}"
+                               data-all-images='{% for img in images %}{{ img.url }}{% if not forloop.last %},{% endif %}{% endfor %}'>
+
+                          <!-- Navigation Arrows -->
+                          {% if images|length > 1 %}
+                            <button class="gallery-nav prev" onclick="changeImage('grid-{{ listing.id }}', -1, event)">
+                              <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                            </button>
+                            <button class="gallery-nav next" onclick="changeImage('grid-{{ listing.id }}', 1, event)">
+                              <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                            </button>
+
+                            <!-- Thumbnails -->
+                            <div class="gallery-thumbnails">
+                              {% for img in images %}
+                                <div class="gallery-thumbnail {% if forloop.first %}active{% endif %}"
+                                     onclick="goToImage('grid-{{ listing.id }}', {{ forloop.counter0 }}, event)">
+                                  <img src="{{ img.url }}" alt="Thumbnail {{ forloop.counter }}">
+                                </div>
+                              {% endfor %}
+                            </div>
+                          {% endif %}
+                        {% endif %}
+                      {% endwith %}
+                    {% else %}
+                      <div style="width: 100%; height: 280px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);"
+                           class="clickable-image"
+                           data-listing-id="{{ listing.id }}"
+                           data-listing-title="{{ listing.title }}"
+                           data-listing-location="{{ listing.get_location_display }}"
+                           data-listing-phone="{{ listing.host_phone }}"
+                           data-listing-price="{{ listing.price_per_night }}"
+                           data-listing-type="{{ listing.property_type }}"
+                           data-listing-guests="{{ listing.guests }}"
+                           data-listing-bedrooms="{{ listing.bedrooms }}"
+                           data-listing-bathrooms="{{ listing.bathrooms }}">
+                        <i class="fa fa-home" aria-hidden="true" style="font-size: 4rem; color: white;"></i>
+                      </div>
+                    {% endif %}
+                  </div>
+
+                  <div class="property-type-badge {{ listing.property_type }}" style="top: 15px; right: 15px; padding: 5px 12px; font-size: 0.6rem;">
+                    {{ listing.get_property_type_display }}
+                  </div>
+
+                  <div class="listing-info" style="padding: 20px;">
+                    <h3 style="
+                      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+                      font-size: 0.75rem;
+                      font-weight: 600;
+                      letter-spacing: -0.2px;
+                      line-height: 1.3;
+                      margin-bottom: 8px;
+                      color: #111;
+                      text-transform: capitalize;
+                      white-space: nowrap;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                    ">
+                      {{ listing.title|title }}
+                      {% if listing.is_approved %}
+                      <span class="verified-badge" style="color: #34a853; font-size: 0.9rem; margin-left: 4px; vertical-align: middle;" title="Verified property">
+                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                      </span>
+                      {% endif %}
+                    </h3>
+
+                    <p class="price-tag" style="font-size: 1.2rem; font-weight: 700; color: #28a745; margin: 10px 0;">
+                      {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
+                        KSh {{ listing.price_per_night|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ night</small>
+                      {% elif listing.transaction_type == 'rent' and listing.price_per_month %}
+                        KSh {{ listing.price_per_month|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ month</small>
+                      {% elif listing.transaction_type == 'sale' and listing.price %}
+                        KSh {{ listing.price|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">total price</small>
+                      {% else %}
+                        Price on request
+                      {% endif %}
+                    </p>
+
+                    <p class="location" style="font-size: 0.75rem; color: #666; margin-bottom: 10px;">
+                      <i class="fa fa-map-marker" style="color: #007bff;" aria-hidden="true"></i>
+                      {{ listing.get_location_display }} • {{ listing.specific_location }}
+                    </p>
+
+                    <!-- AMENITIES -->
+                    {% if listing.wifi or listing.parking or listing.kitchen or listing.pool or listing.ac or listing.tv %}
+                    <div style="margin: 15px 0; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee;">
+                      <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: #555;">Amenities</h4>
+                      <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        {% if listing.wifi %}
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                          <i class="fa fa-wifi" aria-hidden="true" style="color: #007bff; font-size: 0.9rem;"></i>
+                          <span style="font-size: 0.8rem; color: #555;">WiFi</span>
+                        </div>
+                        {% endif %}
+
+                        {% if listing.parking %}
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                          <i class="fa fa-car" aria-hidden="true" style="color: #28a745; font-size: 0.9rem;"></i>
+                          <span style="font-size: 0.8rem; color: #555;">Parking</span>
+                        </div>
+                        {% endif %}
+
+                        {% if listing.pool %}
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                          <i class="fa fa-swimming-pool" aria-hidden="true" style="color: #17a2b8; font-size: 0.9rem;"></i>
+                          <span style="font-size: 0.8rem; color: #555;">Pool</span>
+                        </div>
+                        {% endif %}
+
+                        <a href="{% url 'listing_detail' listing.slug %}" title="View full details, photos, and amenities">
+                          <i class="fa fa-search" aria-hidden="true"></i> View full Details
+                        </a>
+                      </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Action Buttons -->
+                    <div class="listing-actions" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; width: 100%;">
+
+                      <!-- Share Button -->
+                      <button type="button" class="share-btn"
+                              data-url="{% url 'listing_detail' listing.slug %}"
+                              data-title="{{ listing.title }}"
+                              aria-label="Share this listing"
+                              style="
+                                width: 44px;
+                                height: 44px;
+                                border-radius: 50%;
+                                background: rgba(255, 255, 255, 0.2);
+                                backdrop-filter: blur(8px);
+                                border: 1px solid rgba(255, 255, 255, 0.3);
+                                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                                color: #333;
+                                font-size: 1.2rem;
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                transition: all 0.3s ease;
+                                cursor: pointer;
+                                flex-shrink: 0;
+                                padding: 0;
+                              "
+                              onmouseover="this.style.background='rgba(255,255,255,0.35)'; this.style.transform='translateY(-2px)';"
+                              onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
+                        <i class="fa fa-share-alt" aria-hidden="true" style="color: #555;"></i>
+                      </button>
+
+                      <!-- Phone Button -->
+                      <a href="tel:{{ listing.admin_contact }}"
+                         style="background-color: #007bff; color: white; padding: 10px 16px; text-decoration: none; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; min-width: 44px; flex-shrink: 0;"
+                         onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='translateY(-2px)';"
+                         onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='translateY(0)';">
+                        <i class="fa fa-phone" aria-hidden="true"></i>
+                        <span style="display: none;">Call</span>
+                      </a>
+
+                      <!-- WhatsApp Button -->
+                      <a href="{{ listing.admin_whatsapp_link }}" target="_blank"
+                         style="background-color: #25D366; color: white; padding: 10px 16px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; flex: 1 1 auto; min-width: 0; justify-content: center; white-space: nowrap; font-size: clamp(0.8rem, 2vw, 0.9rem);"
+                         onmouseover="this.style.backgroundColor='#1da851'; this.style.transform='translateY(-2px)';"
+                         onmouseout="this.style.backgroundColor='#25D366'; this.style.transform='translateY(0)';"
+                         title="Contact admin to book on behalf of client">
+                        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                        <span>Chat via WhatsApp</span>
+                      </a>
+
+                      <!-- Book Now Button -->
+                      <a href="{% url 'booking_form' listing.id %}"
+                         style="background-color: #ff5a5f; color: white; padding: 10px 16px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; flex: 1 1 auto; min-width: 0; justify-content: center; white-space: nowrap; font-size: clamp(0.85rem, 2.5vw, 1rem);"
+                         onmouseover="this.style.backgroundColor='#e04a50'; this.style.transform='translateY(-2px)';"
+                         onmouseout="this.style.backgroundColor='#ff5a5f'; this.style.transform='translateY(0)';"
+                         title="Book this property online">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        <span>Book Now</span>
+                      </a>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+
+        {% else %}
+          <!-- NO LISTINGS FOUND -->
+          <div class="col-12">
+            <div class="no-listings" style="text-align: center; padding: 40px 20px;">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2rem; max-width: 700px; margin: 0 auto;">
+
+                <div class="dancing-bot-wrapper">
+                  <div class="dancing-bot">
+                    <div class="bot-head">
+                      <div class="eyes">
+                        <div class="eye left"></div>
+                        <div class="eye right"></div>
+                      </div>
+                    </div>
+                    <div class="simple-body"></div>
+                    <div class="arm left-arm"></div>
+                    <div class="arm right-arm"></div>
+                  </div>
+                </div>
+
+                <div class="typewriter-container">
+                  <span id="dynamic-message" class="typewriter-text"></span>
+                  <span class="cursor-blink"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
       </div>
 
     </div>
   </div>
 </section>
-{% endif %}
 
 <!-- ============================================
      STYLES
      ============================================ -->
 <style>
-/* --- Container needs positioning context for the skeleton --- */
-.hero-carousel {
-  position: relative;
-}
+/* ============================================
+   HERO CAROUSEL SKELETON
+   ============================================ */
+.hero-carousel { position: relative; }
 
-/* ===== SKELETON UI ===== */
 .hero-skeleton {
   position: absolute;
   inset: 0;
@@ -451,10 +725,7 @@
   transition: opacity 0.3s ease;
 }
 
-.hero-skeleton-item {
-  position: absolute;
-  inset: 0;
-}
+.hero-skeleton-item { position: absolute; inset: 0; }
 
 .hero-skeleton-img {
   position: absolute;
@@ -490,7 +761,7 @@
   background-color: rgba(255, 255, 255, 0.30);
 }
 
-/* Shimmer animation */
+/* Shared shimmer */
 .shimmer {
   position: relative;
   overflow: hidden;
@@ -515,63 +786,352 @@
   100% { transform: translateX(100%); }
 }
 
-/* Hide skeleton once real content is ready */
 .hero-skeleton.hidden {
   opacity: 0;
   pointer-events: none;
 }
 
-/* ===== REAL CAROUSEL FADE-IN ===== */
 #heroCarouselInner {
   opacity: 0;
   transition: opacity 0.35s ease;
 }
 
-#heroCarouselInner.ready {
-  opacity: 1;
-}
+#heroCarouselInner.ready { opacity: 1; }
 
 .hero-img {
   opacity: 0;
   transition: opacity 0.4s ease;
 }
 
-.hero-img.loaded {
+.hero-img.loaded { opacity: 1; }
+
+/* ============================================
+   LISTINGS GRID SKELETON
+   ============================================ */
+.listings-skeleton {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.skeleton-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.skeleton-card-img {
+  width: 100%;
+  height: 280px;
+  background-color: #e0e0e0;
+}
+
+.skeleton-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.skeleton-card-line {
+  height: 14px;
+  border-radius: 6px;
+  background-color: #e0e0e0;
+}
+
+.skeleton-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.skeleton-pill {
+  flex: 1;
+  height: 40px;
+  border-radius: 20px;
+  background-color: #e0e0e0;
+}
+
+.skeleton-pill:first-child {
+  flex: 0 0 44px;
+  border-radius: 50%;
+}
+
+.listings-skeleton .shimmer {
+  background-color: #e0e0e0;
+}
+
+.listings-skeleton .shimmer::after {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.65) 50%,
+    transparent 100%
+  );
+  animation: listingsShimmer 1.4s infinite;
+}
+
+@keyframes listingsShimmer {
+  100% { transform: translateX(100%); }
+}
+
+.listings-grid-loading {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease;
+}
+
+.listings-grid-loaded {
   opacity: 1;
+  visibility: visible;
 }
 
-/* ===== ACCESSIBILITY ===== */
-@media (prefers-reduced-motion: reduce) {
-  .shimmer::after { animation: none; }
-  .hero-img,
-  #heroCarouselInner,
-  .hero-skeleton {
-    transition: none;
-  }
+.listings-skeleton.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
-/* ===== MOBILE TWEAKS ===== */
+/* ============================================
+   NO-LISTINGS BOT & TYPEWRITER
+   ============================================ */
+.dancing-bot-wrapper { flex-shrink: 0; }
+
+.dancing-bot {
+  position: relative;
+  width: 110px;
+  height: 120px;
+  animation: floatBot 2s ease-in-out infinite;
+  cursor: pointer;
+}
+
+@keyframes floatBot {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+.antenna {
+  position: absolute;
+  width: 6px;
+  height: 24px;
+  background: #2c3e66;
+  border-radius: 10px;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: wiggle 0.5s infinite alternate;
+  z-index: 2;
+}
+
+.antenna::after {
+  content: "⚡";
+  position: absolute;
+  top: -22px;
+  left: -5px;
+  font-size: 14px;
+  animation: spark 1s infinite;
+}
+
+@keyframes wiggle {
+  0% { transform: translateX(-50%) rotate(-6deg); }
+  100% { transform: translateX(-50%) rotate(6deg); }
+}
+
+@keyframes spark {
+  0%, 100% { opacity: 0.6; text-shadow: 0 0 0px gold; }
+  50% { opacity: 1; text-shadow: 0 0 6px #ffb347; }
+}
+
+.bot-head {
+  position: relative;
+  width: 70px;
+  height: 65px;
+  background: radial-gradient(circle at 30% 30%, #e0e7ff, #b7c9e2);
+  border-radius: 50% 45% 55% 50%;
+  margin: 0 auto;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  animation: headBob 0.8s infinite alternate;
+}
+
+@keyframes headBob {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(3px) rotate(2deg); }
+}
+
+.eyes {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  padding-top: 22px;
+}
+
+.eye {
+  width: 12px;
+  height: 12px;
+  background: #0a1a2f;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #fef9e6;
+  animation: blink 3s infinite;
+}
+
+.eye.right { animation-delay: 0.2s; }
+
+@keyframes blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+
+.simple-body {
+  width: 45px;
+  height: 35px;
+  background: linear-gradient(135deg, #3e5a8f, #2b3b5c);
+  border-radius: 20px 20px 16px 16px;
+  margin: 5px auto 0;
+  box-shadow: inset 0 1px 3px rgba(255,255,200,0.3), 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.arm {
+  position: absolute;
+  width: 22px;
+  height: 8px;
+  background: #2e4a7c;
+  border-radius: 20px;
+  top: 65px;
+}
+
+.left-arm {
+  left: -8px;
+  transform: rotate(-20deg);
+  animation: swingLeft 0.6s infinite alternate;
+}
+
+.right-arm {
+  right: -8px;
+  transform: rotate(20deg);
+  animation: swingRight 0.6s infinite alternate;
+}
+
+@keyframes swingLeft {
+  0% { transform: rotate(-25deg); }
+  100% { transform: rotate(15deg); }
+}
+
+@keyframes swingRight {
+  0% { transform: rotate(25deg); }
+  100% { transform: rotate(-15deg); }
+}
+
+.typewriter-container {
+  display: inline-flex;
+  align-items: baseline;
+  background: rgba(255,255,245,0.5);
+  padding: 12px 20px;
+  border-radius: 60px;
+  backdrop-filter: blur(4px);
+  font-size: 1.3rem;
+  font-weight: 600;
+  font-family: 'Inter', system-ui, 'Segoe UI', sans-serif;
+}
+
+.typewriter-text {
+  background: linear-gradient(125deg, #1c2b44, #2a3f62);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+}
+
+.cursor-blink {
+  display: inline-block;
+  width: 3px;
+  height: 1.4rem;
+  background: #ff8c42;
+  margin-left: 5px;
+  border-radius: 4px;
+  animation: cursorFlash 0.8s step-end infinite;
+}
+
+@keyframes cursorFlash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 991px) {
+  .listings-skeleton { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 768px) {
   .hero-skeleton-content {
     left: 1rem;
     right: 1rem;
     bottom: 1.5rem;
   }
-  .hero-skeleton-line {
-    height: 12px;
+  .hero-skeleton-line { height: 12px; }
+}
+
+@media (max-width: 575px) {
+  .listings-skeleton { grid-template-columns: 1fr; }
+  .skeleton-card-img { height: 220px; }
+}
+
+@media (max-width: 550px) {
+  .typewriter-text { font-size: 1rem; white-space: normal; word-break: keep-all; }
+  .typewriter-container { padding: 8px 16px; }
+  .cursor-blink { height: 1.2rem; }
+  .dancing-bot { width: 95px; height: 100px; }
+  .bot-head { width: 60px; height: 55px; }
+  .simple-body { width: 40px; height: 28px; }
+}
+
+@media (max-width: 480px) {
+  .listing-actions { gap: 6px; }
+  .listing-actions a { padding: 10px 12px !important; }
+  .listing-actions a[href^="tel:"] span {
+    display: inline !important;
+    margin-left: 4px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .listing-actions a[href*="whatsapp"] span { font-size: 0.75rem; }
+}
+
+@media (max-width: 768px) {
+  .listing-actions { flex-wrap: wrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer::after { animation: none; }
+  .hero-img,
+  #heroCarouselInner,
+  .hero-skeleton,
+  .listings-grid-loading,
+  .listings-skeleton.hidden {
+    transition: none;
   }
 }
 </style>
 
 <!-- ============================================
-     SCRIPT — Reveal carousel when first image loads
+     SCRIPTS
      ============================================ -->
 <script>
+/* ---------- HERO CAROUSEL SKELETON ---------- */
 (function () {
   const skeleton = document.getElementById('heroSkeleton');
   const inner = document.getElementById('heroCarouselInner');
   if (!skeleton || !inner) return;
 
+  const HERO_MIN_MS = 600;
+  const heroStart = Date.now();
   const firstImg = inner.querySelector('.hero-img');
   let revealed = false;
 
@@ -579,758 +1139,167 @@
     if (revealed) return;
     revealed = true;
 
-    inner.classList.add('ready');
-    skeleton.classList.add('hidden');
+    const wait = Math.max(0, HERO_MIN_MS - (Date.now() - heroStart));
 
-    // Remove skeleton from DOM after fade-out completes
     setTimeout(function () {
-      if (skeleton && skeleton.parentNode) {
-        skeleton.parentNode.removeChild(skeleton);
-      }
-    }, 400);
+      inner.classList.add('ready');
+      skeleton.classList.add('hidden');
+
+      setTimeout(function () {
+        if (skeleton && skeleton.parentNode) {
+          skeleton.parentNode.removeChild(skeleton);
+        }
+      }, 400);
+    }, wait);
   }
 
-  // No image → reveal immediately
-  if (!firstImg) {
-    reveal();
-    return;
-  }
+  if (!firstImg) { reveal(); return; }
 
-  // Already cached / loaded
-  if (firstImg.complete && firstImg.naturalWidth > 0) {
-    reveal();
-    return;
-  }
+  if (firstImg.complete && firstImg.naturalWidth > 0) { reveal(); return; }
 
-  // Wait for load (or error) then reveal
   firstImg.addEventListener('load', reveal, { once: true });
   firstImg.addEventListener('error', reveal, { once: true });
 
-  // Safety timeout — never leave skeleton hanging
   setTimeout(reveal, 4000);
 })();
-</script>
-<!-- Share functionality script -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Share button functionality
-    const shareButtons = document.querySelectorAll('.share-btn');
 
-    shareButtons.forEach(button => {
-        button.addEventListener('click', async function(e) {
-            e.preventDefault();
-            const url = this.dataset.url;
-            const title = this.dataset.title;
-            const fullUrl = window.location.origin + url;
-
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: title,
-                        text: `Check out this amazing property: ${title}`,
-                        url: fullUrl
-                    });
-                } catch (err) {
-                    console.log('Share cancelled or failed');
-                }
-            } else {
-                // Fallback - copy to clipboard
-                try {
-                    await navigator.clipboard.writeText(fullUrl);
-                    alert('Link copied to clipboard!');
-                } catch (err) {
-                    alert('Please copy the link manually');
-                }
-            }
-        });
-    });
-});
-</script>
-
-        <!-- ============================================
-     LISTINGS GRID SKELETON UI
-     Shows while listings are being loaded
-     ============================================ -->
-<div class="listings-skeleton" id="listingsSkeleton" aria-hidden="true">
-  {% for i in "123456" %}
-  <div class="skeleton-card">
-    <div class="skeleton-card-img shimmer"></div>
-    <div class="skeleton-card-body">
-      <div class="skeleton-card-line shimmer" style="width: 35%; height: 10px;"></div>
-      <div class="skeleton-card-line shimmer" style="width: 70%; height: 16px; margin-top: 6px;"></div>
-      <div class="skeleton-card-line shimmer" style="width: 45%; height: 20px; margin-top: 12px;"></div>
-      <div class="skeleton-card-line shimmer" style="width: 80%; height: 12px; margin-top: 10px;"></div>
-      <div class="skeleton-card-actions">
-        <div class="skeleton-pill shimmer"></div>
-        <div class="skeleton-pill shimmer"></div>
-        <div class="skeleton-pill shimmer"></div>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
-</div>
-
-<!-- ============================================
-     STYLES FOR THE SKELETON
-     ============================================ -->
-<style>
-  /* Grid layout — matches Bootstrap's row/col-md-4 col-sm-6 */
-  .listings-skeleton {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-bottom: 30px;
-  }
-
-  .skeleton-card {
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  }
-
-  /* Image block — matches your 280px listing image height */
-  .skeleton-card-img {
-    width: 100%;
-    height: 280px;
-    background-color: #e0e0e0;
-  }
-
-  .skeleton-card-body {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  /* Generic placeholder bar */
-  .skeleton-card-line {
-    height: 14px;
-    border-radius: 6px;
-    background-color: #e0e0e0;
-  }
-
-  /* Buttons row placeholder */
-  .skeleton-card-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 16px;
-  }
-
-  .skeleton-pill {
-    flex: 1;
-    height: 40px;
-    border-radius: 20px;
-    background-color: #e0e0e0;
-  }
-
-  .skeleton-pill:first-child {
-    flex: 0 0 44px;
-    border-radius: 50%;
-  }
-
-  /* Shimmer effect (same as hero skeleton for consistency) */
-  .listings-skeleton .shimmer {
-    position: relative;
-    overflow: hidden;
-    background-color: #e0e0e0;
-  }
-
-  .listings-skeleton .shimmer::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    transform: translateX(-100%);
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.65) 50%,
-      transparent 100%
-    );
-    animation: listingsShimmer 1.4s infinite;
-  }
-
-  @keyframes listingsShimmer {
-    100% { transform: translateX(100%); }
-  }
-
-  /* Hide when real listings are ready */
-  .listings-skeleton.hidden {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-
-  /* ===== RESPONSIVE ===== */
-  @media (max-width: 991px) {
-    .listings-skeleton {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 575px) {
-    .listings-skeleton {
-      grid-template-columns: 1fr;
-    }
-    .skeleton-card-img {
-      height: 220px;
-    }
-  }
-
-  /* ===== ACCESSIBILITY ===== */
-  @media (prefers-reduced-motion: reduce) {
-    .listings-skeleton .shimmer::after { animation: none; }
-  }
-</style>
-
-<!-- ============================================
-     SCRIPT — Hide skeleton when real listings render
-     ============================================ -->
-<script>
+/* ---------- LISTINGS GRID SKELETON ---------- */
 (function () {
   const skeleton = document.getElementById('listingsSkeleton');
   const gallery = document.getElementById('gallery-container');
   if (!skeleton || !gallery) return;
 
-  function reveal() {
-    skeleton.classList.add('hidden');
+  const MIN_DISPLAY_MS = 800;
+  const MAX_WAIT_MS = 5000;
+
+  const startTime = Date.now();
+  let done = false;
+
+  function finish() {
+    if (done) return;
+    done = true;
+
+    const elapsed = Date.now() - startTime;
+    const remaining = Math.max(0, MIN_DISPLAY_MS - elapsed);
+
     setTimeout(function () {
-      if (skeleton && skeleton.parentNode) {
-        skeleton.parentNode.removeChild(skeleton);
-      }
-    }, 400);
+      skeleton.classList.add('hidden');
+      gallery.classList.remove('listings-grid-loading');
+      gallery.classList.add('listings-grid-loaded');
+
+      setTimeout(function () {
+        if (skeleton && skeleton.parentNode) {
+          skeleton.parentNode.removeChild(skeleton);
+        }
+      }, 350);
+    }, remaining);
   }
 
-  // If real cards already exist in the DOM, reveal immediately
-  const realCard = gallery.querySelector('.listing-card');
-  if (realCard) {
-    // Small delay so the skeleton doesn't flash on fast loads
-    setTimeout(reveal, 150);
-    return;
-  }
+  const cards = gallery.querySelectorAll('.listing-card');
+  if (cards.length === 0) { finish(); return; }
 
-  // Otherwise wait for a card to appear (useful if listings load via AJAX)
-  const observer = new MutationObserver(function (mutations, obs) {
-    if (gallery.querySelector('.listing-card')) {
-      obs.disconnect();
-      reveal();
+  const images = Array.from(gallery.querySelectorAll('.listing-img'));
+  const total = images.length;
+
+  if (total === 0) { finish(); return; }
+
+  let loaded = 0;
+  images.forEach(function (img) {
+    function tick() {
+      loaded++;
+      if (loaded === total) finish();
+    }
+
+    if (img.complete && img.naturalWidth > 0) {
+      tick();
+    } else {
+      img.addEventListener('load', tick, { once: true });
+      img.addEventListener('error', tick, { once: true });
     }
   });
 
-  observer.observe(gallery, { childList: true, subtree: true });
-
-  // Safety timeout — never leave skeleton hanging forever
-  setTimeout(function () {
-    observer.disconnect();
-    reveal();
-  }, 5000);
+  setTimeout(finish, MAX_WAIT_MS);
 })();
-</script>
-<!-- All Listings Grid -->
-<div class="row" id="gallery-container">
-  {% if listings %}
-    <!-- Display listings in grid, starting from the 4th listing -->
-    {% for listing in listings %}
-      {% if forloop.counter > 0 %}  <!-- Skip first 3 since they're in the slider -->
-        <div class="col-md-4 col-sm-6 mb-4" data-location="{{ listing.location }}" style="margin-bottom: 15px !important;">
-          <div class="listing-card">
 
-            <!-- Image Gallery for Grid Items -->
-            <div class="image-gallery" id="grid-gallery-{{ listing.id }}">
-              {% if listing.main_image %}
-                {% with listing.all_images as images %}
-                  {% if images|length > 0 %}
+/* ---------- SHARE BUTTONS ---------- */
+document.addEventListener('DOMContentLoaded', function () {
+  const shareButtons = document.querySelectorAll('.share-btn');
 
+  shareButtons.forEach(button => {
+    button.addEventListener('click', async function (e) {
+      e.preventDefault();
+      const url = this.dataset.url;
+      const title = this.dataset.title;
+      const fullUrl = window.location.origin + url;
 
-                    <!-- Main Image Display -->
-                    <img src="{{ images.0.url }}"
-                         alt="{{ listing.title }} - Image 1"
-                         class="listing-img clickable-image"
-                         loading="lazy"
-                         style="width: 100%; height: 280px; object-fit: cover; object-position: center;"
-                         data-gallery-id="grid-{{ listing.id }}"
-                         data-image-index="0"
-                         data-listing-id="{{ listing.id }}"
-                         data-listing-title="{{ listing.title }}"
-                         data-listing-location="{{ listing.get_location_display }}"
-                         data-listing-phone="{{ listing.host_phone }}"
-                         data-listing-price="{{ listing.price_per_night }}"
-                         data-listing-type="{{ listing.property_type }}"
-                         data-listing-image="{{ images.0.url }}"
-                         data-listing-guests="{{ listing.guests }}"
-                         data-listing-bedrooms="{{ listing.bedrooms }}"
-                         data-listing-bathrooms="{{ listing.bathrooms }}"
-                         data-listing-description="{{ listing.description|default:'No description available'|escapejs }}"
-                         data-all-images='{% for img in images %}{{ img.url }}{% if not forloop.last %},{% endif %}{% endfor %}'>
-
-                    <!-- Navigation Arrows for Gallery -->
-                    {% if images|length > 1 %}
-                      <button class="gallery-nav prev" onclick="changeImage('grid-{{ listing.id }}', -1, event)">
-                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                      </button>
-                      <button class="gallery-nav next" onclick="changeImage('grid-{{ listing.id }}', 1, event)">
-                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                      </button>
-
-                      <!-- Thumbnails -->
-                      <div class="gallery-thumbnails">
-                        {% for img in images %}
-                          <div class="gallery-thumbnail {% if forloop.first %}active{% endif %}"
-                               onclick="goToImage('grid-{{ listing.id }}', {{ forloop.counter0 }}, event)">
-                            <img src="{{ img.url }}" alt="Thumbnail {{ forloop.counter }}">
-                          </div>
-                        {% endfor %}
-                      </div>
-                    {% endif %}
-                  {% endif %}
-                {% endwith %}
-              {% else %}
-                <div style="width: 100%; height: 280px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);"
-                     class="clickable-image"
-                     data-listing-id="{{ listing.id }}"
-                     data-listing-title="{{ listing.title }}"
-                     data-listing-location="{{ listing.get_location_display }}"
-                     data-listing-phone="{{ listing.host_phone }}"
-                     data-listing-price="{{ listing.price_per_night }}"
-                     data-listing-type="{{ listing.property_type }}"
-                     data-listing-guests="{{ listing.guests }}"
-                     data-listing-bedrooms="{{ listing.bedrooms }}"
-                     data-listing-bathrooms="{{ listing.bathrooms }}">
-                  <i class="fa fa-home" aria-hidden="true" style="font-size: 4rem; color: white;"></i>
-                </div>
-              {% endif %}
-            </div>
-
-            <div class="property-type-badge {{ listing.property_type }}" style="top: 15px; right: 15px; padding: 5px 12px; font-size: 0.6rem;">
-              {{ listing.get_property_type_display }}
-            </div>
-            <div class="listing-info" style="padding: 20px;">
-             <h3 style="
-  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: -0.2px;
-  line-height: 1.3;
-  margin-bottom: 8px;
-  color: #111;
-  text-transform: capitalize;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-">
-  {{ listing.title|title }}
-  {% if listing.is_approved %}
-  <span class="verified-badge" style="color: #34a853; font-size: 0.9rem; margin-left: 4px; vertical-align: middle;" title="Verified property">
-    <i class="fa fa-check-circle" aria-hidden="true"></i>
-  </span>
-  {% endif %}
-</h3>
-
-
-             <p class="price-tag" style="font-size: 1.2rem; font-weight: 700; color: #28a745; margin: 10px 0;">
-  {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
-    KSh {{ listing.price_per_night|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ night</small>
-  {% elif listing.transaction_type == 'rent' and listing.price_per_month %}
-    KSh {{ listing.price_per_month|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ month</small>
-  {% elif listing.transaction_type == 'sale' and listing.price %}
-    KSh {{ listing.price|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">total price</small>
-  {% else %}
-    Price on request
-  {% endif %}
-</p>
-
-              <p class="location" style="font-size: 0.75rem; color: #666; margin-bottom: 10px;">
-                <i class="fa fa-map-marker" style="color: #007bff;" aria-hidden="true"></i>
-                {{ listing.get_location_display }} • {{ listing.specific_location }}
-              </p>
-
-
-
-              <!-- AMENITIES SECTION (NEW) -->
-              {% if listing.wifi or listing.parking or listing.kitchen or listing.pool or listing.ac or listing.tv %}
-              <div style="margin: 15px 0; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee;">
-                <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: #555;">Amenities</h4>
-                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                  {% if listing.wifi %}
-                  <div style="display: flex; align-items: center; gap: 5px;">
-                    <i class="fa fa-wifi" aria-hidden="true" style="color: #007bff; font-size: 0.9rem;"></i>
-                    <span style="font-size: 0.8rem; color: #555;">WiFi</span>
-                  </div>
-                  {% endif %}
-
-                  {% if listing.parking %}
-                  <div style="display: flex; align-items: center; gap: 5px;">
-                    <i class="fa fa-car" aria-hidden="true" style="color: #28a745; font-size: 0.9rem;"></i>
-                    <span style="font-size: 0.8rem; color: #555;">Parking</span>
-                  </div>
-                  {% endif %}
-
-
-
-                  {% if listing.pool %}
-                  <div style="display: flex; align-items: center; gap: 5px;">
-                    <i class="fa fa-swimming-pool" aria-hidden="true" style="color: #17a2b8; font-size: 0.9rem;"></i>
-                    <span style="font-size: 0.8rem; color: #555;">Pool</span>
-                  </div>
-                  {% endif %}
-
-
-                                                                                                                                     <!-- NEW: View Full Details Button -->
-  <a href="{% url 'listing_detail' listing.slug %}"
-
-     title="View full details, photos, and amenities">
-    <i class="fa fa-search" aria-hidden="true"></i> View full Details
-  </a>
-
-                </div>
-
-
-              </div>
-              {% endif %}
-<!-- Action Buttons - RESPONSIVE FLUID VERSION -->
-<div class="listing-actions" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; width: 100%;">
-
-
-    <!-- Share Button - Glassmorphism Icon Only -->
-<button type="button" class="share-btn"
-        data-url="{% url 'listing_detail' listing.slug %}"
-        data-title="{{ listing.title }}"
-        aria-label="Share this listing"
-        style="
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            color: #333;
-            font-size: 1.2rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            flex-shrink: 0;
-            padding: 0;
-        "
-        onmouseover="this.style.background='rgba(255,255,255,0.35)'; this.style.transform='translateY(-2px)';"
-        onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
-    <i class="fa fa-share-alt" aria-hidden="true" style="color: #555;"></i>
-</button>
- <!-- Phone Button -->
-  <a href="tel:{{ listing.admin_contact }}"
-     style="background-color: #007bff; color: white; padding: 10px 16px; text-decoration: none; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; min-width: 44px; flex-shrink: 0;"
-     onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='translateY(-2px)';"
-     onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='translateY(0)';">
-    <i class="fa fa-phone" aria-hidden="true"></i>
-    <span style="display: none;">Call</span>
-  </a>
-
-          <!-- WhatsApp Button -->
-  <a href="{{ listing.admin_whatsapp_link }}" target="_blank"
-     style="background-color: #25D366; color: white; padding: 10px 16px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; flex: 1 1 auto; min-width: 0; justify-content: center; white-space: nowrap; font-size: clamp(0.8rem, 2vw, 0.9rem);"
-     onmouseover="this.style.backgroundColor='#1da851'; this.style.transform='translateY(-2px)';"
-     onmouseout="this.style.backgroundColor='#25D366'; this.style.transform='translateY(0)';"
-     title="Contact admin to book on behalf of client">
-    <i class="fab fa-whatsapp" aria-hidden="true"></i>
-    <span>Chat via WhatsApp</span>
-  </a>
-
-
- <!-- Book Now Button -->
-  <a href="{% url 'booking_form' listing.id %}"
-     style="background-color: #ff5a5f; color: white; padding: 10px 16px; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; flex: 1 1 auto; min-width: 0; justify-content: center; white-space: nowrap; font-size: clamp(0.85rem, 2.5vw, 1rem);"
-     onmouseover="this.style.backgroundColor='#e04a50'; this.style.transform='translateY(-2px)';"
-     onmouseout="this.style.backgroundColor='#ff5a5f'; this.style.transform='translateY(0)';"
-     title="Book this property online">
-    <i class="fa fa-calendar" aria-hidden="true"></i>
-    <span>Book Now</span>
-  </a>
-
-</div>
-
-<!-- Optional: Add this CSS for better mobile responsiveness -->
-<style>
-  @media (max-width: 480px) {
-    .listing-actions {
-      gap: 6px;
-    }
-
-    .listing-actions a {
-      padding: 10px 12px !important;
-    }
-
-    /* Show text on phone button only on mobile */
-    .listing-actions a[href^="tel:"] span {
-      display: inline !important;
-      margin-left: 4px;
-      font-size: 0.85rem;
-    }
-
-    /* Adjust WhatsApp text on very small screens */
-    @media (max-width: 360px) {
-      .listing-actions a[href*="whatsapp"] span {
-        font-size: 0.75rem;
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    .listing-actions {
-      flex-wrap: wrap;
-    }
-  }
-</style>
-            </div>
-          </div>
-        </div>
-      {% endif %}
-    {% endfor %}
-  {% else %}
-   <!-- NO LISTINGS FOUND -->
-<div class="col-12">
-  <div class="no-listings" style="text-align: center; padding: 40px 20px;">
-
-    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2rem; max-width: 700px; margin: 0 auto;">
-
-      <!-- Dancing Bot (upper part only) -->
-      <div class="dancing-bot-wrapper">
-        <div class="dancing-bot">
-
-          <div class="bot-head">
-            <div class="eyes">
-              <div class="eye left"></div>
-              <div class="eye right"></div>
-            </div>
-          </div>
-          <div class="simple-body"></div>
-          <div class="arm left-arm"></div>
-          <div class="arm right-arm"></div>
-        </div>
-      </div>
-
-      <!-- Typewriter Text -->
-      <div class="typewriter-container">
-        <span id="dynamic-message" class="typewriter-text"></span>
-        <span class="cursor-blink"></span>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<style>
-  /* Dancing Bot - Upper Part Only */
-  .dancing-bot-wrapper {
-    flex-shrink: 0;
-  }
-  .dancing-bot {
-    position: relative;
-    width: 110px;
-    height: 120px;
-    animation: floatBot 2s ease-in-out infinite;
-    cursor: pointer;
-  }
-  @keyframes floatBot {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
-    100% { transform: translateY(0px); }
-  }
-  .antenna {
-    position: absolute;
-    width: 6px;
-    height: 24px;
-    background: #2c3e66;
-    border-radius: 10px;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: wiggle 0.5s infinite alternate;
-    z-index: 2;
-  }
-  .antenna::after {
-    content: "⚡";
-    position: absolute;
-    top: -22px;
-    left: -5px;
-    font-size: 14px;
-    animation: spark 1s infinite;
-  }
-  @keyframes wiggle {
-    0% { transform: translateX(-50%) rotate(-6deg); }
-    100% { transform: translateX(-50%) rotate(6deg); }
-  }
-  @keyframes spark {
-    0%, 100% { opacity: 0.6; text-shadow: 0 0 0px gold; }
-    50% { opacity: 1; text-shadow: 0 0 6px #ffb347; }
-  }
-  .bot-head {
-    position: relative;
-    width: 70px;
-    height: 65px;
-    background: radial-gradient(circle at 30% 30%, #e0e7ff, #b7c9e2);
-    border-radius: 50% 45% 55% 50%;
-    margin: 0 auto;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    animation: headBob 0.8s infinite alternate;
-  }
-  @keyframes headBob {
-    0% { transform: translateY(0px) rotate(0deg); }
-    100% { transform: translateY(3px) rotate(2deg); }
-  }
-  .eyes {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    padding-top: 22px;
-  }
-  .eye {
-    width: 12px;
-    height: 12px;
-    background: #0a1a2f;
-    border-radius: 50%;
-    box-shadow: 0 0 0 2px #fef9e6;
-    animation: blink 3s infinite;
-  }
-  .eye.right {
-    animation-delay: 0.2s;
-  }
-  @keyframes blink {
-    0%, 90%, 100% { transform: scaleY(1); }
-    95% { transform: scaleY(0.1); }
-  }
-  .simple-body {
-    width: 45px;
-    height: 35px;
-    background: linear-gradient(135deg, #3e5a8f, #2b3b5c);
-    border-radius: 20px 20px 16px 16px;
-    margin: 5px auto 0;
-    box-shadow: inset 0 1px 3px rgba(255,255,200,0.3), 0 3px 6px rgba(0,0,0,0.1);
-  }
-  .arm {
-    position: absolute;
-    width: 22px;
-    height: 8px;
-    background: #2e4a7c;
-    border-radius: 20px;
-    top: 65px;
-  }
-  .left-arm {
-    left: -8px;
-    transform: rotate(-20deg);
-    animation: swingLeft 0.6s infinite alternate;
-  }
-  .right-arm {
-    right: -8px;
-    transform: rotate(20deg);
-    animation: swingRight 0.6s infinite alternate;
-  }
-  @keyframes swingLeft {
-    0% { transform: rotate(-25deg); }
-    100% { transform: rotate(15deg); }
-  }
-  @keyframes swingRight {
-    0% { transform: rotate(25deg); }
-    100% { transform: rotate(-15deg); }
-  }
-
-  /* Typewriter Styles (unchanged) */
-  .typewriter-container {
-    display: inline-flex;
-    align-items: baseline;
-    background: rgba(255,255,245,0.5);
-    padding: 12px 20px;
-    border-radius: 60px;
-    backdrop-filter: blur(4px);
-    font-size: 1.3rem;
-    font-weight: 600;
-    font-family: 'Inter', system-ui, 'Segoe UI', sans-serif;
-  }
-  .typewriter-text {
-    background: linear-gradient(125deg, #1c2b44, #2a3f62);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    letter-spacing: -0.2px;
-    white-space: nowrap;
-  }
-  .cursor-blink {
-    display: inline-block;
-    width: 3px;
-    height: 1.4rem;
-    background: #ff8c42;
-    margin-left: 5px;
-    border-radius: 4px;
-    animation: cursorFlash 0.8s step-end infinite;
-  }
-  @keyframes cursorFlash {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-  @media (max-width: 550px) {
-    .typewriter-text { font-size: 1rem; white-space: normal; word-break: keep-all; }
-    .typewriter-container { padding: 8px 16px; }
-    .cursor-blink { height: 1.2rem; }
-    .dancing-bot { width: 95px; height: 100px; }
-    .bot-head { width: 60px; height: 55px; }
-    .simple-body { width: 40px; height: 28px; }
-  }
-</style>
-
-<script>
-  (function() {
-    const message = " Hi buddy! drop us a chat to book now! fast, secure and seamless booking!";
-    const el = document.getElementById('dynamic-message');
-    if (!el) return;
-
-    let i = 0;
-    let isDeleting = false;
-    let timer;
-
-    function animate() {
-      if (!isDeleting) {
-        if (i < message.length) {
-          el.innerText = message.slice(0, i+1);
-          i++;
-          timer = setTimeout(animate, 70);
-        } else {
-          isDeleting = true;
-          timer = setTimeout(animate, 1800);
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: title,
+            text: `Check out this amazing property: ${title}`,
+            url: fullUrl
+          });
+        } catch (err) {
+          console.log('Share cancelled or failed');
         }
       } else {
-        if (i > 0) {
-          el.innerText = message.slice(0, i-1);
-          i--;
-          timer = setTimeout(animate, 45);
-        } else {
-          isDeleting = false;
-          timer = setTimeout(animate, 700);
+        try {
+          await navigator.clipboard.writeText(fullUrl);
+          alert('Link copied to clipboard!');
+        } catch (err) {
+          alert('Please copy the link manually');
         }
       }
-    }
-    animate();
+    });
+  });
+});
 
-    const bot = document.querySelector('.dancing-bot');
-    if (bot) {
-      bot.addEventListener('click', () => {
-        bot.style.transform = 'scale(0.95)';
-        setTimeout(() => bot.style.transform = '', 150);
-        const eyes = document.querySelectorAll('.eye');
-        eyes.forEach(e => {
-          e.style.backgroundColor = '#ffcf40';
-          setTimeout(() => e.style.backgroundColor = '#0a1a2f', 200);
-        });
+/* ---------- NO-LISTINGS BOT + TYPEWRITER ---------- */
+(function () {
+  const el = document.getElementById('dynamic-message');
+  if (!el) return;
+
+  const message = " Hi buddy! drop us a chat to book now! fast, secure and seamless booking!";
+  let i = 0;
+  let isDeleting = false;
+
+  function animate() {
+    if (!isDeleting) {
+      if (i < message.length) {
+        el.innerText = message.slice(0, i + 1);
+        i++;
+        setTimeout(animate, 70);
+      } else {
+        isDeleting = true;
+        setTimeout(animate, 1800);
+      }
+    } else {
+      if (i > 0) {
+        el.innerText = message.slice(0, i - 1);
+        i--;
+        setTimeout(animate, 45);
+      } else {
+        isDeleting = false;
+        setTimeout(animate, 700);
+      }
+    }
+  }
+  animate();
+
+  const bot = document.querySelector('.dancing-bot');
+  if (bot) {
+    bot.addEventListener('click', () => {
+      bot.style.transform = 'scale(0.95)';
+      setTimeout(() => bot.style.transform = '', 150);
+      const eyes = document.querySelectorAll('.eye');
+      eyes.forEach(e => {
+        e.style.backgroundColor = '#ffcf40';
+        setTimeout(() => e.style.backgroundColor = '#0a1a2f', 200);
       });
-    }
-  })();
+    });
+  }
+})();
 </script>
-  {% endif %}
-</div>
-
-    </div>
-  </div>
-</section>
 
 
 <!-- Pagination Section -->

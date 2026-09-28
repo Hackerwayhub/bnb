@@ -212,7 +212,7 @@ def listing_list(request, location_slug=None):
         'location_specific': location_specific,
         'page_type': 'location',
         'title': f'BnB, staycations & holiday homes in {display_location_name}' if selected_location != 'all' else 'BnB, staycations & holiday homes in Kenya!',
-        'meta_description': f'Book BnB, staycations & holiday homes in {display_location_name}. Browse verified listings with photos, amenities, and booking details.' if selected_location != 'all' else 'Book BnB, staycations & holiday homes in Kenya. Browse verified listings with photos, amenities, and booking details.',
+        'meta_description': f'BnB, staycations & holiday homes in {display_location_name}. Browse verified listings with photos, amenities, and booking details.' if selected_location != 'all' else 'BnB, staycations & holiday homes in Kenya. Browse verified listings with photos, amenities, and booking details.',
     }
 
     context = prepare_listing_context(request, queryset, context_extra)
@@ -461,8 +461,8 @@ def booking_view(request, listing_id):
     context = {
         'form': form,
         'listing': listing,
-        'title': f' Book{listing.title} ~ BnB.co.ke',
-        'page_title': f' Book{listing.title} ~ BnB.co.ke',
+        'title': f' Book {listing.title} ',
+        'page_title': f' Book {listing.title} ',
     }
     return render(request, 'listings/booking_form.html', context)
 

@@ -647,6 +647,185 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+        <!-- ============================================
+     LISTINGS GRID SKELETON UI
+     Shows while listings are being loaded
+     ============================================ -->
+<div class="listings-skeleton" id="listingsSkeleton" aria-hidden="true">
+  {% for i in "123456" %}
+  <div class="skeleton-card">
+    <div class="skeleton-card-img shimmer"></div>
+    <div class="skeleton-card-body">
+      <div class="skeleton-card-line shimmer" style="width: 35%; height: 10px;"></div>
+      <div class="skeleton-card-line shimmer" style="width: 70%; height: 16px; margin-top: 6px;"></div>
+      <div class="skeleton-card-line shimmer" style="width: 45%; height: 20px; margin-top: 12px;"></div>
+      <div class="skeleton-card-line shimmer" style="width: 80%; height: 12px; margin-top: 10px;"></div>
+      <div class="skeleton-card-actions">
+        <div class="skeleton-pill shimmer"></div>
+        <div class="skeleton-pill shimmer"></div>
+        <div class="skeleton-pill shimmer"></div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- ============================================
+     STYLES FOR THE SKELETON
+     ============================================ -->
+<style>
+  /* Grid layout — matches Bootstrap's row/col-md-4 col-sm-6 */
+  .listings-skeleton {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 30px;
+  }
+
+  .skeleton-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Image block — matches your 280px listing image height */
+  .skeleton-card-img {
+    width: 100%;
+    height: 280px;
+    background-color: #e0e0e0;
+  }
+
+  .skeleton-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* Generic placeholder bar */
+  .skeleton-card-line {
+    height: 14px;
+    border-radius: 6px;
+    background-color: #e0e0e0;
+  }
+
+  /* Buttons row placeholder */
+  .skeleton-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .skeleton-pill {
+    flex: 1;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #e0e0e0;
+  }
+
+  .skeleton-pill:first-child {
+    flex: 0 0 44px;
+    border-radius: 50%;
+  }
+
+  /* Shimmer effect (same as hero skeleton for consistency) */
+  .listings-skeleton .shimmer {
+    position: relative;
+    overflow: hidden;
+    background-color: #e0e0e0;
+  }
+
+  .listings-skeleton .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.65) 50%,
+      transparent 100%
+    );
+    animation: listingsShimmer 1.4s infinite;
+  }
+
+  @keyframes listingsShimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  /* Hide when real listings are ready */
+  .listings-skeleton.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 991px) {
+    .listings-skeleton {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 575px) {
+    .listings-skeleton {
+      grid-template-columns: 1fr;
+    }
+    .skeleton-card-img {
+      height: 220px;
+    }
+  }
+
+  /* ===== ACCESSIBILITY ===== */
+  @media (prefers-reduced-motion: reduce) {
+    .listings-skeleton .shimmer::after { animation: none; }
+  }
+</style>
+
+<!-- ============================================
+     SCRIPT — Hide skeleton when real listings render
+     ============================================ -->
+<script>
+(function () {
+  const skeleton = document.getElementById('listingsSkeleton');
+  const gallery = document.getElementById('gallery-container');
+  if (!skeleton || !gallery) return;
+
+  function reveal() {
+    skeleton.classList.add('hidden');
+    setTimeout(function () {
+      if (skeleton && skeleton.parentNode) {
+        skeleton.parentNode.removeChild(skeleton);
+      }
+    }, 400);
+  }
+
+  // If real cards already exist in the DOM, reveal immediately
+  const realCard = gallery.querySelector('.listing-card');
+  if (realCard) {
+    // Small delay so the skeleton doesn't flash on fast loads
+    setTimeout(reveal, 150);
+    return;
+  }
+
+  // Otherwise wait for a card to appear (useful if listings load via AJAX)
+  const observer = new MutationObserver(function (mutations, obs) {
+    if (gallery.querySelector('.listing-card')) {
+      obs.disconnect();
+      reveal();
+    }
+  });
+
+  observer.observe(gallery, { childList: true, subtree: true });
+
+  // Safety timeout — never leave skeleton hanging forever
+  setTimeout(function () {
+    observer.disconnect();
+    reveal();
+  }, 5000);
+})();
+</script>
 <!-- All Listings Grid -->
 <div class="row" id="gallery-container">
   {% if listings %}
@@ -1148,6 +1327,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
   {% endif %}
 </div>
+
     </div>
   </div>
 </section>

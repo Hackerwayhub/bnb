@@ -211,7 +211,7 @@ def listing_list(request, location_slug=None):
         'current_location_slug': current_location_slug,
         'location_specific': location_specific,
         'page_type': 'location',
-        'title': f'BnB, staycations & holiday homes in {display_location_name}' if selected_location != 'all' else 'BnB, staycations & holiday homes in Kenya!',
+        'title': f'BᏁB, staycations & holiday homes in {display_location_name}' if selected_location != 'all' else 'BᏁB, staycations & holiday homes in Kenya!',
         'meta_description': f'BnB, staycations & holiday homes in {display_location_name}. Browse verified listings with photos, amenities, and booking details.' if selected_location != 'all' else 'BnB, staycations & holiday homes in Kenya. Browse verified listings with photos, amenities, and booking details.',
     }
 
@@ -618,8 +618,8 @@ def listing_detail(request, slug):
     context = {
         'listing': listing,
         'is_owner': is_owner,
-        'title':  f'BnB ~ {listing.title} ',
-        'page_title': f'BnB ~ {listing.title} ',
+        'title':  f'BᏁB ~ {listing.title} ',
+        'page_title': f'BᏁB ~ {listing.title} ',
         'meta_description': f'Book BnB/Airbnb {listing.title} in {listing.get_location_display()}. {listing.guests} guests, {listing.bedrooms} bedrooms, KES {listing.price_per_night}/night.',
     }
     return render(request, 'listings/listing_detail.html', context)

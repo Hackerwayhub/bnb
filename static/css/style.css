@@ -526,6 +526,10 @@ section.mobile-spacing {
   border-radius: 28px 28px 24px 24px;
    background: transparent;
   cursor: pointer;
+  display: block;   /* <-- add */
+  padding: 0;       /* <-- add */
+  margin: 0;        /* <-- add */
+  line-height: 0;
 }
 
 /* Main image wrapper with smooth transitions */

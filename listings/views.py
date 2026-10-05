@@ -411,19 +411,14 @@ def booking_view(request, listing_id):
 
             # --- Send booking confirmation emails ---
             try:
-                # Calculate pricing details
-                number_of_nights = (booking.check_out - booking.check_in).days
-                price_per_night = listing.price_per_night or listing.price or 0
-                total_price = number_of_nights * price_per_night
-
-                # Prepare context for email
-                context = {
+                # Common context
+                base_context = {
                     'booking': booking,
                     'listing': listing,
                     'booking_ref': f"BK{booking.id:06d}",
                     'guest_name': booking.guest_name,
                     'guest_email': booking.guest_email,
-                    'guest_phone': booking.guest_phone,
+                    'guest_phone': booking.guest_phone,  # for guest template
                     'inquiry_type': booking.get_inquiry_type_display(),
                     'message': booking.message,
                     'check_in': booking.check_in,
@@ -436,26 +431,43 @@ def booking_view(request, listing_id):
 
                 subject = f'Booking Confirmation - {booking.inquiry_ref}'
 
-                html_message = render_to_string('emails/booking_confirmation.html', context)
-                plain_message = strip_tags(html_message)
+                # ---------- EMAIL 1: Guest (+ Admin as BCC-style recipient) ----------
+                guest_html = render_to_string('emails/booking_confirmation.html', base_context)
+                guest_plain = strip_tags(guest_html)
 
-                # Recipients: guest + admin email
-                admin_email = 'booking.bnb.co.ke@gmail.com'
-                recipient_list = [booking.guest_email, admin_email]
+                guest_recipients = [booking.guest_email, 'booking.bnb.co.ke@gmail.com']
+                # dedupe
+                seen = set()
+                guest_recipients = [e for e in guest_recipients if e and not (e in seen or seen.add(e))]
 
                 send_mail(
                     subject=subject,
-                    message=plain_message,
+                    message=guest_plain,
                     from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=recipient_list,
-                    html_message=html_message,
+                    recipient_list=guest_recipients,
+                    html_message=guest_html,
                     fail_silently=False,
                 )
-                logger.info(f"Booking confirmation email sent to {recipient_list} for booking {booking.id}")
+                logger.info(f"Guest confirmation sent to {guest_recipients} for booking {booking.id}")
+
+                # ---------- EMAIL 2: Host (NO guest phone shown) ----------
+                if listing.host_email and listing.host_email not in guest_recipients:
+                    host_html = render_to_string('emails/booking_host_notification.html', base_context)
+                    host_plain = strip_tags(host_html)
+
+                    send_mail(
+                        subject=f'New Booking Request - {booking.inquiry_ref}',
+                        message=host_plain,
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[listing.host_email],
+                        html_message=host_html,
+                        fail_silently=False,
+                    )
+                    logger.info(f"Host notification sent to {listing.host_email} for booking {booking.id}")
 
             except Exception as e:
                 logger.error(
-                    f"Failed to send booking confirmation email for booking {booking.id}: {str(e)}",
+                    f"Failed to send booking emails for booking {booking.id}: {str(e)}",
                     exc_info=True
                 )
                 messages.warning(

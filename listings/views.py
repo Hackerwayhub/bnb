@@ -411,6 +411,15 @@ def booking_view(request, listing_id):
 
             # --- Send booking confirmation emails ---
             try:
+                # ✅ CALCULATE PRICING DETAILS (this was missing!)
+                if booking.check_in and booking.check_out:
+                    number_of_nights = (booking.check_out - booking.check_in).days
+                else:
+                    number_of_nights = 0
+
+                price_per_night = listing.price_per_night or listing.price or 0
+                total_price = number_of_nights * price_per_night
+
                 # Common context
                 base_context = {
                     'booking': booking,
@@ -418,7 +427,7 @@ def booking_view(request, listing_id):
                     'booking_ref': f"BK{booking.id:06d}",
                     'guest_name': booking.guest_name,
                     'guest_email': booking.guest_email,
-                    'guest_phone': booking.guest_phone,  # for guest template
+                    'guest_phone': booking.guest_phone,
                     'inquiry_type': booking.get_inquiry_type_display(),
                     'message': booking.message,
                     'check_in': booking.check_in,
@@ -431,12 +440,11 @@ def booking_view(request, listing_id):
 
                 subject = f'Booking Confirmation - {booking.inquiry_ref}'
 
-                # ---------- EMAIL 1: Guest (+ Admin as BCC-style recipient) ----------
+                # ---------- EMAIL 1: Guest (+ Admin) ----------
                 guest_html = render_to_string('emails/booking_confirmation.html', base_context)
                 guest_plain = strip_tags(guest_html)
 
                 guest_recipients = [booking.guest_email, 'booking.bnb.co.ke@gmail.com']
-                # dedupe
                 seen = set()
                 guest_recipients = [e for e in guest_recipients if e and not (e in seen or seen.add(e))]
 
@@ -450,7 +458,7 @@ def booking_view(request, listing_id):
                 )
                 logger.info(f"Guest confirmation sent to {guest_recipients} for booking {booking.id}")
 
-                # ---------- EMAIL 2: Host (NO guest phone shown) ----------
+                # ---------- EMAIL 2: Host (no phone) ----------
                 if listing.host_email and listing.host_email not in guest_recipients:
                     host_html = render_to_string('emails/booking_host_notification.html', base_context)
                     host_plain = strip_tags(host_html)
@@ -466,6 +474,9 @@ def booking_view(request, listing_id):
                     logger.info(f"Host notification sent to {listing.host_email} for booking {booking.id}")
 
             except Exception as e:
+                # ✅ Print full traceback so you can see the real error next time
+                import traceback
+                traceback.print_exc()
                 logger.error(
                     f"Failed to send booking emails for booking {booking.id}: {str(e)}",
                     exc_info=True
@@ -491,7 +502,6 @@ def booking_view(request, listing_id):
             user=request.user if request.user.is_authenticated else None
         )
 
-    # Calculate default pricing for display
     default_price = listing.price_per_night or listing.price or 0
 
     context = {
@@ -502,26 +512,40 @@ def booking_view(request, listing_id):
         'page_title': f'Book {listing.title}',
     }
     return render(request, 'listings/booking_form.html', context)
+
 def booking_confirmation(request, booking_id):
-    """
-    Display booking confirmation page
-    """
+    """Display booking confirmation page"""
     booking = get_object_or_404(Booking, id=booking_id)
     listing = booking.listing
+
+    # ✅ Safely handle missing dates
+    if booking.check_in and booking.check_out:
+        check_in_formatted  = booking.check_in.strftime('%B %d, %Y')
+        check_out_formatted = booking.check_out.strftime('%B %d, %Y')
+        number_of_nights    = (booking.check_out - booking.check_in).days
+    else:
+        check_in_formatted  = 'Not specified'
+        check_out_formatted = 'Not specified'
+        number_of_nights    = 0
+
+    total_price_formatted = (
+        f"{booking.total_price:,.2f}"
+        if booking.total_price
+        else 'N/A'
+    )
 
     context = {
         'booking': booking,
         'listing': listing,
         'booking_ref': f"BK{booking.id:06d}",
-        'check_in_formatted': booking.check_in.strftime('%B %d, %Y'),
-        'check_out_formatted': booking.check_out.strftime('%B %d, %Y'),
-        'total_price_formatted': f"{booking.total_price:,.2f}",
-        'number_of_nights': (booking.check_out - booking.check_in).days,
-        'title':  f'Booking Confirmation - BK{booking.id:06d} | Bnb.co.ke',
+        'check_in_formatted': check_in_formatted,
+        'check_out_formatted': check_out_formatted,
+        'total_price_formatted': total_price_formatted,
+        'number_of_nights': number_of_nights,
+        'title': f'Booking Confirmation - BK{booking.id:06d} | Bnb.co.ke',
         'page_title': f'Booking Confirmation - BK{booking.id:06d} | Bnb.co.ke',
     }
     return render(request, 'booking_confirmation.html', context)
-
 
 @login_required
 def my_listings(request):

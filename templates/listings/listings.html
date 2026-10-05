@@ -2,327 +2,314 @@
 {% load static %}
 {% block content %}
 
-
 <section class="mobile-spacing" style="
-    background: #ffffff;
+    background: linear-gradient(180deg, #ffffff 0%, #fcfcfc 100%);
     margin: 12px;
-    border-radius: 12px;
-    padding: 10px 16px;
-    border: 1px solid #eeeeee;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    border-radius: 18px;
+    padding: 8px;
+    border: 1px solid #ececec;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px -12px rgba(0,0,0,0.08);
     position: sticky;
     top: 12px;
     z-index: 50;
 ">
-
     <div class="filters-container" style="
         position: relative;
         z-index: 2;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 15px;
+        gap: 12px;
         flex-wrap: nowrap;
         width: 100%;
         overflow: visible !important;
     ">
-        <!-- Brand Logo - Compact -->
+
+        <!-- Brand Logo -->
         <div class="logo-section" data-nosnippet style="
             flex-shrink: 0;
-            margin: 5px;
+            padding: 0 10px 0 6px;
             display: flex;
             align-items: center;
-            min-width: 120px;
+            min-width: 110px;
         ">
             <a class="navbar-brand" href="{% url 'home' %}" style="
                 text-decoration: none;
                 display: flex;
-                align-items: center;
-                gap: 5px;
+                align-items: baseline;
+                gap: 3px;
             ">
                 <span data-nosnippet style="
                     color: #D32F2F;
-                    font-weight: 600;
-                    letter-spacing: 0.02em;
-                    text-transform: none;
+                    font-weight: 700;
+                    letter-spacing: 0.04em;
                     font-family: 'Poppins', sans-serif;
-                    font-size: 1em;
-                    display: inline-block;
+                    font-size: 1.05em;
                     line-height: 1;
                 ">BᏁB</span>
                 <span data-nosnippet style="
-            color:#D32F2F;
-            font-weight: 500;
-             letter-spacing: 0.05em;
-            text-transform: none;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.35em;
-            display: inline-block;
-            line-height: 1;
-            vertical-align: super;  /* Changed from default sub/sup behavior */
-            /* Alternative: use vertical-align: top; with relative positioning */
-        ">.co.ke</span>
+                    color: #D32F2F;
+                    font-weight: 500;
+                    letter-spacing: 0.06em;
+                    font-family: 'Poppins', sans-serif;
+                    font-size: 0.38em;
+                    line-height: 1;
+                    opacity: 0.85;
+                    vertical-align: super;
+                ">.co.ke</span>
             </a>
         </div>
 
-        <!-- Compact Filter Controls - Two Search Bars Merged -->
+        <!-- Unified Filter Pill -->
         <div class="filters-section" style="
             display: flex;
             align-items: center;
-            gap: 0px;
+            gap: 0;
             flex: 1;
             min-width: 0;
             overflow: visible !important;
             position: relative;
             z-index: 50;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            max-width: 500px;
+            background: #ffffff;
+            border-radius: 100px;
+            padding: 4px;
+            box-shadow:
+                0 0 0 1px rgba(0,0,0,0.04),
+                0 1px 2px rgba(0,0,0,0.04),
+                0 12px 32px -16px rgba(0,0,0,0.12);
+            max-width: 540px;
             margin: 0 auto;
         ">
 
-            <!-- Location Search Bar - No Border -->
-<div class="filter-dropdown" style="position: relative; flex: 1; min-width: 0; z-index: 100;">
-    <div class="location-dropdown" style="position: relative; z-index: 1000;">
-        <div class="dropdown-trigger-location" style="
-            background: transparent;
-            border-radius: 40px 0 0 40px;
-            padding: 10px 15px 10px 15px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            color: #000000;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: none;
-            box-shadow: none;
-        ">
-
-            <i class="fa fa-location-dot" style="color: #D32F2F; font-size: 13px;"></i>
-            <span class="selected-location-text" id="locationPlaceholder" style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"> </span>
-
-        </div>
-
-        <div class="dropdown-menu-location" style="
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: auto;
-            min-width: 260px;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            margin-top: 12px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-            z-index: 9999;
-            display: none;
-            max-height: 380px;
-            overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        ">
-            <div style="padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); z-index: 10; border-radius: 24px 24px 0 0;">
-                <div class="claymorphic-search" style="position: relative; background: rgba(255, 255, 255, 0.9); border-radius: 40px; padding: 4px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.05);">
-                    <i class="fa fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color:  #D32F2F; font-size: 12px; opacity: 0.7;"></i>
-                    <input type="text" class="location-search-input" placeholder=" Search locations..." style="
-                        width: 100%;
-                        padding: 10px 15px 10px 40px;
-                        border: none;
-                        border-radius: 40px;
-                        font-size: 12px;
-                        outline: none;
-                        font-family: 'Poppins', 'Inter', sans-serif;
+            <!-- Location Dropdown -->
+            <div class="filter-dropdown" style="position: relative; flex: 1; min-width: 0; z-index: 100;">
+                <div class="location-dropdown" style="position: relative; z-index: 1000;">
+                    <div class="dropdown-trigger-location" style="
                         background: transparent;
-                        color: #333;
-                    ">
-                </div>
-            </div>
-            <div class="location-options-container" style="padding: 8px 4px;">
-
-                {% for location in all_locations %}
-                    <div class="dropdown-option-location claymorphic-option" data-value="{{ location.slug }}" data-url="{{ location.url }}" style="
-                        padding: 10px 16px;
-                        margin: 4px 8px;
+                        border-radius: 100px;
+                        padding: 9px 16px;
+                        cursor: pointer;
+                        font-size: 13px;
+                        font-weight: 500;
+                        color: #1a1a1a;
                         display: flex;
                         align-items: center;
-                        gap: 12px;
-                        cursor: pointer;
-                        transition: all 0.2s ease;
-                        font-size: 13px;
-                        border-radius: 30px;
-                        background: rgba(255, 255, 255, 0.6);
-                    " onmouseover="this.style.background='linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%)'; this.style.transform='translateX(5px)'; this.style.boxShadow='0 4px 12px rgba(255,0,0,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.6)'; this.style.transform='translateX(0)'; this.style.boxShadow='none'">
-                        <i class="fa fa-location-dot" style="width: 20px; color:  #D32F2F;"></i>
-                        <span> {{ location.name }}</span>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Divider Line -->
-<div style="width: 1px; height: 30px; background: rgba(0,0,0,0.1);"></div>
-
-<!-- Property Type Search Bar - No Border -->
-<div class="filter-dropdown" style="position: relative; flex: 1; min-width: 0; z-index: 100;">
-    <div class="property-dropdown" style="position: relative; z-index: 1000;">
-        <div class="dropdown-trigger-property" style="
-            background: transparent;
-            border-radius: 0 40px 40px 0;
-            padding: 10px 15px 10px 15px;
-            cursor: pointer;
-            justify-content: flex-end;
-            font-size: 13px;
-            font-weight: 500;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: none;
-            box-shadow: none;
-        ">
-
-            <i class="fa fa-paint-brush" style="color: #D32F2F; font-size: 13px;"></i>
-            <span class="selected-property-text" id="propertyPlaceholder" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"> </span>
-
-        </div>
-
-        <div class="dropdown-menu-property" style="
-            position: absolute;
-            top: 100%;
-            right: 0;
-            left: auto;
-            min-width: 260px;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            margin-top: 12px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-            z-index: 9999;
-            display: none;
-            max-height: 380px;
-            overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        ">
-            <div style="padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); z-index: 10; border-radius: 24px 24px 0 0;">
-                <div class="claymorphic-search" style="position: relative; background: rgba(255, 255, 255, 0.9); border-radius: 40px; padding: 4px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.05);">
-                    <i class="fa fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color:  #D32F2F; font-size: 12px; opacity: 0.7;"></i>
-                    <input type="text" class="property-search-input" placeholder=" Search property types..." style="
-                        width: 100%;
-                        padding: 10px 15px 10px 40px;
+                        gap: 9px;
                         border: none;
-                        border-radius: 40px;
-                        font-size: 12px;
-                        outline: none;
-                        font-family: 'Poppins', 'Inter', sans-serif;
-                        background: transparent;
-                        color: #333;
+                        transition: background 0.2s ease;
+                    "
+                    onmouseover="this.style.background='#f7f7f7'"
+                    onmouseout="this.style.background='transparent'">
+                        <i class="fa fa-location-dot" style="color: #D32F2F; font-size: 12px; opacity: 0.85;"></i>
+                        <span class="selected-location-text" id="locationPlaceholder" style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.01em;"> </span>
+                    </div>
+
+                    <div class="dropdown-menu-location" style="
+                        position: absolute;
+                        top: calc(100% + 10px);
+                        left: 0;
+                        min-width: 280px;
+                        background: #ffffff;
+                        border-radius: 20px;
+                        box-shadow:
+                            0 0 0 1px rgba(0,0,0,0.05),
+                            0 24px 48px -16px rgba(0,0,0,0.18);
+                        z-index: 9999;
+                        display: none;
+                        max-height: 380px;
+                        overflow-y: auto;
+                        padding: 6px;
                     ">
+                        <div style="padding: 8px 8px 10px; position: sticky; top: 0; background: #ffffff; z-index: 10; border-radius: 16px 16px 0 0;">
+                            <div class="claymorphic-search" style="position: relative; background: #f5f5f5; border-radius: 100px; padding: 2px;">
+                                <i class="fa fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #999; font-size: 11px;"></i>
+                                <input type="text" class="location-search-input" placeholder="Search locations" style="
+                                    width: 100%;
+                                    padding: 9px 14px 9px 36px;
+                                    border: none;
+                                    border-radius: 100px;
+                                    font-size: 12.5px;
+                                    outline: none;
+                                    font-family: 'Poppins', 'Inter', sans-serif;
+                                    background: transparent;
+                                    color: #1a1a1a;
+                                ">
+                            </div>
+                        </div>
+                        <div class="location-options-container" style="padding: 2px;">
+                            {% for location in all_locations %}
+                                <div class="dropdown-option-location claymorphic-option" data-value="{{ location.slug }}" data-url="{{ location.url }}" style="
+                                    padding: 10px 14px;
+                                    margin: 1px 0;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 12px;
+                                    cursor: pointer;
+                                    transition: all 0.15s ease;
+                                    font-size: 13px;
+                                    border-radius: 12px;
+                                    color: #2a2a2a;
+                                    position: relative;
+                                "
+                                onmouseover="this.style.background='#fafafa'; this.style.paddingLeft='18px'"
+                                onmouseout="this.style.background='transparent'; this.style.paddingLeft='14px'">
+                                    <i class="fa fa-location-dot" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    <span>{{ location.name }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="property-options-container" style="padding: 8px 4px;">
 
-                {% for type_code, type_name in property_types %}
-                    <div class="dropdown-option-property claymorphic-option" data-value="{{ type_code }}" style="
-                        padding: 10px 16px;
-                        margin: 4px 8px;
+            <!-- Divider -->
+            <div style="width: 1px; height: 22px; background: linear-gradient(180deg, transparent, #e5e5e5 20%, #e5e5e5 80%, transparent); flex-shrink: 0;"></div>
+
+            <!-- Property Type Dropdown -->
+            <div class="filter-dropdown" style="position: relative; flex: 1; min-width: 0; z-index: 100;">
+                <div class="property-dropdown" style="position: relative; z-index: 1000;">
+                    <div class="dropdown-trigger-property" style="
+                        background: transparent;
+                        border-radius: 100px;
+                        padding: 9px 16px;
+                        cursor: pointer;
+                        justify-content: flex-end;
+                        font-size: 13px;
+                        font-weight: 500;
+                        color: #1a1a1a;
                         display: flex;
                         align-items: center;
-                        gap: 12px;
-                        cursor: pointer;
-                        transition: all 0.2s ease;
-                        font-size: 13px;
-                        border-radius: 30px;
-                        background: rgba(255, 255, 255, 0.6);
-                    " onmouseover="this.style.background='linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%)'; this.style.transform='translateX(5px)'; this.style.boxShadow='0 4px 12px rgba(255,0,0,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.6)'; this.style.transform='translateX(0)'; this.style.boxShadow='none'">
-                        {% if type_code == 'apartment' %}
-                            <i class="fa fa-building" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'house' %}
-                            <i class="fa fa-home" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'villa' %}
-                            <i class="fa fa-landmark" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'cottage' %}
-                            <i class="fa fa-tree" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'studio' %}
-                            <i class="fa fa-paint-brush" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'bungalow' %}
-                            <i class="fa fa-home" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'townhouse' %}
-                            <i class="fa fa-city" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'penthouse' %}
-                            <i class="fa fa-building" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'guesthouse' %}
-                            <i class="fa fa-bed" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'hostel' %}
-                            <i class="fa fa-bed" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'hotel' %}
-                            <i class="fa fa-hotel" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'resort' %}
-                            <i class="fa fa-umbrella-beach" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'cabin' %}
-                            <i class="fa fa-tree" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'farm' %}
-                            <i class="fa fa-tractor" style="width: 20px; color: #FF0000;"></i>
-                        {% elif type_code == 'castle' %}
-                            <i class="fa fa-fort-awesome" style="width: 20px; color: #FF0000;"></i>
-                        {% else %}
-                            <i class="fa fa-paint-brush" style="width: 20px; color:  #D32F2F;"></i>
-                        {% endif %}
-                        <span>{{ type_name }}</span>
+                        gap: 9px;
+                        border: none;
+                        transition: background 0.2s ease;
+                    "
+                    onmouseover="this.style.background='#f7f7f7'"
+                    onmouseout="this.style.background='transparent'">
+                        <i class="fa fa-paint-brush" style="color: #D32F2F; font-size: 12px; opacity: 0.85;"></i>
+                        <span class="selected-property-text" id="propertyPlaceholder" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.01em;"> </span>
                     </div>
-                {% endfor %}
+
+                    <div class="dropdown-menu-property" style="
+                        position: absolute;
+                        top: calc(100% + 10px);
+                        right: 0;
+                        min-width: 280px;
+                        background: #ffffff;
+                        border-radius: 20px;
+                        box-shadow:
+                            0 0 0 1px rgba(0,0,0,0.05),
+                            0 24px 48px -16px rgba(0,0,0,0.18);
+                        z-index: 9999;
+                        display: none;
+                        max-height: 380px;
+                        overflow-y: auto;
+                        padding: 6px;
+                    ">
+                        <div style="padding: 8px 8px 10px; position: sticky; top: 0; background: #ffffff; z-index: 10; border-radius: 16px 16px 0 0;">
+                            <div class="claymorphic-search" style="position: relative; background: #f5f5f5; border-radius: 100px; padding: 2px;">
+                                <i class="fa fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #999; font-size: 11px;"></i>
+                                <input type="text" class="property-search-input" placeholder="Search property types" style="
+                                    width: 100%;
+                                    padding: 9px 14px 9px 36px;
+                                    border: none;
+                                    border-radius: 100px;
+                                    font-size: 12.5px;
+                                    outline: none;
+                                    font-family: 'Poppins', 'Inter', sans-serif;
+                                    background: transparent;
+                                    color: #1a1a1a;
+                                ">
+                            </div>
+                        </div>
+                        <div class="property-options-container" style="padding: 2px;">
+                            {% for type_code, type_name in property_types %}
+                                <div class="dropdown-option-property claymorphic-option" data-value="{{ type_code }}" style="
+                                    padding: 10px 14px;
+                                    margin: 1px 0;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 12px;
+                                    cursor: pointer;
+                                    transition: all 0.15s ease;
+                                    font-size: 13px;
+                                    border-radius: 12px;
+                                    color: #2a2a2a;
+                                "
+                                onmouseover="this.style.background='#fafafa'; this.style.paddingLeft='18px'"
+                                onmouseout="this.style.background='transparent'; this.style.paddingLeft='14px'">
+                                    {% if type_code == 'apartment' %}
+                                        <i class="fa fa-building" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'house' %}
+                                        <i class="fa fa-home" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'villa' %}
+                                        <i class="fa fa-landmark" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'cottage' %}
+                                        <i class="fa fa-tree" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'studio' %}
+                                        <i class="fa fa-paint-brush" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'bungalow' %}
+                                        <i class="fa fa-home" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'townhouse' %}
+                                        <i class="fa fa-city" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'penthouse' %}
+                                        <i class="fa fa-building" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'guesthouse' %}
+                                        <i class="fa fa-bed" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'hostel' %}
+                                        <i class="fa fa-bed" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'hotel' %}
+                                        <i class="fa fa-hotel" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'resort' %}
+                                        <i class="fa fa-umbrella-beach" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'cabin' %}
+                                        <i class="fa fa-tree" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'farm' %}
+                                        <i class="fa fa-tractor" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% elif type_code == 'castle' %}
+                                        <i class="fa fa-fort-awesome" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% else %}
+                                        <i class="fa fa-paint-brush" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                    {% endif %}
+                                    <span>{{ type_name }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
-<!-- Apply Filters Button - Compact -->
-        <button id="applyFilters" class="apply-button" style="
-            background: #FFFFFF;
-            color: #000000;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 40px;
-            font-weight: 550;
-            font-size: 9px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s ease;
 
-            font-family: 'Poppins', 'Inter', sans-serif;
-            white-space: nowrap;
-            flex-shrink: 0;
-            min-width: 100px;
-            justify-content: center;
-            height: 38px;
-        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 25px rgba(255, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)';"
-        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(255, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)';">
-
-<span style="position: relative; display: inline-flex;">
-  <i class="fa-solid fa-magnifying-glass" style="font-size: 18px;color: #D32F2F;"></i>
-  <i class="fa-solid fa-wand-magic-sparkles" style="position: absolute; top: -5px; right: -9px; font-size: 10px; color: #D32F2F; animation: sparkle 1.5s infinite;"></i>
-
-</span>
-
-<style>
-@keyframes sparkle {
-  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
-  50% { transform: scale(1.3) rotate(15deg); opacity: 0.8; }
-}
-</style>
-             Search
-        </button>
-
-
+            <!-- Search Button -->
+            <button id="applyFilters" class="apply-button" style="
+                background: #1a1a1a;
+                color: #ffffff;
+                border: none;
+                padding: 0 20px;
+                border-radius: 100px;
+                font-weight: 500;
+                font-size: 12px;
+                letter-spacing: 0.02em;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+                font-family: 'Poppins', 'Inter', sans-serif;
+                white-space: nowrap;
+                flex-shrink: 0;
+                height: 40px;
+                box-shadow: 0 4px 12px -4px rgba(0,0,0,0.25);
+            "
+            onmouseover="this.style.background='#D32F2F'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 8px 20px -4px rgba(211,47,47,0.4)';"
+            onmouseout="this.style.background='#1a1a1a'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px -4px rgba(0,0,0,0.25)';">
+                <span style="position: relative; display: inline-flex; align-items: center;">
+                    <i class="fa-solid fa-magnifying-glass" style="font-size: 13px;"></i>
+                    <i class="fa-solid fa-wand-magic-sparkles" style="position: absolute; top: -6px; right: -8px; font-size: 8px; color: #ffd700; animation: sparkle 2s ease-in-out infinite;"></i>
+                </span>
+                <span>Search</span>
+            </button>
         </div>
 
-        <!-- Hidden filters for form submission -->
+        <!-- Hidden filters -->
         <select id="locationFilter" style="display: none;">
             <option value="all" {% if selected_location == 'all' %}selected{% endif %}>All Locations</option>
             {% for location in all_locations %}
@@ -343,11 +330,22 @@
             {% endfor %}
         </select>
 
-
     </div>
-
 </section>
 
+<style>
+@keyframes sparkle {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    50% { transform: scale(1.4) rotate(20deg); opacity: 0.6; }
+}
+/* Smooth scrollbar for dropdowns */
+.dropdown-menu-location::-webkit-scrollbar,
+.dropdown-menu-property::-webkit-scrollbar { width: 6px; }
+.dropdown-menu-location::-webkit-scrollbar-thumb,
+.dropdown-menu-property::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 3px; }
+.dropdown-menu-location::-webkit-scrollbar-track,
+.dropdown-menu-property::-webkit-scrollbar-track { background: transparent; }
+</style>
 <!-- listings gallery section -->
 <section>
   <div style="border-radius: 32px 32px 32px 32px; box-shadow: 0 4px 8px rgba(0,0,0,0.1), 0 6px 20px rgba(0,0,0,0.1); margin-top: 10px;">

@@ -395,67 +395,38 @@ def book_via_whatsapp(request):
     return render(request, 'listings/book_via_whatsapp.html', context)
 
 # listings/views.py - inside booking_view
+
 def booking_view(request, listing_id):
-    """
-    Display and handle the booking form for a given listing.
-    Saves the booking, calculates total price, and sends confirmation emails.
-    """
     listing = get_object_or_404(Listing, id=listing_id)
 
     if request.method == 'POST':
-        form = BookingForm(
-            request.POST,
-            listing=listing,
-            user=request.user if request.user.is_authenticated else None
-        )
-
+        form = BookingForm(request.POST, listing=listing, user=request.user if request.user.is_authenticated else None)
         if form.is_valid():
             booking = form.save(commit=False)
             booking.listing = listing
-
-            if request.user.is_authenticated:
-                booking.user = request.user
-
-            # --- Safety-net: recompute total_price if form somehow didn't ---
-            number_of_nights = 0
-            total_price = 0
-            price_per_night = getattr(listing, 'price_per_night', None) or 0
-
-            if booking.check_in and booking.check_out:
-                number_of_nights = (booking.check_out - booking.check_in).days
-                if number_of_nights > 0 and price_per_night:
-                    total_price = number_of_nights * price_per_night
-                    booking.total_price = total_price
-
             booking.save()
 
             # --- Send booking confirmation emails ---
             try:
-                booking_ref = f"BK{booking.id:06d}"
-
+                # Prepare context for email
                 context = {
                     'booking': booking,
                     'listing': listing,
-                    'booking_ref': booking_ref,
+                    'booking_ref': f"BK{booking.id:06d}",
                     'guest_name': booking.guest_name,
                     'guest_email': booking.guest_email,
                     'guest_phone': booking.guest_phone,
-                    'inquiry_type': booking.get_inquiry_type_display() if hasattr(booking, 'get_inquiry_type_display') else booking.inquiry_type,
+                    'inquiry_type': booking.get_inquiry_type_display(),
                     'message': booking.message,
-                    'check_in_formatted': booking.check_in.strftime('%B %d, %Y') if booking.check_in else '',
-                    'check_out_formatted': booking.check_out.strftime('%B %d, %Y') if booking.check_out else '',
-                    'number_of_nights': number_of_nights,
-                    'price_per_night': f"{price_per_night:,.2f}",
-                    'total_price': f"{total_price:,.2f}",
-                    'total_price_formatted': f"{total_price:,.2f}",
                     'site_url': getattr(settings, 'SITE_URL', 'https://bnb.co.ke'),
                 }
 
-                subject = f'Booking Confirmation - {booking_ref}'
+                subject = f'Booking Confirmation - {booking.inquiry_ref}'
 
                 html_message = render_to_string('emails/booking_confirmation.html', context)
                 plain_message = strip_tags(html_message)
 
+                # Recipients: guest + admin email (instead of host)
                 admin_email = 'booking.bnb.co.ke@gmail.com'
                 recipient_list = [booking.guest_email, admin_email]
 
@@ -470,73 +441,53 @@ def booking_view(request, listing_id):
                 logger.info(f"Booking confirmation email sent to {recipient_list} for booking {booking.id}")
 
             except Exception as e:
-                logger.error(
-                    f"Failed to send booking confirmation email for booking {booking.id}: {str(e)}",
-                    exc_info=True
-                )
-                messages.warning(
-                    request,
-                    'Your booking was saved, but we could not send the confirmation email. '
-                    'Please contact support if you do not receive it.'
-                )
+                logger.error(f"Failed to send booking confirmation email for booking {booking.id}: {str(e)}",
+                             exc_info=True)
+                messages.warning(request,
+                                 'Your booking was saved, but we could not send the confirmation email. Please contact support if you do not receive it.')
+            # --- End email sending ---
 
             messages.success(
                 request,
-                f"🎉 Your booking has been sent successfully! "
-                f"Your booking reference is {booking_ref}. "
+                f"🎉 Your inquiry has been sent successfully! "
+                f"Your inquiry reference is {booking.inquiry_ref}. "
                 f"The host will contact you shortly on {booking.guest_phone} or {booking.guest_email}."
             )
-
-            # ✅ Redirect to the confirmation page instead of back to the listing
-            return redirect('booking_confirmation', booking_id=booking.id)
-
+            return redirect('listing_detail', slug=listing.slug)
     else:
-        form = BookingForm(
-            initial={'listing_id': listing.id},
-            listing=listing,
-            user=request.user if request.user.is_authenticated else None
-        )
+        form = BookingForm(initial={'listing_id': listing.id}, listing=listing,
+                           user=request.user if request.user.is_authenticated else None)
 
     context = {
         'form': form,
         'listing': listing,
-        'title': f'Book {listing.title}',
-        'page_title': f'Book {listing.title}',
+        'title': f' Book {listing.title} ',
+        'page_title': f' Book {listing.title} ',
     }
     return render(request, 'listings/booking_form.html', context)
 
 
 def booking_confirmation(request, booking_id):
     """
-    Display booking confirmation page with full booking details.
+    Display booking confirmation page
     """
     booking = get_object_or_404(Booking, id=booking_id)
     listing = booking.listing
-
-    # Safe date handling
-    number_of_nights = 0
-    if booking.check_in and booking.check_out:
-        number_of_nights = (booking.check_out - booking.check_in).days
-
-    # Safe price handling — fall back to listing.price_per_night if booking.total_price is missing
-    price_per_night = getattr(listing, 'price_per_night', None) or 0
-    total_price = booking.total_price
-    if not total_price and price_per_night and number_of_nights:
-        total_price = number_of_nights * price_per_night
 
     context = {
         'booking': booking,
         'listing': listing,
         'booking_ref': f"BK{booking.id:06d}",
-        'check_in_formatted': booking.check_in.strftime('%B %d, %Y') if booking.check_in else '',
-        'check_out_formatted': booking.check_out.strftime('%B %d, %Y') if booking.check_out else '',
-        'number_of_nights': number_of_nights,
-        'price_per_night': f"{price_per_night:,.2f}",
-        'total_price_formatted': f"{total_price:,.2f}" if total_price else "0.00",
-        'title': f'Booking Confirmation - BK{booking.id:06d} | Bnb.co.ke',
+        'check_in_formatted': booking.check_in.strftime('%B %d, %Y'),
+        'check_out_formatted': booking.check_out.strftime('%B %d, %Y'),
+        'total_price_formatted': f"{booking.total_price:,.2f}",
+        'number_of_nights': (booking.check_out - booking.check_in).days,
+        'title':  f'Booking Confirmation - BK{booking.id:06d} | Bnb.co.ke',
         'page_title': f'Booking Confirmation - BK{booking.id:06d} | Bnb.co.ke',
     }
     return render(request, 'booking_confirmation.html', context)
+
+
 @login_required
 def my_listings(request):
     """

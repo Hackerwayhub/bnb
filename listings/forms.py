@@ -319,38 +319,62 @@ class ListingSubmissionForm(forms.ModelForm):
             raise forms.ValidationError("Number of bathrooms cannot be negative")
         return bathrooms
 
-
 class BookingForm(forms.ModelForm):
     listing_id = forms.IntegerField(widget=forms.HiddenInput())
 
+    # NEW: date fields
+    check_in = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'type': 'date',
+            'id': 'check_in',
+        }),
+        required=True,
+        label='Check-in',
+    )
+    check_out = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'type': 'date',
+            'id': 'check_out',
+        }),
+        required=True,
+        label='Check-out',
+    )
+
     class Meta:
         model = Booking
-        fields = ['guest_name', 'guest_email', 'guest_phone', 'message', 'inquiry_type']
+        # 🔑 Added check_in / check_out
+        fields = [
+            'guest_name', 'guest_email', 'guest_phone',
+            'check_in', 'check_out',
+            'message', 'inquiry_type',
+        ]
         widgets = {
             'guest_name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Your full name',
-                'id': 'guest_name'
+                'id': 'guest_name',
             }),
             'guest_email': forms.EmailInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'your@email.com',
-                'id': 'guest_email'
+                'id': 'guest_email',
             }),
             'guest_phone': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': '+254',
-                'id': 'guest_phone'
+                'id': 'guest_phone',
             }),
             'message': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 4,
                 'placeholder': 'Message (Optional) Tell us about your inquiry, questions, or special requests',
-                'id': 'message'
+                'id': 'message',
             }),
             'inquiry_type': forms.Select(attrs={
                 'class': 'form-control',
-                'id': 'inquiry_type'
+                'id': 'inquiry_type',
             }),
         }
         help_texts = {
@@ -366,8 +390,7 @@ class BookingForm(forms.ModelForm):
         if self.user and self.user.is_authenticated:
             self.fields['guest_name'].initial = f"{self.user.first_name} {self.user.last_name}".strip()
             self.fields['guest_email'].initial = self.user.email
-
-            if hasattr(self.user, 'profile') and self.user.profile.phone:
+            if hasattr(self.user, 'profile') and getattr(self.user.profile, 'phone', None):
                 self.fields['guest_phone'].initial = self.user.profile.phone
 
         # Set listing_id initial value
@@ -379,11 +402,65 @@ class BookingForm(forms.ModelForm):
         self.fields['guest_email'].required = True
         self.fields['guest_phone'].required = True
 
+        # Set min date = today for check-in
+        today = date.today().isoformat()
+        self.fields['check_in'].widget.attrs['min'] = today
+        self.fields['check_out'].widget.attrs['min'] = today
+
         # Add CSS classes to all fields
         for field_name, field in self.fields.items():
             if field_name != 'listing_id':
                 if 'class' not in field.widget.attrs:
                     field.widget.attrs['class'] = 'form-control'
+
+    def clean_guest_email(self):
+        email = self.cleaned_data.get('guest_email')
+        if email:
+            if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', email):
+                raise forms.ValidationError("Please enter a valid email address")
+        return email
+
+    def clean_guest_phone(self):
+        phone = self.cleaned_data.get('guest_phone')
+        if phone:
+            cleaned = re.sub(r'[^\d+]', '', phone)
+            if cleaned.startswith('+254'):
+                if len(cleaned) != 13:
+                    raise forms.ValidationError("Please enter a valid Kenyan phone number (+2547XXXXXXXX)")
+            elif cleaned.startswith('0'):
+                if len(cleaned) != 10:
+                    raise forms.ValidationError("Please enter a valid Kenyan phone number (07XXXXXXXX)")
+                cleaned = '+254' + cleaned[1:]
+            elif len(cleaned) == 9 and cleaned.isdigit():
+                cleaned = '+254' + cleaned
+            else:
+                raise forms.ValidationError("Please enter a valid phone number (e.g., +2547XXXXXXXX or 07XXXXXXXX)")
+            return cleaned
+        return phone
+
+    # NEW: validate check-in is not in the past
+    def clean_check_in(self):
+        check_in = self.cleaned_data.get('check_in')
+        if check_in and check_in < date.today():
+            raise forms.ValidationError("Check-in date cannot be in the past.")
+        return check_in
+
+    def clean(self):
+        cleaned_data = super().clean()
+        check_in = cleaned_data.get('check_in')
+        check_out = cleaned_data.get('check_out')
+
+        # Ensure check_out is after check_in
+        if check_in and check_out and check_out <= check_in:
+            self.add_error('check_out', "Check-out date must be after check-in date.")
+
+        # Ensure we have at least a message or inquiry_type (kept from your original)
+        message = cleaned_data.get('message')
+        inquiry_type = cleaned_data.get('inquiry_type')
+        if not message and not inquiry_type:
+            pass  # both empty is fine
+
+        return cleaned_data
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -396,50 +473,13 @@ class BookingForm(forms.ModelForm):
         if self.user and self.user.is_authenticated:
             instance.user = self.user
 
+        # ✅ Calculate total_price using listing.price_per_night (NOT listing.price)
+        if self.listing and instance.check_in and instance.check_out:
+            nights = (instance.check_out - instance.check_in).days
+            price_per_night = getattr(self.listing, 'price_per_night', None) or 0
+            if nights > 0 and price_per_night:
+                instance.total_price = nights * price_per_night
+
         if commit:
             instance.save()
         return instance
-
-    def clean_guest_email(self):
-        email = self.cleaned_data.get('guest_email')
-        if email:
-            # Basic email validation
-            if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', email):
-                raise forms.ValidationError("Please enter a valid email address")
-        return email
-
-    def clean_guest_phone(self):
-        phone = self.cleaned_data.get('guest_phone')
-        if phone:
-            # Remove any non-digit characters except +
-            cleaned = re.sub(r'[^\d+]', '', phone)
-
-            # Kenyan phone validation
-            if cleaned.startswith('+254'):
-                if len(cleaned) != 13:  # +2547XXXXXXXX = 13 characters
-                    raise forms.ValidationError("Please enter a valid Kenyan phone number (+2547XXXXXXXX)")
-            elif cleaned.startswith('0'):
-                if len(cleaned) != 10:  # 07XXXXXXXX = 10 digits
-                    raise forms.ValidationError("Please enter a valid Kenyan phone number (07XXXXXXXX)")
-                # Convert to international format
-                cleaned = '+254' + cleaned[1:]
-            elif len(cleaned) == 9 and cleaned.isdigit():  # 7XXXXXXXX = 9 digits
-                cleaned = '+254' + cleaned
-            else:
-                raise forms.ValidationError("Please enter a valid phone number (e.g., +2547XXXXXXXX or 07XXXXXXXX)")
-
-            return cleaned
-        return phone
-
-    def clean(self):
-        cleaned_data = super().clean()
-
-        # Ensure we have at least a message or inquiry_type
-        message = cleaned_data.get('message')
-        inquiry_type = cleaned_data.get('inquiry_type')
-
-        if not message and not inquiry_type:
-            # If both are empty, that's fine - just a basic inquiry
-            pass
-
-        return cleaned_data

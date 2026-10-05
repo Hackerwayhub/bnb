@@ -53,28 +53,47 @@
             margin-bottom: 15px;
         }
         .detail-row {
-            display: flex;
             margin-bottom: 10px;
         }
         .detail-label {
             font-weight: bold;
-            width: 180px;
             color: #666;
+            padding-right: 10px;
+            vertical-align: top;
         }
         .detail-value {
-            flex: 1;
             color: #333;
         }
-        .highlight-box {
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
+        .stay-dates {
+            background-color: #f0f8ff;
             border-radius: 5px;
             padding: 15px;
-            margin: 20px 0;
+            margin-bottom: 15px;
         }
-        .highlight-box h4 {
-            margin-top: 0;
-            color: #856404;
+        .stay-dates table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .stay-dates td {
+            text-align: center;
+            padding: 5px;
+            font-size: 14px;
+        }
+        .stay-dates .date-label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .stay-dates .date-value {
+            font-size: 15px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .stay-dates .arrow {
+            font-size: 20px;
+            color: #4CAF50;
+            padding: 0 5px;
         }
         .footer {
             background-color: #2c3e50;
@@ -94,12 +113,13 @@
             margin: 20px 0;
         }
         @media (max-width: 600px) {
-            .detail-row {
-                flex-direction: column;
-            }
             .detail-label {
+                display: block;
                 width: 100%;
-                margin-bottom: 5px;
+                margin-bottom: 2px;
+            }
+            .detail-value {
+                display: block;
             }
         }
     </style>
@@ -117,55 +137,105 @@
                 <p>Thank you, {{ booking.guest_name }}, for booking with us!</p>
             </div>
 
+            <!-- Stay Dates -->
             <div class="section">
-                <h3>🏨 Property Details</h3>
-                <div class="detail-row">
-                    <div class="detail-label">Property Name:</div>
-                    <div class="detail-value">{{ listing.title }}</div>
+                <h3>📅 Your Stay</h3>
+                <div class="stay-dates">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td width="42%">
+                                <div class="date-label">Check-in</div>
+                                <div class="date-value">{{ check_in_formatted }}</div>
+                            </td>
+                            <td width="16%" align="center" class="arrow">→</td>
+                            <td width="42%">
+                                <div class="date-label">Check-out</div>
+                                <div class="date-value">{{ check_out_formatted }}</div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-                <div class="detail-row">
-                    <div class="detail-label">Location:</div>
-                    <div class="detail-value">{{ listing.get_location_display }}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Property Type:</div>
-                    <div class="detail-value">{{ listing.get_property_type_display }}</div>
-                </div>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                        <td class="detail-label">Number of Nights:</td>
+                        <td class="detail-value">{{ number_of_nights }} night{{ number_of_nights|pluralize }}</td>
+                    </tr>
+                </table>
             </div>
 
+            <!-- Property -->
+            <div class="section">
+                <h3>🏨 Property Details</h3>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                        <td class="detail-label" width="40%">Property Name:</td>
+                        <td class="detail-value">{{ listing.title }}</td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Location:</td>
+                        <td class="detail-value">{{ listing.get_location_display }}</td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Property Type:</td>
+                        <td class="detail-value">{{ listing.get_property_type_display }}</td>
+                    </tr>
+                </table>
+            </div>
 
+            <!-- Price Summary -->
             <div class="section">
                 <h3>💰 Price Summary</h3>
-                <div class="detail-row">
-                    <div class="detail-label">Price per Night:</div>
-                    <div class="detail-value">KES {{ price_per_night }}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Total Nights:</div>
-                    <div class="detail-value">{{ number_of_nights }} nights</div>
-                </div>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                        <td class="detail-label" width="40%">Price per Night:</td>
+                        <td class="detail-value">KES {{ price_per_night }}</td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Total Nights:</td>
+                        <td class="detail-value">{{ number_of_nights }} night{{ number_of_nights|pluralize }}</td>
+                    </tr>
+                </table>
                 <div class="total-price">
                     Total Amount: KES {{ total_price }}
                 </div>
             </div>
 
+            <!-- Guest Info -->
             <div class="section">
                 <h3>👤 Guest Information</h3>
-                <div class="detail-row">
-                    <div class="detail-label">Full Name:</div>
-                    <div class="detail-value">{{ booking.guest_name }}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Email Address:</div>
-                    <div class="detail-value">{{ booking.guest_email }}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Phone Number:</div>
-                    <div class="detail-value">{{ booking.guest_phone }}</div>
-                </div>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                        <td class="detail-label" width="40%">Full Name:</td>
+                        <td class="detail-value">{{ booking.guest_name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Email Address:</td>
+                        <td class="detail-value">{{ booking.guest_email }}</td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Phone Number:</td>
+                        <td class="detail-value">{{ booking.guest_phone }}</td>
+                    </tr>
+                    {% if inquiry_type %}
+                    <tr>
+                        <td class="detail-label">Inquiry Type:</td>
+                        <td class="detail-value">{{ inquiry_type }}</td>
+                    </tr>
+                    {% endif %}
+                </table>
             </div>
 
+            {% if booking.message %}
             <div class="section">
+                <h3>📝 Your Message</h3>
+                <p style="background: #f8f9fa; padding: 12px; border-radius: 5px; margin: 0; color: #555;">
+                    {{ booking.message }}
+                </p>
+            </div>
+            {% endif %}
+
+            <!-- Help -->
+            <div class="section" style="border-bottom: none;">
                 <h3>❓ Need Help?</h3>
                 <p>If you have any questions about your booking, please contact us:</p>
                 <ul style="padding-left: 20px;">

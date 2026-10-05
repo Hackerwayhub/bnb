@@ -5,6 +5,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
+    <style>
+
+        .date-field-wrapper {
+            background: var(--glass-white);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        }
+        .date-field-wrapper:focus-within {
+            border-color: rgba(148, 163, 184, 0.5);
+            box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.1), 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        .date-field-wrapper .date-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.6rem;
+            font-size: 0.95rem;
+        }
+        .date-field-wrapper .form-control {
+            border: none;
+            box-shadow: none;
+            padding: 0.4rem 0;
+            background: transparent;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+        .date-field-wrapper .form-control:focus {
+            transform: none;
+            box-shadow: none;
+        }
+        .summary-total {
+            padding-top: 1rem;
+            border-top: 2px solid var(--glass-border) !important;
+            margin-top: 0.5rem;
+        }
+    </style>
 
     <style>
         :root {
@@ -533,9 +574,7 @@
                 {% for message in messages %}
                     <div class="alert-success-custom">
                         <div class="alert-content">
-                            <div class="alert-icon">
-                                <i class="fa fa-check"></i>
-                            </div>
+                            <div class="alert-icon"><i class="fa fa-check"></i></div>
                             <div class="alert-text">
                                 <h5 class="alert-title">Booking Confirmed</h5>
                                 <p class="alert-message">{{ message }}</p>
@@ -547,58 +586,107 @@
             {% endif %}
         </div>
 
+        <!-- Header -->
+        {% if listing %}
+        <div class="booking-header">
+            <h1>{{ listing.title }}</h1>
+            <p><i class="fa fa-map-marker"></i> {{ listing.get_location_display }}</p>
+            <div class="price-highlight">
+                KES <span id="pricePerNight">{{ listing.price_per_night|default:"0" }}</span> / night
+            </div>
+        </div>
+        {% endif %}
+
         <div class="form-content">
-            <form method="post" id="bookingForm">
+            <form method="post" id="bookingForm" novalidate>
                 {% csrf_token %}
                 <input type="hidden" name="listing_id" value="{{ listing.id }}">
-<!-- Replace the form fields section with this: -->
 
-<div class="booking-form-grid">
-    <!-- Inquiry Type Field (NEW) -->
-    <div class="form-group" style="grid-column: 1 / -1;">
+                <!-- ===================== DATE FIELDS ===================== -->
+                <div class="date-inputs">
+                    <div class="date-field-wrapper">
+                        <label class="date-label" for="check_in">
+                            <i class="fa fa-calendar-plus-o"></i> Check-in
+                        </label>
+                        {{ form.check_in }}
+                        {% if form.check_in.errors %}
+                            <div class="error-message">{{ form.check_in.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="date-field-wrapper">
+                        <label class="date-label" for="check_out">
+                            <i class="fa fa-calendar-minus-o"></i> Check-out
+                        </label>
+                        {{ form.check_out }}
+                        {% if form.check_out.errors %}
+                            <div class="error-message">{{ form.check_out.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
 
-        {{ form.inquiry_type }}
-        {% if form.inquiry_type.errors %}
-            <div class="error-message">{{ form.inquiry_type.errors }}</div>
-        {% endif %}
-    </div>
+                <!-- ===================== LIVE BOOKING SUMMARY ===================== -->
+                <div class="booking-summary" id="bookingSummary">
+                    <h3><i class="fa fa-receipt"></i> Booking Summary</h3>
+                    <div class="summary-item">
+                        <span><i class="fa fa-moon-o"></i> Nights</span>
+                        <span id="nightsCount">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span><i class="fa fa-tag"></i> Price per night</span>
+                        <span>KES <span id="pricePerNightSummary">{{ listing.price_per_night|default:"0" }}</span></span>
+                    </div>
+                    <div class="summary-item summary-total">
+                        <span><i class="fa fa-money"></i> Total Cost</span>
+                        <span class="total-price">KES <span id="totalPrice">0.00</span></span>
+                    </div>
+                </div>
 
-    <div class="form-group">
+                <!-- ===================== FORM FIELDS ===================== -->
+                <div class="booking-form-grid">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label class="form-label" for="inquiry_type">Inquiry Type</label>
+                        {{ form.inquiry_type }}
+                        {% if form.inquiry_type.errors %}
+                            <div class="error-message">{{ form.inquiry_type.errors }}</div>
+                        {% endif %}
+                    </div>
 
-        {{ form.guest_name }}
-        {% if form.guest_name.errors %}
-            <div class="error-message">{{ form.guest_name.errors }}</div>
-        {% endif %}
-    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="guest_name">Full Name</label>
+                        {{ form.guest_name }}
+                        {% if form.guest_name.errors %}
+                            <div class="error-message">{{ form.guest_name.errors }}</div>
+                        {% endif %}
+                    </div>
 
-    <div class="form-group">
+                    <div class="form-group">
+                        <label class="form-label" for="guest_email">Email</label>
+                        {{ form.guest_email }}
+                        {% if form.guest_email.errors %}
+                            <div class="error-message">{{ form.guest_email.errors }}</div>
+                        {% endif %}
+                    </div>
 
-        {{ form.guest_email }}
-        {% if form.guest_email.errors %}
-            <div class="error-message">{{ form.guest_email.errors }}</div>
-        {% endif %}
-    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label class="form-label" for="guest_phone">Phone</label>
+                        {{ form.guest_phone }}
+                        {% if form.guest_phone.help_text %}
+                            <small style="color: var(--text-muted); font-size: 0.85rem;">{{ form.guest_phone.help_text }}</small>
+                        {% endif %}
+                        {% if form.guest_phone.errors %}
+                            <div class="error-message">{{ form.guest_phone.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
 
-    <div class="form-group">
-
-        {{ form.guest_phone }}
-
-        {% if form.guest_phone.errors %}
-            <div class="error-message">{{ form.guest_phone.errors }}</div>
-        {% endif %}
-    </div>
-</div>
-
-<!-- Message Field (replaces special_requests) -->
-<div class="form-group">
-
-    {{ form.message }}
-    {% if form.message.errors %}
-        <div class="error-message">{{ form.message.errors }}</div>
-    {% endif %}
-</div>
-
-
+                <!-- Message -->
+                <div class="form-group">
+                    <label class="form-label" for="message">Message</label>
+                    {{ form.message }}
+                    {% if form.message.errors %}
+                        <div class="error-message">{{ form.message.errors }}</div>
+                    {% endif %}
+                </div>
 
                 {% if form.non_field_errors %}
                     <div class="error-message" style="margin-bottom: 1.5rem; padding: 1rem;">
@@ -608,131 +696,83 @@
                     </div>
                 {% endif %}
 
-
                 <button type="submit" class="btn">
                     <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                    Book
+                    Book Now
                 </button>
             </form>
         </div>
     </div>
 
     <script>
-        function calculateTotal() {
-            const checkIn = document.querySelector('input[name="check_in"]');
-            const checkOut = document.querySelector('input[name="check_out"]');
-            const pricePerNight = parseFloat(document.getElementById('pricePerNight').textContent);
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkInEl = document.getElementById('check_in');
+            const checkOutEl = document.getElementById('check_out');
+            const nightsEl = document.getElementById('nightsCount');
+            const totalEl = document.getElementById('totalPrice');
+            const priceEl = document.getElementById('pricePerNight');
 
-            if (checkIn.value && checkOut.value) {
-                const checkInDate = new Date(checkIn.value);
-                const checkOutDate = new Date(checkOut.value);
-                const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
-                const nights = timeDiff / (1000 * 3600 * 24);
+            const pricePerNight = parseFloat(priceEl ? priceEl.textContent : '0') || 0;
 
-                if (nights > 0) {
-                    document.getElementById('nightsCount').textContent = Math.round(nights);
-                    document.getElementById('totalPrice').textContent = (nights * pricePerNight).toFixed(2);
+            function calculateTotal() {
+                if (!checkInEl || !checkOutEl) return;
+
+                const inVal = checkInEl.value;
+                const outVal = checkOutEl.value;
+
+                if (inVal && outVal) {
+                    const inDate = new Date(inVal);
+                    const outDate = new Date(outVal);
+                    const nights = Math.round((outDate - inDate) / (1000 * 60 * 60 * 24));
+
+                    if (nights > 0) {
+                        nightsEl.textContent = nights;
+                        totalEl.textContent = (nights * pricePerNight).toFixed(2);
+                    } else {
+                        nightsEl.textContent = '0';
+                        totalEl.textContent = '0.00';
+                    }
                 } else {
-                    document.getElementById('nightsCount').textContent = 0;
-                    document.getElementById('totalPrice').textContent = '0.00';
+                    nightsEl.textContent = '0';
+                    totalEl.textContent = '0.00';
                 }
             }
-        }
 
-        // Initialize calculation on page load
-        document.addEventListener('DOMContentLoaded', calculateTotal);
-
-        document.querySelector('input[name="check_in"]').addEventListener('change', calculateTotal);
-        document.querySelector('input[name="check_out"]').addEventListener('change', calculateTotal);
-
-        // Set min date for checkout based on checkin
-        document.querySelector('input[name="check_in"]').addEventListener('change', function() {
-            const checkOutField = document.querySelector('input[name="check_out"]');
-            checkOutField.min = this.value;
-            if (checkOutField.value && checkOutField.value <= this.value) {
-                checkOutField.value = '';
-                calculateTotal();
+            if (checkInEl) {
+                checkInEl.addEventListener('change', function () {
+                    if (checkOutEl) {
+                        checkOutEl.min = this.value;
+                        if (!checkOutEl.value || checkOutEl.value <= this.value) {
+                            const next = new Date(this.value);
+                            next.setDate(next.getDate() + 1);
+                            checkOutEl.value = next.toISOString().split('T')[0];
+                        }
+                    }
+                    calculateTotal();
+                });
             }
+
+            if (checkOutEl) {
+                checkOutEl.addEventListener('change', calculateTotal);
+            }
+
+            calculateTotal();
         });
 
-        // Auto-hide success message after 8 seconds
+        // Auto-hide success alert
         setTimeout(() => {
-            const alerts = document.querySelectorAll('.alert-success-custom');
-            alerts.forEach(alert => {
+            document.querySelectorAll('.alert-success-custom').forEach(alert => {
+                alert.style.transition = 'opacity 0.3s, transform 0.3s';
                 alert.style.opacity = '0';
                 alert.style.transform = 'translateY(-20px) scale(0.95)';
-                setTimeout(() => {
-                    alert.style.display = 'none';
-                }, 300);
+                setTimeout(() => { alert.style.display = 'none'; }, 300);
             });
         }, 8000);
 
-        // Scroll to top if there's a success message
         {% if messages %}
             window.scrollTo({ top: 0, behavior: 'smooth' });
         {% endif %}
-
-        // Add floating animation to form elements on focus
-        document.querySelectorAll('.form-control').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.style.transform = 'translateY(-2px)';
-                this.parentElement.style.transform = 'translateY(-5px)';
-            });
-
-            input.addEventListener('blur', function() {
-                this.style.transform = 'translateY(0)';
-                this.parentElement.style.transform = 'translateY(0)';
-            });
-        });
-
-        // Add subtle animation to booking summary
-        const bookingSummary = document.querySelector('.booking-summary');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animation = 'fadeIn 0.8s ease-out';
-                }
-            });
-        });
-
-        observer.observe(bookingSummary);
-
-        // Add ripple effect to button
-        document.querySelector('.btn').addEventListener('click', function(e) {
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-
-            ripple.style.cssText = `
-                position: absolute;
-                border-radius: 50%;
-                background: rgba(255, 255, 255, 0.6);
-                transform: scale(0);
-                animation: ripple 0.6s linear;
-                width: ${size}px;
-                height: ${size}px;
-                left: ${x}px;
-                top: ${y}px;
-            `;
-
-            this.appendChild(ripple);
-
-            setTimeout(() => ripple.remove(), 600);
-        });
-
-        // Add ripple animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to {
-                    transform: scale(4);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
+{% endblock %}
 {% endblock %}

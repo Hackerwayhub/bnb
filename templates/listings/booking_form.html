@@ -552,11 +552,52 @@
                 {% csrf_token %}
                 <input type="hidden" name="listing_id" value="{{ listing.id }}">
 <!-- Replace the form fields section with this: -->
+<!-- Replace the form fields section with this: -->
+
+<!-- Date Selection Section -->
+<div class="date-inputs">
+    <div class="form-group">
+        <label class="form-label" for="check_in">
+            <i class="fa fa-calendar-check-o info-icon"></i>Check-in Date
+        </label>
+        {{ form.check_in }}
+        {% if form.check_in.errors %}
+            <div class="error-message">{{ form.check_in.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        <label class="form-label" for="check_out">
+            <i class="fa fa-calendar-check-o info-icon"></i>Check-out Date
+        </label>
+        {{ form.check_out }}
+        {% if form.check_out.errors %}
+            <div class="error-message">{{ form.check_out.errors }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Price Summary (shows when dates are selected) -->
+<div class="booking-summary" id="priceSummary" style="display: none;">
+    <h3>💰 Price Summary</h3>
+    <div class="summary-item">
+        <span>Price per night:</span>
+        <span>KES <span id="pricePerNight">{{ default_price|floatformat:2 }}</span></span>
+    </div>
+    <div class="summary-item">
+        <span>Number of nights:</span>
+        <span id="nightsCount">0</span>
+    </div>
+    <div class="summary-item">
+        <span>Total:</span>
+        <span class="total-price">KES <span id="totalPrice">0.00</span></span>
+    </div>
+</div>
 
 <div class="booking-form-grid">
-    <!-- Inquiry Type Field (NEW) -->
+    <!-- Inquiry Type Field -->
     <div class="form-group" style="grid-column: 1 / -1;">
-
+        <label class="form-label" for="inquiry_type">Inquiry Type</label>
         {{ form.inquiry_type }}
         {% if form.inquiry_type.errors %}
             <div class="error-message">{{ form.inquiry_type.errors }}</div>
@@ -564,7 +605,7 @@
     </div>
 
     <div class="form-group">
-
+        <label class="form-label" for="guest_name">Full Name</label>
         {{ form.guest_name }}
         {% if form.guest_name.errors %}
             <div class="error-message">{{ form.guest_name.errors }}</div>
@@ -572,7 +613,7 @@
     </div>
 
     <div class="form-group">
-
+        <label class="form-label" for="guest_email">Email Address</label>
         {{ form.guest_email }}
         {% if form.guest_email.errors %}
             <div class="error-message">{{ form.guest_email.errors }}</div>
@@ -580,18 +621,17 @@
     </div>
 
     <div class="form-group">
-
+        <label class="form-label" for="guest_phone">Phone Number</label>
         {{ form.guest_phone }}
-
         {% if form.guest_phone.errors %}
             <div class="error-message">{{ form.guest_phone.errors }}</div>
         {% endif %}
     </div>
 </div>
 
-<!-- Message Field (replaces special_requests) -->
+<!-- Message Field -->
 <div class="form-group">
-
+    <label class="form-label" for="message">Message (Optional)</label>
     {{ form.message }}
     {% if form.message.errors %}
         <div class="error-message">{{ form.message.errors }}</div>
@@ -616,123 +656,269 @@
             </form>
         </div>
     </div>
+<script>
+    // ============================================================
+    // BOOKING FORM - PRICE CALCULATOR & UX ENHANCEMENTS
+    // ============================================================
+    (function() {
+        'use strict';
 
-    <script>
+        // ---------- Element References ----------
+        const checkInInput   = document.getElementById('check_in');
+        const checkOutInput  = document.getElementById('check_out');
+        const priceSummary   = document.getElementById('priceSummary');
+        const nightsCountEl  = document.getElementById('nightsCount');
+        const totalPriceEl   = document.getElementById('totalPrice');
+        const pricePerNightEl = document.getElementById('pricePerNight');
+        const bookingForm    = document.getElementById('bookingForm');
+        const submitBtn      = bookingForm ? bookingForm.querySelector('.btn[type="submit"]') : null;
+
+        // ---------- Read price per night (safe) ----------
+        let pricePerNight = 0;
+        if (pricePerNightEl) {
+            pricePerNight = parseFloat(pricePerNightEl.textContent.replace(/,/g, '')) || 0;
+        }
+
+        // ---------- Helper: get YYYY-MM-DD from Date ----------
+        function toISODate(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        // ---------- Helper: today in local time ----------
+        function todayISO() {
+            return toISODate(new Date());
+        }
+
+        // ---------- Helper: tomorrow in local time ----------
+        function tomorrowISO() {
+            const d = new Date();
+            d.setDate(d.getDate() + 1);
+            return toISODate(d);
+        }
+
+        // ---------- Calculate nights + total ----------
         function calculateTotal() {
-            const checkIn = document.querySelector('input[name="check_in"]');
-            const checkOut = document.querySelector('input[name="check_out"]');
-            const pricePerNight = parseFloat(document.getElementById('pricePerNight').textContent);
+            if (!checkInInput || !checkOutInput) return;
 
-            if (checkIn.value && checkOut.value) {
-                const checkInDate = new Date(checkIn.value);
-                const checkOutDate = new Date(checkOut.value);
-                const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
-                const nights = timeDiff / (1000 * 3600 * 24);
+            const checkIn  = checkInInput.value;
+            const checkOut = checkOutInput.value;
 
-                if (nights > 0) {
-                    document.getElementById('nightsCount').textContent = Math.round(nights);
-                    document.getElementById('totalPrice').textContent = (nights * pricePerNight).toFixed(2);
-                } else {
-                    document.getElementById('nightsCount').textContent = 0;
-                    document.getElementById('totalPrice').textContent = '0.00';
+            // If dates aren't both filled → hide summary
+            if (!checkIn || !checkOut) {
+                if (priceSummary) priceSummary.style.display = 'none';
+                return;
+            }
+
+            const checkInDate  = new Date(checkIn + 'T00:00:00');
+            const checkOutDate = new Date(checkOut + 'T00:00:00');
+            const timeDiff     = checkOutDate.getTime() - checkInDate.getTime();
+            const nights       = Math.round(timeDiff / (1000 * 3600 * 24));
+
+            if (nights > 0 && pricePerNight > 0) {
+                if (priceSummary) priceSummary.style.display = 'block';
+                if (nightsCountEl) nightsCountEl.textContent = nights;
+                if (totalPriceEl) {
+                    totalPriceEl.textContent = (nights * pricePerNight)
+                        .toFixed(2)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
                 }
+            } else if (nights > 0 && pricePerNight === 0) {
+                // Dates selected but no price set on listing
+                if (priceSummary) priceSummary.style.display = 'none';
+            } else {
+                // Invalid range (checkout <= checkin)
+                if (priceSummary) priceSummary.style.display = 'none';
             }
         }
 
-        // Initialize calculation on page load
-        document.addEventListener('DOMContentLoaded', calculateTotal);
+        // ---------- Setup date inputs ----------
+        function setupDateInputs() {
+            if (!checkInInput || !checkOutInput) return;
 
-        document.querySelector('input[name="check_in"]').addEventListener('change', calculateTotal);
-        document.querySelector('input[name="check_out"]').addEventListener('change', calculateTotal);
+            // Min date = today
+            checkInInput.min = todayISO();
 
-        // Set min date for checkout based on checkin
-        document.querySelector('input[name="check_in"]').addEventListener('change', function() {
-            const checkOutField = document.querySelector('input[name="check_out"]');
-            checkOutField.min = this.value;
-            if (checkOutField.value && checkOutField.value <= this.value) {
-                checkOutField.value = '';
+            // If check-in has a value, set checkout min accordingly
+            if (checkInInput.value) {
+                const next = new Date(checkInInput.value + 'T00:00:00');
+                next.setDate(next.getDate() + 1);
+                checkOutInput.min = toISODate(next);
+            } else {
+                checkOutInput.min = tomorrowISO();
+            }
+
+            // Check-in changed → update checkout min + clear invalid checkout
+            checkInInput.addEventListener('change', function() {
+                const next = new Date(this.value + 'T00:00:00');
+                next.setDate(next.getDate() + 1);
+                checkOutInput.min = toISODate(next);
+
+                if (checkOutInput.value && checkOutInput.value <= this.value) {
+                    checkOutInput.value = '';
+                }
                 calculateTotal();
+            });
+
+            // Check-out changed → recalculate
+            checkOutInput.addEventListener('change', calculateTotal);
+
+            // Initialize
+            calculateTotal();
+        }
+
+        // ---------- Inquiry type → toggle date requirement ----------
+        function setupInquiryTypeToggle() {
+            const inquiryTypeSelect = document.getElementById('inquiry_type');
+            if (!inquiryTypeSelect) return;
+
+            function updateDateRequirement() {
+                const isBooking = inquiryTypeSelect.value === 'booking';
+                // For booking inquiries → dates are required
+                if (checkInInput)  checkInInput.required  = isBooking;
+                if (checkOutInput) checkOutInput.required = isBooking;
+
+                // Visual cue
+                const dateLabels = document.querySelectorAll('.date-inputs .form-label');
+                dateLabels.forEach(lbl => {
+                    if (isBooking) {
+                        lbl.innerHTML = lbl.innerHTML.replace(' (optional)', '') + ' <span style="color:#e53e3e;">*</span>';
+                    }
+                });
             }
-        });
 
-        // Auto-hide success message after 8 seconds
-        setTimeout(() => {
-            const alerts = document.querySelectorAll('.alert-success-custom');
-            alerts.forEach(alert => {
-                alert.style.opacity = '0';
-                alert.style.transform = 'translateY(-20px) scale(0.95)';
-                setTimeout(() => {
-                    alert.style.display = 'none';
-                }, 300);
-            });
-        }, 8000);
+            inquiryTypeSelect.addEventListener('change', updateDateRequirement);
+            updateDateRequirement(); // initial state
+        }
 
-        // Scroll to top if there's a success message
-        {% if messages %}
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        {% endif %}
+        // ---------- Auto-hide success messages ----------
+        function setupMessageAutoHide() {
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert-success-custom');
+                alerts.forEach(function(alert) {
+                    alert.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    alert.style.opacity = '0';
+                    alert.style.transform = 'translateY(-20px) scale(0.95)';
+                    setTimeout(function() {
+                        alert.style.display = 'none';
+                    }, 300);
+                });
+            }, 8000);
+        }
 
-        // Add floating animation to form elements on focus
-        document.querySelectorAll('.form-control').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.style.transform = 'translateY(-2px)';
-                this.parentElement.style.transform = 'translateY(-5px)';
-            });
-
-            input.addEventListener('blur', function() {
-                this.style.transform = 'translateY(0)';
-                this.parentElement.style.transform = 'translateY(0)';
-            });
-        });
-
-        // Add subtle animation to booking summary
-        const bookingSummary = document.querySelector('.booking-summary');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animation = 'fadeIn 0.8s ease-out';
-                }
-            });
-        });
-
-        observer.observe(bookingSummary);
-
-        // Add ripple effect to button
-        document.querySelector('.btn').addEventListener('click', function(e) {
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-
-            ripple.style.cssText = `
-                position: absolute;
-                border-radius: 50%;
-                background: rgba(255, 255, 255, 0.6);
-                transform: scale(0);
-                animation: ripple 0.6s linear;
-                width: ${size}px;
-                height: ${size}px;
-                left: ${x}px;
-                top: ${y}px;
-            `;
-
-            this.appendChild(ripple);
-
-            setTimeout(() => ripple.remove(), 600);
-        });
-
-        // Add ripple animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to {
-                    transform: scale(4);
-                    opacity: 0;
-                }
+        // ---------- Scroll to top if messages exist ----------
+        function scrollToTopIfMessages() {
+            if (document.querySelector('.alert-success-custom')) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
-        `;
-        document.head.appendChild(style);
-    </script>
+        }
+
+        // ---------- Focus animations ----------
+        function setupFocusAnimations() {
+            document.querySelectorAll('.form-control').forEach(function(input) {
+                input.addEventListener('focus', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    if (this.parentElement) {
+                        this.parentElement.style.transform = 'translateY(-5px)';
+                    }
+                });
+                input.addEventListener('blur', function() {
+                    this.style.transform = 'translateY(0)';
+                    if (this.parentElement) {
+                        this.parentElement.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+        }
+
+        // ---------- Animate booking summary on scroll ----------
+        function setupSummaryAnimation() {
+            if (!priceSummary || !('IntersectionObserver' in window)) return;
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeIn 0.8s ease-out';
+                    }
+                });
+            }, { threshold: 0.1 });
+            observer.observe(priceSummary);
+        }
+
+        // ---------- Ripple effect on submit button ----------
+        function setupRipple() {
+            if (!submitBtn) return;
+
+            // Inject ripple keyframes once
+            if (!document.getElementById('ripple-keyframes')) {
+                const style = document.createElement('style');
+                style.id = 'ripple-keyframes';
+                style.textContent = `
+                    @keyframes ripple {
+                        to { transform: scale(4); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            submitBtn.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                const ripple = document.createElement('span');
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.6);
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    pointer-events: none;
+                `;
+                this.appendChild(ripple);
+                setTimeout(function() { ripple.remove(); }, 600);
+            });
+        }
+
+        // ---------- Prevent double submission ----------
+        function setupFormSubmitGuard() {
+            if (!bookingForm || !submitBtn) return;
+            bookingForm.addEventListener('submit', function() {
+                // Basic HTML5 validity check before disabling
+                if (!bookingForm.checkValidity()) return;
+
+                submitBtn.disabled = true;
+                const originalHTML = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Sending...';
+
+                // Safety net: re-enable after 10s if navigation fails
+                setTimeout(function() {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalHTML;
+                }, 10000);
+            });
+        }
+
+        // ============================================================
+        // INITIALIZE EVERYTHING ON DOM READY
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            setupDateInputs();
+            setupInquiryTypeToggle();
+            setupMessageAutoHide();
+            scrollToTopIfMessages();
+            setupFocusAnimations();
+            setupSummaryAnimation();
+            setupRipple();
+            setupFormSubmitGuard();
+        });
+    })();
+</script>
 </body>
 {% endblock %}

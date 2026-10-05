@@ -606,7 +606,44 @@ class Booking(models.Model):
     guest_email = models.EmailField()
     guest_phone = models.CharField(max_length=20)
 
-    # Simplified fields - removed dates and guest count
+    # ============================================================
+    # NEW: Check-in and Check-out dates
+    # ============================================================
+    check_in = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Guest's check-in date"
+    )
+    check_out = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Guest's check-out date"
+    )
+
+    # NEW: Guest count (useful for bookings)
+    number_of_guests = models.PositiveIntegerField(
+        default=1,
+        null=True,
+        blank=True,
+        help_text="Number of guests"
+    )
+
+    # NEW: Store calculated total price at time of inquiry
+    total_price = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text="Total price for the stay"
+    )
+
+    # NEW: Number of nights (calculated)
+    number_of_nights = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        help_text="Number of nights for the stay"
+    )
+
     message = models.TextField(blank=True, help_text="Guest's message or inquiry")
     inquiry_type = models.CharField(max_length=20, choices=INQUIRY_TYPE_CHOICES, default='general')
 
@@ -642,9 +679,54 @@ class Booking(models.Model):
                 self.price_at_inquiry = self.listing.price_per_night
             elif self.listing.price:
                 self.price_at_inquiry = self.listing.price
+
+        # ============================================================
+        # NEW: Calculate number of nights and total price
+        # ============================================================
+        if self.check_in and self.check_out:
+            self.number_of_nights = (self.check_out - self.check_in).days
+
+            # Calculate total price based on listing pricing
+            if self.listing:
+                if self.listing.transaction_type == 'shortlet' and self.listing.price_per_night:
+                    self.total_price = self.number_of_nights * self.listing.price_per_night
+                elif self.listing.price_per_night:
+                    self.total_price = self.number_of_nights * self.listing.price_per_night
+                elif self.listing.price and self.number_of_nights:
+                    self.total_price = self.number_of_nights * self.listing.price
+
         super().save(*args, **kwargs)
 
     @property
     def inquiry_ref(self):
         """Generate inquiry reference number"""
         return f"INQ{self.id:06d}"
+
+    # ============================================================
+    # NEW: Helper properties for display
+    # ============================================================
+    @property
+    def formatted_check_in(self):
+        """Format check-in date for display"""
+        if self.check_in:
+            return self.check_in.strftime('%B %d, %Y')
+        return 'Not specified'
+
+    @property
+    def formatted_check_out(self):
+        """Format check-out date for display"""
+        if self.check_out:
+            return self.check_out.strftime('%B %d, %Y')
+        return 'Not specified'
+
+    @property
+    def formatted_total_price(self):
+        """Format total price for display"""
+        if self.total_price:
+            return f"KES {self.total_price:,.2f}"
+        return 'N/A'
+
+    @property
+    def has_dates(self):
+        """Check if booking has check-in and check-out dates"""
+        return bool(self.check_in and self.check_out)

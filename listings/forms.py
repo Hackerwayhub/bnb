@@ -323,9 +323,37 @@ class ListingSubmissionForm(forms.ModelForm):
 class BookingForm(forms.ModelForm):
     listing_id = forms.IntegerField(widget=forms.HiddenInput())
 
+    # Add date fields explicitly for better control
+    check_in = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'type': 'date',
+            'id': 'check_in',
+            'min': date.today().isoformat(),  # Prevent past dates
+        }),
+        label='Check-in Date',
+        required=True,
+        help_text='Select your arrival date'
+    )
+
+    check_out = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'type': 'date',
+            'id': 'check_out',
+        }),
+        label='Check-out Date',
+        required=True,
+        help_text='Select your departure date'
+    )
+
     class Meta:
         model = Booking
-        fields = ['guest_name', 'guest_email', 'guest_phone', 'message', 'inquiry_type']
+        fields = [
+            'guest_name', 'guest_email', 'guest_phone',
+            'check_in', 'check_out',  # ADD THESE
+            'message', 'inquiry_type'
+        ]
         widgets = {
             'guest_name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -374,16 +402,70 @@ class BookingForm(forms.ModelForm):
         if self.listing:
             self.fields['listing_id'].initial = self.listing.id
 
+            # If listing has minimum_stay, use it for validation
+            if hasattr(self.listing, 'minimum_stay') and self.listing.minimum_stay:
+                self.fields['check_out'].widget.attrs['data-min-stay'] = self.listing.minimum_stay
+
         # Make fields required
         self.fields['guest_name'].required = True
         self.fields['guest_email'].required = True
         self.fields['guest_phone'].required = True
+        self.fields['check_in'].required = True
+        self.fields['check_out'].required = True
 
         # Add CSS classes to all fields
         for field_name, field in self.fields.items():
             if field_name != 'listing_id':
                 if 'class' not in field.widget.attrs:
                     field.widget.attrs['class'] = 'form-control'
+
+    def clean_check_in(self):
+        check_in = self.cleaned_data.get('check_in')
+        if check_in:
+            if check_in < date.today():
+                raise forms.ValidationError("Check-in date cannot be in the past.")
+        return check_in
+
+    def clean_check_out(self):
+        check_out = self.cleaned_data.get('check_out')
+        if check_out:
+            if check_out < date.today():
+                raise forms.ValidationError("Check-out date cannot be in the past.")
+        return check_out
+
+    def clean(self):
+        cleaned_data = super().clean()
+        check_in = cleaned_data.get('check_in')
+        check_out = cleaned_data.get('check_out')
+
+        if check_in and check_out:
+            if check_out <= check_in:
+                raise forms.ValidationError("Check-out date must be after check-in date.")
+
+            # Check minimum stay if listing has it
+            if self.listing and hasattr(self.listing, 'minimum_stay') and self.listing.minimum_stay:
+                nights = (check_out - check_in).days
+                if nights < self.listing.minimum_stay:
+                    raise forms.ValidationError(
+                        f"Minimum stay is {self.listing.minimum_stay} night(s). "
+                        f"You selected {nights} night(s)."
+                    )
+
+            # Check maximum stay if listing has it
+            if self.listing and hasattr(self.listing, 'maximum_stay') and self.listing.maximum_stay:
+                nights = (check_out - check_in).days
+                if nights > self.listing.maximum_stay:
+                    raise forms.ValidationError(
+                        f"Maximum stay is {self.listing.maximum_stay} night(s). "
+                        f"You selected {nights} night(s)."
+                    )
+
+        # Ensure we have at least a message or inquiry_type
+        message = cleaned_data.get('message')
+        inquiry_type = cleaned_data.get('inquiry_type')
+        # Both can be empty - that's fine
+
+        return cleaned_data
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -396,50 +478,14 @@ class BookingForm(forms.ModelForm):
         if self.user and self.user.is_authenticated:
             instance.user = self.user
 
+        # Calculate total price if listing has price_per_night
+        if self.listing and hasattr(self.listing, 'price_per_night') and self.listing.price_per_night:
+            check_in = self.cleaned_data.get('check_in')
+            check_out = self.cleaned_data.get('check_out')
+            if check_in and check_out:
+                nights = (check_out - check_in).days
+                instance.total_price = nights * self.listing.price_per_night
+
         if commit:
             instance.save()
         return instance
-
-    def clean_guest_email(self):
-        email = self.cleaned_data.get('guest_email')
-        if email:
-            # Basic email validation
-            if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', email):
-                raise forms.ValidationError("Please enter a valid email address")
-        return email
-
-    def clean_guest_phone(self):
-        phone = self.cleaned_data.get('guest_phone')
-        if phone:
-            # Remove any non-digit characters except +
-            cleaned = re.sub(r'[^\d+]', '', phone)
-
-            # Kenyan phone validation
-            if cleaned.startswith('+254'):
-                if len(cleaned) != 13:  # +2547XXXXXXXX = 13 characters
-                    raise forms.ValidationError("Please enter a valid Kenyan phone number (+2547XXXXXXXX)")
-            elif cleaned.startswith('0'):
-                if len(cleaned) != 10:  # 07XXXXXXXX = 10 digits
-                    raise forms.ValidationError("Please enter a valid Kenyan phone number (07XXXXXXXX)")
-                # Convert to international format
-                cleaned = '+254' + cleaned[1:]
-            elif len(cleaned) == 9 and cleaned.isdigit():  # 7XXXXXXXX = 9 digits
-                cleaned = '+254' + cleaned
-            else:
-                raise forms.ValidationError("Please enter a valid phone number (e.g., +2547XXXXXXXX or 07XXXXXXXX)")
-
-            return cleaned
-        return phone
-
-    def clean(self):
-        cleaned_data = super().clean()
-
-        # Ensure we have at least a message or inquiry_type
-        message = cleaned_data.get('message')
-        inquiry_type = cleaned_data.get('inquiry_type')
-
-        if not message and not inquiry_type:
-            # If both are empty, that's fine - just a basic inquiry
-            pass
-
-        return cleaned_data

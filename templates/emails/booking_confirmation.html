@@ -133,6 +133,22 @@
                 </div>
             </div>
 
+            <!-- Add this after the Property Details section and before Price Summary -->
+<div class="section">
+    <h3>📅 Stay Details</h3>
+    <div class="detail-row">
+        <div class="detail-label">Check-in Date:</div>
+        <div class="detail-value">{{ booking.check_in|date:"l, F d, Y" }}</div>
+    </div>
+    <div class="detail-row">
+        <div class="detail-label">Check-out Date:</div>
+        <div class="detail-value">{{ booking.check_out|date:"l, F d, Y" }}</div>
+    </div>
+    <div class="detail-row">
+        <div class="detail-label">Number of Nights:</div>
+        <div class="detail-value">{{ number_of_nights }} night{{ number_of_nights|pluralize }}</div>
+    </div>
+</div>
 
             <div class="section">
                 <h3>💰 Price Summary</h3>

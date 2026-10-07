@@ -594,11 +594,10 @@ class Booking(models.Model):
     ]
 
     INQUIRY_TYPE_CHOICES = [
-        ('general', 'General Inquiry'),
+
         ('booking', 'Booking Request'),
         ('viewing', 'Schedule Viewing'),
-        ('price', 'Price Negotiation'),
-        ('other', 'Other'),
+        
     ]
 
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='bookings')

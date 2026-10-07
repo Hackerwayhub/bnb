@@ -33,31 +33,22 @@
             align-items: center;
             min-width: 110px;
         ">
-            <a class="navbar-brand" href="{% url 'home' %}" style="
-                text-decoration: none;
-                display: flex;
-                align-items: baseline;
-                gap: 3px;
-            ">
-                <span data-nosnippet style="
-                    color: #D32F2F;
-                    font-weight: 400;
-                    letter-spacing: 0.04em;
-                    font-family: 'Poppins', sans-serif;
-                    font-size: 1.05em;
-                    line-height: 1;
-                ">𝙱ɳ𝙱</span>
-                <span data-nosnippet style="
-                    color: #D32F2F;
-                    font-weight: 500;
-                    letter-spacing: 0.06em;
-                    font-family: 'Poppins', sans-serif;
-                    font-size: 0.38em;
-                    line-height: 1;
-                    opacity: 0.85;
-                    vertical-align: super;
-                ">.co.ke</span>
-            </a>
+           <a class="navbar-brand" href="{% url 'home' %}" style="
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+">
+    <img src="{% static '/static/images/android-chrome-192x192.png' %}"
+         alt="bnb.co.ke"
+         data-nosnippet
+         style="
+             height: 32px;
+             width: auto;
+             display: block;
+             object-fit: contain;
+         ">
+</a>
         </div>
 
         <!-- Unified Filter Pill -->

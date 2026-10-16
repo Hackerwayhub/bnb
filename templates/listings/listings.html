@@ -176,8 +176,8 @@
                     "
                     onmouseover="this.style.background='#f7f7f7'"
                     onmouseout="this.style.background='transparent'">
-                       <i class="fa fa-building" style="color: #D32F2F; font-size: 12px; opacity: 0.85;"></i>
-                       <span class="selected-property-text" id="propertyPlaceholder" style="..."> </span>
+                        <i class="fa fa-city" style="color: #D32F2F; font-size: 12px; opacity: 0.85;"></i>
+                        <span class="selected-property-text" id="propertyPlaceholder" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.01em;"> </span>
                     </div>
 
                     <div class="dropdown-menu-property" style="
@@ -259,7 +259,7 @@
                                     {% elif type_code == 'castle' %}
                                         <i class="fa fa-fort-awesome" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
                                     {% else %}
-                                        <i class="fa fa-fa fa-building" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                        <i class="fa fa-fa-city" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
                                     {% endif %}
                                     <span>{{ type_name }}</span>
                                 </div>
@@ -407,16 +407,15 @@
                 </div>
                 <div class="hero-overlay"></div>
                 <div class="hero-content">
-                  <div class="hero-category">
 
-                        <div class="hero-delivery">
-                             {{ listing.get_location_display }} • {{ listing.specific_location }}
 
+                  <div class="hero-delivery">
+                    <i class="fa fa-gem"></i> BnB, staycations & holiday homes !
                   </div>
-                       <i class="fa fa-gem"></i> BnB, staycations & holiday homes
-                     </div>
 
-
+                     <div class="hero-category">
+                      {{ listing.get_location_display }} • {{ listing.specific_location }}
+                        </div>
                   <p class="hero-price">
                     {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
                       Ksh {{ listing.price_per_night|floatformat:0 }} <small>/= night</small>
@@ -577,7 +576,9 @@
 
                     <p class="location" style="font-size: 0.75rem; color: #666; margin-bottom: 10px;">
                       <i class="fa fa-map-marker" style="color: #007bff;" aria-hidden="true"></i>
+
                       {{ listing.get_location_display }} • {{ listing.specific_location }}
+
                     </p>
 
                        <p class="price-tag" style="font-size: 0.75rem; font-weight: 700; color: #28a745; margin: 10px 0;">

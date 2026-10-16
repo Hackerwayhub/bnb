@@ -176,8 +176,8 @@
                     "
                     onmouseover="this.style.background='#f7f7f7'"
                     onmouseout="this.style.background='transparent'">
-                        <i class="fa fa-paint-brush" style="color: #D32F2F; font-size: 12px; opacity: 0.85;"></i>
-                        <span class="selected-property-text" id="propertyPlaceholder" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.01em;"> </span>
+                       <i class="fa fa-building" style="color: #D32F2F; font-size: 12px; opacity: 0.85;"></i>
+                       <span class="selected-property-text" id="propertyPlaceholder" style="..."> </span>
                     </div>
 
                     <div class="dropdown-menu-property" style="
@@ -259,7 +259,7 @@
                                     {% elif type_code == 'castle' %}
                                         <i class="fa fa-fort-awesome" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
                                     {% else %}
-                                        <i class="fa fa-paint-brush" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
+                                        <i class="fa fa-fa fa-building" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
                                     {% endif %}
                                     <span>{{ type_name }}</span>
                                 </div>
@@ -410,10 +410,11 @@
                   <div class="hero-category">
 
                         <div class="hero-delivery">
-                    <i class="fa fa-gem"></i> BnB, staycations & holiday homes in
-                  </div>
+                             {{ listing.get_location_display }} • {{ listing.specific_location }}
 
-                      {{ listing.get_location_display }} • {{ listing.specific_location }} !</div>
+                  </div>
+                       <i class="fa fa-gem"></i> BnB, staycations & holiday homes
+                     </div>
 
 
                   <p class="hero-price">

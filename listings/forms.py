@@ -373,7 +373,7 @@ class BookingForm(forms.ModelForm):
             'message': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 4,
-                'placeholder': 'Message (Optional) Tell us about your inquiry, questions, or special requests',
+                'placeholder': 'Tell us anything more you would like to know about your stay booking, questions, or special requests',
                 'id': 'message'
             }),
             'inquiry_type': forms.Select(attrs={

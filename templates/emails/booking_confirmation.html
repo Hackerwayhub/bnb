@@ -108,7 +108,7 @@
     <div class="email-container">
         <div class="header">
             <h1>🎉 Booking Confirmation</h1>
-            <p>Your booking request has been received!</p>
+
         </div>
 
         <div class="content">
@@ -180,6 +180,13 @@
                     <div class="detail-value">{{ booking.guest_phone }}</div>
                 </div>
             </div>
+
+            {% if booking.message %}
+            <div class="section">
+                <h3>💬 Guest Message</h3>
+                <p style="background:#f8f9fa; padding:12px; border-radius:5px;">{{ booking.message }}</p>
+            </div>
+            {% endif %}
 
             <div class="section">
                 <h3>❓ Need Help?</h3>

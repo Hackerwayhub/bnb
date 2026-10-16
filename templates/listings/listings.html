@@ -408,6 +408,7 @@
                 <div class="hero-overlay"></div>
                 <div class="hero-content">
                   <div class="hero-category">{{ listing.get_property_type_display }}</div>
+
                   <div class="hero-delivery">
                     <i class="fa fa-gem"></i> BnB, staycations & holiday homes !
                   </div>
@@ -576,11 +577,11 @@
 
                        <p class="price-tag" style="font-size: 0.75rem; font-weight: 700; color: #28a745; margin: 10px 0;">
                       {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
-                        KSh {{ listing.price_per_night|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ night</small>
+                        Ksh {{ listing.price_per_night|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/= night</small>
                       {% elif listing.transaction_type == 'rent' and listing.price_per_month %}
-                        KSh {{ listing.price_per_month|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/ month</small>
+                        Ksh {{ listing.price_per_month|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">/= month</small>
                       {% elif listing.transaction_type == 'sale' and listing.price %}
-                        KSh {{ listing.price|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">total price</small>
+                        Ksh {{ listing.price|floatformat:0 }} <small style="font-size: 0.9rem; color: #666;">total price</small>
                       {% else %}
                         Price on request
                       {% endif %}

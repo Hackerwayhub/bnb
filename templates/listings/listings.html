@@ -407,7 +407,8 @@
                 </div>
                 <div class="hero-overlay"></div>
                 <div class="hero-content">
-                  <div class="hero-category">{{ listing.get_property_type_display }}</div>
+                  <div class="hero-category">
+                      {{ listing.get_location_display }} • {{ listing.specific_location }}</div>
 
                   <div class="hero-delivery">
                     <i class="fa fa-gem"></i> BnB, staycations & holiday homes !

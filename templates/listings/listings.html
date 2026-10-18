@@ -1,5 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
+
+{% block extra_head %}
+  {% if listings %}
+    {% with listings.0.all_images as images %}
+      {% if images %}
+        <link rel="preload"
+              as="image"
+              href="{{ images.0.url }}"
+              fetchpriority="high">
+      {% endif %}
+    {% endwith %}
+  {% endif %}
+{% endblock %}
+
+
 {% block content %}
 
 <section class="mobile-spacing" style="
@@ -721,9 +736,6 @@
   </div>
 </section>
 
-<!-- ============================================
-     STYLES
-     ============================================ -->
 <style>
 /* ============================================
    HERO CAROUSEL SKELETON
@@ -1135,9 +1147,6 @@
 }
 </style>
 
-<!-- ============================================
-     SCRIPTS
-     ============================================ -->
 <script>
 /* ---------- HERO CAROUSEL SKELETON ---------- */
 (function () {
@@ -2679,9 +2688,5 @@ document.addEventListener('DOMContentLoaded', function() {
 {% endblock %}
 
 {% block scripts %}
-  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
-  <script src="{% static 'js/bootstrap.js' %}"></script>
-  <script src="{% static 'js/ekko-lightbox.min.js' %}"></script>
-  <script src="{% static 'js/custom.js' %}"></script>
-  <script src="{% static 'js/sw.js' %}"></script>
+
 {% endblock %}

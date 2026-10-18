@@ -5,6 +5,12 @@
   {% load static %}
   <!-- Basic Meta Tags -->
   <meta charset="utf-8" />
+
+
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta http-equiv="content-language" content="en-ke">
@@ -42,6 +48,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
   <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
 
+
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
 
@@ -66,13 +73,6 @@
 
 
 
-    {% if listings %}
-  {% with listings.0.all_images as images %}
-    {% if images %}
-      <link rel="preload" as="image" href="{{ images.0.url }}" fetchpriority="high">
-    {% endif %}
-  {% endwith %}
-{% endif %}
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -984,18 +984,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-  <!-- Bootstrap JS for Dropdowns -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script defer src="{% static 'js/bootstrap.js' %}"></script>
+<script defer src="{% static 'js/ekko-lightbox.min.js' %}"></script>
+<script defer src="{% static 'js/custom.js' %}"></script>
 
-  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  {% block scripts %}
 
-  <script src="{% static 'js/ekko-lightbox.min.js' %}"></script>
-
-  <script src="{% static 'js/bootstrap.js' %}"></script>
-
-   <script src="{% static 'js/sw.js' %}"></script>
-
-  <!-- Optional JavaScript -->
-  {% block scripts %}{% endblock %}
+{% endblock %}
 </body>
 </html>

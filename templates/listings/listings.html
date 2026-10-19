@@ -3,22 +3,104 @@
 
 {% block extra_head %}
   {% if listings %}
-    {% with listings.0.all_images as images %}
-      {% if images %}
-        <link rel="preload"
-              as="image"
-              href="{{ images.0.url }}"
-              fetchpriority="high">
-      {% endif %}
-    {% endwith %}
+    {% for listing in listings|slice:":3" %}
+      {% with listing.all_images as images %}
+        {% if images %}
+          <link rel="preload"
+                as="image"
+                href="{{ images.0.url }}"
+                fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}">
+        {% endif %}
+      {% endwith %}
+    {% endfor %}
   {% endif %}
-
 {% endblock %}
 
 
 
 {% block content %}
 
+<style>
+/* ============================================
+   FILTER & SEARCH SKELETON
+   ============================================ */
+
+/* Sticky wrapper — replaces per-section sticky */
+.filter-shell {
+  position: sticky;
+  top: 12px;
+  z-index: 50;
+  margin: 9px;
+  border-radius: 18px;
+}
+
+/* Inner sections get no margin (shell handles it) */
+.filter-shell .mobile-spacing {
+  margin: 0 !important;
+  position: static !important;
+}
+
+/* Skeleton */
+.filter-skeleton {
+  position: relative;
+  overflow: hidden;
+  transition: opacity 0.35s ease;
+}
+
+.filter-skeleton.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.filter-skeleton .shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: #e6e6e6;
+}
+
+.filter-skeleton .shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.65) 50%,
+    transparent 100%
+  );
+  animation: filterShimmer 1.4s infinite;
+}
+
+@keyframes filterShimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* Real filter reveal */
+.filter-real {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.filter-real.ready {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Mobile tweaks matching the real filter */
+@media (max-width: 640px) {
+  .filter-skel-pill { max-width: 100% !important; }
+  .filter-skel-btn { min-width: 92px !important; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .filter-skeleton .shimmer::after { animation: none; }
+  .filter-skeleton { transition: none; }
+  .filter-real { transition: none; }
+}
+</style>
 <!-- ============================================
      FILTER & SEARCH — SKELETON + REAL UI
      ============================================ -->
@@ -445,87 +527,6 @@
      END FILTER & SEARCH
      ============================================ -->
 
-<style>
-/* ============================================
-   FILTER & SEARCH SKELETON
-   ============================================ */
-
-/* Sticky wrapper — replaces per-section sticky */
-.filter-shell {
-  position: sticky;
-  top: 12px;
-  z-index: 50;
-  margin: 9px;
-  border-radius: 18px;
-}
-
-/* Inner sections get no margin (shell handles it) */
-.filter-shell .mobile-spacing {
-  margin: 0 !important;
-  position: static !important;
-}
-
-/* Skeleton */
-.filter-skeleton {
-  position: relative;
-  overflow: hidden;
-  transition: opacity 0.35s ease;
-}
-
-.filter-skeleton.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.filter-skeleton .shimmer {
-  position: relative;
-  overflow: hidden;
-  background-color: #e6e6e6;
-}
-
-.filter-skeleton .shimmer::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.65) 50%,
-    transparent 100%
-  );
-  animation: filterShimmer 1.4s infinite;
-}
-
-@keyframes filterShimmer {
-  100% { transform: translateX(100%); }
-}
-
-/* Real filter reveal */
-.filter-real {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.35s ease, visibility 0.35s ease;
-}
-
-.filter-real.ready {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Mobile tweaks matching the real filter */
-@media (max-width: 640px) {
-  .filter-skel-pill { max-width: 100% !important; }
-  .filter-skel-btn { min-width: 92px !important; }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .filter-skeleton .shimmer::after { animation: none; }
-  .filter-skeleton { transition: none; }
-  .filter-real { transition: none; }
-}
-</style>
 
 <style>
 @keyframes sparkle {
@@ -552,6 +553,8 @@
     }
 }
 </style>
+
+
 <!-- listings gallery section -->
 <section>
     <div style="border-radius:21px; overflow: hidden; margin-top: 5px;">
@@ -561,93 +564,131 @@
       <!-- ============================================
            HERO CAROUSEL WITH SKELETON UI
            ============================================ -->
-      {% if listings|length > 0 %}
-      <section class="hero-carousel-section">
-        <div class="hero-carousel-container">
-          <div class="hero-carousel" id="heroCarousel">
+     <!-- ============================================
+     HERO CAROUSEL WITH SKELETON UI
+     ============================================ -->
+{% if listings|length > 0 %}
+<section class="hero-carousel-section">
+  <div class="hero-carousel-container">
+    <div class="hero-carousel" id="heroCarousel">
 
-            <!-- SKELETON -->
-            <div class="hero-skeleton" id="heroSkeleton" aria-hidden="true">
-              <div class="hero-skeleton-item">
-                <div class="hero-skeleton-img shimmer"></div>
-                <div class="hero-skeleton-overlay"></div>
-                <div class="hero-skeleton-content">
-                  <div class="hero-skeleton-line shimmer" style="width: 28%;"></div>
-                  <div class="hero-skeleton-line shimmer" style="width: 55%; height: 22px;"></div>
-                  <div class="hero-skeleton-line shimmer" style="width: 38%; height: 26px;"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- REAL CAROUSEL -->
-            <div class="hero-carousel-inner" id="heroCarouselInner">
-              {% for listing in listings|slice:":3" %}
-              <div class="hero-carousel-item {% if forloop.first %}active{% endif %}" data-slide-index="{{ forloop.counter0 }}">
-                <div class="hero-img-wrapper">
-                  {% if listing.main_image %}
-                    {% with listing.all_images as images %}
-                      <img
-                        class="hero-img"
-                        src="{{ images.0.url }}"
-                        alt="{{ listing.title }}"
-                        width="1200"
-                        height="675"
-                        decoding="async"
-                        {% if forloop.first %}
-                          loading="eager"
-                          fetchpriority="high"
-                        {% else %}
-                          loading="lazy"
-                        {% endif %}
-                        onload="this.classList.add('loaded')"
-                      >
-                    {% endwith %}
-                  {% else %}
-                    <div class="hero-bg-gradient"></div>
-                  {% endif %}
-                </div>
-                <div class="hero-overlay"></div>
-                <div class="hero-content">
-
-
-                  <div class="hero-delivery">
-                    <i class="fa fa-gem"></i> BnB, staycations & holiday homes !
-                  </div>
-
-                     <div class="hero-category">
-                      {{ listing.get_location_display }} • {{ listing.specific_location }}
-                        </div>
-                  <p class="hero-price">
-                    {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
-                      Ksh {{ listing.price_per_night|floatformat:0 }} <small>/= night</small>
-                    {% elif listing.transaction_type == 'rent' and listing.price_per_month %}
-                      Ksh {{ listing.price_per_month|floatformat:0 }} <small>/= month</small>
-                    {% elif listing.transaction_type == 'sale' and listing.price %}
-                      Ksh {{ listing.price|floatformat:0 }} <small>total price</small>
-                    {% else %}
-                      Price on request
-                    {% endif %}
-                  </p>
-                </div>
-              </div>
-              {% endfor %}
-            </div>
-
-            <!-- INDICATORS -->
-            <div class="hero-carousel-indicators">
-              {% for listing in listings|slice:":3" %}
-              <span class="hero-indicator {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}" aria-label="Go to slide {{ forloop.counter }}"></span>
-              {% endfor %}
-            </div>
-
+      <!-- GLOBAL SKELETON (only covers first paint) -->
+      <div class="hero-skeleton" id="heroSkeleton" aria-hidden="true">
+        <div class="hero-skeleton-item">
+          <div class="hero-skeleton-img shimmer"></div>
+          <div class="hero-skeleton-overlay"></div>
+          <div class="hero-skeleton-content">
+            <div class="hero-skeleton-line shimmer" style="width: 28%;"></div>
+            <div class="hero-skeleton-line shimmer" style="width: 55%; height: 22px;"></div>
+            <div class="hero-skeleton-line shimmer" style="width: 38%; height: 26px;"></div>
           </div>
         </div>
-      </section>
-      {% endif %}
+      </div>
 
-        <style>
-  .hero-carousel-item, .hero-carousel-item .hero-img-wrapper { overflow: hidden !important; }
-  .hero-img { display: block !important; }
+      <!-- REAL CAROUSEL -->
+      <div class="hero-carousel-inner" id="heroCarouselInner">
+        {% for listing in listings|slice:":3" %}
+        <div class="hero-carousel-item {% if forloop.first %}active{% endif %}" data-slide-index="{{ forloop.counter0 }}">
+          <div class="hero-img-wrapper">
+            {% if listing.main_image %}
+              {% with listing.all_images as images %}
+
+                <!-- Per-slide placeholder -->
+                <div class="hero-img-placeholder shimmer" aria-hidden="true"></div>
+
+                <img
+                  class="hero-img"
+                  src="{{ images.0.url }}"
+                  alt="{{ listing.title }}"
+                  width="1200"
+                  height="675"
+                  decoding="async"
+                  {% if forloop.first %}
+                    loading="eager"
+                    fetchpriority="high"
+                  {% else %}
+                    loading="lazy"
+                  {% endif %}
+                  onload="this.classList.add('loaded'); var p = this.previousElementSibling; if (p) p.classList.add('hidden');"
+                  onerror="var p = this.previousElementSibling; if (p) p.classList.add('hidden');"
+                >
+
+              {% endwith %}
+            {% else %}
+              <div class="hero-bg-gradient"></div>
+            {% endif %}
+          </div>
+          <div class="hero-overlay"></div>
+          <div class="hero-content">
+            <div class="hero-delivery">
+              <i class="fa fa-gem"></i> BnB, staycations & holiday homes !
+            </div>
+
+            <div class="hero-category">
+              {{ listing.get_location_display }} • {{ listing.specific_location }}
+            </div>
+
+            <p class="hero-price">
+              {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
+                Ksh {{ listing.price_per_night|floatformat:0 }} <small>/= night</small>
+              {% elif listing.transaction_type == 'rent' and listing.price_per_month %}
+                Ksh {{ listing.price_per_month|floatformat:0 }} <small>/= month</small>
+              {% elif listing.transaction_type == 'sale' and listing.price %}
+                Ksh {{ listing.price|floatformat:0 }} <small>total price</small>
+              {% else %}
+                Price on request
+              {% endif %}
+            </p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- INDICATORS -->
+      <div class="hero-carousel-indicators">
+        {% for listing in listings|slice:":3" %}
+        <span class="hero-indicator {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}" aria-label="Go to slide {{ forloop.counter }}"></span>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endif %}
+
+       <style>
+  /* Hero slide structure */
+  .hero-carousel-item,
+  .hero-carousel-item .hero-img-wrapper { overflow: hidden !important; }
+
+  .hero-img-wrapper { position: relative; }
+
+  /* Per-slide shimmer placeholder */
+  .hero-img-placeholder {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: #d8d8d8;
+    transition: opacity 0.35s ease;
+  }
+
+  .hero-img-placeholder.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Hero image sits above its placeholder */
+  .hero-img {
+    position: relative;
+    z-index: 2;
+    display: block !important;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+
+  .hero-img.loaded { opacity: 1; }
+
+  /* Ken-burns zoom on active slide */
   .hero-carousel-item.active .hero-img { transform: none !important; }
   .hero-carousel-item.active .hero-img-wrapper { transform: scale(1.05); transition: transform 6s ease; }
 </style>
@@ -1334,7 +1375,6 @@
   }
 }
 </style>
-
 <script>
 /* ---------- HERO CAROUSEL SKELETON ---------- */
 (function () {
@@ -1342,7 +1382,8 @@
   const inner = document.getElementById('heroCarouselInner');
   if (!skeleton || !inner) return;
 
-  const HERO_MIN_MS = 600;
+  const HERO_MIN_MS = 300;
+  const HERO_MAX_WAIT_MS = 1500;
   const heroStart = Date.now();
   const firstImg = inner.querySelector('.hero-img');
   let revealed = false;
@@ -1372,7 +1413,8 @@
   firstImg.addEventListener('load', reveal, { once: true });
   firstImg.addEventListener('error', reveal, { once: true });
 
-  setTimeout(reveal, 4000);
+  // Shorter safety net — per-slide placeholders handle slides 2 & 3
+  setTimeout(reveal, HERO_MAX_WAIT_MS);
 })();
 
 /* ---------- LISTINGS GRID SKELETON ---------- */
@@ -1512,7 +1554,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 })();
 </script>
-
 
 <!-- Pagination Section -->
 {% if page_obj.has_other_pages %}

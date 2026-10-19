@@ -1375,185 +1375,6 @@
   }
 }
 </style>
-<script>
-/* ---------- HERO CAROUSEL SKELETON ---------- */
-(function () {
-  const skeleton = document.getElementById('heroSkeleton');
-  const inner = document.getElementById('heroCarouselInner');
-  if (!skeleton || !inner) return;
-
-  const HERO_MIN_MS = 300;
-  const HERO_MAX_WAIT_MS = 1500;
-  const heroStart = Date.now();
-  const firstImg = inner.querySelector('.hero-img');
-  let revealed = false;
-
-  function reveal() {
-    if (revealed) return;
-    revealed = true;
-
-    const wait = Math.max(0, HERO_MIN_MS - (Date.now() - heroStart));
-
-    setTimeout(function () {
-      inner.classList.add('ready');
-      skeleton.classList.add('hidden');
-
-      setTimeout(function () {
-        if (skeleton && skeleton.parentNode) {
-          skeleton.parentNode.removeChild(skeleton);
-        }
-      }, 400);
-    }, wait);
-  }
-
-  if (!firstImg) { reveal(); return; }
-
-  if (firstImg.complete && firstImg.naturalWidth > 0) { reveal(); return; }
-
-  firstImg.addEventListener('load', reveal, { once: true });
-  firstImg.addEventListener('error', reveal, { once: true });
-
-  // Shorter safety net — per-slide placeholders handle slides 2 & 3
-  setTimeout(reveal, HERO_MAX_WAIT_MS);
-})();
-
-/* ---------- LISTINGS GRID SKELETON ---------- */
-(function () {
-  const skeleton = document.getElementById('listingsSkeleton');
-  const gallery = document.getElementById('gallery-container');
-  if (!skeleton || !gallery) return;
-
-  const MIN_DISPLAY_MS = 800;
-  const MAX_WAIT_MS = 8000;
-
-  const startTime = Date.now();
-  let done = false;
-
-  function finish() {
-    if (done) return;
-    done = true;
-
-    const elapsed = Date.now() - startTime;
-    const remaining = Math.max(0, MIN_DISPLAY_MS - elapsed);
-
-    setTimeout(function () {
-      skeleton.classList.add('hidden');
-      gallery.classList.remove('listings-grid-loading');
-      gallery.classList.add('listings-grid-loaded');
-
-      setTimeout(function () {
-        if (skeleton && skeleton.parentNode) {
-          skeleton.parentNode.removeChild(skeleton);
-        }
-      }, 350);
-    }, remaining);
-  }
-
-  const cards = gallery.querySelectorAll('.listing-card');
-  if (cards.length === 0) { finish(); return; }
-
-  const images = Array.from(gallery.querySelectorAll('.listing-img'));
-  const total = images.length;
-
-  if (total === 0) { finish(); return; }
-
-  let loaded = 0;
-  images.forEach(function (img) {
-    function tick() {
-      loaded++;
-      if (loaded === total) finish();
-    }
-
-    if (img.complete && img.naturalWidth > 0) {
-      tick();
-    } else {
-      img.addEventListener('load', tick, { once: true });
-      img.addEventListener('error', tick, { once: true });
-    }
-  });
-
-  setTimeout(finish, MAX_WAIT_MS);
-})();
-
-/* ---------- SHARE BUTTONS ---------- */
-document.addEventListener('DOMContentLoaded', function () {
-  const shareButtons = document.querySelectorAll('.share-btn');
-
-  shareButtons.forEach(button => {
-    button.addEventListener('click', async function (e) {
-      e.preventDefault();
-      const url = this.dataset.url;
-      const title = this.dataset.title;
-      const fullUrl = window.location.origin + url;
-
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: title,
-            text: `Check out this amazing property: ${title}`,
-            url: fullUrl
-          });
-        } catch (err) {
-          console.log('Share cancelled or failed');
-        }
-      } else {
-        try {
-          await navigator.clipboard.writeText(fullUrl);
-          alert('Link copied to clipboard!');
-        } catch (err) {
-          alert('Please copy the link manually');
-        }
-      }
-    });
-  });
-});
-
-/* ---------- NO-LISTINGS BOT + TYPEWRITER ---------- */
-(function () {
-  const el = document.getElementById('dynamic-message');
-  if (!el) return;
-
-  const message = " Hi buddy! chat our Assistant for fast, secure and seamless booking!";
-  let i = 0;
-  let isDeleting = false;
-
-  function animate() {
-    if (!isDeleting) {
-      if (i < message.length) {
-        el.innerText = message.slice(0, i + 1);
-        i++;
-        setTimeout(animate, 70);
-      } else {
-        isDeleting = true;
-        setTimeout(animate, 1800);
-      }
-    } else {
-      if (i > 0) {
-        el.innerText = message.slice(0, i - 1);
-        i--;
-        setTimeout(animate, 45);
-      } else {
-        isDeleting = false;
-        setTimeout(animate, 700);
-      }
-    }
-  }
-  animate();
-
-  const bot = document.querySelector('.dancing-bot');
-  if (bot) {
-    bot.addEventListener('click', () => {
-      bot.style.transform = 'scale(0.95)';
-      setTimeout(() => bot.style.transform = '', 150);
-      const eyes = document.querySelectorAll('.eye');
-      eyes.forEach(e => {
-        e.style.backgroundColor = '#ffcf40';
-        setTimeout(() => e.style.backgroundColor = '#0a1a2f', 200);
-      });
-    });
-  }
-})();
-</script>
 
 <!-- Pagination Section -->
 {% if page_obj.has_other_pages %}
@@ -2481,264 +2302,184 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 
-<!-- Fixed JavaScript for Desktop Sliding -->
 <script>
-  let currentSlide = 0;
-  let slideInterval;
-  const slides = document.querySelectorAll('.listing-slide');
-  const totalSlides = slides.length;
-  const isMobile = window.innerWidth < 768;
+/* ---------- HERO CAROUSEL SKELETON ---------- */
+(function () {
+  const skeleton = document.getElementById('heroSkeleton');
+  const inner = document.getElementById('heroCarouselInner');
+  if (!skeleton || !inner) return;
 
-  // Only initialize slider functionality if we have slides
-  if (totalSlides > 0) {
-    function updateSlider() {
-      const slidesContainer = document.getElementById('slidesContainer');
-      const dots = document.querySelectorAll('.slider-dot');
+  const HERO_MIN_MS = 300;
+  const HERO_MAX_WAIT_MS = 3000;
+  const heroStart = Date.now();
+  const firstImg = inner.querySelector('.hero-img');
+  let revealed = false;
 
-      // If only one slide, just make sure it's properly displayed
-      if (totalSlides === 1) {
-        if (slides[0]) {
-          slides[0].classList.add('active-slide');
-          slides[0].style.opacity = '1';
-          slides[0].style.transform = 'scale(1)';
+  function reveal() {
+    if (revealed) return;
+    revealed = true;
+
+    const wait = Math.max(0, HERO_MIN_MS - (Date.now() - heroStart));
+
+    setTimeout(function () {
+      inner.classList.add('ready');
+      skeleton.classList.add('hidden');
+
+      setTimeout(function () {
+        if (skeleton && skeleton.parentNode) {
+          skeleton.parentNode.removeChild(skeleton);
         }
-        if (slidesContainer) {
-          slidesContainer.style.transform = 'translateX(0)';
-        }
-        return;
-      }
-
-      if (isMobile) {
-        // Mobile: Traditional sliding
-        slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
-      } else {
-        // Desktop: Use active class for animation
-        slides.forEach((slide, index) => {
-          slide.classList.toggle('active-slide', index === currentSlide);
-
-          // Add/remove opacity and scale for desktop
-          if (!isMobile) {
-            if (index === currentSlide) {
-              slide.style.opacity = '1';
-              slide.style.transform = 'scale(1)';
-            } else {
-              slide.style.opacity = '0.7';
-              slide.style.transform = 'scale(0.95)';
-            }
-          }
-        });
-
-        // Center the active slide on desktop
-        if (!isMobile && slidesContainer) {
-          const activeSlide = slides[currentSlide];
-          if (activeSlide) {
-            const slideWidth = activeSlide.offsetWidth;
-            const containerWidth = slidesContainer.parentElement.offsetWidth;
-
-            if (totalSlides <= 3) {
-              // For 3 or fewer slides, don't scroll, just show them all
-              slidesContainer.style.transform = 'translateX(0)';
-            } else {
-              // For more than 3 slides, calculate proper centering
-              const scrollPosition = (slideWidth * currentSlide) - (containerWidth / 2) + (slideWidth / 2);
-              const maxScroll = slideWidth * totalSlides - containerWidth;
-              const finalPosition = Math.max(0, Math.min(scrollPosition, maxScroll));
-              slidesContainer.style.transform = `translateX(-${finalPosition}px)`;
-            }
-          }
-        }
-      }
-
-      // Update dots if they exist
-      dots.forEach((dot, index) => {
-        if (dot) {
-          dot.classList.toggle('active', index === currentSlide);
-        }
-      });
-    }
-
-    function nextSlide() {
-      if (totalSlides <= 1) return; // Don't navigate if only one slide
-
-      if (currentSlide < totalSlides - 1) {
-        currentSlide++;
-      } else {
-        currentSlide = 0;
-      }
-      updateSlider();
-      resetAutoSlide();
-    }
-
-    function prevSlide() {
-      if (totalSlides <= 1) return; // Don't navigate if only one slide
-
-      if (currentSlide > 0) {
-        currentSlide--;
-      } else {
-        currentSlide = totalSlides - 1;
-      }
-      updateSlider();
-      resetAutoSlide();
-    }
-
-    function goToSlide(index) {
-      if (totalSlides <= 1) return; // Don't navigate if only one slide
-
-      if (index >= 0 && index < totalSlides) {
-        currentSlide = index;
-        updateSlider();
-        resetAutoSlide();
-      }
-    }
-
-    function startAutoSlide() {
-      if (totalSlides > 1) {
-        slideInterval = setInterval(nextSlide, 5000);
-      }
-    }
-
-    function resetAutoSlide() {
-      clearInterval(slideInterval);
-      startAutoSlide();
-    }
-
-    // Initialize
-    updateSlider();
-    if (totalSlides > 1) {
-      startAutoSlide();
-    }
-
-    // Handle window resize
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        // Recalculate on resize
-        const newIsMobile = window.innerWidth < 768;
-        if (newIsMobile !== isMobile) {
-          // Reset to first slide on breakpoint change
-          currentSlide = 0;
-          updateSlider();
-        }
-      }, 250);
-    });
-
-    // Pause auto-slide on hover
-    const slider = document.getElementById('listingsSlider');
-    if (slider) {
-      slider.addEventListener('mouseenter', () => {
-        clearInterval(slideInterval);
-      });
-
-      slider.addEventListener('mouseleave', () => {
-        if (totalSlides > 1) {
-          startAutoSlide();
-        }
-      });
-
-      // Touch support for mobile
-      let touchStartX = 0;
-      let touchEndX = 0;
-
-      slider.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-        clearInterval(slideInterval);
-      });
-
-      slider.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        if (totalSlides > 1) {
-          handleSwipe();
-          startAutoSlide();
-        }
-      });
-
-      function handleSwipe() {
-        const swipeThreshold = 50;
-        const diff = touchStartX - touchEndX;
-
-        if (Math.abs(diff) > swipeThreshold) {
-          if (diff > 0) {
-            nextSlide();
-          } else {
-            prevSlide();
-          }
-        }
-      }
-    }
+      }, 400);
+    }, wait);
   }
 
-  // Image Gallery Functions (remain the same)
-  function changeImage(galleryId, direction, event) {
-    if (event) {
-      event.stopPropagation();
-      event.preventDefault();
+  if (!firstImg) { reveal(); return; }
+
+  if (firstImg.complete && firstImg.naturalWidth > 0) { reveal(); return; }
+
+  firstImg.addEventListener('load', reveal, { once: true });
+  firstImg.addEventListener('error', reveal, { once: true });
+
+  // Shorter safety net — per-slide placeholders handle slides 2 & 3
+  setTimeout(reveal, HERO_MAX_WAIT_MS);
+})();
+
+/* ---------- LISTINGS GRID SKELETON ---------- */
+(function () {
+  const skeleton = document.getElementById('listingsSkeleton');
+  const gallery = document.getElementById('gallery-container');
+  if (!skeleton || !gallery) return;
+
+  const MIN_DISPLAY_MS = 800;
+  const MAX_WAIT_MS = 8000;
+
+  const startTime = Date.now();
+  let done = false;
+
+  function finish() {
+    if (done) return;
+    done = true;
+
+    const elapsed = Date.now() - startTime;
+    const remaining = Math.max(0, MIN_DISPLAY_MS - elapsed);
+
+    setTimeout(function () {
+      skeleton.classList.add('hidden');
+      gallery.classList.remove('listings-grid-loading');
+      gallery.classList.add('listings-grid-loaded');
+
+      setTimeout(function () {
+        if (skeleton && skeleton.parentNode) {
+          skeleton.parentNode.removeChild(skeleton);
+        }
+      }, 350);
+    }, remaining);
+  }
+
+  const cards = gallery.querySelectorAll('.listing-card');
+  if (cards.length === 0) { finish(); return; }
+
+  const images = Array.from(gallery.querySelectorAll('.listing-img'));
+  const total = images.length;
+
+  if (total === 0) { finish(); return; }
+
+  let loaded = 0;
+  images.forEach(function (img) {
+    function tick() {
+      loaded++;
+      if (loaded === total) finish();
     }
 
-    let gallery;
-    if (galleryId.startsWith('grid-')) {
-      gallery = document.getElementById(`grid-gallery-${galleryId.replace('grid-', '')}`);
-    } else if (galleryId.startsWith('featured-')) {
-      gallery = document.getElementById(`featured-gallery-${galleryId.replace('featured-', '')}`);
+    if (img.complete && img.naturalWidth > 0) {
+      tick();
     } else {
-      gallery = document.getElementById(`featured-gallery-${galleryId}`);
+      img.addEventListener('load', tick, { once: true });
+      img.addEventListener('error', tick, { once: true });
     }
+  });
 
-    if (!gallery) return;
+  setTimeout(finish, MAX_WAIT_MS);
+})();
 
-    const mainImage = gallery.querySelector('.listing-img');
-    const thumbnails = gallery.querySelectorAll('.gallery-thumbnail');
-    const images = gallery.querySelectorAll('.gallery-thumbnail img');
+/* ---------- SHARE BUTTONS ---------- */
+document.addEventListener('DOMContentLoaded', function () {
+  const shareButtons = document.querySelectorAll('.share-btn');
 
-    if (!mainImage || images.length === 0) return;
+  shareButtons.forEach(button => {
+    button.addEventListener('click', async function (e) {
+      e.preventDefault();
+      const url = this.dataset.url;
+      const title = this.dataset.title;
+      const fullUrl = window.location.origin + url;
 
-    let currentIndex = parseInt(mainImage.getAttribute('data-image-index')) || 0;
-    let newIndex = (currentIndex + direction + images.length) % images.length;
-
-    // Update main image
-    mainImage.src = images[newIndex].src;
-    mainImage.setAttribute('data-image-index', newIndex);
-    mainImage.setAttribute('data-listing-image', images[newIndex].src);
-
-    // Update thumbnails
-    thumbnails.forEach((thumb, index) => {
-      thumb.classList.toggle('active', index === newIndex);
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: title,
+            text: `Check out this amazing property: ${title}`,
+            url: fullUrl
+          });
+        } catch (err) {
+          console.log('Share cancelled or failed');
+        }
+      } else {
+        try {
+          await navigator.clipboard.writeText(fullUrl);
+          alert('Link copied to clipboard!');
+        } catch (err) {
+          alert('Please copy the link manually');
+        }
+      }
     });
-  }
+  });
+});
 
-  function goToImage(galleryId, index, event) {
-    if (event) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
+/* ---------- NO-LISTINGS BOT + TYPEWRITER ---------- */
+(function () {
+  const el = document.getElementById('dynamic-message');
+  if (!el) return;
 
-    let gallery;
-    if (galleryId.startsWith('grid-')) {
-      gallery = document.getElementById(`grid-gallery-${galleryId.replace('grid-', '')}`);
-    } else if (galleryId.startsWith('featured-')) {
-      gallery = document.getElementById(`featured-gallery-${galleryId.replace('featured-', '')}`);
+  const message = " Hi buddy! chat our Assistant for fast, secure and seamless booking!";
+  let i = 0;
+  let isDeleting = false;
+
+  function animate() {
+    if (!isDeleting) {
+      if (i < message.length) {
+        el.innerText = message.slice(0, i + 1);
+        i++;
+        setTimeout(animate, 70);
+      } else {
+        isDeleting = true;
+        setTimeout(animate, 1800);
+      }
     } else {
-      gallery = document.getElementById(`featured-gallery-${galleryId}`);
+      if (i > 0) {
+        el.innerText = message.slice(0, i - 1);
+        i--;
+        setTimeout(animate, 45);
+      } else {
+        isDeleting = false;
+        setTimeout(animate, 700);
+      }
     }
+  }
+  animate();
 
-    if (!gallery) return;
-
-    const mainImage = gallery.querySelector('.listing-img');
-    const thumbnails = gallery.querySelectorAll('.gallery-thumbnail');
-    const images = gallery.querySelectorAll('.gallery-thumbnail img');
-
-    if (!mainImage || images.length === 0 || index >= images.length) return;
-
-    // Update main image
-    mainImage.src = images[index].src;
-    mainImage.setAttribute('data-image-index', index);
-    mainImage.setAttribute('data-listing-image', images[index].src);
-
-    // Update thumbnails
-    thumbnails.forEach((thumb, idx) => {
-      thumb.classList.toggle('active', idx === index);
+  const bot = document.querySelector('.dancing-bot');
+  if (bot) {
+    bot.addEventListener('click', () => {
+      bot.style.transform = 'scale(0.95)';
+      setTimeout(() => bot.style.transform = '', 150);
+      const eyes = document.querySelectorAll('.eye');
+      eyes.forEach(e => {
+        e.style.backgroundColor = '#ffcf40';
+        setTimeout(() => e.style.backgroundColor = '#0a1a2f', 200);
+      });
     });
   }
+})();
 </script>
 <script>
 (function() {

@@ -516,19 +516,20 @@
   .filter-real { transition: none; }
 }
 
-    /* Dots container — overlay at bottom of image */
+    /* Dots container — centered at bottom of image */
 .gallery-thumbnails {
-  position: absolute;
-  bottom: 12px;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: absolute !important;
+  bottom: 12px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
   gap: 6px;
   padding: 6px 10px;
   z-index: 5;
-  pointer-events: none; /* let clicks pass except on dots */
+  pointer-events: none;
+  width: auto !important;
 }
 
 /* Individual dot */
@@ -558,14 +559,20 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
 }
 
-/* Optional: cap visible dots if a listing has many images */
 @media (max-width: 576px) {
-  .gallery-thumbnails { gap: 4px; bottom: 8px; }
-  .gallery-thumbnail { width: 6px; height: 6px; }
-  .gallery-thumbnail.active { width: 16px; }
+  .gallery-thumbnails {
+    gap: 4px;
+    bottom: 8px !important;
+  }
+  .gallery-thumbnail {
+    width: 6px;
+    height: 6px;
+  }
+  .gallery-thumbnail.active {
+    width: 16px;
+  }
 }
-
-</style>
+   </style>
 <div class="filter-shell" id="filterShell">
 
   <!-- ===============================
@@ -1215,12 +1222,6 @@
 
                           <!-- Navigation Arrows -->
                           {% if images|length > 1 %}
-                            <button class="gallery-nav prev" onclick="changeImage('grid-{{ listing.id }}', -1, event)">
-                              <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                            </button>
-                            <button class="gallery-nav next" onclick="changeImage('grid-{{ listing.id }}', 1, event)">
-                              <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                            </button>
 
                            <!-- Thumbnails -->
 <div class="gallery-thumbnails">

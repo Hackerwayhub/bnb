@@ -28,61 +28,6 @@
 
 
 /* ============================================
-   FILTER & SEARCH SKELETON
-   ============================================ */
-
-/* Sticky wrapper — replaces per-section sticky */
-.filter-shell {
-  position: sticky;
-  top: 12px;
-  z-index: 50;
-  margin: 9px;
-  border-radius: 18px;
-}
-
-/* Inner sections get no margin (shell handles it) */
-.filter-shell .mobile-spacing {
-  margin: 0 !important;
-  position: static !important;
-}
-
-/* Skeleton */
-.filter-skeleton {
-  position: relative;
-  overflow: hidden;
-  transition: opacity 0.35s ease;
-}
-
-.filter-skeleton.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.filter-skeleton .shimmer {
-  position: relative;
-  overflow: hidden;
-  background-color: #e6e6e6;
-}
-
-.filter-skeleton .shimmer::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.65) 50%,
-    transparent 100%
-  );
-  animation: filterShimmer 1.4s infinite;
-}
-
-@keyframes filterShimmer {
-  100% { transform: translateX(100%); }
-}
-
-/* ============================================
    HERO CAROUSEL SKELETON
    ============================================ */
 .hero-carousel { position: relative; }
@@ -264,6 +209,311 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
+}
+
+/* ============================================
+   NO-LISTINGS BOT & TYPEWRITER
+   ============================================ */
+.dancing-bot-wrapper { flex-shrink: 0; }
+
+.dancing-bot {
+  position: relative;
+  width: 110px;
+  height: 120px;
+  animation: floatBot 2s ease-in-out infinite;
+  cursor: pointer;
+}
+
+@keyframes floatBot {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+.antenna {
+  position: absolute;
+  width: 6px;
+  height: 24px;
+  background: #2c3e66;
+  border-radius: 10px;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: wiggle 0.5s infinite alternate;
+  z-index: 2;
+}
+
+.antenna::after {
+  content: "⚡";
+  position: absolute;
+  top: -22px;
+  left: -5px;
+  font-size: 14px;
+  animation: spark 1s infinite;
+}
+
+@keyframes wiggle {
+  0% { transform: translateX(-50%) rotate(-6deg); }
+  100% { transform: translateX(-50%) rotate(6deg); }
+}
+
+@keyframes spark {
+  0%, 100% { opacity: 0.6; text-shadow: 0 0 0px gold; }
+  50% { opacity: 1; text-shadow: 0 0 6px #ffb347; }
+}
+
+.bot-head {
+  position: relative;
+  width: 70px;
+  height: 65px;
+  background: radial-gradient(circle at 30% 30%, #e0e7ff, #b7c9e2);
+  border-radius: 50% 45% 55% 50%;
+  margin: 0 auto;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  animation: headBob 0.8s infinite alternate;
+}
+
+@keyframes headBob {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(3px) rotate(2deg); }
+}
+
+.eyes {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  padding-top: 22px;
+}
+
+.eye {
+  width: 12px;
+  height: 12px;
+  background: #0a1a2f;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #fef9e6;
+  animation: blink 3s infinite;
+}
+
+.eye.right { animation-delay: 0.2s; }
+
+@keyframes blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+
+.simple-body {
+  width: 45px;
+  height: 35px;
+  background: linear-gradient(135deg, #3e5a8f, #2b3b5c);
+  border-radius: 20px 20px 16px 16px;
+  margin: 5px auto 0;
+  box-shadow: inset 0 1px 3px rgba(255,255,200,0.3), 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.arm {
+  position: absolute;
+  width: 22px;
+  height: 8px;
+  background: #2e4a7c;
+  border-radius: 20px;
+  top: 65px;
+}
+
+.left-arm {
+  left: -8px;
+  transform: rotate(-20deg);
+  animation: swingLeft 0.6s infinite alternate;
+}
+
+.right-arm {
+  right: -8px;
+  transform: rotate(20deg);
+  animation: swingRight 0.6s infinite alternate;
+}
+
+@keyframes swingLeft {
+  0% { transform: rotate(-25deg); }
+  100% { transform: rotate(15deg); }
+}
+
+@keyframes swingRight {
+  0% { transform: rotate(25deg); }
+  100% { transform: rotate(-15deg); }
+}
+
+.typewriter-container {
+  display: inline-flex;
+  align-items: baseline;
+  background: rgba(255,255,245,0.5);
+  padding: 12px 20px;
+  border-radius: 60px;
+  backdrop-filter: blur(4px);
+  font-size: 1.3rem;
+  font-weight: 600;
+  font-family: 'Inter', system-ui, 'Segoe UI', sans-serif;
+}
+
+.typewriter-text {
+  background: linear-gradient(125deg, #1c2b44, #2a3f62);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+}
+
+.cursor-blink {
+  display: inline-block;
+  width: 3px;
+  height: 1.4rem;
+  background: #ff8c42;
+  margin-left: 5px;
+  border-radius: 4px;
+  animation: cursorFlash 0.8s step-end infinite;
+}
+
+@keyframes cursorFlash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 991px) {
+  .listings-skeleton { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .hero-skeleton-content {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1.5rem;
+  }
+  .hero-skeleton-line { height: 12px; }
+}
+
+@media (max-width: 575px) {
+  .listings-skeleton { grid-template-columns: 1fr; }
+  .skeleton-card-img { height: 220px; }
+}
+
+@media (max-width: 550px) {
+  .typewriter-text { font-size: 1rem; white-space: normal; word-break: keep-all; }
+  .typewriter-container { padding: 8px 16px; }
+  .cursor-blink { height: 1.2rem; }
+  .dancing-bot { width: 95px; height: 100px; }
+  .bot-head { width: 60px; height: 55px; }
+  .simple-body { width: 40px; height: 28px; }
+}
+
+@media (max-width: 480px) {
+  .listing-actions { gap: 6px; }
+  .listing-actions a { padding: 10px 12px !important; }
+  .listing-actions a[href^="tel:"] span {
+    display: inline !important;
+    margin-left: 4px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .listing-actions a[href*="whatsapp"] span { font-size: 0.75rem; }
+}
+
+@media (max-width: 768px) {
+  .listing-actions { flex-wrap: wrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer::after { animation: none; }
+  .hero-img,
+  #heroCarouselInner,
+  .hero-skeleton,
+  .listings-grid-loading,
+  .listings-skeleton.hidden {
+    transition: none;
+  }
+}
+
+/* ============================================
+   FILTER & SEARCH SKELETON
+   ============================================ */
+
+/* Sticky wrapper — replaces per-section sticky */
+.filter-shell {
+  position: sticky;
+  top: 12px;
+  z-index: 50;
+  margin: 9px;
+  border-radius: 18px;
+}
+
+/* Inner sections get no margin (shell handles it) */
+.filter-shell .mobile-spacing {
+  margin: 0 !important;
+  position: static !important;
+}
+
+/* Skeleton */
+.filter-skeleton {
+  position: relative;
+  overflow: hidden;
+  transition: opacity 0.35s ease;
+}
+
+.filter-skeleton.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.filter-skeleton .shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: #e6e6e6;
+}
+
+.filter-skeleton .shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.65) 50%,
+    transparent 100%
+  );
+  animation: filterShimmer 1.4s infinite;
+}
+
+@keyframes filterShimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* Real filter reveal */
+.filter-real {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.filter-real.ready {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Mobile tweaks matching the real filter */
+@media (max-width: 640px) {
+  .filter-skel-pill { max-width: 100% !important; }
+  .filter-skel-btn { min-width: 92px !important; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .filter-skeleton .shimmer::after { animation: none; }
+  .filter-skeleton { transition: none; }
+  .filter-real { transition: none; }
 }
 
 </style>
@@ -727,8 +977,9 @@
       <!-- ============================================
            HERO CAROUSEL WITH SKELETON UI
            ============================================ -->
-
-
+     <!-- ============================================
+     HERO CAROUSEL WITH SKELETON UI
+     ============================================ -->
 {% if listings|length > 0 %}
 <section class="hero-carousel-section">
   <div class="hero-carousel-container">
@@ -853,7 +1104,7 @@
   /* Ken-burns zoom on active slide */
   .hero-carousel-item.active .hero-img { transform: none !important; }
   .hero-carousel-item.active .hero-img-wrapper { transform: scale(1.05); transition: transform 6s ease; }
-</>
+</style>
       <!-- ============================================
            LISTINGS GRID SKELETON UI
            ============================================ -->

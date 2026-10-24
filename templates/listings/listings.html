@@ -572,6 +572,7 @@
     width: 16px;
   }
 }
+
    </style>
 <div class="filter-shell" id="filterShell">
 
@@ -1026,8 +1027,8 @@
 
 <!-- listings gallery section -->
 <section>
+    <div style="border-radius:21px; overflow: hidden; margin-top: 5px;">
 
-    <div style="border-radius:21px; overflow: hidden; margin-top: 5px; padding-top: 0;">
     <div class="container-fluid">
 
       <!-- ============================================
@@ -1037,8 +1038,8 @@
      HERO CAROUSEL WITH SKELETON UI
      ============================================ -->
 {% if listings|length > 0 %}
-        <section class="hero-carousel-section" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
-            <div class="hero-carousel-container" style="margin-bottom: 0; padding-bottom: 0;">
+<section class="hero-carousel-section">
+  <div class="hero-carousel-container">
     <div class="hero-carousel" id="heroCarousel">
 
       <!-- GLOBAL SKELETON (only covers first paint) -->
@@ -1164,7 +1165,7 @@
       <!-- ============================================
            LISTINGS GRID SKELETON UI
            ============================================ -->
-        <div class="listings-skeleton" id="listingsSkeleton" aria-hidden="true" style="margin-top: 0 !important; padding-top: 0 !important;">
+      <div class="listings-skeleton" id="listingsSkeleton" aria-hidden="true">
         {% for i in "123456" %}
         <div class="skeleton-card">
           <div class="skeleton-card-img shimmer"></div>
@@ -1186,7 +1187,7 @@
       <!-- ============================================
            ALL LISTINGS GRID (hidden until ready)
            ============================================ -->
-        <div class="row listings-grid-loading" id="gallery-container" style="margin-top: 0 !important; padding-top: 0 !important;">
+      <div class="row listings-grid-loading" id="gallery-container">
         {% if listings %}
           {% for listing in listings %}
             {% if forloop.counter > 0 %}

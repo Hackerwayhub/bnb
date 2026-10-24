@@ -516,6 +516,55 @@
   .filter-real { transition: none; }
 }
 
+    /* Dots container — overlay at bottom of image */
+.gallery-thumbnails {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  z-index: 5;
+  pointer-events: none; /* let clicks pass except on dots */
+}
+
+/* Individual dot */
+.gallery-thumbnail {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.gallery-thumbnail:hover {
+  background: rgba(255, 255, 255, 0.85);
+  transform: scale(1.2);
+}
+
+/* Active dot — wider pill indicator */
+.gallery-thumbnail.active {
+  width: 20px;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+/* Optional: cap visible dots if a listing has many images */
+@media (max-width: 576px) {
+  .gallery-thumbnails { gap: 4px; bottom: 8px; }
+  .gallery-thumbnail { width: 6px; height: 6px; }
+  .gallery-thumbnail.active { width: 16px; }
+}
+
 </style>
 <div class="filter-shell" id="filterShell">
 
@@ -1173,15 +1222,16 @@
                               <i class="fa fa-chevron-right" aria-hidden="true"></i>
                             </button>
 
-                            <!-- Thumbnails -->
-                            <div class="gallery-thumbnails">
-                              {% for img in images %}
-                                <div class="gallery-thumbnail {% if forloop.first %}active{% endif %}"
-                                     onclick="goToImage('grid-{{ listing.id }}', {{ forloop.counter0 }}, event)">
-                                  <img src="{{ img.url }}" alt="Thumbnail {{ forloop.counter }}">
-                                </div>
-                              {% endfor %}
-                            </div>
+                           <!-- Thumbnails -->
+<div class="gallery-thumbnails">
+  {% for img in images %}
+    <div class="gallery-thumbnail {% if forloop.first %}active{% endif %}"
+         onclick="goToImage('grid-{{ listing.id }}', {{ forloop.counter0 }}, event)"
+         role="button"
+         aria-label="Go to image {{ forloop.counter }} of {{ images|length }}">
+    </div>
+  {% endfor %}
+</div>
                           {% endif %}
                         {% endif %}
                       {% endwith %}
@@ -1753,7 +1803,6 @@
     });
   })();
 </script>
-
 <script>
   let modalCurrentImageIndex = 0;
   let modalAllImages = [];
@@ -1817,8 +1866,6 @@
         // Update image counter
         currentImageSpan.textContent = modalCurrentImageIndex + 1;
         totalImagesSpan.textContent = modalAllImages.length;
-
-
 
         // Show modal
         modal.style.display = 'block';
@@ -1923,6 +1970,62 @@
       currentImageSpan.textContent = modalCurrentImageIndex + 1;
     }
   }
+
+  // ==================== GRID GALLERY CONTROLS ====================
+  // These are called from the template's onclick handlers:
+  //   changeImage('grid-{{ listing.id }}', -1/1, event)
+  //   goToImage('grid-{{ listing.id }}', index, event)
+
+  window.goToImage = function(galleryId, index, event) {
+    if (event) event.stopPropagation();
+
+    const gallery = document.getElementById(galleryId);
+    if (!gallery) return;
+
+    const mainImg = gallery.querySelector('.listing-img');
+    if (!mainImg) return;
+
+    const allImages = (mainImg.dataset.allImages || '').split(',').filter(Boolean);
+    if (!allImages[index]) return;
+
+    // Swap main image
+    mainImg.src = allImages[index];
+    mainImg.dataset.imageIndex = index;
+
+    // Update dot indicators (active state)
+    const dots = gallery.querySelectorAll('.gallery-thumbnail');
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === index);
+    });
+
+    // Track current index for changeImage()
+    gallery.dataset.currentIndex = index;
+  };
+
+  window.changeImage = function(galleryId, direction, event) {
+    if (event) event.stopPropagation();
+
+    const gallery = document.getElementById(galleryId);
+    if (!gallery) return;
+
+    const mainImg = gallery.querySelector('.listing-img');
+    if (!mainImg) return;
+
+    const allImages = (mainImg.dataset.allImages || '').split(',').filter(Boolean);
+    if (allImages.length < 2) return;
+
+    let current = parseInt(
+      gallery.dataset.currentIndex !== undefined
+        ? gallery.dataset.currentIndex
+        : (mainImg.dataset.imageIndex || 0),
+      10
+    );
+    if (isNaN(current)) current = 0;
+
+    const next = (current + direction + allImages.length) % allImages.length;
+
+    window.goToImage(galleryId, next, event);
+  };
 </script>
 
 <script>

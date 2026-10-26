@@ -25,23 +25,7 @@
      ============================================ -->
 
 <style>
-/* Mobile: soften pill + button radius so they don't look nested */
-@media (max-width: 640px) {
-  .filters-section {
-    border-radius: 22px !important;
-    padding: 5px !important;
-  }
-  #applyFilters {
-    border-radius: 16px !important;
-    min-width: 90px !important;
-    padding: 0 16px !important;
-    font-size: 11.5px !important;
-  }
-  .dropdown-trigger-location,
-  .dropdown-trigger-property {
-    border-radius: 16px !important;
-  }
-}
+
 
 /* ============================================
    HERO CAROUSEL SKELETON
@@ -691,24 +675,33 @@
        =============================== -->
     <section class="mobile-spacing filter-real" id="filterReal"
   style="
-    background: transparent;
+    background: linear-gradient(180deg, #ffffff 0%, #fcfcfc 100%);
+    border-radius: 18px;
     padding: 8px;
+    border: 1px solid #ececec;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px -12px rgba(0,0,0,0.08);
   ">
   <div class="filters-container" style="
+      position: relative;
+      z-index: 2;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 14px;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: nowrap;
       width: 100%;
+      overflow: visible !important;
   ">
 
-    <!-- Logo — own row, visible on all screens -->
+    <!-- Brand Logo -->
     <div class="logo-section" data-nosnippet style="
+        flex-shrink: 0;
+        padding: 0 10px 0 6px;
         display: flex;
-        justify-content: center;
-        width: 100%;
+        align-items: center;
+        min-width: 110px;
     ">
-      <a href="{% url 'home' %}" class="filter-logo-link" style="
+      <a class="navbar-brand" href="{% url 'home' %}" style="
           text-decoration: none;
           display: flex;
           align-items: center;
@@ -720,35 +713,37 @@
              style="
                  height: 32px;
                  width: auto;
-                 display: block !important;
+                 display: block;
                  object-fit: contain;
              ">
       </a>
     </div>
 
-    <!-- Floating pill -->
+    <!-- Unified Filter Pill -->
     <div class="filters-section" style="
         display: flex;
         align-items: center;
         gap: 0;
-        width: 100%;
-        max-width: 540px;
+        flex: 1;
+        min-width: 0;
+        overflow: visible !important;
+        position: relative;
+        z-index: 50;
         background: #ffffff;
-        border-radius: 100px;
+        border-radius: 18px;
         padding: 4px;
         box-shadow:
             0 0 0 1px rgba(0,0,0,0.04),
-            0 6px 16px rgba(0,0,0,0.08),
-            0 24px 48px -12px rgba(0,0,0,0.18);
+            0 1px 2px rgba(0,0,0,0.04),
+            0 12px 32px -16px rgba(0,0,0,0.12);
+        max-width: 540px;
         margin: 0 auto;
-        position: relative;
-        z-index: 50;
-        overflow: visible;
     ">
 
       <!-- Location Dropdown -->
       <div class="filter-dropdown" style="position: relative; flex: 1; min-width: 0; z-index: 100;">
         <div class="location-dropdown" style="position: relative; z-index: 1000;">
+
           <div class="dropdown-trigger-location" style="
               background: transparent;
               border-radius: 100px;
@@ -765,7 +760,9 @@
           "
           onmouseover="this.style.background='#f7f7f7'"
           onmouseout="this.style.background='transparent'">
+
             <i class="fa fa-location-dot" style="color: #D32F2F; font-size: 12px; opacity: 0.85; flex-shrink: 0;"></i>
+
             <input
               type="text"
               class="location-search-input"
@@ -836,11 +833,13 @@
       <!-- Property Type Dropdown -->
       <div class="filter-dropdown" style="position: relative; flex: 1; min-width: 0; z-index: 100;">
         <div class="property-dropdown" style="position: relative; z-index: 1000;">
+
           <div class="dropdown-trigger-property" style="
               background: transparent;
               border-radius: 100px;
               padding: 9px 16px;
               cursor: text;
+              justify-content: flex-end;
               font-size: 13px;
               font-weight: 500;
               color: #1a1a1a;
@@ -852,7 +851,9 @@
           "
           onmouseover="this.style.background='#f7f7f7'"
           onmouseout="this.style.background='transparent'">
+
             <i class="fa fa-city" style="color: #D32F2F; font-size: 12px; opacity: 0.85; flex-shrink: 0;"></i>
+
             <input
               type="text"
               class="property-search-input"
@@ -869,6 +870,7 @@
                 color: inherit;
                 padding: 0;
                 letter-spacing: 0.01em;
+                text-align: right;
               ">
           </div>
 

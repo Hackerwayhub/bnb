@@ -25,7 +25,23 @@
      ============================================ -->
 
 <style>
-
+/* Mobile: soften pill + button radius so they don't look nested */
+@media (max-width: 640px) {
+  .filters-section {
+    border-radius: 22px !important;
+    padding: 5px !important;
+  }
+  #applyFilters {
+    border-radius: 16px !important;
+    min-width: 90px !important;
+    padding: 0 16px !important;
+    font-size: 11.5px !important;
+  }
+  .dropdown-trigger-location,
+  .dropdown-trigger-property {
+    border-radius: 16px !important;
+  }
+}
 
 /* ============================================
    HERO CAROUSEL SKELETON
@@ -686,13 +702,13 @@
       width: 100%;
   ">
 
-    <!-- Logo — its own row, centered -->
+    <!-- Logo — own row, visible on all screens -->
     <div class="logo-section" data-nosnippet style="
         display: flex;
         justify-content: center;
         width: 100%;
     ">
-      <a class="navbar-brand" href="{% url 'home' %}" style="
+      <a href="{% url 'home' %}" class="filter-logo-link" style="
           text-decoration: none;
           display: flex;
           align-items: center;
@@ -704,7 +720,7 @@
              style="
                  height: 32px;
                  width: auto;
-                 display: block;
+                 display: block !important;
                  object-fit: contain;
              ">
       </a>
@@ -733,7 +749,6 @@
       <!-- Location Dropdown -->
       <div class="filter-dropdown" style="position: relative; flex: 1; min-width: 0; z-index: 100;">
         <div class="location-dropdown" style="position: relative; z-index: 1000;">
-
           <div class="dropdown-trigger-location" style="
               background: transparent;
               border-radius: 100px;
@@ -750,9 +765,7 @@
           "
           onmouseover="this.style.background='#f7f7f7'"
           onmouseout="this.style.background='transparent'">
-
             <i class="fa fa-location-dot" style="color: #D32F2F; font-size: 12px; opacity: 0.85; flex-shrink: 0;"></i>
-
             <input
               type="text"
               class="location-search-input"
@@ -823,7 +836,6 @@
       <!-- Property Type Dropdown -->
       <div class="filter-dropdown" style="position: relative; flex: 1; min-width: 0; z-index: 100;">
         <div class="property-dropdown" style="position: relative; z-index: 1000;">
-
           <div class="dropdown-trigger-property" style="
               background: transparent;
               border-radius: 100px;
@@ -840,9 +852,7 @@
           "
           onmouseover="this.style.background='#f7f7f7'"
           onmouseout="this.style.background='transparent'">
-
             <i class="fa fa-city" style="color: #D32F2F; font-size: 12px; opacity: 0.85; flex-shrink: 0;"></i>
-
             <input
               type="text"
               class="property-search-input"

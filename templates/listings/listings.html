@@ -588,23 +588,37 @@
     width: 16px;
   }
 }
-/* Tighten gap between hero carousel and listings grid */
+/* ============================================
+   AESTHETIC GAP: HERO → LISTINGS GRID
+   ============================================ */
 .hero-carousel-section {
-  margin-bottom: 8px !important;
+  margin-bottom: 28px !important;
 }
 
 #listingsSkeleton {
   margin-top: 0 !important;
-  margin-bottom: 12px !important;
+  margin-bottom: 24px !important;
 }
 
 #gallery-container {
   margin-top: 0 !important;
 }
 
+/* Remove the doubled top space Bootstrap adds above the first row */
+#gallery-container > .row,
 #gallery-container > [class*="col-"] {
   margin-top: 0 !important;
   padding-top: 0 !important;
+}
+
+/* Mobile: slightly tighter, still airy */
+@media (max-width: 768px) {
+  .hero-carousel-section {
+    margin-bottom: 20px !important;
+  }
+  #listingsSkeleton {
+    margin-bottom: 16px !important;
+  }
 }
    </style>
 <div class="filter-shell" id="filterShell">

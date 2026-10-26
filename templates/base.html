@@ -493,13 +493,15 @@ document.addEventListener('keydown', function(event) {
 <div style="position: fixed; bottom: 24px; right: 24px; z-index: 1000;">
   <!-- Main FAB -->
 
-   <button id="bnbkeFab" style="
+  <button id="bnbkeFab" style="
   background: #FFFFFF;
   color: #D32F2F !important;
   border: 1px solid #dadce0;
-  border-radius: 20px;
-  padding: 6px 16px;
-  font-size: 12px;
+  border-radius: 50%;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  font-size: 14px;
   font-weight: 900;
   font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1),
@@ -507,21 +509,18 @@ document.addEventListener('keydown', function(event) {
               0 0 35px rgba(255, 90, 95, 0.25);
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 100px;
-  justify-content: center;
   z-index: 1002;
   outline: none;
-  height: 49px;
   line-height: 1;
+  flex-shrink: 0;
 "
 onfocus="this.style.outline='none'"
-onmouseover="this.style.boxShadow='0 4px 15px rgba(0, 0, 0, 0.15), 0 0 25px rgba(255, 90, 95, 0.5), 0 0 40px rgba(255, 90, 95, 0.35)'; this.style.background='#FFFFFF'; this.style.setProperty('color', ' #D32F2F', 'important')"
-onmouseout="this.style.boxShadow='0 2px 10px rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 90, 95, 0.4), 0 0 35px rgba(255, 90, 95, 0.25)'; this.style.background='#FFFFFF'; this.style.setProperty('color', ' #D32F2F', 'important')">
-  <i class="fa fa-comment" aria-hidden="true" style="font-size: 13px; color: inherit !important;"></i>
-
+onmouseover="this.style.boxShadow='0 4px 15px rgba(0, 0, 0, 0.15), 0 0 25px rgba(255, 90, 95, 0.5), 0 0 40px rgba(255, 90, 95, 0.35)'; this.style.background='#FFFFFF'; this.style.setProperty('color', '#D32F2F', 'important')"
+onmouseout="this.style.boxShadow='0 2px 10px rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 90, 95, 0.4), 0 0 35px rgba(255, 90, 95, 0.25)'; this.style.background='#FFFFFF'; this.style.setProperty('color', '#D32F2F', 'important')">
+  <i class="fa fa-comment" aria-hidden="true" style="font-size: 14px; color: inherit !important;"></i>
 </button>
 
   <!-- Hidden Contact Options -->

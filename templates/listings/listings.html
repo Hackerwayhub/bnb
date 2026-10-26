@@ -962,7 +962,7 @@
             onmouseout="this.style.background='#D32F2F'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px -4px rgba(211,47,47,0.35)';">
                 <span style="position: relative; display: inline-flex; align-items: center; justify-content: center;">
                     <i class="fa-solid fa-magnifying-glass" style="font-size: 13px;"></i>
-                    <i class="fa-solid fa-wand-magic-sparkles" style="position: absolute; top: -6px; right: -8px; font-size: 8px; color: #ffd700; animation: sparkle 2s ease-in-out infinite;"></i>
+
                 </span>
                 <span>Search</span>
             </button>
@@ -1805,6 +1805,7 @@
     });
   })();
 </script>
+
 <script>
   let modalCurrentImageIndex = 0;
   let modalAllImages = [];
@@ -1921,7 +1922,7 @@
       }
     });
 
-    // Swipe gesture support for mobile
+    // Swipe gesture support for mobile (MODAL)
     let touchStartX = 0;
     let touchEndX = 0;
 
@@ -1974,9 +1975,9 @@
   }
 
   // ==================== GRID GALLERY CONTROLS ====================
-  // These are called from the template's onclick handlers:
-  //   changeImage('grid-{{ listing.id }}', -1/1, event)
+  // Called from template onclick handlers:
   //   goToImage('grid-{{ listing.id }}', index, event)
+  //   changeImage('grid-{{ listing.id }}', -1/1, event)
 
   window.goToImage = function(galleryId, index, event) {
     if (event) event.stopPropagation();
@@ -2000,7 +2001,7 @@
       dot.classList.toggle('active', i === index);
     });
 
-    // Track current index for changeImage()
+    // Track current index for swipe/changeImage()
     gallery.dataset.currentIndex = index;
   };
 
@@ -2028,6 +2029,60 @@
 
     window.goToImage(galleryId, next, event);
   };
+
+  // ==================== GRID GALLERY SWIPE SUPPORT ====================
+  // Swipe left/right on a listing image to change photos.
+  // Calls goToImage() so dot indicators stay in sync.
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.image-gallery').forEach(function (gallery) {
+      const mainImg = gallery.querySelector('.listing-img');
+      if (!mainImg) return;
+
+      let startX = 0;
+      let startY = 0;
+      let tracking = false;
+      const SWIPE_MIN = 40;            // px — minimum horizontal distance
+      const VERTICAL_TOLERANCE = 60;   // px — ignore vertical scrolls
+
+      gallery.addEventListener('touchstart', function (e) {
+        if (e.touches.length !== 1) return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        tracking = true;
+      }, { passive: true });
+
+      gallery.addEventListener('touchend', function (e) {
+        if (!tracking) return;
+        tracking = false;
+
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
+
+        const dx = endX - startX;
+        const dy = endY - startY;
+
+        // Ignore mostly-vertical gestures (page scroll)
+        if (Math.abs(dy) > VERTICAL_TOLERANCE) return;
+        if (Math.abs(dx) < SWIPE_MIN) return;
+
+        const allImages = (mainImg.dataset.allImages || '').split(',').filter(Boolean);
+        if (allImages.length < 2) return;
+
+        let current = parseInt(
+          gallery.dataset.currentIndex !== undefined
+            ? gallery.dataset.currentIndex
+            : (mainImg.dataset.imageIndex || 0),
+          10
+        );
+        if (isNaN(current)) current = 0;
+
+        const direction = dx < 0 ? 1 : -1; // swipe left → next
+        const next = (current + direction + allImages.length) % allImages.length;
+
+        window.goToImage(gallery.id, next);
+      }, { passive: true });
+    });
+  });
 </script>
 
 <script>

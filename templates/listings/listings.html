@@ -777,7 +777,7 @@
 
                             </div>
                         </div>
-                        
+
                     </div>
 
                     <div class="dropdown-menu-location" style="
@@ -863,8 +863,24 @@
                     "
                     onmouseover="this.style.background='#f7f7f7'"
                     onmouseout="this.style.background='transparent'">
-                        <i class="fa fa-city" style="color: #D32F2F; font-size: 12px; opacity: 0.85;"></i>
-                        <span class="selected-property-text" id="propertyPlaceholder" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.01em;"> </span>
+
+                        <div style="padding: 8px 8px 10px; position: sticky; top: 0; background: #ffffff; z-index: 10; border-radius: 16px 16px 0 0;">
+                            <div class="claymorphic-search" style="position: relative; background: #f5f5f5; border-radius: 100px; padding: 2px;">
+                                <i class="fa fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #999; font-size: 11px;"></i>
+                                <input type="text" class="property-search-input" placeholder="Search property types" style="
+                                    width: 100%;
+                                    padding: 9px 14px 9px 36px;
+                                    border: none;
+                                    border-radius: 100px;
+                                    font-size: 12.5px;
+                                    outline: none;
+                                    font-family: 'Poppins', 'Inter', sans-serif;
+                                    background: transparent;
+                                    color: #1a1a1a;
+                                ">
+                            </div>
+                        </div>
+                        
                     </div>
 
                     <div class="dropdown-menu-property" style="
@@ -899,6 +915,7 @@
                                 ">
                             </div>
                         </div>
+
                         <div class="property-options-container" style="padding: 2px;">
                             {% for type_code, type_name in property_types %}
                                 <div class="dropdown-option-property claymorphic-option" data-value="{{ type_code }}" style="

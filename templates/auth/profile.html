@@ -1546,8 +1546,7 @@
                                         <th style="padding: 1rem; text-align: left;">Dates</th>
                                         <th style="padding: 1rem; text-align: left;">Guests</th>
                                         <th style="padding: 1rem; text-align: left;">Total</th>
-                                        <th style="padding: 1rem; text-align: left;">Status</th>
-                                        <th style="padding: 1rem; text-align: left;">Actions</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1559,13 +1558,6 @@
                                         </td>
                                         <td style="padding: 1rem;">{{ booking.number_of_guests }}</td>
                                         <td style="padding: 1rem;">KES {{ booking.total_price }}</td>
-                                        <td style="padding: 1rem;">
-                                            <span style="padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem;
-                                                  background: {% if booking.status == 'confirmed' %}var(--success-color){% elif booking.status == 'pending' %}var(--warning-color){% else %}var(--error-color){% endif %};
-                                                  color: white;">
-                                                {{ booking.get_status_display }}
-                                            </span>
-                                        </td>
 
                                     </tr>
                                     {% endfor %}

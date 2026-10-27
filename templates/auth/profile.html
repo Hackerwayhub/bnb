@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ title|default:"Profile | βnb.co.ke" }}</title>
+  <title>{{ title|default:"profile - BnB.co.ke" }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Favicon files -->
@@ -1549,19 +1549,7 @@
 
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {% for booking in user.user_bookings.all|slice:":5" %}
-                                    <tr style="border-bottom: 1px solid var(--glass-border);">
-                                        <td style="padding: 1rem;">{{ booking.listing.title }}</td>
-                                        <td style="padding: 1rem;">
-                                            {{ booking.check_in|date:"M d" }} - {{ booking.check_out|date:"M d" }}
-                                        </td>
-                                        <td style="padding: 1rem;">{{ booking.number_of_guests }}</td>
-                                        <td style="padding: 1rem;">KES {{ booking.total_price }}</td>
 
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
                             </table>
                         </div>
                         {% if user.user_bookings.count > 5 %}

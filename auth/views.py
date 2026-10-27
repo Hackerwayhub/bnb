@@ -209,7 +209,7 @@ def profile(request):
         'bookings_count': bookings_count,
         'approved_listings_count': approved_listings_count,
         'featured_listings_count': featured_listings_count,
-        'title': 'Profile ~ BnB.co.ke',
+        'title': 'profile - BnB.co.ke',
         'page_title': 'My Profile'
     }
     return render(request, 'auth/profile.html', context)
@@ -274,7 +274,7 @@ def my_listings(request):
         'active_listings': active_listings,
         'featured_listings': featured_listings,
         'pending_bookings': 0,  # You can add this later
-        'title': 'My Listings ~ BnB.co.ke',
+        'title': 'mylistings - BnB.co.ke',
         'page_title': 'My Listings'
     }
     return render(request, 'auth/profile.html', context)

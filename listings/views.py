@@ -677,8 +677,8 @@ def listing_detail(request, slug):
     context = {
         'listing': listing,
         'is_owner': is_owner,
-        'title':  f'BɳB ~ {listing.title} ',
-        'page_title': f'BɳB ~ {listing.title} ',
+        'title':  f'BnB  {listing.title} ',
+        'page_title': f'BnB  {listing.title} ',
         'meta_description': f'Book BnB/Airbnb {listing.title} in {listing.get_location_display()}. {listing.guests} guests, {listing.bedrooms} bedrooms, KES {listing.price_per_night}/night.',
     }
     return render(request, 'listings/listing_detail.html', context)

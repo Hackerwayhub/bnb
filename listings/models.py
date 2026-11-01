@@ -24,11 +24,21 @@ class Listing(models.Model):
     ]
 
     LOCATIONS = [
-
+        ('safari & travel experiences', 'safari & travel experiences'),
         ('kilimani', 'Kilimani'),
         ('westlands', 'Westlands'),
 
         ('kileleshwa', 'Kileleshwa'),
+
+        ('watamu', 'Watamu'),
+        ('diani', 'Diani'),
+        ('nyali', 'Nyali'),
+        ('mtwapa', 'Mtwapa'),
+        ('shanzu', 'Shanzu'),
+        ('mombasa', 'Mombasa'),
+        ('malindi', 'Malindi'),
+        ('kilifi_town', 'Kilifi Town'),
+
         ('waiyaki_way', 'Waiyaki way'),
         ('riverside', 'Riverside'),
         ('pangani', 'Pangani'),
@@ -68,14 +78,7 @@ class Listing(models.Model):
         ('kitengela', 'Kitengela'),
         ('kikuyu_road', 'Kikuyu road'),
 
-        ('watamu', 'Watamu'),
-        ('diani', 'Diani'),
-        ('nyali', 'Nyali'),
-        ('mtwapa', 'Mtwapa'),
-        ('shanzu', 'Shanzu'),
-        ('mombasa', 'Mombasa'),
-        ('malindi', 'Malindi'),
-        ('kilifi_town', 'Kilifi Town'),
+
 
         ('embakasi', 'Embakasi'),
         ('fedha', 'Fedha'),

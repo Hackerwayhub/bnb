@@ -24,7 +24,7 @@ class Listing(models.Model):
     ]
 
     LOCATIONS = [
-        ('safari & travel experiences', 'safari & travel experiences'),
+        ('safaritravel experiences', 'safari & travel experiences'),
         ('kilimani', 'Kilimani'),
         ('westlands', 'Westlands'),
 

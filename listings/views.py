@@ -696,7 +696,7 @@ INVEST_TIERS = {
         'name': 'Starter Unit',
         'setup_fee': Decimal('250000'),
         'monthly_estimate': Decimal('25000'),
-        'description': 'Studio units in high-demand areas',
+        'description': 'Studio apartments',
     },
     'growth': {
         'name': 'Growth Unit',
@@ -708,7 +708,7 @@ INVEST_TIERS = {
         'name': 'Premium Unit',
         'setup_fee': Decimal('750000'),
         'monthly_estimate': Decimal('75000'),
-        'description': '3 bedroom furnished penthouses',
+        'description': '3 bedroom furnished apartments',
     },
 }
 
@@ -726,7 +726,7 @@ def invest_landing(request):
     context = {
         'invest_tiers': INVEST_TIERS,
         'invest_locations': INVEST_LOCATIONS,
-        'title': 'Invest, Own a unit, earn passive income',
+        'title': 'Invest, Own, Earn passive income',
         'page_title': 'bnb.co.ke Invest',
         'meta_description': (
             'Own a fully-furnished BnB unit in Kenya. bnb.co.ke Invest handles '
@@ -734,3 +734,12 @@ def invest_landing(request):
         ),
     }
     return render(request, 'listings/invest.html', context)
+
+
+def safari_landing(request):
+    context = {
+        'title': 'Luxury Safari Packages in Kenya — bnb.co.ke Safari',
+        'page_title': 'bnb.co.ke Safari',
+        'meta_description': 'Curated luxury safari packages in Kenya. Stay at Mahali Mzuri, Angama Mara, and more.',
+    }
+    return render(request, 'listings/safari.html', context)

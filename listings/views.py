@@ -738,7 +738,7 @@ def invest_landing(request):
 
 def safari_landing(request):
     context = {
-        'title': 'Luxury Safari Packages in Kenya — bnb.co.ke Safari',
+        'title': 'Luxury Safari & travel experiences Packages in Kenya — welcome Kenya, karibu Kenya',
         'page_title': 'bnb.co.ke Safari',
         'meta_description': 'Curated luxury safari packages in Kenya. Stay at Mahali Mzuri, Angama Mara, and more.',
     }

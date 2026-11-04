@@ -233,6 +233,35 @@
     margin-top: 12px;
   }
 
+  .invest-form-card .btn-invest-primary { width: 100%; justify-content: center; margin-top: 6px; }
+
+  .invest-submit-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 6px;
+  }
+
+  .invest-submit-row button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 12px;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.25s ease;
+  }
+
+  .invest-submit-wa { background: #25D366; color: #fff; }
+  .invest-submit-wa:hover { background: #1da851; transform: translateY(-1px); }
+
+  .invest-submit-email { background: var(--invest-navy); color: #fff; }
+  .invest-submit-email:hover { background: var(--invest-red); transform: translateY(-1px); }
   /* ---------- SECTION SHELL ---------- */
   .invest-section {
     max-width: 1200px;
@@ -866,10 +895,18 @@
             <textarea id="notes" name="notes" rows="2" placeholder="Anything we should know?"></textarea>
           </div>
 
-          <button type="button" class="btn-invest-primary" onclick="investSendWhatsApp()">
-            <i class="fa fa-paper-plane"></i> Request my investor pack
-          </button>
+         <div class="invest-submit-row">
+  <button type="button" class="invest-submit-wa" onclick="investSendWhatsApp()">
+    <i class="fab fa-whatsapp"></i> WhatsApp
+  </button>
+  <button type="button" class="invest-submit-email" onclick="investSendEmail()">
+    <i class="fa fa-envelope"></i> Email
+  </button>
+</div>
 
+<p class="invest-form-fine">
+  <i class="fa fa-lock"></i> We'll never share your details. No obligation.
+</p>
           <p class="invest-form-fine">
             <i class="fa fa-lock"></i> We'll never share your details. No obligation.
           </p>
@@ -1252,5 +1289,40 @@
   };
 
 })();
+
+      /* ---------- Form → Email (fallback for non-WhatsApp users) ---------- */
+  window.investSendEmail = function () {
+    var name = (document.getElementById('full_name') || {}).value || '';
+    var email = (document.getElementById('email') || {}).value || '';
+    var phone = (document.getElementById('phone') || {}).value || '';
+    var loc = (document.getElementById('location') || {}).value || '';
+    var tier = (document.getElementById('tier') || {}).value || '';
+    var budget = (document.getElementById('budget') || {}).value || '';
+    var notes = (document.getElementById('notes') || {}).value || '';
+
+    if (!name.trim() || (!email.trim() && !phone.trim())) {
+      alert('Please enter your name and either an email or phone number.');
+      return;
+    }
+
+    var subject = 'Investor Pack Request — ' + (tier || 'General Enquiry');
+    var body =
+      'Hi bnb.co.ke Invest,\n\n' +
+      'I would like to request the investor pack. Here are my details:\n\n' +
+      'Name: ' + name + '\n' +
+      'Email: ' + email + '\n' +
+      'Phone: ' + phone + '\n' +
+      'Preferred location: ' + loc + '\n' +
+      'Unit tier: ' + tier + '\n' +
+      'Setup budget: ' + budget + '\n' +
+      'Notes: ' + notes + '\n\n' +
+      'Please send me the investor pack and next steps.\n\n' +
+      'Thank you!';
+
+    window.location.href =
+      'mailto:invest@bnb.co.ke' +
+      '?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(body);
+  };
 </script>
 {% endblock %}

@@ -154,7 +154,7 @@ class Listing(models.Model):
         ('kitui_town', 'Kitui Town'),
         ('bungoma_town', 'Bungoma Town'),
 
-        ('wangige', 'Wangige'),
+
         ('kericho_town', 'Kericho Town'),
 
         ('dubai', 'Dubai'),

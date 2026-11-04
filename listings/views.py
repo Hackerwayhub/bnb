@@ -726,7 +726,7 @@ def invest_landing(request):
     context = {
         'invest_tiers': INVEST_TIERS,
         'invest_locations': INVEST_LOCATIONS,
-        'title': 'bnb.co.ke Invest — Own a unit, earn passive income',
+        'title': 'Invest, Own a unit, earn passive income',
         'page_title': 'bnb.co.ke Invest',
         'meta_description': (
             'Own a fully-furnished BnB unit in Kenya. bnb.co.ke Invest handles '

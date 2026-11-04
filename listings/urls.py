@@ -20,6 +20,7 @@ urlpatterns = [
 
     path('invest/', views.invest_landing, name='invest_landing'),
 
+path('safari/', views.safari_landing, name='safari_landing'),
     # Individual listing detail
     path('listing/<slug:slug>/', views.listing_detail, name='listing_detail'),
 

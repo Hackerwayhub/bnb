@@ -16,6 +16,8 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from .models import Listing, Booking
 import logging
+
+from decimal import Decimal
 import urllib.parse
 
 # Set up logger
@@ -682,3 +684,53 @@ def listing_detail(request, slug):
         'meta_description': f'Book BnB/Airbnb {listing.title} in {listing.get_location_display()}. {listing.guests} guests, {listing.bedrooms} bedrooms, KES {listing.price_per_night}/night.',
     }
     return render(request, 'listings/listing_detail.html', context)
+
+
+
+# ============================================================================
+# bnb.co.ke INVEST
+# ============================================================================
+
+INVEST_TIERS = {
+    'starter': {
+        'name': 'Starter Unit',
+        'setup_fee': Decimal('250000'),
+        'monthly_estimate': Decimal('25000'),
+        'description': 'Studio units in high-demand areas',
+    },
+    'growth': {
+        'name': 'Growth Unit',
+        'setup_fee': Decimal('450000'),
+        'monthly_estimate': Decimal('45000'),
+        'description': '1 bedroom serviced apartments',
+    },
+    'premium': {
+        'name': 'Premium Unit',
+        'setup_fee': Decimal('750000'),
+        'monthly_estimate': Decimal('75000'),
+        'description': '3 bedroom furnished penthouses',
+    },
+}
+
+INVEST_LOCATIONS = [
+    'Kilimani', 'Kileleshwa', 'Westlands',
+
+]
+
+
+def invest_landing(request):
+    """
+    Public landing page for bnb.co.ke Invest.
+    No auth, no POST — just renders the page with tiers + locations.
+    """
+    context = {
+        'invest_tiers': INVEST_TIERS,
+        'invest_locations': INVEST_LOCATIONS,
+        'title': 'bnb.co.ke Invest — Own a unit, earn passive income',
+        'page_title': 'bnb.co.ke Invest',
+        'meta_description': (
+            'Own a fully-furnished BnB unit in Kenya. bnb.co.ke Invest handles '
+            'setup, furnishing, and hosting. You collect monthly passive income.'
+        ),
+    }
+    return render(request, 'listings/invest.html', context)

@@ -24,7 +24,7 @@ class Listing(models.Model):
     ]
 
     LOCATIONS = [
-        ('safaritravel experiences', 'safari & travel experiences'),
+        ('safaritravelexperiences', 'safari & travel experiences'),
         ('kilimani', 'Kilimani'),
         ('westlands', 'Westlands'),
 
@@ -85,6 +85,31 @@ class Listing(models.Model):
         ('south_b', 'South B'),
         ('south_c', 'South C'),
         ('utawala', 'Utawala'),
+
+
+            ('royal_suburbs_roysambu', 'Royal Suburbs by TSAVO (Roysambu)'),
+            ('royal_city_roysambu', 'Royal City by TSAVO (Roysambu)'),
+            ('royal_suburbs_5_roysambu', 'Royal Suburbs 5 (Roysambu)'),
+            ('tsavo_sunset_thindigua', 'TSAVO Sunset / Sunset 2 (Kiambu Road)'),
+            ('tsavo_stanley_kiambu', 'TSAVO Stanley (Kiambu Town)'),
+            ('tsavo_fedha_embakasi', 'TSAVO Fedha (Embakasi)'),
+            ('90_degrees_embakasi', '90 Degrees by TSAVO (Embakasi)'),
+            ('tsavo_skywalk_ngong_road', 'TSAVO Skywalk (Ngong Road)'),
+            ('tsavo_court_ngong_road', 'Tsavo Court Apartments (Ngong Road)'),
+            ('coral_bells_kiambu_road', 'Coral Bells by TSAVO (Kiambu Road)'),
+            ('tsavo_sentinel_rongai', 'TSAVO Sentinel (Ongata Rongai)'),
+            ('laiser_place_rongai', 'Laiser Place by TSAVO (Ongata Rongai)'),
+            ('tsavo_gardens_south_c', 'Tsavo Gardens Apartments (South C)'),
+            ('tsavo_elite_westlands', 'TSAVO Elite (Westlands/Ngara)'),
+            ('tsavo_delight_nairobi', 'TSAVO Delight (Oloitoktok Road)'),
+            ('tsavo_premier_nairobi', 'TSAVO Premier (Nairobi)'),
+            ('tsavo_divine_nairobi', 'TSAVO Divine (Nairobi)'),
+            ('tsavo_rising_dagoretti', 'TSAVO Rising (Dagoretti)'),
+            ('tsavo_step_up_nairobi', 'TSAVO Step-up (Nairobi)'),
+            ('tsavo_elevate_waiyaki_way', 'TSAVO Elevate (Waiyaki Way)'),
+            ('tsavo_heights_nairobi', 'Tsavo Heights (Nairobi)'),
+            ('tsavo_pioneer_eldoret', 'Tsavo Pioneer (Eldoret)'),
+
 
         ('eldoret', 'Eldoret'),
         ('nakuru', 'Nakuru'),

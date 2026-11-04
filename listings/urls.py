@@ -18,6 +18,7 @@ urlpatterns = [
     path('edit/<int:listing_id>/', views.edit_listing, name='edit_bnb_listing'),
     path('delete/<int:listing_id>/', views.delete_listing, name='delete_listing'),
 
+    path('invest/', views.invest_landing, name='invest_landing'),
 
     # Individual listing detail
     path('listing/<slug:slug>/', views.listing_detail, name='listing_detail'),

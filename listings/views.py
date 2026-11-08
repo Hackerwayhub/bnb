@@ -694,21 +694,28 @@ def listing_detail(request, slug):
 INVEST_TIERS = {
     'starter': {
         'name': 'Starter Unit',
-        'setup_fee': Decimal('250000-450000'),
-        'monthly_estimate': Decimal('25000-45000'),
+        'setup_fee': Decimal('250000'),
+        'monthly_estimate': Decimal('25000'),
         'description': 'Furnished apartments',
     },
     'growth': {
         'name': 'Growth Unit',
-        'setup_fee': Decimal('450000-750000'),
-        'monthly_estimate': Decimal('45000-75000'),
-        'description': 'Furnished serviced apartments',
+        'setup_fee': Decimal('450000'),
+        'monthly_estimate': Decimal('45000'),
+        'description': 'Furnished apartments',
     },
     'premium': {
         'name': 'Premium Unit',
-        'setup_fee': Decimal('750000-1500000'),
+        'setup_fee': Decimal('750000'),
         'monthly_estimate': Decimal('75000'),
-        'description': 'furnished services apartments',
+        'description': 'furnished apartments',
+    },
+
+'Luxury': {
+        'name': 'luxury Unit',
+        'setup_fee': Decimal('1500000'),
+        'monthly_estimate': Decimal('150000'),
+        'description': 'furnished apartments',
     },
 }
 

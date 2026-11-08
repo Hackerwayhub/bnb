@@ -368,7 +368,7 @@ def submit_listing(request):
                 'form': form,
                 'title': 'Submit Listing ~ BnB.co.ke',
                 'page_title': 'Submit  listing ~ BnB.co.ke',
-                'featured_price': 1000.00,
+                'featured_price': 3000.00,
             }
             return render(request, 'listings/create_listing.html', context)
 
@@ -379,7 +379,7 @@ def submit_listing(request):
         'form': form,
         'title': 'Submit Listing | βnb.co.ke',
         'page_title': 'Submit Listing | βnb.co.ke',
-        'featured_price': 1000.00,
+        'featured_price': 3000.00,
     }
     return render(request, 'listings/create_listing.html', context)
 
@@ -694,21 +694,21 @@ def listing_detail(request, slug):
 INVEST_TIERS = {
     'starter': {
         'name': 'Starter Unit',
-        'setup_fee': Decimal('250000'),
-        'monthly_estimate': Decimal('25000'),
-        'description': 'Studio apartments',
+        'setup_fee': Decimal('250000-450000'),
+        'monthly_estimate': Decimal('25000-45000'),
+        'description': 'Furnished apartments',
     },
     'growth': {
         'name': 'Growth Unit',
-        'setup_fee': Decimal('450000'),
-        'monthly_estimate': Decimal('45000'),
-        'description': '1 bedroom serviced apartments',
+        'setup_fee': Decimal('450000-750000'),
+        'monthly_estimate': Decimal('45000-75000'),
+        'description': 'Furnished serviced apartments',
     },
     'premium': {
         'name': 'Premium Unit',
-        'setup_fee': Decimal('750000'),
+        'setup_fee': Decimal('750000-1500000'),
         'monthly_estimate': Decimal('75000'),
-        'description': '3 bedroom furnished apartments',
+        'description': 'furnished services apartments',
     },
 }
 

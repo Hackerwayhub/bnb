@@ -1106,7 +1106,7 @@ body.is-scrolled .filters-container {
      <!-- ============================================
      HERO CAROUSEL WITH SKELETON UI
      ============================================ -->
-{% if listings|length > 0 %}
+        {% if listings|length > 0 and selected_location == 'all' and not current_filters.property_type %}
 <section class="hero-carousel-section">
   <div class="hero-carousel-container">
     <div class="hero-carousel" id="heroCarousel">

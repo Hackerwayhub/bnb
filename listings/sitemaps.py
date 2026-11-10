@@ -1,97 +1,119 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
-from .models import Listing
 from django.utils import timezone
+from .models import Listing
 
+
+# ============================================================================
+# STATIC / MARKETING PAGES
+# ============================================================================
 
 class StaticSitemap(Sitemap):
-    """Sitemap for static pages"""
-    changefreq = 'daily'
+    """Sitemap for static public marketing pages."""
+    changefreq = 'weekly'
     priority = 0.9
 
     def items(self):
         return [
-            'home',  # Main homepage
-            'advertise_bnb',  # Submit listing page
-            'whatsapp_booking',  # WhatsApp booking page
-
-            'login',  # Login page
-            'register',  # Registration page
-            'password_reset',  # Password reset page
+            'home',
+            'advertise_bnb',
+            'whatsapp_booking',
+            # NOTE: login, register, password_reset are blocked in robots.txt
+            #       and MUST NOT be in the sitemap (causes Search Console warnings).
         ]
 
     def location(self, item):
         return reverse(item)
 
-    def priority(self, item):
-        # Home page gets highest priority
-        if item == 'home':
-            return 1.0
-        # Important pages get high priority
-        elif item in ['advertise_bnb', 'whatsapp_booking']:
-            return 0.9
-        elif item == 'all_property_types':
-            return 0.8
-        # Auth pages
-        elif item in ['login', 'register']:
-            return 0.7
-        return 0.6
-
     def lastmod(self, item):
-        # For static pages, return current time
         return timezone.now()
 
+    def priority(self, item):
+        if item == 'home':
+            return 1.0
+        if item in ['advertise_bnb', 'whatsapp_booking']:
+            return 0.9
+        return 0.8
+
+
+# ============================================================================
+# PRODUCT LANDING PAGES
+# ============================================================================
+
+class ProductSitemap(Sitemap):
+    """Sitemap for the product / service landing pages present in urls.py."""
+    changefreq = 'weekly'
+    priority = 0.95
+
+    def items(self):
+        return [
+            'safari_landing',
+            'invest_landing',
+            'bnb_faq',
+        ]
+
+    def location(self, item):
+        return reverse(item)
+
+    def lastmod(self, item):
+        return timezone.now()
+
+    def priority(self, item):
+        if item in ['safari_landing', 'invest_landing']:
+            return 0.95
+        if item == 'bnb_faq':
+            return 0.75
+        return 0.85
+
+
+# ============================================================================
+# LOCATION PAGES
+# ============================================================================
 
 class LocationSitemap(Sitemap):
-    """Sitemap for all location pages with clean URLs"""
+    """Sitemap for every location landing page."""
     changefreq = 'weekly'
     priority = 0.8
 
     def items(self):
-        # Get all location choices from your model
-        location_choices = Listing.LOCATIONS
-        # Extract just the location codes
-        location_codes = [code for code, name in location_choices]
-        return location_codes
+        return [code for code, name in Listing.LOCATIONS]
 
     def location(self, location_code):
-        # Convert location code to slug format
-        location_slug = location_code.lower()
-        return reverse('listings_by_location', kwargs={'location_slug': location_slug})
+        return reverse(
+            'listings_by_location',
+            kwargs={'location_slug': location_code.lower()},
+        )
 
     def lastmod(self, location_code):
-        # Get the latest listing update for this location
-        latest_listing = Listing.objects.filter(
-            location=location_code,
-            is_approved=True
+        latest = Listing.objects.filter(
+            location=location_code, is_approved=True
         ).order_by('-updated_at').first()
-
-        if latest_listing:
-            return latest_listing.updated_at
-        return None
+        return latest.updated_at if latest else None
 
     def priority(self, location_code):
-        # Higher priority for locations with more listings
-        count = Listing.objects.filter(location=location_code, is_approved=True).count()
+        count = Listing.objects.filter(
+            location=location_code, is_approved=True
+        ).count()
         if count > 50:
             return 0.9
-        elif count > 20:
+        if count > 20:
             return 0.8
-        elif count > 5:
+        if count > 5:
             return 0.7
         return 0.6
 
 
+# ============================================================================
+# LISTINGS
+# ============================================================================
+
 class ListingSitemap(Sitemap):
-    """Sitemap for individual listing pages"""
+    """Sitemap for every approved listing detail page."""
     changefreq = 'weekly'
-    priority = 0.7
+    priority = 0.75
 
     def items(self):
-        # Only include approved listings
-        return Listing.objects.filter(
-            is_approved=True
-        ).order_by('-created_at')
+        return Listing.objects.filter(is_approved=True).order_by('-created_at')
 
     def location(self, listing):
         return reverse('listing_detail', kwargs={'slug': listing.slug})
@@ -100,113 +122,108 @@ class ListingSitemap(Sitemap):
         return listing.updated_at
 
     def priority(self, listing):
-        # Give higher priority to featured listings
         if listing.listing_type == 'featured':
             return 0.9
-        # Higher priority to recently updated listings
-        days_since_update = (timezone.now() - listing.updated_at).days
-        if days_since_update < 7:
-            return 0.8
-        elif days_since_update < 30:
-            return 0.7
-        return 0.6
+        days = (timezone.now() - listing.updated_at).days
+        if days < 7:
+            return 0.85
+        if days < 30:
+            return 0.75
+        return 0.65
 
+
+# ============================================================================
+# PROPERTY TYPE PAGES
+# ============================================================================
 
 class PropertyTypeSitemap(Sitemap):
-    """Sitemap for property type pages with clean URLs"""
+    """Sitemap for every property type filter page."""
     changefreq = 'weekly'
-    priority = 0.7
+    priority = 0.75
 
     def items(self):
-        # Get all property type choices from your model
         return [code for code, name in Listing.PROPERTY_TYPES]
 
     def location(self, property_code):
-        # Create clean URL with the property type code (with underscore)
-        # Your URLs use underscore: /property-type/rent_studio/
-        return reverse('listings_by_property_type', kwargs={'property_type_slug': property_code})
+        return reverse(
+            'listings_by_property_type',
+            kwargs={'property_type_slug': property_code},
+        )
 
     def lastmod(self, property_code):
-        # Get the latest listing update for this property type
-        latest_listing = Listing.objects.filter(
-            property_type=property_code,
-            is_approved=True
+        latest = Listing.objects.filter(
+            property_type=property_code, is_approved=True
         ).order_by('-updated_at').first()
-
-        if latest_listing:
-            return latest_listing.updated_at
-        return None
+        return latest.updated_at if latest else None
 
     def priority(self, property_code):
-        # Higher priority for property types with more listings
-        count = Listing.objects.filter(property_type=property_code, is_approved=True).count()
+        count = Listing.objects.filter(
+            property_type=property_code, is_approved=True
+        ).count()
         if count > 50:
-            return 0.8
-        elif count > 20:
-            return 0.7
-        elif count > 5:
-            return 0.6
-        return 0.5
+            return 0.85
+        if count > 20:
+            return 0.75
+        if count > 5:
+            return 0.65
+        return 0.55
 
 
+# ============================================================================
+# LISTING TYPE FILTERS (Free / Featured)
+# ============================================================================
 
 class ListingTypeSitemap(Sitemap):
-    """Sitemap for listing type filter pages (free/featured)"""
-    changefreq = 'monthly'
-    priority = 0.5
+    """Sitemap for listing type filter pages (free / featured)."""
+    changefreq = 'weekly'
+    priority = 0.6
 
     def items(self):
         return [code for code, name in Listing.LISTING_TYPE_CHOICES]
 
     def location(self, listing_type):
-        # Create URL with query parameter for listing type
-        base_url = reverse('home')
-        return f"{base_url}?listing_type={listing_type}"
+        return f"{reverse('home')}?listing_type={listing_type}"
 
     def lastmod(self, listing_type):
-        latest_listing = Listing.objects.filter(
-            listing_type=listing_type,
-            is_approved=True
+        latest = Listing.objects.filter(
+            listing_type=listing_type, is_approved=True
         ).order_by('-updated_at').first()
+        return latest.updated_at if latest else None
 
-        if latest_listing:
-            return latest_listing.updated_at
-        return None
 
+# ============================================================================
+# TRANSACTION TYPE FILTERS (Rent / Sale / Shortlet)
+# ============================================================================
 
 class TransactionTypeSitemap(Sitemap):
-    """Sitemap for transaction type filter pages (Rent, Sale, Shortlet)"""
-    changefreq = 'monthly'
-    priority = 0.6
+    """Sitemap for transaction type filter pages (rent / sale / shortlet)."""
+    changefreq = 'weekly'
+    priority = 0.7
 
     def items(self):
         return [code for code, name in Listing.TRANSACTION_TYPE_CHOICES]
 
     def location(self, transaction_type):
-        # Create URL with query parameter for transaction type
-        base_url = reverse('home')
-        return f"{base_url}?transaction_type={transaction_type}"
+        return f"{reverse('home')}?transaction_type={transaction_type}"
 
     def lastmod(self, transaction_type):
-        latest_listing = Listing.objects.filter(
-            transaction_type=transaction_type,
-            is_approved=True
+        latest = Listing.objects.filter(
+            transaction_type=transaction_type, is_approved=True
         ).order_by('-updated_at').first()
+        return latest.updated_at if latest else None
 
-        if latest_listing:
-            return latest_listing.updated_at
-        return None
 
+# ============================================================================
+# USER PAGES
+# ============================================================================
 
 class UserSitemap(Sitemap):
-    """Sitemap for user-related pages"""
+    """Sitemap for user-facing pages (auth-required, low priority)."""
     changefreq = 'monthly'
-    priority = 0.4
+    priority = 0.3
 
     def items(self):
-        return [
-            'my_bnb_listings',  # User's listings page
-        ]
+        return ['my_bnb_listings']
 
     def location(self, item):
         return reverse(item)
@@ -215,12 +232,16 @@ class UserSitemap(Sitemap):
         return timezone.now()
 
 
-# Combine all sitemaps
+# ============================================================================
+# MASTER SITEMAP DICT
+# ============================================================================
+
 sitemaps = {
     'static': StaticSitemap,
+    'products': ProductSitemap,
     'locations': LocationSitemap,
     'listings': ListingSitemap,
-    'property_types': PropertyTypeSitemap,  # Clean URLs for each property type
+    'property_types': PropertyTypeSitemap,
     'listing_types': ListingTypeSitemap,
     'transaction_types': TransactionTypeSitemap,
     'user_pages': UserSitemap,

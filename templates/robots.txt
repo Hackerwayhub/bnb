@@ -1,117 +1,104 @@
+# ============================================
+# welcomekenya.co.ke / bnb.co.ke robots.txt
+# ============================================
+
 User-agent: *
 Allow: /
+
+# ---------- Public product pages (explicit allow) ----------
+Allow: /safari/
+Allow: /invest/
+Allow: /faq/
 Allow: /advertise/
 Allow: /book-via-whatsapp/
+
+# ---------- SEO-critical indexable paths ----------
 Allow: /location/
 Allow: /property-type/
 Allow: /listing/
+Allow: /static/
+Allow: /media/
 
-# Disallow admin and backend areas
-Disallow: /admin/
+# ---------- Backend & auth (mounted at /auth/) ----------
+Disallow: /auth/
 Disallow: /accounts/
-Disallow: /login/
-Disallow: /logout/
-Disallow: /signup/
-Disallow: /password-reset/
+Disallow: /admin/
 Disallow: /api/
 Disallow: /static/admin/
 Disallow: /media/admin/
 Disallow: /django-admin/
 
-# Disallow transactional / private pages
+# ---------- Transactional / private pages ----------
 Disallow: /book/
 Disallow: /booking/
 Disallow: /my-listings/
 Disallow: /edit/
 Disallow: /delete/
-Disallow: /submit-listing/
 
-# Allow search engines to crawl CSS, JS, and images
-Allow: /static/
-Allow: /media/
-Allow: *.css
-Allow: *.js
-Allow: *.jpg
-Allow: *.jpeg
-Allow: *.png
-Allow: *.gif
-Allow: *.svg
-Allow: *.webp
-
-# Disallow query parameters that might create duplicate content
+# ---------- Duplicate-content query strings ONLY ----------
+# (Do NOT block ?page=, ?listing_type=, ?transaction_type=
+#  — those are indexable. Use canonical tags instead.)
 Disallow: /*?*sort=
 Disallow: /*?*filter=
-Disallow: /*?page=
-Disallow: /*?listing_type=
-Disallow: /*?transaction_type=
 
-# Sitemap location
 Sitemap: https://bnb.co.ke/sitemap.xml
 
-# Crawl delay for respectful crawling
-Crawl-delay: 2
-
-# Additional directives for specific search engines
+# ============================================
+# Major search engines
+# ============================================
 User-agent: Googlebot
 Allow: /
-Allow: /advertise/
-Allow: /book-via-whatsapp/
-Allow: /location/
-Allow: /property-type/
-Disallow: /admin/
+Disallow: /auth/
 Disallow: /accounts/
+Disallow: /admin/
+Disallow: /api/
 Disallow: /book/
 Disallow: /booking/
 Disallow: /my-listings/
-Crawl-delay: 1
+Disallow: /edit/
+Disallow: /delete/
 
 User-agent: Googlebot-Image
 Allow: /media/
 Allow: /static/
-Allow: /*.jpg$
-Allow: /*.jpeg$
-Allow: /*.png$
-Allow: /*.gif$
-Allow: /*.webp$
 
 User-agent: Bingbot
 Allow: /
-Allow: /advertise/
-Allow: /book-via-whatsapp/
-Allow: /location/
-Allow: /property-type/
-Disallow: /admin/
+Disallow: /auth/
 Disallow: /accounts/
+Disallow: /admin/
+Disallow: /api/
 Disallow: /book/
 Disallow: /booking/
 Disallow: /my-listings/
 Crawl-delay: 2
 
-User-agent: Baiduspider
-Disallow: /
-
 User-agent: YandexBot
-Disallow: /admin/
+Disallow: /auth/
 Disallow: /accounts/
+Disallow: /admin/
 Disallow: /book/
 Disallow: /booking/
 Crawl-delay: 3
 
 User-agent: DuckDuckBot
 Allow: /
-Disallow: /admin/
+Disallow: /auth/
 Disallow: /accounts/
-Disallow: /book/
-Disallow: /booking/
+Disallow: /admin/
 
 User-agent: Applebot
 Allow: /
-Disallow: /admin/
+Disallow: /auth/
 Disallow: /accounts/
-Disallow: /book/
-Disallow: /booking/
+Disallow: /admin/
 
-# Block scrapers and bad bots
+User-agent: Baiduspider
+Disallow: /
+
+# ============================================
+# Rate-limit SEO scrapers (they follow robots)
+# ============================================
 User-agent: AhrefsBot
 Crawl-delay: 10
 
@@ -127,7 +114,9 @@ Crawl-delay: 10
 User-agent: BLEXBot
 Crawl-delay: 10
 
-# Block known bad bots
+# ============================================
+# Block malicious / content-scraper bots
+# ============================================
 User-agent: Xenu
 Disallow: /
 
@@ -197,40 +186,16 @@ Disallow: /
 User-agent: NetAnts
 Disallow: /
 
-User-agent: Mister Pix
-Disallow: /
-
 User-agent: WebAuto
-Disallow: /
-
-User-agent: TheNomad
 Disallow: /
 
 User-agent: WWW-Collector-E
 Disallow: /
 
-User-agent: RMA
-Disallow: /
-
-User-agent: libWeb/clsHTTP
-Disallow: /
-
-User-agent: asterias
-Disallow: /
-
-User-agent: httplib
-Disallow: /
-
 User-agent: turingos
 Disallow: /
 
-User-agent: spanner
-Disallow: /
-
 User-agent: InfoNaviRobot
-Disallow: /
-
-User-agent: Harvest
 Disallow: /
 
 User-agent: Bullseye

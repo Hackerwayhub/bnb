@@ -750,3 +750,9 @@ def safari_landing(request):
         'meta_description': 'Curated luxury safari packages in Kenya. Stay at Mahali Mzuri, Angama Mara, and more.',
     }
     return render(request, 'listings/safari.html', context)
+
+def bnb_faq(request):
+    return render(request, 'faq/bnb_faq.html', {
+        'title': 'FAQ — bnb.co.ke | BnB Stays, Staycations & Holiday Homes in Kenya',
+        'meta_description': 'Frequently asked questions about booking BnB stays, staycations, and holiday homes on bnb.co.ke. Answers for guests and hosts in Kenya.',
+    })

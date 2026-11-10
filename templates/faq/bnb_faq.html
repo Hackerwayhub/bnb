@@ -1,0 +1,1436 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+
+ <meta name="description" content="{{ meta_description|default:'Frequently asked questions about booking BnB stays, staycations, and holiday homes on bnb.co.ke. Answers for guests and hosts in Kenya. Support: +254 798 246 467.' }}">
+ <title>{{ title|default:'FAQ — bnb.co.ke | BnB Stays, Staycations & Holiday Homes in Kenya' }}</title>
+
+{% endblock %}
+
+{% block content %}
+<style>
+  :root {
+    --faq-red: #D32F2F;
+    --faq-red-dark: #B71C1C;
+    --faq-navy: #0F1B2D;
+    --faq-slate: #475569;
+    --faq-bg: #F8FAFC;
+    --faq-card: #FFFFFF;
+    --faq-gold: #D4A017;
+    --faq-border: #E2E8F0;
+    --faq-green: #059669;
+    --radius-lg: 24px;
+    --radius-md: 16px;
+  }
+
+  .faq-page {
+    background: var(--faq-bg);
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ============================================
+     HERO
+     ============================================ */
+  .faq-hero {
+    background: linear-gradient(135deg, #0F1B2D 0%, #1A2E48 50%, #D32F2F 140%);
+    padding: 96px 24px 100px;
+    text-align: center;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .faq-hero::before {
+    content: "";
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(253, 230, 138, 0.12) 0%, transparent 70%);
+    top: -200px; right: -100px;
+    pointer-events: none;
+  }
+
+  .faq-hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-hero h1 {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 0 0 16px;
+    line-height: 1.1;
+    word-wrap: break-word;
+  }
+
+  .faq-hero p {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    opacity: 0.88;
+    max-width: 600px;
+    margin: 0 auto 28px;
+  }
+
+  /* Support pill */
+  .faq-support-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 100px;
+    backdrop-filter: blur(12px);
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.25s ease;
+    max-width: 100%;
+  }
+
+  .faq-support-pill:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(253, 230, 138, 0.5);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+  .faq-support-pill:active {
+    transform: translateY(0) scale(0.99);
+  }
+
+  .faq-support-pill .support-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #25D366;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .faq-support-pill .support-text {
+    text-align: left;
+  }
+
+  .faq-support-pill .support-label {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    opacity: 0.75;
+    margin-bottom: 2px;
+  }
+
+  .faq-support-pill .support-number {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FDE68A;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  /* ============================================
+     CONTAINER
+     ============================================ */
+  .faq-container {
+    max-width: 900px;
+    margin: -40px auto 96px;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ============================================
+     CO-FOUNDER CARD
+     ============================================ */
+  .faq-founder {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 36px;
+    margin-bottom: 40px;
+    border: 1px solid var(--faq-border);
+    box-shadow: 0 20px 48px -16px rgba(15, 27, 45, 0.18);
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .faq-founder::before {
+    content: "";
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 160, 23, 0.08) 0%, transparent 70%);
+    top: -80px; right: -60px;
+    pointer-events: none;
+  }
+
+  .faq-founder-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #FDE68A 0%, #D4A017 50%, #8B5E2B 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--faq-navy);
+    box-shadow: 0 8px 24px -8px rgba(212, 160, 23, 0.5);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .faq-founder-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+
+  .faq-founder-content {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .faq-founder-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faq-gold);
+    margin-bottom: 8px;
+  }
+
+  .faq-founder-label i {
+    font-size: 11px;
+  }
+
+  .faq-founder-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--faq-navy);
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+    line-height: 1.2;
+  }
+
+  .faq-founder-role {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--faq-red);
+    margin-bottom: 12px;
+  }
+
+  .faq-founder-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--faq-slate);
+    margin: 0 0 16px;
+  }
+
+  .faq-founder-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--faq-red);
+    text-decoration: none;
+    transition: gap 0.2s ease;
+    min-height: 32px;
+  }
+
+  .faq-founder-cta:hover {
+    gap: 10px;
+    color: var(--faq-red-dark);
+  }
+
+  /* ============================================
+     TABS
+     ============================================ */
+  .faq-tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .faq-tab {
+    padding: 12px 24px;
+    border-radius: 100px;
+    background: #fff;
+    border: 1.5px solid var(--faq-border);
+    color: var(--faq-slate);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+  }
+
+  .faq-tab:hover {
+    border-color: var(--faq-red);
+    color: var(--faq-red);
+  }
+
+  .faq-tab.active {
+    background: var(--faq-navy);
+    border-color: var(--faq-navy);
+    color: #fff;
+  }
+
+  /* ============================================
+     FAQ ITEMS
+     ============================================ */
+  .faq-section { display: none; }
+  .faq-section.active { display: block; }
+
+  .faq-item {
+    background: #fff;
+    border: 1px solid var(--faq-border);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: all 0.25s ease;
+  }
+
+  .faq-item.open {
+    border-color: rgba(211, 47, 47, 0.3);
+    box-shadow: 0 12px 32px -12px rgba(15, 27, 45, 0.18);
+  }
+
+  .faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 22px 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15.5px;
+    font-weight: 600;
+    color: var(--faq-navy);
+    font-family: inherit;
+    line-height: 1.4;
+    min-height: 60px;
+  }
+
+  .faq-q i {
+    color: var(--faq-red);
+    font-size: 14px;
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .faq-item.open .faq-q i {
+    transform: rotate(45deg);
+  }
+
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    padding: 0 26px;
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--faq-slate);
+  }
+
+  .faq-item.open .faq-a {
+    max-height: 800px;
+    padding: 0 26px 24px;
+  }
+
+  .faq-a p { margin: 0 0 14px; }
+  .faq-a p:last-child { margin-bottom: 0; }
+  .faq-a ul { margin: 0 0 14px 20px; padding: 0; }
+  .faq-a li { margin-bottom: 8px; }
+  .faq-a strong { color: var(--faq-navy); }
+
+  .faq-a a {
+    color: var(--faq-red);
+    text-decoration: none;
+    font-weight: 600;
+    word-break: break-word;
+  }
+  .faq-a a:hover { text-decoration: underline; }
+
+  /* ============================================
+     SUPPORT BAND
+     ============================================ */
+  .faq-support-band {
+    background: linear-gradient(135deg, #0F1B2D 0%, #1A2E48 100%);
+    border-radius: var(--radius-lg);
+    padding: 48px 36px;
+    margin-top: 48px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .faq-support-band::before {
+    content: "";
+    position: absolute;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 160, 23, 0.15) 0%, transparent 70%);
+    top: -100px; left: -60px;
+    pointer-events: none;
+  }
+
+  .faq-support-band::after {
+    content: "";
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(211, 47, 47, 0.15) 0%, transparent 70%);
+    bottom: -80px; right: -40px;
+    pointer-events: none;
+  }
+
+  .faq-support-band h3 {
+    position: relative;
+    font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 12px;
+    letter-spacing: -0.02em;
+    word-wrap: break-word;
+  }
+
+  .faq-support-band p {
+    position: relative;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 540px;
+    margin: 0 auto 28px;
+  }
+
+  .faq-support-number-box {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 32px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(253, 230, 138, 0.35);
+    border-radius: 100px;
+    backdrop-filter: blur(12px);
+    margin-bottom: 28px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    max-width: 100%;
+  }
+
+  .faq-support-number-box:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(253, 230, 138, 0.6);
+    transform: translateY(-2px);
+  }
+  .faq-support-number-box:active {
+    transform: translateY(0) scale(0.99);
+  }
+
+  .faq-support-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: #25D366;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 8px 20px -6px rgba(37, 211, 102, 0.5);
+  }
+
+  .faq-support-number-text {
+    text-align: left;
+    color: #fff;
+    min-width: 0;
+  }
+
+  .faq-support-number-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: #FDE68A;
+    margin-bottom: 4px;
+  }
+
+  .faq-support-number-value {
+    font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  .faq-support-number-hours {
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 500;
+    margin-top: 4px;
+  }
+
+  .faq-support-actions {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .faq-support-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 26px;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    min-height: 48px;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+  }
+
+  .faq-support-btn.wa {
+    background: #25D366;
+    color: #fff;
+  }
+  .faq-support-btn.wa:hover {
+    background: #1da851;
+    transform: translateY(-2px);
+    color: #fff;
+  }
+  .faq-support-btn.wa:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .faq-support-btn.call {
+    background: #fff;
+    color: var(--faq-navy);
+  }
+  .faq-support-btn.call:hover {
+    background: #FEF2F2;
+    color: var(--faq-red);
+    transform: translateY(-2px);
+  }
+  .faq-support-btn.call:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .faq-support-btn.email {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  .faq-support-btn.email:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    color: #fff;
+  }
+  .faq-support-btn.email:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .faq-support-btn.browse {
+    background: var(--faq-red);
+    color: #fff;
+  }
+  .faq-support-btn.browse:hover {
+    background: var(--faq-red-dark);
+    transform: translateY(-2px);
+    color: #fff;
+  }
+  .faq-support-btn.browse:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* ============================================
+     REDUCED MOTION
+     ============================================ */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+    *:hover {
+      transform: none !important;
+    }
+  }
+
+  /* ============================================
+     RESPONSIVE — TABLET (1024px)
+     ============================================ */
+  @media (max-width: 1024px) {
+    .faq-hero {
+      padding: 80px 20px 88px;
+    }
+    .faq-container {
+      max-width: 100%;
+      padding: 0 20px;
+    }
+    .faq-founder {
+      padding: 32px;
+      gap: 24px;
+    }
+    .faq-support-band {
+      padding: 44px 28px;
+    }
+  }
+
+  /* ============================================
+     RESPONSIVE — MOBILE (768px)
+     ============================================ */
+  @media (max-width: 768px) {
+    .faq-hero {
+      padding: 72px 20px 80px;
+    }
+    .faq-hero p {
+      font-size: 1rem;
+      margin-bottom: 24px;
+    }
+    .faq-container {
+      padding: 0 16px;
+      margin-bottom: 80px;
+    }
+
+    /* Co-founder stacks vertically */
+    .faq-founder {
+      flex-direction: column;
+      text-align: center;
+      padding: 28px 24px;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .faq-founder-label {
+      justify-content: center;
+    }
+    .faq-founder-cta {
+      justify-content: center;
+      display: flex;
+    }
+    .faq-founder-text {
+      font-size: 13.5px;
+      line-height: 1.65;
+    }
+
+    /* Tabs scroll horizontally if needed */
+    .faq-tabs {
+      gap: 6px;
+      margin-bottom: 32px;
+      justify-content: flex-start;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .faq-tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .faq-tab {
+      flex-shrink: 0;
+      padding: 11px 18px;
+      font-size: 13px;
+    }
+
+    /* Support band compact */
+    .faq-support-band {
+      padding: 40px 24px;
+      margin-top: 40px;
+    }
+    .faq-support-number-box {
+      flex-direction: column;
+      padding: 20px 24px;
+      gap: 12px;
+      text-align: center;
+      border-radius: 20px;
+    }
+    .faq-support-number-text {
+      text-align: center;
+    }
+    .faq-support-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .faq-support-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  /* ============================================
+     RESPONSIVE — SMALL MOBILE (640px)
+     ============================================ */
+  @media (max-width: 640px) {
+    .faq-hero {
+      padding: 56px 16px 72px;
+      border-radius: 0 0 20px 20px;
+    }
+    .faq-hero h1 {
+      font-size: clamp(1.75rem, 7vw, 2.2rem);
+    }
+    .faq-hero p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .faq-support-pill {
+      padding: 10px 18px;
+      gap: 10px;
+    }
+    .faq-support-pill .support-icon {
+      width: 32px;
+      height: 32px;
+      font-size: 14px;
+      border-radius: 9px;
+    }
+    .faq-support-pill .support-label {
+      font-size: 9.5px;
+    }
+    .faq-support-pill .support-number {
+      font-size: 13px;
+    }
+
+    .faq-container {
+      padding: 0 14px;
+      margin-bottom: 64px;
+    }
+
+    .faq-founder {
+      padding: 24px 20px;
+      margin-bottom: 28px;
+    }
+    .faq-founder-avatar {
+      width: 76px;
+      height: 76px;
+      font-size: 1.7rem;
+    }
+    .faq-founder-name {
+      font-size: 1.2rem;
+    }
+    .faq-founder-role {
+      font-size: 12.5px;
+      margin-bottom: 10px;
+    }
+    .faq-founder-text {
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .faq-founder-cta {
+      font-size: 12.5px;
+    }
+
+    .faq-tab {
+      padding: 10px 14px;
+      font-size: 12.5px;
+      min-height: 42px;
+    }
+    .faq-tab i {
+      font-size: 12px;
+    }
+
+    .faq-q {
+      padding: 18px 20px;
+      font-size: 14.5px;
+      min-height: 56px;
+      gap: 12px;
+    }
+    .faq-q i {
+      font-size: 13px;
+    }
+    .faq-a {
+      padding: 0 20px;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .faq-item.open .faq-a {
+      padding: 0 20px 20px;
+    }
+    .faq-a ul {
+      margin-left: 18px;
+    }
+
+    .faq-support-band {
+      padding: 32px 20px;
+      margin-top: 36px;
+      border-radius: 20px;
+    }
+    .faq-support-band h3 {
+      font-size: 1.3rem;
+    }
+    .faq-support-band p {
+      font-size: 0.95rem;
+      margin-bottom: 22px;
+    }
+    .faq-support-icon {
+      width: 46px;
+      height: 46px;
+      font-size: 20px;
+      border-radius: 12px;
+    }
+    .faq-support-number-box {
+      padding: 16px 20px;
+      margin-bottom: 22px;
+    }
+    .faq-support-number-value {
+      font-size: 1.2rem;
+    }
+    .faq-support-number-hours {
+      font-size: 11px;
+    }
+    .faq-support-btn {
+      padding: 13px 20px;
+      font-size: 13.5px;
+      min-height: 46px;
+    }
+  }
+
+  /* ============================================
+     RESPONSIVE — SMALL PHONES (480px)
+     ============================================ */
+  @media (max-width: 480px) {
+    .faq-hero {
+      padding: 48px 14px 64px;
+    }
+    .faq-hero h1 {
+      font-size: clamp(1.6rem, 8vw, 2rem);
+    }
+    .faq-hero p {
+      font-size: 0.92rem;
+    }
+
+    .faq-support-pill {
+      padding: 9px 16px;
+      gap: 8px;
+    }
+    .faq-support-pill .support-icon {
+      width: 30px;
+      height: 30px;
+      font-size: 13px;
+    }
+    .faq-support-pill .support-label {
+      font-size: 9px;
+    }
+    .faq-support-pill .support-number {
+      font-size: 12.5px;
+    }
+
+    .faq-container {
+      padding: 0 12px;
+    }
+
+    .faq-founder {
+      padding: 22px 18px;
+    }
+    .faq-founder-avatar {
+      width: 68px;
+      height: 68px;
+      font-size: 1.5rem;
+    }
+    .faq-founder-name {
+      font-size: 1.1rem;
+    }
+    .faq-founder-text {
+      font-size: 12.5px;
+    }
+
+    .faq-q {
+      padding: 16px 18px;
+      font-size: 14px;
+      min-height: 54px;
+    }
+    .faq-a {
+      padding: 0 18px;
+      font-size: 13.5px;
+    }
+    .faq-item.open .faq-a {
+      padding: 0 18px 18px;
+    }
+
+    .faq-support-band {
+      padding: 28px 18px;
+    }
+    .faq-support-band h3 {
+      font-size: 1.2rem;
+    }
+    .faq-support-band p {
+      font-size: 0.9rem;
+    }
+    .faq-support-number-box {
+      padding: 14px 18px;
+      border-radius: 18px;
+    }
+    .faq-support-number-value {
+      font-size: 1.1rem;
+    }
+    .faq-support-btn {
+      padding: 12px 18px;
+      font-size: 13px;
+    }
+  }
+
+  /* ============================================
+     RESPONSIVE — VERY SMALL PHONES (360px)
+     ============================================ */
+  @media (max-width: 360px) {
+    .faq-hero {
+      padding: 40px 12px 56px;
+    }
+    .faq-hero h1 {
+      font-size: 1.5rem;
+    }
+
+    .faq-support-pill {
+      padding: 8px 14px;
+    }
+    .faq-support-pill .support-label {
+      font-size: 8.5px;
+    }
+    .faq-support-pill .support-number {
+      font-size: 12px;
+    }
+
+    .faq-tab {
+      padding: 9px 12px;
+      font-size: 12px;
+    }
+
+    .faq-q {
+      padding: 14px 16px;
+      font-size: 13.5px;
+    }
+    .faq-a {
+      padding: 0 16px;
+      font-size: 13px;
+    }
+    .faq-item.open .faq-a {
+      padding: 0 16px 16px;
+    }
+
+    .faq-support-number-value {
+      font-size: 1rem;
+    }
+  }
+
+  /* ============================================
+     LANDSCAPE PHONE
+     ============================================ */
+  @media (max-width: 896px) and (orientation: landscape) {
+    .faq-hero {
+      padding: 40px 20px 48px;
+    }
+    .faq-container {
+      margin-top: -20px;
+    }
+    .faq-founder {
+      flex-direction: row;
+      text-align: left;
+      padding: 20px;
+    }
+    .faq-founder-label,
+    .faq-founder-cta {
+      justify-content: flex-start;
+    }
+  }
+
+  /* ============================================
+     TOUCH DEVICES — disable hover transforms
+     ============================================ */
+  @media (hover: none) {
+    .faq-support-pill:hover,
+    .faq-support-number-box:hover,
+    .faq-support-btn:hover,
+    .faq-support-btn.wa:hover,
+    .faq-support-btn.call:hover,
+    .faq-support-btn.email:hover,
+    .faq-support-btn.browse:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<div class="faq-page">
+
+  <!-- ============================================
+       HERO
+       ============================================ -->
+  <section class="faq-hero">
+    <div class="faq-hero-inner">
+      <h1>Frequently Asked Questions</h1>
+      <p>Everything you need to know about booking BnB stays, staycations, and holiday homes on bnb.co.ke — for guests and hosts.</p>
+
+      <a href="tel:+254798246467" class="faq-support-pill">
+        <span class="support-icon"><i class="fa fa-phone"></i></span>
+        <span class="support-text">
+          <span class="support-label">24/7 Support</span>
+          <span class="support-number">+254 798 246 467</span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <div class="faq-container">
+
+    <!-- ============================================
+         CO-FOUNDER CARD
+         ============================================ -->
+    <div class="faq-founder">
+      <div class="faq-founder-avatar">
+        <span>BC</span>
+        <img src="{% static 'images/chris/chris-portrait.jpg' %}"
+             alt="Brian Chris — Co-Founder of bnb.co.ke"
+             onerror="this.style.display='none'">
+      </div>
+      <div class="faq-founder-content">
+        <div class="faq-founder-label">
+          <i class="fa fa-star"></i> Meet the Founder
+        </div>
+        <h3 class="faq-founder-name">Brian Chris</h3>
+        <div class="faq-founder-role">Co-Founder — bnb.co.ke</div>
+        <p class="faq-founder-text">
+          Brian Chris is the co-founder behind bnb.co.ke — Kenya's curated platform for verified BnB stays, staycations, and holiday homes. His vision: making travel, business, and exploration in Kenya feel seamless, with real people and real properties you can trust.
+        </p>
+        <a href="{% url 'founder_chris' %}" class="faq-founder-cta">
+          Read his story <i class="fa fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- ============================================
+         TABS
+         ============================================ -->
+    <div class="faq-tabs">
+      <button class="faq-tab active" data-tab="guests" onclick="faqSwitchTab('guests')">
+        <i class="fa fa-user"></i> For Guests
+      </button>
+      <button class="faq-tab" data-tab="hosts" onclick="faqSwitchTab('hosts')">
+        <i class="fa fa-home"></i> For Hosts
+      </button>
+      <button class="faq-tab" data-tab="booking" onclick="faqSwitchTab('booking')">
+        <i class="fa fa-calendar-check"></i> Bookings &amp; Payments
+      </button>
+    </div>
+
+    <!-- ============================================
+         GUESTS
+         ============================================ -->
+    <div class="faq-section active" id="faq-guests">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          What is bnb.co.ke and how does it work?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p><strong>bnb.co.ke</strong> is Kenya's curated platform for verified BnB stays, staycations, and holiday homes. We list only properties we've personally vetted — no random listings, no surprises.</p>
+          <p>You browse, pick your dates, and book directly with us. We handle the communication with the host, the payment, and the check-in details. Think of us as your local fixer for accommodation in Kenya.</p>
+          <p>Questions? Call or WhatsApp us on <a href="tel:+254798246467"><strong>+254 798 246 467</strong></a>.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          Are the properties verified?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>Yes. Every property on bnb.co.ke is verified before it goes live. We check:</p>
+          <ul>
+            <li>The property actually exists and matches the photos</li>
+            <li>The host is a real person we can reach</li>
+            <li>Basic safety and cleanliness standards</li>
+            <li>That the property is legally allowed to operate as a short-stay (we ask for Tourism Regulatory Authority registration where applicable)</li>
+          </ul>
+          <p>If a property doesn't meet our standards, it doesn't get listed. Simple as that.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          How do I book a stay?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>Three ways:</p>
+          <ul>
+            <li><strong>On the website</strong> — find your property, select your dates, and complete the booking form.</li>
+            <li><strong>WhatsApp</strong> — send us a message on <a href="https://wa.me/254798246467" target="_blank" rel="noopener">+254 798 246 467</a> with the property name and your dates.</li>
+            <li><strong>Call</strong> — same as WhatsApp, but with a human voice.</li>
+          </ul>
+          <p>Once payment is confirmed, you'll receive a booking confirmation with the exact address, host contact, and check-in instructions.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          Can I see the exact location before booking?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>We show the neighbourhood and general area on the listing. The exact address is shared after your booking is confirmed — this is standard practice in short-term rentals to protect host privacy and prevent security issues.</p>
+          <p>If you have a specific concern (e.g., proximity to a landmark or accessibility needs), call us on <a href="tel:+254798246467"><strong>+254 798 246 467</strong></a> before booking and we'll confirm the details.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          What's the difference between a BnB, a staycation, and a holiday home?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>On bnb.co.ke, the terms overlap but roughly mean:</p>
+          <ul>
+            <li><strong>BnB</strong> — a furnished apartment or house available for short stays, usually with a host nearby.</li>
+            <li><strong>Staycation</strong> — a property designed for locals taking a break, often with premium amenities (pool, gym, views).</li>
+            <li><strong>Holiday home</strong> — a standalone house or villa, often in coastal or safari locations, rented as a whole unit.</li>
+          </ul>
+          <p>The labels help you filter, but the quality bar is the same across all three.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          What amenities are usually included?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>It varies by property, but most listings include:</p>
+          <ul>
+            <li>WiFi</li>
+            <li>Furnished living space and kitchen</li>
+            <li>Fresh linens and towels</li>
+            <li>Basic toiletries</li>
+          </ul>
+          <p>Many also offer parking, backup power (important in Nairobi), pool/gym access, and Netflix. Each listing clearly states what's available and what isn't.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          Do I need to clean up before checkout?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>No. We don't ask guests to strip beds, wash dishes, or take out rubbish. That's what the cleaning fee covers.</p>
+          <p>We do ask that you leave the property in a reasonable state — dishes in the sink, towels gathered, nothing broken. Standard courtesy, not a chore list.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          Is bnb.co.ke safe to book through?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>Yes. Here's what we do to protect you:</p>
+          <ul>
+            <li><strong>Verified properties only</strong> — we've seen them, or trusted people we know have seen them.</li>
+            <li><strong>Secure payment channels</strong> — we use traceable methods, not "send money to this random number."</li>
+            <li><strong>Human support</strong> — if something goes wrong, you talk to a real person, not a chatbot.</li>
+            <li><strong>Direct escalation</strong> — because we're small and local, issues get resolved fast.</li>
+          </ul>
+          <p>Reach us any time on <a href="tel:+254798246467"><strong>+254 798 246 467</strong></a> — day or night.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================
+         HOSTS
+         ============================================ -->
+    <div class="faq-section" id="faq-hosts">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          How do I list my property on bnb.co.ke?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>Click "Advertise" in the menu, fill in the form, and upload photos. We'll review your listing within 24–48 hours.</p>
+          <p>We look at: photo quality, property condition, location, and whether the property is legally allowed to operate as a short-stay. If it's a fit, we'll publish it. If not, we'll tell you why — no ghosting.</p>
+          <p>Need help? Call us on <a href="tel:+254798246467"><strong>+254 798 246 467</strong></a> and we'll walk you through it.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          Is listing free?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>Yes. Basic listings are free. We also offer a <strong>Featured</strong> option for KES 1,000 — it pushes your property to the top of search results and gives it more visibility for a set period.</p>
+          <p>We don't take a commission on your bookings. You keep what you earn.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          What legal requirements do I need to meet?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>At minimum, you should have:</p>
+          <ul>
+            <li><strong>Tourism Regulatory Authority (TRA) registration</strong> — if your property falls under the regulated categories (serviced apartments, holiday cottages, etc.). This is a legal requirement in Kenya.</li>
+            <li><strong>KRA PIN</strong> — for tax purposes.</li>
+            <li><strong>Permission to operate</strong> — from your landlord (if renting) or your estate/management company (if in a gated community). Many Nairobi estates restrict short-term rentals, so check before listing.</li>
+          </ul>
+          <p>We can point you in the right direction, but the responsibility is yours. We won't list properties we know are operating illegally.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          How do I get paid?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>We collect payment from the guest and disburse to you via M-Pesa or bank transfer, minus any agreed fees. Payout timing is discussed when you list — typically within 24 hours of guest check-in.</p>
+          <p>You'll get a clear statement of what was booked, what was collected, and what you're owed. No mystery deductions.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          What photos do I need?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>Clear, well-lit photos of:</p>
+          <ul>
+            <li>Every room (bedroom, living area, kitchen, bathroom)</li>
+            <li>The exterior and any outdoor space</li>
+            <li>Amenities (pool, gym, view)</li>
+          </ul>
+          <p>Phone photos are fine if the lighting is good. We can arrange professional photography for featured listings if needed.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          Can I block dates for personal use?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>Yes. You control your calendar. Just tell us which dates to block — via WhatsApp on <a href="https://wa.me/254798246467" target="_blank" rel="noopener">+254 798 246 467</a> or email — and we won't accept bookings for those periods.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          What if a guest damages my property?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>We screen guests before confirming bookings, but damage can still happen. Our process:</p>
+          <ul>
+            <li>We document the property condition before each stay.</li>
+            <li>If damage occurs, you report it to us immediately with photos.</li>
+            <li>We handle the conversation with the guest and pursue recovery through the agreed channels.</li>
+          </ul>
+          <p>We strongly recommend you have your own insurance cover for your property, as we are a booking platform, not an insurer.</p>
+          <p>Report issues to <a href="tel:+254798246467"><strong>+254 798 246 467</strong></a> immediately.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================
+         BOOKINGS & PAYMENTS
+         ============================================ -->
+    <div class="faq-section" id="faq-booking">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          How do I pay for a booking?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>We accept:</p>
+          <ul>
+            <li><strong>M-Pesa</strong> — the most common method for local guests.</li>
+            <li><strong>Bank transfer</strong> — for larger bookings or corporate stays.</li>
+            <li><strong>Card</strong> — via our payment partner (where available).</li>
+          </ul>
+          <p>Payment details are shared after you confirm the property and dates. We never ask for payment before confirming availability.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          Do I pay a deposit or the full amount?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>For most stays, we ask for <strong>full payment upfront</strong> to secure the booking. This protects both you and the host — no last-minute cancellations, no uncertainty.</p>
+          <p>For longer stays or corporate bookings, we can discuss a deposit structure. Call us on <a href="tel:+254798246467"><strong>+254 798 246 467</strong></a> before booking if you need to split payment.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          What is your cancellation policy?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>Our standard policy:</p>
+          <ul>
+            <li><strong>7+ days before check-in</strong> — full refund, minus any transaction fees.</li>
+            <li><strong>3–7 days before check-in</strong> — 50% refund.</li>
+            <li><strong>Less than 72 hours before check-in</strong> — no refund.</li>
+          </ul>
+          <p>Some properties have stricter or more flexible policies — this is stated on the listing. If you need to cancel, contact us as early as possible and we'll do what we can.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          Can I get a refund if the property doesn't match the photos?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>Yes. If you arrive and the property is materially different from what was advertised, contact us immediately on <a href="tel:+254798246467"><strong>+254 798 246 467</strong></a> with photos. We'll either:</p>
+          <ul>
+            <li>Move you to a comparable or better property at no extra cost, or</li>
+            <li>Issue a full refund for the remaining nights.</li>
+          </ul>
+          <p>We take listing accuracy seriously. Hosts who repeatedly misrepresent their properties are removed.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          Can I extend my stay after booking?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>Usually, yes — if the property isn't booked by someone else. Message us on <a href="https://wa.me/254798246467" target="_blank" rel="noopener">WhatsApp</a> as early as possible and we'll check availability and confirm the extension price.</p>
+          <p>Extensions are subject to the same nightly rate unless a different rate was agreed.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="faqToggle(this)">
+          Do you charge a cleaning fee?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          <p>Some properties include cleaning in the nightly rate; others add a separate cleaning fee. This is clearly shown on the listing before you book.</p>
+          <p>What we don't do is ask you to clean the property yourself. The cleaning fee covers professional turnover cleaning.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================
+         SUPPORT BAND
+         ============================================ -->
+    <div class="faq-support-band">
+      <h3>Still have a question?</h3>
+      <p>Talk to a real person — any day, any time. Our support line is open 24/7.</p>
+
+      <a href="tel:+254798246467" class="faq-support-number-box">
+        <div class="faq-support-icon">
+          <i class="fa fa-phone"></i>
+        </div>
+        <div class="faq-support-number-text">
+          <div class="faq-support-number-label">Support Hotline</div>
+          <div class="faq-support-number-value">+254 798 246 467</div>
+          <div class="faq-support-number-hours">Available 24 hours · 7 days</div>
+        </div>
+      </a>
+
+      <div class="faq-support-actions">
+        <a href="https://wa.me/254798246467?text=Hi%20bnb.co.ke!%20I%20have%20a%20question."
+           target="_blank"
+           rel="noopener"
+           class="faq-support-btn wa">
+          <i class="fab fa-whatsapp"></i> WhatsApp Us
+        </a>
+        <a href="tel:+254798246467" class="faq-support-btn call">
+          <i class="fa fa-phone"></i> Call Now
+        </a>
+        <a href="mailto:bookings.bnb.co.ke@gmail.com" class="faq-support-btn email">
+          <i class="fa fa-envelope"></i> Email Us
+        </a>
+        <a href="{% url 'home' %}" class="faq-support-btn browse">
+          <i class="fa fa-search"></i> Browse Properties
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  'use strict';
+
+  window.faqToggle = function (btn) {
+    var item = btn.closest('.faq-item');
+    var wasOpen = item.classList.contains('open');
+    var parent = item.parentElement;
+    parent.querySelectorAll('.faq-item.open').forEach(function (i) {
+      i.classList.remove('open');
+    });
+    if (!wasOpen) item.classList.add('open');
+  };
+
+  window.faqSwitchTab = function (tab) {
+    document.querySelectorAll('.faq-tab').forEach(function (t) {
+      t.classList.toggle('active', t.dataset.tab === tab);
+    });
+    document.querySelectorAll('.faq-section').forEach(function (s) {
+      s.classList.toggle('active', s.id === 'faq-' + tab);
+    });
+  };
+
+})();
+</script>
+{% endblock %}

@@ -30,7 +30,7 @@ path('safari/', views.safari_landing, name='safari_landing'),
 
     # WhatsApp booking
     path('book-via-whatsapp/', views.book_via_whatsapp, name='whatsapp_booking'),
-
+path('faq/', views.bnb_faq, name='bnb_faq'),
     # Property type URLs (clean URLs)
 
 

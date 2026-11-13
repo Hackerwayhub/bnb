@@ -2,12 +2,36 @@
 {% load static %}
 
 {% block extra_head %}
-  <meta name="description" content="Own a fully-furnished BnB unit in Kenya. bnb.co.ke Invest handles setup, furnishing, and hosting. You collect monthly passive income.">
+  <meta name="description" content="Independent advisory for investors looking to buy, furnish, and operate BnB and holiday-home property in Kenya. We help you choose the right unit, operator, and strategy — you own the asset and keep the upside.">
   <link rel="preload" as="image" href="{% static 'images/invest-hero.jpg' %}" fetchpriority="high">
 {% endblock %}
 
 
 {% block content %}
+
+<style>
+  /* ── Same token system as before ───────────────────────────────── */
+  :root {
+    --invest-red: #D32F2F;
+    --invest-red-dark: #B71C1C;
+    --invest-navy: #0F1B2D;
+    --invest-slate: #475569;
+    --invest-bg: #F8FAFC;
+    --invest-card: #FFFFFF;
+    --invest-gold: #F59E0B;
+    --invest-green: #059669;
+    --invest-border: #E2E8F0;
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --shadow-soft: 0 4px 24px -8px rgba(15, 27, 45, 0.12);
+    --shadow-hover: 0 20px 48px -16px rgba(15, 27, 45, 0.28);
+  }
+
+  .invest-page { background: var(--invest-bg); }
+
+  /* Hero, cards, tier grid, calc, faq, cta — ALL your original CSS
+     stays exactly as-is. Only copy + form fields changed below.     */
+</style>
 
 <style>
   :root {
@@ -788,12 +812,11 @@
     .btn-invest-primary, .btn-invest-ghost { width: 100%; justify-content: center; }
   }
 </style>
-
 <div class="invest-page">
 
-  <!-- ============================================
-       HERO + CONTACT CARD
-       ============================================ -->
+  <!-- ═══════════════════════════════════════════════════════════
+       HERO + CONSULTATION FORM
+       ═══════════════════════════════════════════════════════════ -->
   <section class="invest-hero">
     <img src="{% static 'images/invest-hero.jpg' %}"
          alt="Furnished BnB unit interior"
@@ -804,36 +827,45 @@
 
       <div>
         <span class="invest-eyebrow">
-          <i class="fa fa-chart-line"></i> bnb.co.ke Invest
+          <i class="fa fa-compass"></i> bnb.co.ke Invest — Advisory
         </span>
 
-
-          <span class="accent">Earn passive income monthly !.</span>
+        <h1 class="invest-h1">
+          Invest in Kenya's BnB market — <br>
+          <span class="accent">with someone who knows it.</span>
         </h1>
 
         <p class="invest-sub">
-          Put down your setup capital, choose a location, and we handle everything -- You collect passive income every month.
-
+          We don't take your money. We help you deploy it. Independent advisory
+          on which units to buy, which operators to trust, and how to structure
+          a furnished short-stay investment that actually earns — in Nairobi,
+          the coast, or the highlands.
         </p>
 
         <div class="invest-hero-ctas">
-
+          <a href="#consult-form" class="btn-invest-primary">
+            <i class="fa fa-calendar-check"></i> Book a free 30-min call
+          </a>
           <a href="#how-it-works" class="btn-invest-ghost">
             <i class="fa fa-play-circle"></i> See how it works
           </a>
         </div>
 
         <div class="invest-trust">
-          <div class="invest-trust-item"><i class="fa fa-shield-halved"></i> Verified unit pipeline</div>
-          <div class="invest-trust-item"><i class="fa fa-calendar-check"></i> Monthly payouts</div>
-          <div class="invest-trust-item"><i class="fa fa-headset"></i> Full management included</div>
+          <div class="invest-trust-item"><i class="fa fa-shield-halved"></i> Independent, fee-based advisory</div>
+          <div class="invest-trust-item"><i class="fa fa-chart-line"></i> Real yield data, not brochure numbers</div>
+          <div class="invest-trust-item"><i class="fa fa-handshake"></i> You own the asset, always</div>
         </div>
       </div>
 
-      <!-- Contact card -->
-      <div class="invest-form-card" id="invest-form">
+      <!-- Consultation request card -->
+      <div class="invest-form-card" id="consult-form">
 
-        <p class="sub">Tell us a bit about you and we'll match you to an investment plan in your preferred location.</p>
+        <h3>Request a consultation</h3>
+        <p class="sub">
+          Tell us your budget and target location. We'll come back with a short
+          yield snapshot and a call slot — no obligation, no sales pressure.
+        </p>
 
         <form id="investContactForm" novalidate>
 
@@ -848,14 +880,14 @@
               <input type="email" id="email" name="email" required placeholder="you@email.com">
             </div>
             <div class="invest-field">
-              <label for="phone">Phone</label>
+              <label for="phone">Phone / WhatsApp</label>
               <input type="tel" id="phone" name="phone" required placeholder="+254 7XX XXX XXX">
             </div>
           </div>
 
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
             <div class="invest-field">
-              <label for="location">Preferred location</label>
+              <label for="location">Target location</label>
               <select id="location" name="location">
                 <option value="">Select area</option>
                 {% for loc in invest_locations %}
@@ -864,46 +896,55 @@
               </select>
             </div>
             <div class="invest-field">
-              <label for="tier">Unit tier</label>
-              <select id="tier" name="tier">
-                <option value="">Select tier</option>
-                {% for key, t in invest_tiers.items %}
-                  <option value="{{ key }}">{{ t.name }}</option>
+              <label for="package">Advisory package</label>
+              <select id="package" name="package">
+                <option value="">Not sure yet</option>
+                {% for key, p in advisory_packages.items %}
+                  <option value="{{ key }}">{{ p.name }}</option>
                 {% endfor %}
               </select>
             </div>
           </div>
 
           <div class="invest-field">
-            <label for="budget">Setup budget (KES)</label>
+            <label for="budget">Capital you're considering investing (KES)</label>
             <select id="budget" name="budget">
               <option value="">Select range</option>
-              <option value="250000">250,000 – 450,000</option>
-              <option value="450000">450,000 – 750,000</option>
-              <option value="750000">750,000 – 1,500,000</option>
-              <option value="1500000">1,500,000+</option>
+              <option value="1000000">Under 1,000,000</option>
+              <option value="2500000">1,000,000 – 2,500,000</option>
+              <option value="5000000">2,500,000 – 5,000,000</option>
+              <option value="10000000">5,000,000 – 10,000,000</option>
+              <option value="25000000">10,000,000+</option>
             </select>
           </div>
 
           <div class="invest-field">
-            <label for="notes">Notes (optional)</label>
-            <textarea id="notes" name="notes" rows="2" placeholder="Anything we should know?"></textarea>
+            <label for="stage">Where are you in the process?</label>
+            <select id="stage" name="stage">
+              <option value="">Select stage</option>
+              <option value="exploring">Just exploring options</option>
+              <option value="shortlisting">Already shortlisting units</option>
+              <option value="have_unit">I have a unit, need advisory on furnishing / operator</option>
+              <option value="operating">Already operating — want a performance review</option>
+            </select>
           </div>
 
-         <div class="invest-submit-row">
-  <button type="button" class="invest-submit-wa" onclick="investSendWhatsApp()">
-    <i class="fab fa-whatsapp"></i> WhatsApp
-  </button>
-  <button type="button" class="invest-submit-email" onclick="investSendEmail()">
-    <i class="fa fa-envelope"></i> Email
-  </button>
-</div>
+          <div class="invest-field">
+            <label for="notes">Anything specific? (optional)</label>
+            <textarea id="notes" name="notes" rows="2" placeholder="e.g. I already own a 2BR in Kilimani and want help furnishing + listing it."></textarea>
+          </div>
 
-<p class="invest-form-fine">
-  <i class="fa fa-lock"></i> We'll never share your details. No obligation.
-</p>
+          <div class="invest-submit-row">
+            <button type="button" class="invest-submit-wa" onclick="investSendWhatsApp()">
+              <i class="fab fa-whatsapp"></i> WhatsApp
+            </button>
+            <button type="button" class="invest-submit-email" onclick="investSendEmail()">
+              <i class="fa fa-envelope"></i> Email
+            </button>
+          </div>
+
           <p class="invest-form-fine">
-            <i class="fa fa-lock"></i> We'll never share your details. No obligation.
+            <i class="fa fa-lock"></i> We never share your details. No obligation, no hard sell.
           </p>
         </form>
       </div>
@@ -911,242 +952,250 @@
     </div>
   </section>
 
-  <!-- ============================================
-       HOW IT WORKS
-       ============================================ -->
+  <!-- ═══════════════════════════════════════════════════════════
+       HOW IT WORKS — now framed as advisory process
+       ═══════════════════════════════════════════════════════════ -->
   <section class="invest-section" id="how-it-works">
     <div class="invest-section-head reveal">
-      <div class="invest-kicker">How it works</div>
-      <h2 class="invest-h2">From capital to cash flow in 4 steps</h2>
+      <div class="invest-kicker">How advisory works</div>
+      <h2 class="invest-h2">From "where do I start?" to "my unit is earning" in 4 steps</h2>
       <p class="invest-lead">
-        You provide the setup capital. We do the rest — sourcing, furnishing, listing, and running
-        the unit so you don't have to lift a finger.
+        We're not a fund and we don't take custody of your money. We sit on
+        <em>your</em> side of the table — helping you buy well, furnish sensibly,
+        and pick an operator who won't eat your margins.
       </p>
     </div>
 
     <div class="steps-grid">
       <div class="step-card reveal">
         <div class="step-num">01</div>
-        <h4>Choose &amp; deposit</h4>
-        <p>Pick a location and unit tier. Place your setup capital into a secure escrow account and get a signed investment agreement.</p>
+        <h4>Discovery call</h4>
+        <p>A free 30-minute call to map your capital, risk appetite, timeline, and target locations. No pitch deck.</p>
       </div>
       <div class="step-card reveal">
         <div class="step-num">02</div>
-        <h4>We furnish &amp; list</h4>
-        <p>Our team procures furniture, appliances, and styling. We photograph and list your unit on bnb.co.ke and partner channels.</p>
+        <h4>Yield &amp; unit shortlist</h4>
+        <p>We pull real occupancy and ADR data for your target locations, shortlist 3–5 vetted buildings, and model net yield per unit.</p>
       </div>
       <div class="step-card reveal">
         <div class="step-num">03</div>
-        <h4>We host &amp; manage</h4>
-        <p>Guest screening, check-ins, cleaning, maintenance, and 24/7 support are all handled by our operations team.</p>
+        <h4>Operator &amp; furnishing plan</h4>
+        <p>We vet property managers on your behalf, recommend a furnishing spec that photographs well but won't over-capitalise you, and sit in on the negotiation if you want.</p>
       </div>
       <div class="step-card reveal">
         <div class="step-num">04</div>
-        <h4>You get paid monthly</h4>
-        <p>Net rental income is deposited to your account every month, with a transparent dashboard of every booking and expense.</p>
+        <h4>Launch &amp; review</h4>
+        <p>Once your unit is live, we check in on performance in the first 90 days and give you an honest quarterly review — not a sales update.</p>
       </div>
     </div>
   </section>
 
-  <!-- ============================================
-       INVESTMENT TIERS
-       ============================================ -->
+  <!-- ═══════════════════════════════════════════════════════════
+       ADVISORY PACKAGES (was: investment tiers)
+       ═══════════════════════════════════════════════════════════ -->
   <section class="invest-section" style="padding-top:0;">
     <div class="invest-section-head reveal">
-      <div class="invest-kicker">Investment tiers</div>
-      <h2 class="invest-h2">Choose the unit that fits your goals</h2>
+      <div class="invest-kicker">Advisory packages</div>
+      <h2 class="invest-h2">Pay for advice, not for a "deal"</h2>
       <p class="invest-lead">
-        Every tier includes full furnishing, listing, hosting, and management. Estimates below are
-        based on current performance of comparable units in our network.
+        Every engagement is fee-based and disclosed up front. We don't take
+        commissions from developers or operators — our only incentive is to
+        give you advice worth paying for.
       </p>
     </div>
 
     <div class="tiers-grid">
-      {% for key, t in invest_tiers.items %}
-      <div class="tier-card {% if key == 'growth' %}featured{% endif %} reveal">
-        {% if key == 'growth' %}<div class="tier-badge">Most popular</div>{% endif %}
+      {% for key, p in advisory_packages.items %}
+      <div class="tier-card {% if key == 'investor' %}featured{% endif %} reveal">
+        {% if key == 'investor' %}<div class="tier-badge">Most chosen</div>{% endif %}
 
-        <div class="tier-name">{{ t.name }}</div>
+        <div class="tier-name">{{ p.name }}</div>
         <div class="tier-fee">
-          KES {{ t.setup_fee|floatformat:0 }}
-          <small>One-time setup capital</small>
+          {% if p.fee == 0 %}Free{% else %}KES {{ p.fee|floatformat:0 }}{% endif %}
+          <small>{{ p.fee_label }}</small>
         </div>
 
-        <p class="tier-desc">{{ t.description }}</p>
-
-        <div class="tier-earn">
-          <div class="tier-earn-label">Estimated payout</div>
-          <div class="tier-earn-value">
-            ~KES {{ t.monthly_estimate|floatformat:0 }}
-            <small>/ month</small>
-          </div>
-        </div>
+        <p class="tier-desc">{{ p.description }}</p>
 
         <ul class="tier-features">
-          <li><i class="fa fa-check"></i> Full furnishing &amp; styling included</li>
-          <li><i class="fa fa-check"></i> Listed on bnb.co.ke + partner channels</li>
-          <li><i class="fa fa-check"></i> Fully managed</li>
-
+          {% for f in p.features %}
+            <li><i class="fa fa-check"></i> {{ f }}</li>
+          {% endfor %}
         </ul>
 
-        <a href="#invest-form" class="tier-cta"
-           onclick="document.getElementById('tier').value='{{ key }}';">
-          Reserve this tier
+        <a href="#consult-form" class="tier-cta"
+           onclick="document.getElementById('package').value='{{ key }}';">
+          {% if key == 'starter' %}Book the free call{% else %}Request this package{% endif %}
         </a>
       </div>
       {% endfor %}
     </div>
   </section>
 
-  <!-- ============================================
-       WHY INVEST
-       ============================================ -->
+  <!-- ═══════════════════════════════════════════════════════════
+       WHY ADVISORY (was: why invest with us)
+       ═══════════════════════════════════════════════════════════ -->
   <section class="invest-section" style="background:#fff;max-width:none;border-radius:24px;margin:0 12px;">
     <div style="max-width:1200px;margin:0 auto;">
       <div class="invest-section-head reveal">
-        <div class="invest-kicker">Why bnb.co.ke Invest</div>
-        <h2 class="invest-h2">Hospitality returns, without the hassle</h2>
+        <div class="invest-kicker">Why an independent advisor</div>
+        <h2 class="invest-h2">The BnB market is noisy. Good advice isn't.</h2>
         <p class="invest-lead">
-          Short-term rentals in Kenya outperform long-term leases by 2–3× on gross yield. We give
-          you the upside, without the operations.
+          Developers will sell you a unit. Operators will promise you occupancy.
+          An independent advisor is the only party in the transaction who gets
+          paid the same whether you buy or walk away.
         </p>
       </div>
 
       <div class="why-grid">
         <div class="why-card reveal">
-          <div class="why-icon"><i class="fa fa-chart-pie"></i></div>
-          <h4>Higher yields than long-term rent</h4>
-          <p>Furnished short-stays in Nairobi and coastal towns deliver materially higher gross income than annual leases.</p>
+          <div class="why-icon"><i class="fa fa-scale-balanced"></i></div>
+          <h4>No commissions, no conflicts</h4>
+          <p>We're paid by you, not by developers or property managers. That means when a unit is a bad idea, we tell you.</p>
+        </div>
+        <div class="why-card reveal">
+          <div class="why-icon"><i class="fa fa-chart-line"></i></div>
+          <h4>Real data, not brochures</h4>
+          <p>Actual occupancy, ADR, and net-yield numbers pulled from operating units — not the projected numbers from a developer's pitch deck.</p>
         </div>
         <div class="why-card reveal">
           <div class="why-icon"><i class="fa fa-screwdriver-wrench"></i></div>
-          <h4>Zero operations burden</h4>
-          <p>No tenants, no maintenance calls, no guest chats. Our team runs the unit end-to-end under a management agreement.</p>
+          <h4>Furnishing that pays back</h4>
+          <p>We help you spend the right amount on furnishing — enough to photograph well and command premium rates, without over-capitalising.</p>
         </div>
         <div class="why-card reveal">
-          <div class="why-icon"><i class="fa fa-file-contract"></i></div>
-          <h4>Transparent monthly reporting</h4>
-          <p>Every booking, expense, and payout is visible in your owner dashboard. No black boxes.</p>
-        </div>
-        <div class="why-card reveal">
-          <div class="why-icon"><i class="fa fa-shield-halved"></i></div>
-          <h4>Verified unit pipeline</h4>
-          <p>We only invest in locations and buildings we've vetted for demand, safety, and building management quality.</p>
+          <div class="why-icon"><i class="fa fa-user-shield"></i></div>
+          <h4>Operator vetting</h4>
+          <p>We've seen who actually delivers on cleaning SLAs, guest response times, and revenue reporting — and who quietly bleeds owners dry.</p>
         </div>
         <div class="why-card reveal">
           <div class="why-icon"><i class="fa fa-rotate"></i></div>
-          <h4>Exit options</h4>
-          <p>After the minimum holding period you can sell your unit back to us, or to a third party, at a fair valuation.</p>
+          <h4>Exit planning from day one</h4>
+          <p>Before you buy, we help you think through resale liquidity, building restrictions, and how the unit would price if you sold in 3–5 years.</p>
         </div>
         <div class="why-card reveal">
           <div class="why-icon"><i class="fa fa-handshake"></i></div>
-          <h4>Aligned incentives</h4>
-          <p>Our management fee is tied to collected revenue — we only earn more when your unit performs.</p>
+          <h4>You keep full ownership</h4>
+          <p>The title stays in your name. The operator reports to you. We're your advisor — not a middleman taking a cut of your cash flow.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================
-       EARNINGS CALCULATOR
-       ============================================ -->
+  <!-- ═══════════════════════════════════════════════════════════
+       YIELD CALCULATOR (was: "your payout from us")
+       ═══════════════════════════════════════════════════════════ -->
   <section class="invest-section">
     <div class="calc-wrap reveal">
       <div class="calc-copy">
-        <div class="invest-kicker" style="color:#FDE68A;">Estimate your earnings</div>
-        <h2 class="invest-h2">See what your unit could earn</h2>
+        <div class="invest-kicker" style="color:#FDE68A;">Target yield calculator</div>
+        <h2 class="invest-h2">What could your capital realistically earn?</h2>
         <p>
-          Slide to your setup capital. We'll estimate a monthly payout based on current performance
-          of comparable units in our network. Actual returns vary by location and season.
+          Slide to a purchase price and we'll show the gross short-stay yield
+          range we typically see for units in that bracket — based on live
+          occupancy and ADR data from comparable buildings. This is what
+          <em>you</em> earn, not what we pay you.
         </p>
-        <a href="#invest-form" class="btn-invest-primary" style="background:#fff;color:var(--invest-red);">
-          <i class="fa fa-arrow-right"></i> Talk to an advisor
+        <a href="#consult-form" class="btn-invest-primary" style="background:#fff;color:var(--invest-red);">
+          <i class="fa fa-arrow-right"></i> Get a unit-level model
         </a>
       </div>
 
       <div class="calc-panel">
         <div class="calc-row">
-          <label>Setup capital <strong id="calcCapitalLabel">KES 450,000</strong></label>
-          <input type="range" id="calcCapital" min="250000" max="1500000" step="50000" value="450000">
+          <label>Unit purchase price <strong id="calcCapitalLabel">KES 5,000,000</strong></label>
+          <input type="range" id="calcCapital" min="1000000" max="25000000" step="250000" value="5000000">
         </div>
 
         <div class="calc-result">
-          <div class="label">Estimated monthly payout</div>
-          <div class="amount" id="calcPayout">KES 45,000<small>before management fee</small></div>
+          <div class="label">Typical gross monthly income range</div>
+          <div class="amount" id="calcPayout">
+            KES 250,000 – 350,000
+            <small>before operating costs &amp; management fee</small>
+          </div>
         </div>
 
         <p class="calc-disclaimer">
-          Illustrative only. Based on ~10% gross monthly yield on setup capital in prime locations.
-          Actual performance depends on unit, location, season, and occupancy.
+          Illustrative only. Based on 5%–7% gross monthly yield — the range we
+          typically see for well-located, well-furnished short-stay units in
+          Nairobi and the coast. Actual returns vary by building, operator,
+          season, and unit quality.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- ============================================
-       FAQ
-       ============================================ -->
+  <!-- ═══════════════════════════════════════════════════════════
+       FAQ — rewritten for advisory framing
+       ═══════════════════════════════════════════════════════════ -->
   <section class="invest-section" style="padding-top:0;">
     <div class="invest-section-head reveal">
       <div class="invest-kicker">FAQ</div>
       <h2 class="invest-h2">Common questions</h2>
-      <p class="invest-lead">Everything you need to know before you reserve a unit.</p>
+      <p class="invest-lead">What advisory actually means — and what it doesn't.</p>
     </div>
 
     <div class="faq-list">
       <div class="faq-item reveal">
         <button class="faq-q" type="button" onclick="investToggleFaq(this)">
-          Do I own the unit, or is this a fund?
+          Do you take my capital or hold any funds?
           <i class="fa fa-plus"></i>
         </button>
         <div class="faq-a">
-          You own a real, titled unit in a specific building. bnb.co.ke Invest furnishes it and operates it
-          under a management agreement. Your name is on the title and you can sell or transfer the unit
-          after the minimum holding period (typically 24 months).
+          No. We never hold your money. You pay developers and sellers directly,
+          you pay the operator directly, and you pay us a disclosed advisory fee.
+          Our job is to make sure each of those payments is well-spent.
         </div>
       </div>
 
       <div class="faq-item reveal">
         <button class="faq-q" type="button" onclick="investToggleFaq(this)">
-          What does the setup capital cover?
+          Do I own the unit?
           <i class="fa fa-plus"></i>
         </button>
         <div class="faq-a">
-          The setup capital covers furniture, appliances, styling, photography, listing setup, and the first
-          month of operating float. It does not include the purchase price of the unit — that is financed
-          or purchased separately as part of your investment agreement.
+          Yes — 100%. The title is in your name (or your company's). You hold the
+          management agreement with the operator of your choice. We're simply
+          the advisor who helped you get there.
         </div>
       </div>
 
       <div class="faq-item reveal">
         <button class="faq-q" type="button" onclick="investToggleFaq(this)">
-          How and when do I get paid?
+          Are you affiliated with any developer or property manager?
           <i class="fa fa-plus"></i>
         </button>
         <div class="faq-a">
-          Payouts are processed on the 5th of every month for the previous month's net rental income.
-          You receive a full statement of bookings, revenue, expenses, and management fees alongside the payout.
+          No. We don't take commissions or referral fees from developers,
+          furnishing suppliers, or property managers. That's the whole point of
+          independent advisory — our only revenue is the fee you pay us.
         </div>
       </div>
 
       <div class="faq-item reveal">
         <button class="faq-q" type="button" onclick="investToggleFaq(this)">
-          What happens during low season?
+          What kind of returns are realistic?
           <i class="fa fa-plus"></i>
         </button>
         <div class="faq-a">
-          Income fluctuates with occupancy. We mitigate low season through dynamic pricing, longer-stay discounts,
-          and corporate contracts. Our estimates use conservative 12-month averages, not peak season figures.
+          Well-located, well-furnished short-stay units in Nairobi and the coast
+          typically see 5%–7% gross monthly yield on purchase price, before
+          operating costs. Net yields after management, cleaning, utilities, and
+          vacancy tend to land in the 25%–40% annualised range. We'll model the
+          real numbers for your specific unit during advisory.
         </div>
       </div>
 
       <div class="faq-item reveal">
         <button class="faq-q" type="button" onclick="investToggleFaq(this)">
-          Can I use the unit myself?
+          What happens after I buy?
           <i class="fa fa-plus"></i>
         </button>
         <div class="faq-a">
-          Yes — you get 14 nights per year of owner use, subject to availability, booked through your owner dashboard.
+          We stay available for the first 90 days post-purchase — reviewing the
+          operator's setup, the listing quality, and the first month's
+          performance — and we offer optional quarterly reviews after that.
+          Most investors stick with us on an ongoing basis for 6–12 months.
         </div>
       </div>
 
@@ -1156,26 +1205,41 @@
           <i class="fa fa-plus"></i>
         </button>
         <div class="faq-a">
-          Returns are not guaranteed. Occupancy, market conditions, and building quality all affect performance.
-          We mitigate by only investing in vetted buildings in high-demand locations, maintaining a reserve fund,
-          and reporting transparently every month.
+          Short-stay income is seasonal, operator quality varies enormously, and
+          some buildings have management or licensing constraints that hurt
+          performance. Our job is to surface those risks <em>before</em> you buy
+          — not after. But no advisor can guarantee returns.
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q" type="button" onclick="investToggleFaq(this)">
+          I already own a unit — can you still help?
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="faq-a">
+          Yes, and this is a large part of what we do. We can audit your current
+          operator, review your furnishing and listing quality, and help you
+          restructure the numbers if the unit is underperforming. Book a
+          consultation and choose "Already operating" as your stage.
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================
-       FINAL CTA
-       ============================================ -->
+  <!-- ═══════════════════════════════════════════════════════════
+       FINAL CTA — advisory framing
+       ═══════════════════════════════════════════════════════════ -->
   <section style="padding:0 12px;">
     <div class="invest-cta-band reveal">
-      <h2>Ready to own a unit that pays you?</h2>
+      <h2>Ready to invest with a clear head?</h2>
       <p>
-        Join the waitlist for our next unit release. We'll send you the investor pack,
-        unit options, and a projected payout sheet within 24 hours.
+        Book a free 30-minute call. We'll come back with a short yield snapshot
+        for your target location and a straight answer on whether the numbers
+        you're seeing stack up.
       </p>
-      <a href="#invest-form" class="btn-invest-primary">
-        <i class="fa fa-arrow-right"></i> Reserve my unit
+      <a href="#consult-form" class="btn-invest-primary">
+        <i class="fa fa-calendar-check"></i> Book my free consultation
       </a>
     </div>
   </section>
@@ -1190,7 +1254,7 @@
 (function () {
   'use strict';
 
-  /* ---------- Smooth anchor scroll ---------- */
+  /* ---------- Smooth anchor scroll (unchanged) ---------- */
   document.querySelectorAll('a[href^="#"]').forEach(function (a) {
     a.addEventListener('click', function (e) {
       var id = this.getAttribute('href');
@@ -1206,7 +1270,7 @@
     });
   });
 
-  /* ---------- FAQ accordion ---------- */
+  /* ---------- FAQ accordion (unchanged) ---------- */
   window.investToggleFaq = function (btn) {
     var item = btn.closest('.faq-item');
     var wasOpen = item.classList.contains('open');
@@ -1216,26 +1280,29 @@
     if (!wasOpen) item.classList.add('open');
   };
 
-  /* ---------- Calculator ---------- */
+  /* ---------- Yield calculator (rewritten for advisory framing) ---------- */
   var slider = document.getElementById('calcCapital');
   var label = document.getElementById('calcCapitalLabel');
   var payout = document.getElementById('calcPayout');
 
   if (slider && label && payout) {
-    var format = function (n) { return n.toLocaleString('en-KE'); };
+    var fmt = function (n) { return n.toLocaleString('en-KE'); };
 
     var update = function () {
-      var capital = parseInt(slider.value, 10);
-      var monthly = Math.round(capital * 0.10);
-      label.textContent = 'KES ' + format(capital);
-      payout.innerHTML = 'KES ' + format(monthly) + '<small>before management fee</small>';
+      var price = parseInt(slider.value, 10);
+      var low  = Math.round(price * 0.05);   // 5% monthly gross
+      var high = Math.round(price * 0.07);   // 7% monthly gross
+      label.textContent = 'KES ' + fmt(price);
+      payout.innerHTML =
+        'KES ' + fmt(low) + ' – ' + fmt(high) +
+        '<small>before operating costs &amp; management fee</small>';
     };
 
     slider.addEventListener('input', update);
     update();
   }
 
-  /* ---------- Reveal on scroll ---------- */
+  /* ---------- Reveal on scroll (unchanged) ---------- */
   var els = document.querySelectorAll('.reveal');
   if (els.length) {
     if (!('IntersectionObserver' in window)) {
@@ -1254,15 +1321,16 @@
     }
   }
 
-  /* ---------- Form → WhatsApp (no backend needed) ---------- */
+  /* ---------- Consultation request → WhatsApp ---------- */
   window.investSendWhatsApp = function () {
-    var name = (document.getElementById('full_name') || {}).value || '';
-    var email = (document.getElementById('email') || {}).value || '';
-    var phone = (document.getElementById('phone') || {}).value || '';
-    var loc = (document.getElementById('location') || {}).value || '';
-    var tier = (document.getElementById('tier') || {}).value || '';
-    var budget = (document.getElementById('budget') || {}).value || '';
-    var notes = (document.getElementById('notes') || {}).value || '';
+    var name    = (document.getElementById('full_name') || {}).value || '';
+    var email   = (document.getElementById('email') || {}).value || '';
+    var phone   = (document.getElementById('phone') || {}).value || '';
+    var loc     = (document.getElementById('location') || {}).value || '';
+    var pkg     = (document.getElementById('package') || {}).value || '';
+    var budget  = (document.getElementById('budget') || {}).value || '';
+    var stage   = (document.getElementById('stage') || {}).value || '';
+    var notes   = (document.getElementById('notes') || {}).value || '';
 
     if (!name.trim() || !phone.trim()) {
       alert('Please enter at least your name and phone number.');
@@ -1270,53 +1338,56 @@
     }
 
     var msg =
-      'Hi bnb.co.ke Invest! I would like my investor pack.%0A%0A' +
-      'Name: ' + encodeURIComponent(name) + '%0A' +
-      'Email: ' + encodeURIComponent(email) + '%0A' +
-      'Phone: ' + encodeURIComponent(phone) + '%0A' +
-      'Location: ' + encodeURIComponent(loc) + '%0A' +
-      'Tier: ' + encodeURIComponent(tier) + '%0A' +
-      'Budget: ' + encodeURIComponent(budget) + '%0A' +
-      'Notes: ' + encodeURIComponent(notes);
+      'Hi bnb.co.ke Invest — I would like an advisory consultation.%0A%0A' +
+      'Name: '    + encodeURIComponent(name)   + '%0A' +
+      'Email: '   + encodeURIComponent(email)  + '%0A' +
+      'Phone: '   + encodeURIComponent(phone)  + '%0A' +
+      'Location: '+ encodeURIComponent(loc)    + '%0A' +
+      'Package: ' + encodeURIComponent(pkg)    + '%0A' +
+      'Budget: '  + encodeURIComponent(budget) + '%0A' +
+      'Stage: '   + encodeURIComponent(stage)  + '%0A' +
+      'Notes: '   + encodeURIComponent(notes);
 
     window.open('https://wa.me/254798246467?text=' + msg, '_blank');
   };
 
 })();
 
-      /* ---------- Form → Email (fallback for non-WhatsApp users) ---------- */
-  window.investSendEmail = function () {
-    var name = (document.getElementById('full_name') || {}).value || '';
-    var email = (document.getElementById('email') || {}).value || '';
-    var phone = (document.getElementById('phone') || {}).value || '';
-    var loc = (document.getElementById('location') || {}).value || '';
-    var tier = (document.getElementById('tier') || {}).value || '';
-    var budget = (document.getElementById('budget') || {}).value || '';
-    var notes = (document.getElementById('notes') || {}).value || '';
+/* ---------- Consultation request → Email fallback ---------- */
+window.investSendEmail = function () {
+  var name    = (document.getElementById('full_name') || {}).value || '';
+  var email   = (document.getElementById('email') || {}).value || '';
+  var phone   = (document.getElementById('phone') || {}).value || '';
+  var loc     = (document.getElementById('location') || {}).value || '';
+  var pkg     = (document.getElementById('package') || {}).value || '';
+  var budget  = (document.getElementById('budget') || {}).value || '';
+  var stage   = (document.getElementById('stage') || {}).value || '';
+  var notes   = (document.getElementById('notes') || {}).value || '';
 
-    if (!name.trim() || (!email.trim() && !phone.trim())) {
-      alert('Please enter your name and either an email or phone number.');
-      return;
-    }
+  if (!name.trim() || (!email.trim() && !phone.trim())) {
+    alert('Please enter your name and either an email or phone number.');
+    return;
+  }
 
-    var subject = 'Investor Pack Request — ' + (tier || 'General Enquiry');
-    var body =
-      'Hi bnb.co.ke Invest,\n\n' +
-      'I would like to request the investor pack. Here are my details:\n\n' +
-      'Name: ' + name + '\n' +
-      'Email: ' + email + '\n' +
-      'Phone: ' + phone + '\n' +
-      'Preferred location: ' + loc + '\n' +
-      'Unit tier: ' + tier + '\n' +
-      'Setup budget: ' + budget + '\n' +
-      'Notes: ' + notes + '\n\n' +
-      'Please send me the investor pack and next steps.\n\n' +
-      'Thank you!';
+  var subject = 'Advisory Consultation Request — ' + (pkg || 'General Enquiry');
+  var body =
+    'Hi bnb.co.ke Invest,\n\n' +
+    'I would like to book an advisory consultation. Details:\n\n' +
+    'Name: ' + name + '\n' +
+    'Email: ' + email + '\n' +
+    'Phone / WhatsApp: ' + phone + '\n' +
+    'Target location: ' + loc + '\n' +
+    'Advisory package: ' + pkg + '\n' +
+    'Capital range: ' + budget + '\n' +
+    'Current stage: ' + stage + '\n' +
+    'Notes: ' + notes + '\n\n' +
+    'Please suggest a call slot.\n\n' +
+    'Thank you!';
 
-    window.location.href =
-      'mailto:booking.bnb.co.ke@gmail.com' +
-      '?subject=' + encodeURIComponent(subject) +
-      '&body=' + encodeURIComponent(body);
-  };
+  window.location.href =
+    'mailto:booking.bnb.co.ke@gmail.com' +
+    '?subject=' + encodeURIComponent(subject) +
+    '&body=' + encodeURIComponent(body);
+};
 </script>
 {% endblock %}

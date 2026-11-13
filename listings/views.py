@@ -724,24 +724,84 @@ INVEST_LOCATIONS = [
 
 ]
 
-
 def invest_landing(request):
     """
-    Public landing page for bnb.co.ke Invest.
-    No auth, no POST — just renders the page with tiers + locations.
+    Public advisory landing page for bnb.co.ke Invest.
+    Positions bnb.co.ke as an advisory service that helps individuals
+    invest in BnB / holiday-home property in Kenya.
     """
+    # Advisory packages — what we DO for the investor
+    ADVISORY_PACKAGES = {
+        'starter': {
+            'name': 'Starter Advisory',
+            'fee': 0,
+            'fee_label': 'Free intro call',
+            'description': (
+                'A 30-minute call to understand your goals, budget, and preferred '
+                'locations. We outline the realistic yield range for your capital.'
+            ),
+            'monthly_estimate': None,
+            'features': [
+                'Goal & budget assessment',
+                'Location yield snapshot',
+                'Honest risk & seasonality briefing',
+                'Next-step roadmap',
+            ],
+        },
+        'investor': {
+            'name': 'Investor Advisory',
+            'fee': 25000,
+            'fee_label': 'One-time engagement fee',
+            'description': (
+                'Full due-diligence support: shortlisting vetted buildings, '
+                'yield modelling per unit, operator vetting, and negotiation support.'
+            ),
+            'monthly_estimate': None,
+            'features': [
+                '3–5 vetted unit shortlist',
+                'Per-unit yield & occupancy model',
+                'Operator / manager vetting',
+                'Negotiation & documentation support',
+                'Furnishing budget guidance',
+            ],
+        },
+        'portfolio': {
+            'name': 'Portfolio Advisory',
+            'fee': 75000,
+            'fee_label': 'One-time engagement fee',
+            'description': (
+                'For investors deploying KES 5M+. Multi-unit strategy, operator '
+                'selection, brand alignment, and ongoing quarterly reviews.'
+            ),
+            'monthly_estimate': None,
+            'features': [
+                'Multi-unit portfolio strategy',
+                'Operator RFP & selection',
+                'Brand & listing positioning',
+                'Quarterly performance reviews',
+                'Exit & refinancing guidance',
+            ],
+        },
+    }
+
+    INVEST_LOCATIONS = [
+        'Kilimani', 'Kileleshwa', 'Westlands', 'Karen', 'Lavington',
+        'Parklands', 'Runda', 'Muthaiga', 'Diani', 'Nyali',
+        'Nanyuki', 'Naivasha', 'Maasai Mara', 'Watamu',
+    ]
+
     context = {
-        'invest_tiers': INVEST_TIERS,
+        'advisory_packages': ADVISORY_PACKAGES,
         'invest_locations': INVEST_LOCATIONS,
-        'title': 'Invest, Own, Earn passive income',
-        'page_title': 'bnb.co.ke Invest',
+        'title': 'BnB Investment Advisory in Kenya',
+        'page_title': 'bnb.co.ke Invest — Advisory',
         'meta_description': (
-            'Own a fully-furnished BnB unit in Kenya. bnb.co.ke Invest handles '
-            'setup, furnishing, and hosting. You collect monthly passive income.'
+            'Independent advisory for investors looking to buy, furnish, and operate '
+            'BnB and holiday-home property in Kenya. We help you choose the right unit, '
+            'operator, and strategy — you own the asset and keep the upside.'
         ),
     }
     return render(request, 'listings/invest.html', context)
-
 
 def safari_landing(request):
     context = {

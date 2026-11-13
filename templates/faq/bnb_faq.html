@@ -2,10 +2,8 @@
 {% load static %}
 
 {% block extra_head %}
-
  <meta name="description" content="{{ meta_description|default:'Frequently asked questions about booking BnB stays, staycations, and holiday homes on bnb.co.ke. Answers for guests and hosts in Kenya. Support: +254 798 246 467.' }}">
  <title>{{ title|default:'FAQ — bnb.co.ke | BnB Stays, Staycations & Holiday Homes in Kenya' }}</title>
-
 {% endblock %}
 
 {% block content %}
@@ -150,35 +148,40 @@
   }
 
   /* ============================================
-     CO-FOUNDER CARD
+     FOUNDER PROFILE — now lives INSIDE a tab
      ============================================ */
-  .faq-founder {
+  .founder-profile {
     background: #fff;
     border-radius: var(--radius-lg);
-    padding: 36px;
-    margin-bottom: 40px;
+    padding: 40px 36px;
     border: 1px solid var(--faq-border);
-    box-shadow: 0 20px 48px -16px rgba(15, 27, 45, 0.18);
-    display: flex;
-    align-items: center;
-    gap: 28px;
+    box-shadow: 0 20px 48px -16px rgba(15, 27, 45, 0.12);
     position: relative;
     overflow: hidden;
   }
 
-  .faq-founder::before {
+  .founder-profile::before {
     content: "";
     position: absolute;
-    width: 200px; height: 200px;
+    width: 240px; height: 240px;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(212, 160, 23, 0.08) 0%, transparent 70%);
-    top: -80px; right: -60px;
+    top: -100px; right: -80px;
     pointer-events: none;
   }
 
-  .faq-founder-avatar {
-    width: 90px;
-    height: 90px;
+  .founder-top {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 24px;
+  }
+
+  .founder-avatar {
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
     flex-shrink: 0;
     background: linear-gradient(135deg, #FDE68A 0%, #D4A017 50%, #8B5E2B 100%);
@@ -186,16 +189,15 @@
     align-items: center;
     justify-content: center;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 2rem;
+    font-size: 2.1rem;
     font-weight: 800;
     color: var(--faq-navy);
     box-shadow: 0 8px 24px -8px rgba(212, 160, 23, 0.5);
     position: relative;
-    z-index: 1;
     overflow: hidden;
   }
 
-  .faq-founder-avatar img {
+  .founder-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -203,14 +205,11 @@
     inset: 0;
   }
 
-  .faq-founder-content {
-    flex: 1;
+  .founder-heading {
     min-width: 0;
-    position: relative;
-    z-index: 1;
   }
 
-  .faq-founder-label {
+  .founder-label {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -222,13 +221,9 @@
     margin-bottom: 8px;
   }
 
-  .faq-founder-label i {
-    font-size: 11px;
-  }
-
-  .faq-founder-name {
+  .founder-name {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 1.35rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: var(--faq-navy);
     letter-spacing: -0.02em;
@@ -236,35 +231,58 @@
     line-height: 1.2;
   }
 
-  .faq-founder-role {
-    font-size: 13px;
+  .founder-role {
+    font-size: 13.5px;
     font-weight: 600;
     color: var(--faq-red);
-    margin-bottom: 12px;
+    margin: 0;
   }
 
-  .faq-founder-text {
-    font-size: 14px;
-    line-height: 1.65;
+  .founder-bio {
+    position: relative;
+    z-index: 1;
+    font-size: 15px;
+    line-height: 1.75;
     color: var(--faq-slate);
     margin: 0 0 16px;
   }
+  .founder-bio:last-of-type { margin-bottom: 0; }
+  .founder-bio strong { color: var(--faq-navy); }
 
-  .faq-founder-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--faq-red);
-    text-decoration: none;
-    transition: gap 0.2s ease;
-    min-height: 32px;
+  .founder-highlights {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 28px 0 0;
+    padding-top: 28px;
+    border-top: 1px dashed var(--faq-border);
+    position: relative;
+    z-index: 1;
   }
 
-  .faq-founder-cta:hover {
-    gap: 10px;
-    color: var(--faq-red-dark);
+  .founder-highlight {
+    text-align: center;
+    padding: 16px 12px;
+    background: #F8FAFC;
+    border-radius: 14px;
+    border: 1px solid var(--faq-border);
+  }
+
+  .founder-highlight-value {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--faq-navy);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+
+  .founder-highlight-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--faq-slate);
+    letter-spacing: 0.02em;
   }
 
   /* ============================================
@@ -590,70 +608,40 @@
      REDUCED MOTION
      ============================================ */
   @media (prefers-reduced-motion: reduce) {
-    * {
-      transition: none !important;
-      animation: none !important;
-    }
-    *:hover {
-      transform: none !important;
-    }
+    * { transition: none !important; animation: none !important; }
+    *:hover { transform: none !important; }
   }
 
   /* ============================================
      RESPONSIVE — TABLET (1024px)
      ============================================ */
   @media (max-width: 1024px) {
-    .faq-hero {
-      padding: 80px 20px 88px;
-    }
-    .faq-container {
-      max-width: 100%;
-      padding: 0 20px;
-    }
-    .faq-founder {
-      padding: 32px;
-      gap: 24px;
-    }
-    .faq-support-band {
-      padding: 44px 28px;
-    }
+    .faq-hero { padding: 80px 20px 88px; }
+    .faq-container { max-width: 100%; padding: 0 20px; }
+    .faq-support-band { padding: 44px 28px; }
+    .founder-profile { padding: 36px 28px; }
   }
 
   /* ============================================
      RESPONSIVE — MOBILE (768px)
      ============================================ */
   @media (max-width: 768px) {
-    .faq-hero {
-      padding: 72px 20px 80px;
-    }
-    .faq-hero p {
-      font-size: 1rem;
-      margin-bottom: 24px;
-    }
-    .faq-container {
-      padding: 0 16px;
-      margin-bottom: 80px;
-    }
+    .faq-hero { padding: 72px 20px 80px; }
+    .faq-hero p { font-size: 1rem; margin-bottom: 24px; }
+    .faq-container { padding: 0 16px; margin-bottom: 80px; }
 
-    /* Co-founder stacks vertically */
-    .faq-founder {
+    /* Founder stacks vertically */
+    .founder-profile { padding: 28px 22px; }
+    .founder-top {
       flex-direction: column;
       text-align: center;
-      padding: 28px 24px;
-      gap: 20px;
-      margin-bottom: 32px;
+      gap: 18px;
+      margin-bottom: 20px;
     }
-    .faq-founder-label {
-      justify-content: center;
-    }
-    .faq-founder-cta {
-      justify-content: center;
-      display: flex;
-    }
-    .faq-founder-text {
-      font-size: 13.5px;
-      line-height: 1.65;
-    }
+    .founder-label { justify-content: center; }
+    .founder-name { font-size: 1.4rem; }
+    .founder-highlights { grid-template-columns: 1fr; gap: 10px; }
+    .founder-highlight { padding: 14px 12px; }
 
     /* Tabs scroll horizontally if needed */
     .faq-tabs {
@@ -666,9 +654,7 @@
       scrollbar-width: none;
       padding-bottom: 4px;
     }
-    .faq-tabs::-webkit-scrollbar {
-      display: none;
-    }
+    .faq-tabs::-webkit-scrollbar { display: none; }
     .faq-tab {
       flex-shrink: 0;
       padding: 11px 18px;
@@ -676,10 +662,7 @@
     }
 
     /* Support band compact */
-    .faq-support-band {
-      padding: 40px 24px;
-      margin-top: 40px;
-    }
+    .faq-support-band { padding: 40px 24px; margin-top: 40px; }
     .faq-support-number-box {
       flex-direction: column;
       padding: 20px 24px;
@@ -687,17 +670,9 @@
       text-align: center;
       border-radius: 20px;
     }
-    .faq-support-number-text {
-      text-align: center;
-    }
-    .faq-support-actions {
-      flex-direction: column;
-      width: 100%;
-    }
-    .faq-support-btn {
-      width: 100%;
-      justify-content: center;
-    }
+    .faq-support-number-text { text-align: center; }
+    .faq-support-actions { flex-direction: column; width: 100%; }
+    .faq-support-btn { width: 100%; justify-content: center; }
   }
 
   /* ============================================
@@ -708,272 +683,103 @@
       padding: 56px 16px 72px;
       border-radius: 0 0 20px 20px;
     }
-    .faq-hero h1 {
-      font-size: clamp(1.75rem, 7vw, 2.2rem);
-    }
-    .faq-hero p {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 22px;
-    }
+    .faq-hero h1 { font-size: clamp(1.75rem, 7vw, 2.2rem); }
+    .faq-hero p { font-size: 0.95rem; line-height: 1.6; margin-bottom: 22px; }
 
-    .faq-support-pill {
-      padding: 10px 18px;
-      gap: 10px;
-    }
-    .faq-support-pill .support-icon {
-      width: 32px;
-      height: 32px;
-      font-size: 14px;
-      border-radius: 9px;
-    }
-    .faq-support-pill .support-label {
-      font-size: 9.5px;
-    }
-    .faq-support-pill .support-number {
-      font-size: 13px;
-    }
+    .faq-support-pill { padding: 10px 18px; gap: 10px; }
+    .faq-support-pill .support-icon { width: 32px; height: 32px; font-size: 14px; border-radius: 9px; }
+    .faq-support-pill .support-label { font-size: 9.5px; }
+    .faq-support-pill .support-number { font-size: 13px; }
 
-    .faq-container {
-      padding: 0 14px;
-      margin-bottom: 64px;
-    }
+    .faq-container { padding: 0 14px; margin-bottom: 64px; }
 
-    .faq-founder {
-      padding: 24px 20px;
-      margin-bottom: 28px;
-    }
-    .faq-founder-avatar {
-      width: 76px;
-      height: 76px;
-      font-size: 1.7rem;
-    }
-    .faq-founder-name {
-      font-size: 1.2rem;
-    }
-    .faq-founder-role {
-      font-size: 12.5px;
-      margin-bottom: 10px;
-    }
-    .faq-founder-text {
-      font-size: 13px;
-      margin-bottom: 14px;
-    }
-    .faq-founder-cta {
-      font-size: 12.5px;
-    }
+    .founder-profile { padding: 24px 20px; }
+    .founder-avatar { width: 80px; height: 80px; font-size: 1.8rem; }
+    .founder-name { font-size: 1.25rem; }
+    .founder-role { font-size: 12.5px; }
+    .founder-bio { font-size: 14px; line-height: 1.7; }
+    .founder-highlight-value { font-size: 1.2rem; }
+    .founder-highlight-label { font-size: 11px; }
 
-    .faq-tab {
-      padding: 10px 14px;
-      font-size: 12.5px;
-      min-height: 42px;
-    }
-    .faq-tab i {
-      font-size: 12px;
-    }
+    .faq-tab { padding: 10px 14px; font-size: 12.5px; min-height: 42px; }
+    .faq-tab i { font-size: 12px; }
 
-    .faq-q {
-      padding: 18px 20px;
-      font-size: 14.5px;
-      min-height: 56px;
-      gap: 12px;
-    }
-    .faq-q i {
-      font-size: 13px;
-    }
-    .faq-a {
-      padding: 0 20px;
-      font-size: 14px;
-      line-height: 1.7;
-    }
-    .faq-item.open .faq-a {
-      padding: 0 20px 20px;
-    }
-    .faq-a ul {
-      margin-left: 18px;
-    }
+    .faq-q { padding: 18px 20px; font-size: 14.5px; min-height: 56px; gap: 12px; }
+    .faq-q i { font-size: 13px; }
+    .faq-a { padding: 0 20px; font-size: 14px; line-height: 1.7; }
+    .faq-item.open .faq-a { padding: 0 20px 20px; }
+    .faq-a ul { margin-left: 18px; }
 
-    .faq-support-band {
-      padding: 32px 20px;
-      margin-top: 36px;
-      border-radius: 20px;
-    }
-    .faq-support-band h3 {
-      font-size: 1.3rem;
-    }
-    .faq-support-band p {
-      font-size: 0.95rem;
-      margin-bottom: 22px;
-    }
-    .faq-support-icon {
-      width: 46px;
-      height: 46px;
-      font-size: 20px;
-      border-radius: 12px;
-    }
-    .faq-support-number-box {
-      padding: 16px 20px;
-      margin-bottom: 22px;
-    }
-    .faq-support-number-value {
-      font-size: 1.2rem;
-    }
-    .faq-support-number-hours {
-      font-size: 11px;
-    }
-    .faq-support-btn {
-      padding: 13px 20px;
-      font-size: 13.5px;
-      min-height: 46px;
-    }
+    .faq-support-band { padding: 32px 20px; margin-top: 36px; border-radius: 20px; }
+    .faq-support-band h3 { font-size: 1.3rem; }
+    .faq-support-band p { font-size: 0.95rem; margin-bottom: 22px; }
+    .faq-support-icon { width: 46px; height: 46px; font-size: 20px; border-radius: 12px; }
+    .faq-support-number-box { padding: 16px 20px; margin-bottom: 22px; }
+    .faq-support-number-value { font-size: 1.2rem; }
+    .faq-support-number-hours { font-size: 11px; }
+    .faq-support-btn { padding: 13px 20px; font-size: 13.5px; min-height: 46px; }
   }
 
   /* ============================================
      RESPONSIVE — SMALL PHONES (480px)
      ============================================ */
   @media (max-width: 480px) {
-    .faq-hero {
-      padding: 48px 14px 64px;
-    }
-    .faq-hero h1 {
-      font-size: clamp(1.6rem, 8vw, 2rem);
-    }
-    .faq-hero p {
-      font-size: 0.92rem;
-    }
+    .faq-hero { padding: 48px 14px 64px; }
+    .faq-hero h1 { font-size: clamp(1.6rem, 8vw, 2rem); }
+    .faq-hero p { font-size: 0.92rem; }
 
-    .faq-support-pill {
-      padding: 9px 16px;
-      gap: 8px;
-    }
-    .faq-support-pill .support-icon {
-      width: 30px;
-      height: 30px;
-      font-size: 13px;
-    }
-    .faq-support-pill .support-label {
-      font-size: 9px;
-    }
-    .faq-support-pill .support-number {
-      font-size: 12.5px;
-    }
+    .faq-support-pill { padding: 9px 16px; gap: 8px; }
+    .faq-support-pill .support-icon { width: 30px; height: 30px; font-size: 13px; }
+    .faq-support-pill .support-label { font-size: 9px; }
+    .faq-support-pill .support-number { font-size: 12.5px; }
 
-    .faq-container {
-      padding: 0 12px;
-    }
+    .faq-container { padding: 0 12px; }
 
-    .faq-founder {
-      padding: 22px 18px;
-    }
-    .faq-founder-avatar {
-      width: 68px;
-      height: 68px;
-      font-size: 1.5rem;
-    }
-    .faq-founder-name {
-      font-size: 1.1rem;
-    }
-    .faq-founder-text {
-      font-size: 12.5px;
-    }
+    .founder-profile { padding: 22px 18px; }
+    .founder-avatar { width: 70px; height: 70px; font-size: 1.6rem; }
+    .founder-name { font-size: 1.15rem; }
+    .founder-bio { font-size: 13.5px; }
 
-    .faq-q {
-      padding: 16px 18px;
-      font-size: 14px;
-      min-height: 54px;
-    }
-    .faq-a {
-      padding: 0 18px;
-      font-size: 13.5px;
-    }
-    .faq-item.open .faq-a {
-      padding: 0 18px 18px;
-    }
+    .faq-q { padding: 16px 18px; font-size: 14px; min-height: 54px; }
+    .faq-a { padding: 0 18px; font-size: 13.5px; }
+    .faq-item.open .faq-a { padding: 0 18px 18px; }
 
-    .faq-support-band {
-      padding: 28px 18px;
-    }
-    .faq-support-band h3 {
-      font-size: 1.2rem;
-    }
-    .faq-support-band p {
-      font-size: 0.9rem;
-    }
-    .faq-support-number-box {
-      padding: 14px 18px;
-      border-radius: 18px;
-    }
-    .faq-support-number-value {
-      font-size: 1.1rem;
-    }
-    .faq-support-btn {
-      padding: 12px 18px;
-      font-size: 13px;
-    }
+    .faq-support-band { padding: 28px 18px; }
+    .faq-support-band h3 { font-size: 1.2rem; }
+    .faq-support-band p { font-size: 0.9rem; }
+    .faq-support-number-box { padding: 14px 18px; border-radius: 18px; }
+    .faq-support-number-value { font-size: 1.1rem; }
+    .faq-support-btn { padding: 12px 18px; font-size: 13px; }
   }
 
   /* ============================================
      RESPONSIVE — VERY SMALL PHONES (360px)
      ============================================ */
   @media (max-width: 360px) {
-    .faq-hero {
-      padding: 40px 12px 56px;
-    }
-    .faq-hero h1 {
-      font-size: 1.5rem;
-    }
+    .faq-hero { padding: 40px 12px 56px; }
+    .faq-hero h1 { font-size: 1.5rem; }
 
-    .faq-support-pill {
-      padding: 8px 14px;
-    }
-    .faq-support-pill .support-label {
-      font-size: 8.5px;
-    }
-    .faq-support-pill .support-number {
-      font-size: 12px;
-    }
+    .faq-support-pill { padding: 8px 14px; }
+    .faq-support-pill .support-label { font-size: 8.5px; }
+    .faq-support-pill .support-number { font-size: 12px; }
 
-    .faq-tab {
-      padding: 9px 12px;
-      font-size: 12px;
-    }
+    .faq-tab { padding: 9px 12px; font-size: 12px; }
 
-    .faq-q {
-      padding: 14px 16px;
-      font-size: 13.5px;
-    }
-    .faq-a {
-      padding: 0 16px;
-      font-size: 13px;
-    }
-    .faq-item.open .faq-a {
-      padding: 0 16px 16px;
-    }
+    .faq-q { padding: 14px 16px; font-size: 13.5px; }
+    .faq-a { padding: 0 16px; font-size: 13px; }
+    .faq-item.open .faq-a { padding: 0 16px 16px; }
 
-    .faq-support-number-value {
-      font-size: 1rem;
-    }
+    .faq-support-number-value { font-size: 1rem; }
   }
 
   /* ============================================
      LANDSCAPE PHONE
      ============================================ */
   @media (max-width: 896px) and (orientation: landscape) {
-    .faq-hero {
-      padding: 40px 20px 48px;
-    }
-    .faq-container {
-      margin-top: -20px;
-    }
-    .faq-founder {
-      flex-direction: row;
-      text-align: left;
-      padding: 20px;
-    }
-    .faq-founder-label,
-    .faq-founder-cta {
-      justify-content: flex-start;
-    }
+    .faq-hero { padding: 40px 20px 48px; }
+    .faq-container { margin-top: -20px; }
+    .founder-top { flex-direction: row; text-align: left; }
+    .founder-label { justify-content: flex-start; }
   }
 
   /* ============================================
@@ -1000,7 +806,7 @@
   <section class="faq-hero">
     <div class="faq-hero-inner">
       <h1>Frequently Asked Questions</h1>
-      <p>Everything you need to know about booking BnB stays, staycations, and holiday homes on bnb.co.ke — for guests and hosts.</p>
+      <p>Everything you need to know about booking BnB stays, staycations, and holiday homes on bnb.co.ke — for guests, hosts, and anyone curious about who's behind the platform.</p>
 
       <a href="tel:+254798246467" class="faq-support-pill">
         <span class="support-icon"><i class="fa fa-phone"></i></span>
@@ -1015,29 +821,7 @@
   <div class="faq-container">
 
     <!-- ============================================
-         CO-FOUNDER CARD
-         ============================================ -->
-    <div class="faq-founder">
-      <div class="faq-founder-avatar">
-        <span>BC</span>
-        <img src="{% static 'images/chris/chris-portrait.jpg' %}"
-             alt="Brian Chris — Co-Founder of bnb.co.ke"
-             onerror="this.style.display='none'">
-      </div>
-      <div class="faq-founder-content">
-        <div class="faq-founder-label">
-          <i class="fa fa-star"></i> Meet the Founder
-        </div>
-        <h3 class="faq-founder-name">Brian Chris</h3>
-        <div class="faq-founder-role">Co-Founder — bnb.co.ke</div>
-        <p class="faq-founder-text">
-          Brian Chris is the co-founder behind bnb.co.ke — Kenya's booking platform for verified BnB stays, staycations, and holiday homes. His vision: making travel, business, and exploration in Kenya feel seamless, with real people and real properties you can trust.
-        </p>
-      </div>
-    </div>
-
-    <!-- ============================================
-         TABS
+         TABS — 4 now, including "Meet the Founder"
          ============================================ -->
     <div class="faq-tabs">
       <button class="faq-tab active" data-tab="guests" onclick="faqSwitchTab('guests')">
@@ -1048,6 +832,9 @@
       </button>
       <button class="faq-tab" data-tab="booking" onclick="faqSwitchTab('booking')">
         <i class="fa fa-calendar-check"></i> Bookings &amp; Payments
+      </button>
+      <button class="faq-tab" data-tab="founder" onclick="faqSwitchTab('founder')">
+        <i class="fa fa-star"></i> Meet the Founder
       </button>
     </div>
 
@@ -1363,6 +1150,58 @@
     </div>
 
     <!-- ============================================
+         MEET THE FOUNDER — new tab section
+         ============================================ -->
+    <div class="faq-section" id="faq-founder">
+
+      <div class="founder-profile">
+        <div class="founder-top">
+          <div class="founder-avatar">
+            <span>BC</span>
+            <img src="{% static 'images/chris/chris-portrait.jpg' %}"
+                 alt="Brian Chris — Co-Founder of bnb.co.ke"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="founder-heading">
+            <div class="founder-label">
+              <i class="fa fa-star"></i> Meet the Founder
+            </div>
+            <h3 class="founder-name">Brian Chris</h3>
+            <p class="founder-role">Co-Founder — bnb.co.ke</p>
+          </div>
+        </div>
+
+        <p class="founder-bio">
+          <strong>Brian Chris</strong> is the co-founder behind bnb.co.ke — Kenya's booking platform for verified BnB stays, staycations, and holiday homes. His vision: making travel, business, and exploration in Kenya feel seamless, with real people and real properties you can trust.
+        </p>
+
+        <p class="founder-bio">
+          Before bnb.co.ke, Brian spent years working across Kenyan hospitality, technology, and guest experience — which is where the platform's obsession with verification, transparency, and human support comes from. Every listing, every policy, and every support call is designed around one question: <em>"Would I book this myself?"</em>
+        </p>
+
+        <p class="founder-bio">
+          When he's not reviewing properties or improving the booking experience, he's on the road — usually somewhere between Nairobi and the coast, checking out the next great stay.
+        </p>
+
+        <div class="founder-highlights">
+          <div class="founder-highlight">
+            <div class="founder-highlight-value">100%</div>
+            <div class="founder-highlight-label">Verified Properties</div>
+          </div>
+          <div class="founder-highlight">
+            <div class="founder-highlight-value">24/7</div>
+            <div class="founder-highlight-label">Human Support</div>
+          </div>
+          <div class="founder-highlight">
+            <div class="founder-highlight-value">Kenya</div>
+            <div class="founder-highlight-label">Built &amp; Operated</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================
          SUPPORT BAND
          ============================================ -->
     <div class="faq-support-band">
@@ -1426,6 +1265,11 @@
     document.querySelectorAll('.faq-section').forEach(function (s) {
       s.classList.toggle('active', s.id === 'faq-' + tab);
     });
+    // Scroll tab into view on mobile (horizontal scroll tabs)
+    var activeTab = document.querySelector('.faq-tab.active');
+    if (activeTab && activeTab.scrollIntoView) {
+      activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
   };
 
 })();

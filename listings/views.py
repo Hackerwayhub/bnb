@@ -750,7 +750,7 @@ def invest_landing(request):
         },
         'investor': {
             'name': 'Investor Advisory',
-            'fee': 25000,
+            'fee': 5000,
             'fee_label': 'One-time engagement fee',
             'description': (
                 'Full due-diligence support: shortlisting vetted buildings, '
@@ -796,7 +796,7 @@ def invest_landing(request):
         'title': 'BnB Investment Advisory in Kenya',
         'page_title': 'bnb.co.ke Invest — Advisory',
         'meta_description': (
-            'Independent advisory for investors looking to buy, furnish, and operate '
+            'Independent advisory for investors looking to start, furnish, and operate '
             'BnB and holiday-home property in Kenya. We help you choose the right unit, '
             'operator, and strategy — you own the asset and keep the upside.'
         ),

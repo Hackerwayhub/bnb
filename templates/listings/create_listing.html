@@ -25,25 +25,33 @@ body {
     font-family: -apple-system, 'Inter', 'Segoe UI', Roboto, sans-serif;
     color: var(--cl-slate);
     line-height: 1.55;
+    -webkit-text-size-adjust: 100%;
 }
 
 .create-listing-container {
     max-width: 1000px;
     margin: 0 auto;
     padding: 24px 20px 80px;
+    overflow-x: hidden;
 }
 
-.page-header { text-align: center; margin-bottom: 32px; padding: 0 12px; }
+/* ============================================
+   PAGE HEADER
+   ============================================ */
+.page-header { text-align: center; margin-bottom: 28px; padding: 0 12px; }
 .page-header h1 {
     font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800;
     color: var(--cl-navy); letter-spacing: -0.02em; margin: 0 0 8px;
+    word-wrap: break-word;
 }
 .page-header p { font-size: 15px; color: var(--cl-slate); margin: 0; line-height: 1.55; }
 
-/* Progress */
+/* ============================================
+   PROGRESS INDICATOR
+   ============================================ */
 .progress-bar-wrap {
-    display: flex; align-items: center; justify-content: center;
-    gap: 8px; margin-bottom: 32px; padding: 0 12px;
+    display: flex; align-items: center; justify-content: flex-start;
+    gap: 8px; margin-bottom: 28px; padding: 0 12px 4px;
     overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
 }
 .progress-bar-wrap::-webkit-scrollbar { display: none; }
@@ -53,7 +61,8 @@ body {
     padding: 10px 16px; border-radius: 100px;
     background: #fff; border: 1.5px solid var(--cl-border);
     color: var(--cl-slate); font-size: 13px; font-weight: 600;
-    white-space: nowrap; transition: all 0.25s ease; flex-shrink: 0; cursor: pointer;
+    white-space: nowrap; transition: all 0.25s ease;
+    flex-shrink: 0; cursor: pointer;
 }
 .progress-step.active { background: var(--cl-navy); border-color: var(--cl-navy); color: #fff; }
 .progress-step.completed {
@@ -70,7 +79,9 @@ body {
 .progress-step.completed .progress-step-num { background: var(--cl-green); color: #fff; }
 .progress-connector { width: 20px; height: 1.5px; background: var(--cl-border); flex-shrink: 0; }
 
-/* Card */
+/* ============================================
+   MAIN CARD
+   ============================================ */
 .listing-card {
     background: #fff; border-radius: var(--radius-lg);
     border: 1px solid var(--cl-border); box-shadow: var(--shadow-card);
@@ -81,7 +92,9 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Messages */
+/* ============================================
+   MESSAGES
+   ============================================ */
 .alert-custom {
     padding: 16px 20px; margin: 20px; border-radius: var(--radius-md);
     border-left: 4px solid; display: flex; align-items: flex-start;
@@ -93,7 +106,9 @@ body {
 .alert-custom.info { background: #EFF6FF; border-color: #3B82F6; color: #1E40AF; }
 .alert-custom i { flex-shrink: 0; margin-top: 2px; }
 
-/* Step panels */
+/* ============================================
+   STEP PANELS
+   ============================================ */
 .form-step { display: none; padding: 28px 24px; }
 .form-step.active { display: block; animation: stepIn 0.35s ease-out; }
 @keyframes stepIn {
@@ -102,23 +117,35 @@ body {
 }
 
 .section-header {
-    margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--cl-border);
+    margin-bottom: 24px; padding-bottom: 18px;
+    border-bottom: 1px solid var(--cl-border);
 }
 .section-title {
     font-size: 1.35rem; font-weight: 800; color: var(--cl-navy);
     letter-spacing: -0.02em; margin: 0 0 6px;
     display: flex; align-items: center; gap: 12px;
+    word-wrap: break-word;
 }
 .section-title i {
     display: inline-flex; align-items: center; justify-content: center;
     width: 36px; height: 36px; border-radius: 10px;
     background: linear-gradient(135deg, rgba(211, 47, 47, 0.1), rgba(212, 160, 23, 0.08));
-    color: var(--cl-red); font-size: 15px;
+    color: var(--cl-red); font-size: 15px; flex-shrink: 0;
 }
 .section-subtitle { font-size: 14px; color: var(--cl-slate); margin: 0; line-height: 1.55; }
 
-/* Form controls */
-.form-group { margin-bottom: 22px; }
+.subsection-title {
+    font-size: 15px; font-weight: 700; color: var(--cl-navy);
+    margin: 24px 0 14px; display: flex; align-items: center;
+    gap: 6px;
+}
+.subsection-title i { color: var(--cl-red); font-size: 14px; }
+.subsection-title:first-of-type { margin-top: 0; }
+
+/* ============================================
+   FORM CONTROLS
+   ============================================ */
+.form-group { margin-bottom: 20px; }
 .form-label {
     display: flex; align-items: center; gap: 8px;
     font-size: 13px; font-weight: 600; color: var(--cl-navy);
@@ -127,6 +154,10 @@ body {
 .form-label i { color: var(--cl-slate); font-size: 13px; opacity: 0.75; }
 .required-star { color: var(--cl-red); font-size: 14px; margin-left: 2px; }
 
+/* Font Awesome icons — WhatsApp uses brands style */
+.form-label i.fab { font-family: "Font Awesome 6 Brands", "Font Awesome 5 Brands", "FontAwesome"; }
+.form-label i.fa-whatsapp::before { content: "\f232"; }
+
 .form-control,
 select.form-control,
 textarea.form-control {
@@ -134,6 +165,15 @@ textarea.form-control {
     border: 1.5px solid var(--cl-border); border-radius: var(--radius-sm);
     font-size: 15px; color: var(--cl-navy); font-family: inherit;
     transition: all 0.2s ease; min-height: 46px;
+    -webkit-appearance: none;
+    appearance: none;
+}
+select.form-control {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    padding-right: 40px;
 }
 .form-control::placeholder { color: #94A3B8; }
 .form-control:hover, select.form-control:hover, textarea.form-control:hover { border-color: #CBD5E1; }
@@ -153,14 +193,15 @@ input[type="file"].form-control::file-selector-button {
 }
 input[type="file"].form-control::file-selector-button:hover { background: var(--cl-red); }
 
-/* Tips */
+/* ============================================
+   TIPS & ERRORS
+   ============================================ */
 .form-tip {
     display: flex; align-items: flex-start; gap: 8px;
     margin-top: 8px; font-size: 12.5px; color: var(--cl-slate); line-height: 1.5;
 }
 .form-tip i { color: var(--cl-gold); font-size: 12px; margin-top: 2px; flex-shrink: 0; }
 
-/* Errors */
 .error-message {
     display: flex; align-items: flex-start; gap: 8px;
     margin-top: 6px; padding: 10px 12px;
@@ -169,14 +210,18 @@ input[type="file"].form-control::file-selector-button:hover { background: var(--
 }
 .error-message i { color: var(--cl-red); flex-shrink: 0; margin-top: 1px; }
 
-/* Grids */
+/* ============================================
+   GRIDS
+   ============================================ */
 .field-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
 @media (min-width: 640px) {
     .field-grid.cols-2 { grid-template-columns: 1fr 1fr; }
     .field-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
 }
 
-/* Capacity */
+/* ============================================
+   CAPACITY GRID
+   ============================================ */
 .capacity-grid {
     display: grid; grid-template-columns: repeat(2, 1fr);
     gap: 12px; margin-bottom: 20px;
@@ -209,7 +254,9 @@ input[type="file"].form-control::file-selector-button:hover { background: var(--
     font-size: 15px; min-height: 40px; background: #fff;
 }
 
-/* Amenities — SAME STRUCTURE AS YOUR OLD TEMPLATE, NEW STYLING */
+/* ============================================
+   AMENITIES
+   ============================================ */
 .amenities-section-title {
     font-size: 13px; font-weight: 700; color: var(--cl-navy);
     letter-spacing: 0.06em; text-transform: uppercase;
@@ -230,6 +277,7 @@ input[type="file"].form-control::file-selector-button:hover { background: var(--
     gap: 12px; padding: 12px 14px; background: #F8FAFC;
     border: 1.5px solid var(--cl-border); border-radius: var(--radius-sm);
     transition: all 0.2s ease; cursor: pointer;
+    min-height: 52px;
 }
 .amenity-item:hover { background: #fff; border-color: #CBD5E1; }
 .amenity-item:has(input:checked) {
@@ -262,7 +310,9 @@ input[type="file"].form-control::file-selector-button:hover { background: var(--
     font-size: 12px; font-weight: 700;
 }
 
-/* Listing type cards */
+/* ============================================
+   LISTING TYPE CARDS
+   ============================================ */
 .listing-type-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 24px; }
 @media (min-width: 640px) { .listing-type-grid { grid-template-columns: 1fr 1fr; } }
 
@@ -314,7 +364,9 @@ input[type="file"].form-control::file-selector-button:hover { background: var(--
 }
 .listing-card-option.selected .listing-radio-label { background: var(--cl-navy); color: #fff; }
 
-/* Photo upload */
+/* ============================================
+   PHOTO UPLOAD WITH PREVIEW
+   ============================================ */
 .photo-upload-grid {
     display: grid; grid-template-columns: repeat(2, 1fr);
     gap: 12px; margin-bottom: 20px;
@@ -325,10 +377,14 @@ input[type="file"].form-control::file-selector-button:hover { background: var(--
     position: relative; padding: 16px 12px; background: #F8FAFC;
     border: 2px dashed var(--cl-border); border-radius: var(--radius-sm);
     text-align: center; transition: all 0.2s ease; cursor: pointer;
+    min-height: 140px; overflow: hidden;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
 }
 .photo-upload-item:hover { background: #fff; border-color: var(--cl-red); }
-.photo-upload-item:has(input:valid) {
-    background: #F0FDF4; border-color: var(--cl-green); border-style: solid;
+.photo-upload-item.has-file {
+    background: #0F1B2D; border-style: solid; border-color: var(--cl-green);
+    padding: 0;
 }
 .upload-icon {
     font-size: 22px; color: var(--cl-slate);
@@ -348,10 +404,47 @@ input[type="file"].form-control::file-selector-button:hover { background: var(--
 .upload-info i { font-size: 10px; color: var(--cl-slate); opacity: 0.7; }
 .photo-upload-item input[type="file"] {
     position: absolute; inset: 0; opacity: 0; cursor: pointer;
-    width: 100%; height: 100%;
+    width: 100%; height: 100%; z-index: 3;
 }
 
-/* Price input */
+/* Preview layer */
+.photo-preview {
+    display: none;
+    position: absolute; inset: 0;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: #000;
+    z-index: 2;
+}
+.photo-upload-item.has-file .photo-preview { display: block; }
+.photo-preview img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+}
+.photo-preview-remove {
+    position: absolute; top: 6px; right: 6px;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(0, 0, 0, 0.75); color: #fff;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    cursor: pointer; display: flex; align-items: center;
+    justify-content: center; font-size: 12px;
+    z-index: 4; transition: background 0.2s ease;
+    font-family: inherit;
+}
+.photo-preview-remove:hover { background: var(--cl-red); }
+.photo-preview-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 8px 10px 6px;
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    color: #fff; font-size: 10px; font-weight: 600;
+    text-align: center; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+    z-index: 3;
+}
+
+/* ============================================
+   PRICE INPUT
+   ============================================ */
 .price-input-wrap {
     display: flex; border-radius: var(--radius-sm); overflow: hidden;
     border: 1.5px solid var(--cl-border); transition: all 0.2s ease;
@@ -367,7 +460,9 @@ input[type="file"].form-control::file-selector-button:hover { background: var(--
 .price-input-wrap .form-control { border: none; border-radius: 0; background: #F8FAFC; }
 .price-input-wrap .form-control:focus { box-shadow: none; border: none; }
 
-/* Checkbox row */
+/* ============================================
+   CHECKBOX ROW
+   ============================================ */
 .checkbox-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
 @media (min-width: 640px) { .checkbox-row { grid-template-columns: repeat(2, 1fr); } }
 
@@ -376,6 +471,7 @@ input[type="file"].form-control::file-selector-button:hover { background: var(--
     padding: 12px 14px; background: #F8FAFC;
     border: 1.5px solid var(--cl-border); border-radius: var(--radius-sm);
     cursor: pointer; transition: all 0.2s ease;
+    min-height: 48px;
 }
 .checkbox-item:hover { background: #fff; border-color: #CBD5E1; }
 .checkbox-item input[type="checkbox"] {
@@ -387,11 +483,14 @@ input[type="file"].form-control::file-selector-button:hover { background: var(--
     margin: 0; cursor: pointer; line-height: 1.4;
 }
 
-/* Step navigation */
+/* ============================================
+   STEP NAVIGATION
+   ============================================ */
 .step-nav {
     display: flex; justify-content: space-between; align-items: center;
     gap: 12px; padding: 20px 24px;
     border-top: 1px solid var(--cl-border); background: #F8FAFC;
+    flex-wrap: wrap;
 }
 
 .btn-nav {
@@ -421,20 +520,51 @@ input[type="file"].form-control::file-selector-button:hover { background: var(--
 }
 .btn-nav-submit:hover { background: #047857; color: #fff; transform: translateY(-2px); }
 
-/* Mobile */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 @media (max-width: 640px) {
     .create-listing-container { padding: 16px 14px 60px; }
+    .page-header { margin-bottom: 20px; }
+    .progress-bar-wrap { margin-bottom: 20px; padding: 0 4px 4px; }
     .form-step { padding: 20px 18px; }
-    .section-title { font-size: 1.15rem; }
+    .section-title { font-size: 1.15rem; gap: 10px; }
     .section-title i { width: 32px; height: 32px; font-size: 13px; }
+    .subsection-title { font-size: 14px; margin: 20px 0 12px; }
     .step-nav { padding: 16px 18px; flex-direction: column-reverse; }
     .btn-nav { width: 100%; }
     .progress-step { font-size: 12px; padding: 8px 12px; }
     .progress-step-num { width: 20px; height: 20px; font-size: 10px; }
+    .capacity-item { padding: 14px 10px; }
+    .capacity-icon { width: 36px; height: 36px; font-size: 14px; margin-bottom: 8px; }
+    .capacity-label { font-size: 11px; }
+    .photo-upload-grid { gap: 10px; }
+    .photo-upload-item { min-height: 120px; padding: 14px 10px; }
+    .listing-card-option { padding: 20px 16px; }
+    .form-control { font-size: 16px; /* prevents iOS zoom */ }
+    .alert-custom { padding: 14px 16px; margin: 16px; font-size: 13px; }
+}
+
+@media (max-width: 480px) {
+    .create-listing-container { padding: 14px 12px 48px; }
+    .form-step { padding: 18px 14px; }
+    .section-header { margin-bottom: 18px; padding-bottom: 14px; }
+    .photo-upload-item { min-height: 110px; padding: 12px 8px; }
+    .upload-icon { font-size: 20px; margin-bottom: 6px; }
+    .upload-label { font-size: 11px; }
+    .upload-info { font-size: 10px; margin-top: 6px; }
+    .checkbox-item { padding: 10px 12px; }
+    .amenity-item { padding: 10px 12px; min-height: 48px; }
+    .amenity-label { font-size: 12px; }
+}
+
+@media (max-width: 360px) {
+    .photo-upload-grid { grid-template-columns: 1fr; }
+    .photo-upload-item { min-height: 130px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .form-step, .listing-card, .progress-step, .btn-nav {
+    .form-step, .listing-card, .progress-step, .btn-nav, .photo-preview {
         animation: none !important;
         transition: none !important;
     }
@@ -584,18 +714,16 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
             </div>
 
             <!-- ============================================
-                 STEP 2 — DETAILS
+                 STEP 2 — DETAILS (land_size, land_size_unit,
+                 floor_area REMOVED as requested)
                  ============================================ -->
             <div class="form-step" data-step="1">
                 <div class="section-header">
                     <h2 class="section-title"><i class="fa fa-list-ul"></i> Property details</h2>
-                    <p class="section-subtitle">Size, rooms, and contact info</p>
+                    <p class="section-subtitle">Capacity, condition, and contact info</p>
                 </div>
 
-                <h3 style="font-size: 15px; font-weight: 700; color: var(--cl-navy); margin: 0 0 16px;">
-                    <i class="fa fa-users" style="color: var(--cl-red); margin-right: 6px;"></i>
-                    Capacity
-                </h3>
+                <h3 class="subsection-title"><i class="fa fa-users"></i> Capacity</h3>
 
                 <div class="capacity-grid">
                     <div class="capacity-item">
@@ -620,31 +748,7 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
                     </div>
                 </div>
 
-                <h3 style="font-size: 15px; font-weight: 700; color: var(--cl-navy); margin: 24px 0 16px;">
-                    <i class="fa fa-ruler-combined" style="color: var(--cl-red); margin-right: 6px;"></i>
-                    Size & condition
-                </h3>
-
-                <div class="field-grid cols-3">
-                    <div class="form-group">
-                        <label class="form-label" for="{{ form.land_size.id_for_label }}">
-                            <i class="fa fa-tree"></i> Land size
-                        </label>
-                        {{ form.land_size }}
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="{{ form.land_size_unit.id_for_label }}">
-                            <i class="fa fa-ruler"></i> Unit
-                        </label>
-                        {{ form.land_size_unit }}
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="{{ form.floor_area.id_for_label }}">
-                            <i class="fa fa-building"></i> Floor area (m²)
-                        </label>
-                        {{ form.floor_area }}
-                    </div>
-                </div>
+                <h3 class="subsection-title"><i class="fa fa-check-circle"></i> Condition</h3>
 
                 <div class="field-grid cols-3">
                     <div class="form-group">
@@ -667,10 +771,7 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
                     </div>
                 </div>
 
-                <h3 style="font-size: 15px; font-weight: 700; color: var(--cl-navy); margin: 24px 0 16px;">
-                    <i class="fa fa-address-book" style="color: var(--cl-red); margin-right: 6px;"></i>
-                    Contact
-                </h3>
+                <h3 class="subsection-title"><i class="fa fa-address-book"></i> Contact</h3>
 
                 <div class="field-grid cols-2">
                     <div class="form-group">
@@ -682,17 +783,14 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="{{ form.host_whatsapp.id_for_label }}">
-                            <i class="fa fa-whatsapp"></i>
+                            <i class="fab fa-whatsapp" style="color: #25D366;"></i>
                             WhatsApp <span class="required-star">*</span>
                         </label>
                         {{ form.host_whatsapp }}
                     </div>
                 </div>
 
-                <h3 style="font-size: 15px; font-weight: 700; color: var(--cl-navy); margin: 24px 0 16px;">
-                    <i class="fa fa-calendar-check" style="color: var(--cl-red); margin-right: 6px;"></i>
-                    Availability & virtual tour
-                </h3>
+                <h3 class="subsection-title"><i class="fa fa-calendar-check"></i> Availability & virtual tour</h3>
 
                 <div class="field-grid cols-2">
                     <div class="form-group">
@@ -718,7 +816,7 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="{{ form.youtube_video_id.id_for_label }}">
-                            <i class="fa fa-youtube"></i> YouTube video ID
+                            <i class="fab fa-youtube"></i> YouTube video ID
                         </label>
                         {{ form.youtube_video_id }}
                     </div>
@@ -726,7 +824,7 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
             </div>
 
             <!-- ============================================
-                 STEP 3 — AMENITIES (SAME AS YOUR OLD TEMPLATE)
+                 STEP 3 — AMENITIES
                  ============================================ -->
             <div class="form-step" data-step="2">
                 <div class="section-header">
@@ -1103,7 +1201,7 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
             </div>
 
             <!-- ============================================
-                 STEP 4 — PHOTOS
+                 STEP 4 — PHOTOS WITH LIVE PREVIEW
                  ============================================ -->
             <div class="form-step" data-step="3">
                 <div class="section-header">
@@ -1119,7 +1217,13 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
                 </div>
 
                 <div class="photo-upload-grid">
-                    <div class="photo-upload-item">
+
+                    <div class="photo-upload-item" data-photo-tile>
+                        <div class="photo-preview">
+                            <img alt="">
+                            <button type="button" class="photo-preview-remove" aria-label="Remove photo">✕</button>
+                            <div class="photo-preview-label"></div>
+                        </div>
                         <div class="upload-icon"><i class="fa fa-camera"></i></div>
                         <label class="upload-label" for="{{ form.main_image.id_for_label }}">
                             Main photo <span class="required-star">*</span>
@@ -1127,48 +1231,91 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
                         {{ form.main_image }}
                         <div class="upload-info"><i class="fa fa-star"></i><span>Required</span></div>
                     </div>
-                    <div class="photo-upload-item">
+
+                    <div class="photo-upload-item" data-photo-tile>
+                        <div class="photo-preview">
+                            <img alt="">
+                            <button type="button" class="photo-preview-remove" aria-label="Remove photo">✕</button>
+                            <div class="photo-preview-label"></div>
+                        </div>
                         <div class="upload-icon"><i class="fa fa-image"></i></div>
                         <label class="upload-label" for="{{ form.image_2.id_for_label }}">Photo 2</label>
                         {{ form.image_2 }}
                         <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
                     </div>
-                    <div class="photo-upload-item">
+
+                    <div class="photo-upload-item" data-photo-tile>
+                        <div class="photo-preview">
+                            <img alt="">
+                            <button type="button" class="photo-preview-remove" aria-label="Remove photo">✕</button>
+                            <div class="photo-preview-label"></div>
+                        </div>
                         <div class="upload-icon"><i class="fa fa-image"></i></div>
                         <label class="upload-label" for="{{ form.image_3.id_for_label }}">Photo 3</label>
                         {{ form.image_3 }}
                         <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
                     </div>
-                    <div class="photo-upload-item">
+
+                    <div class="photo-upload-item" data-photo-tile>
+                        <div class="photo-preview">
+                            <img alt="">
+                            <button type="button" class="photo-preview-remove" aria-label="Remove photo">✕</button>
+                            <div class="photo-preview-label"></div>
+                        </div>
                         <div class="upload-icon"><i class="fa fa-image"></i></div>
                         <label class="upload-label" for="{{ form.image_4.id_for_label }}">Photo 4</label>
                         {{ form.image_4 }}
                         <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
                     </div>
-                    <div class="photo-upload-item">
+
+                    <div class="photo-upload-item" data-photo-tile>
+                        <div class="photo-preview">
+                            <img alt="">
+                            <button type="button" class="photo-preview-remove" aria-label="Remove photo">✕</button>
+                            <div class="photo-preview-label"></div>
+                        </div>
                         <div class="upload-icon"><i class="fa fa-image"></i></div>
                         <label class="upload-label" for="{{ form.image_5.id_for_label }}">Photo 5</label>
                         {{ form.image_5 }}
                         <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
                     </div>
-                    <div class="photo-upload-item">
+
+                    <div class="photo-upload-item" data-photo-tile>
+                        <div class="photo-preview">
+                            <img alt="">
+                            <button type="button" class="photo-preview-remove" aria-label="Remove photo">✕</button>
+                            <div class="photo-preview-label"></div>
+                        </div>
                         <div class="upload-icon"><i class="fa fa-image"></i></div>
                         <label class="upload-label" for="{{ form.image_6.id_for_label }}">Photo 6</label>
                         {{ form.image_6 }}
                         <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
                     </div>
-                    <div class="photo-upload-item">
+
+                    <div class="photo-upload-item" data-photo-tile>
+                        <div class="photo-preview">
+                            <img alt="">
+                            <button type="button" class="photo-preview-remove" aria-label="Remove photo">✕</button>
+                            <div class="photo-preview-label"></div>
+                        </div>
                         <div class="upload-icon"><i class="fa fa-image"></i></div>
                         <label class="upload-label" for="{{ form.image_7.id_for_label }}">Photo 7</label>
                         {{ form.image_7 }}
                         <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
                     </div>
-                    <div class="photo-upload-item">
+
+                    <div class="photo-upload-item" data-photo-tile>
+                        <div class="photo-preview">
+                            <img alt="">
+                            <button type="button" class="photo-preview-remove" aria-label="Remove photo">✕</button>
+                            <div class="photo-preview-label"></div>
+                        </div>
                         <div class="upload-icon"><i class="fa fa-image"></i></div>
                         <label class="upload-label" for="{{ form.image_8.id_for_label }}">Photo 8</label>
                         {{ form.image_8 }}
                         <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
                     </div>
+
                 </div>
             </div>
 
@@ -1238,10 +1385,7 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
                     </div>
                 </div>
 
-                <h3 style="font-size: 15px; font-weight: 700; color: var(--cl-navy); margin: 0 0 16px;">
-                    <i class="fa fa-crown" style="color: var(--cl-gold); margin-right: 6px;"></i>
-                    Listing type
-                </h3>
+                <h3 class="subsection-title"><i class="fa fa-crown" style="color: var(--cl-gold);"></i> Listing type</h3>
 
                 <div class="listing-type-grid">
                     <div class="listing-card-option selected" id="free-listing-card">
@@ -1381,7 +1525,9 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
             });
         });
 
-        // Listing type
+        // ============================================
+        // LISTING TYPE
+        // ============================================
         const freeCard = document.getElementById('free-listing-card');
         const featuredCard = document.getElementById('featured-listing-card');
         const freeRadio = form.querySelector('input[name="listing_type"][value="free"]');
@@ -1404,7 +1550,9 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
         });
         setCardSelection();
 
-        // Transaction type → price label
+        // ============================================
+        // TRANSACTION TYPE → PRICE LABEL
+        // ============================================
         const transactionType = document.getElementById('id_transaction_type');
         const priceHelp = document.getElementById('priceHelp');
         const priceField = document.getElementById('id_price');
@@ -1425,6 +1573,56 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
             transactionType.dispatchEvent(new Event('change'));
         }
 
+        // ============================================
+        // PHOTO PREVIEWS
+        // ============================================
+        document.querySelectorAll('[data-photo-tile]').forEach(function (tile) {
+            const input = tile.querySelector('input[type="file"]');
+            const preview = tile.querySelector('.photo-preview');
+            const previewImg = preview ? preview.querySelector('img') : null;
+            const previewLabel = preview ? preview.querySelector('.photo-preview-label') : null;
+            const removeBtn = preview ? preview.querySelector('.photo-preview-remove') : null;
+
+            if (!input || !previewImg) return;
+
+            input.addEventListener('change', function () {
+                const file = this.files && this.files[0];
+                if (!file) { clearPreview(); return; }
+                if (!file.type.startsWith('image/')) { clearPreview(); return; }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImg.src = e.target.result;
+                    if (previewLabel) {
+                        const name = file.name.length > 22
+                            ? file.name.substring(0, 19) + '...'
+                            : file.name;
+                        previewLabel.textContent = name;
+                    }
+                    tile.classList.add('has-file');
+                };
+                reader.readAsDataURL(file);
+            });
+
+            if (removeBtn) {
+                removeBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    input.value = '';
+                    clearPreview();
+                });
+            }
+
+            function clearPreview() {
+                previewImg.src = '';
+                if (previewLabel) previewLabel.textContent = '';
+                tile.classList.remove('has-file');
+            }
+        });
+
+        // ============================================
+        // FORM SUBMIT
+        // ============================================
         form.addEventListener('submit', function (e) {
             for (let i = 0; i < totalSteps; i++) {
                 if (!validateStep(i)) {
@@ -1442,6 +1640,7 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
             }, 6000);
         });
 
+        // Inline validation
         form.querySelectorAll('input, select, textarea').forEach(function (input) {
             input.addEventListener('blur', function () {
                 if (!this.hasAttribute('required')) return;

@@ -647,6 +647,80 @@ body.is-scrolled .filters-container {
   margin: 9px 9px 24px 9px;   /* was: margin: 9px; */
   border-radius: 18px;
 }
+    /* ============================================
+   HERO DELIVERY — LUXURY EDITORIAL
+   ============================================ */
+.hero-delivery {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(15, 27, 45, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 14px 28px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  margin-bottom: 24px;
+
+  /* Entrance Animation */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroFadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards;
+}
+
+@keyframes heroFadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-delivery-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--safari-gold); /* or #D4A017 */
+  font-size: 18px;
+  text-shadow: 0 0 15px rgba(212, 160, 23, 0.5);
+}
+
+.hero-delivery-text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.hero-accent {
+  font-style: italic;
+  font-weight: 800;
+  background: linear-gradient(120deg, #FDE68A 0%, #D4A017 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-right: 2px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .hero-delivery {
+    padding: 10px 20px;
+    border-radius: 20px;
+    gap: 12px;
+    align-items: flex-start; /* Align icon to top if text wraps */
+  }
+  .hero-delivery-icon {
+    font-size: 15px;
+    margin-top: 3px;
+  }
+  .hero-delivery-text {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
    </style>
 <div class="filter-shell" id="filterShell">
 
@@ -1159,9 +1233,15 @@ body.is-scrolled .filters-container {
           </div>
           <div class="hero-overlay"></div>
           <div class="hero-content">
-            <div class="hero-delivery">
-              <i class="fa fa-gem"></i> BnB, staycations, holiday homes, safari & travel experiences in Kenya !
-            </div>
+
+              <div class="hero-delivery">
+  <div class="hero-delivery-icon">
+    <i class="fa fa-gem"></i>
+  </div>
+  <div class="hero-delivery-text">
+    BnB, staycations, holiday homes, <span class="hero-accent">safari & travel</span> experiences in Kenya.
+  </div>
+</div>
 
 
           </div>

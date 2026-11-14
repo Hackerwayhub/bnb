@@ -5,2389 +5,1459 @@
 
 <style>
 :root {
-    --glass-white: rgba(255, 255, 255, 0.95);
-    --glass-light: rgba(255, 255, 255, 0.85);
-    --glass-medium: rgba(255, 255, 255, 0.75);
-    --glass-dark: rgba(255, 255, 255, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.25);
-    --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-    --text-primary: #2d3748;
-    --text-secondary: #4a5568;
-    --text-muted: #718096;
-    --blur-intensity: blur(20px);
-    --border-radius: 20px;
+    --cl-red: #D32F2F;
+    --cl-red-dark: #B71C1C;
+    --cl-navy: #0F1B2D;
+    --cl-slate: #475569;
+    --cl-bg: #F8FAFC;
+    --cl-gold: #D4A017;
+    --cl-green: #059669;
+    --cl-border: #E2E8F0;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+    --shadow-card: 0 4px 24px -8px rgba(15, 27, 45, 0.1);
+    --shadow-hover: 0 20px 48px -16px rgba(15, 27, 45, 0.2);
 }
 
 body {
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-    min-height: 100vh;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
+    background: var(--cl-bg);
+    font-family: -apple-system, 'Inter', 'Segoe UI', Roboto, sans-serif;
+    color: var(--cl-slate);
+    line-height: 1.55;
 }
 
 .create-listing-container {
-    min-height: 80vh;
-    padding: 20px 16px;
-    max-width: 1400px;
+    max-width: 1000px;
     margin: 0 auto;
+    padding: 24px 20px 80px;
 }
 
+.page-header { text-align: center; margin-bottom: 32px; padding: 0 12px; }
+.page-header h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800;
+    color: var(--cl-navy); letter-spacing: -0.02em; margin: 0 0 8px;
+}
+.page-header p { font-size: 15px; color: var(--cl-slate); margin: 0; line-height: 1.55; }
+
+/* Progress */
+.progress-bar-wrap {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; margin-bottom: 32px; padding: 0 12px;
+    overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.progress-bar-wrap::-webkit-scrollbar { display: none; }
+
+.progress-step {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; border-radius: 100px;
+    background: #fff; border: 1.5px solid var(--cl-border);
+    color: var(--cl-slate); font-size: 13px; font-weight: 600;
+    white-space: nowrap; transition: all 0.25s ease; flex-shrink: 0; cursor: pointer;
+}
+.progress-step.active { background: var(--cl-navy); border-color: var(--cl-navy); color: #fff; }
+.progress-step.completed {
+    background: rgba(5, 150, 105, 0.1);
+    border-color: rgba(5, 150, 105, 0.35);
+    color: var(--cl-green);
+}
+.progress-step-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(0, 0, 0, 0.06); font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.progress-step.active .progress-step-num { background: rgba(255, 255, 255, 0.2); color: #fff; }
+.progress-step.completed .progress-step-num { background: var(--cl-green); color: #fff; }
+.progress-connector { width: 20px; height: 1.5px; background: var(--cl-border); flex-shrink: 0; }
+
+/* Card */
 .listing-card {
-    background: var(--glass-white);
-    backdrop-filter: var(--blur-intensity);
-    -webkit-backdrop-filter: var(--blur-intensity);
-    border-radius: var(--border-radius);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-    overflow: hidden;
-    animation: fadeIn 0.8s ease-out;
+    background: #fff; border-radius: var(--radius-lg);
+    border: 1px solid var(--cl-border); box-shadow: var(--shadow-card);
+    overflow: hidden; animation: fadeIn 0.4s ease-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* Success Message - Glassmorphism */
-.alert-success-custom {
-    background: var(--glass-white);
-    backdrop-filter: blur(15px);
-    border-radius: 16px;
-    border: 1px solid var(--glass-border);
-    margin-bottom: 25px;
-    padding: 18px 20px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--glass-shadow);
+/* Messages */
+.alert-custom {
+    padding: 16px 20px; margin: 20px; border-radius: var(--radius-md);
+    border-left: 4px solid; display: flex; align-items: flex-start;
+    gap: 12px; font-size: 14px; line-height: 1.5;
 }
+.alert-custom.success { background: #ECFDF5; border-color: var(--cl-green); color: #065F46; }
+.alert-custom.error { background: #FEF2F2; border-color: var(--cl-red); color: #991B1B; }
+.alert-custom.warning { background: #FFFBEB; border-color: #F59E0B; color: #92400E; }
+.alert-custom.info { background: #EFF6FF; border-color: #3B82F6; color: #1E40AF; }
+.alert-custom i { flex-shrink: 0; margin-top: 2px; }
 
-.alert-success-custom::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(to bottom, #48bb78, #38a169);
-}
-
-.alert-success-custom .alert-content {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-}
-
-.alert-success-custom .alert-icon {
-    background: linear-gradient(135deg, #48bb78, #38a169);
-    color: white;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.2);
-}
-
-.alert-success-custom .alert-text {
-    flex: 1;
-    min-width: 0;
-}
-
-.alert-success-custom .alert-title {
-    margin: 0 0 6px 0;
-    color: var(--text-primary);
-    font-weight: 700;
-    font-size: 17px;
-    line-height: 1.3;
-}
-
-.alert-success-custom .alert-message {
-    margin: 0;
-    color: var(--text-secondary);
-    font-size: 15px;
-    line-height: 1.4;
-}
-
-.alert-success-custom .btn-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: var(--glass-medium);
-    border: 1px solid var(--glass-border);
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-    flex-shrink: 0;
-}
-
-.alert-success-custom .btn-close:hover {
-    background: var(--glass-dark);
-    color: var(--text-primary);
-    transform: rotate(90deg);
-}
-
-.
-/* Form Sections - Glassmorphism */
-.form-section {
-    margin: 15px;
-    padding: 20px;
-    background: var(--glass-light);
-    border-radius: 16px;
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+/* Step panels */
+.form-step { display: none; padding: 28px 24px; }
+.form-step.active { display: block; animation: stepIn 0.35s ease-out; }
+@keyframes stepIn {
+    from { opacity: 0; transform: translateX(10px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 .section-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid var(--glass-border);
-    gap: 16px;
+    margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--cl-border);
 }
-
-.section-icon {
-    background: var(--glass-white);
-    backdrop-filter: blur(10px);
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-primary);
-    font-size: 20px;
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-.section-content {
-    width: 100%;
-}
-
 .section-title {
-    color: var(--text-primary);
-    margin: 0 0 5px 0;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 1.3;
+    font-size: 1.35rem; font-weight: 800; color: var(--cl-navy);
+    letter-spacing: -0.02em; margin: 0 0 6px;
+    display: flex; align-items: center; gap: 12px;
 }
-
-.section-subtitle {
-    color: var(--text-secondary);
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.4;
+.section-title i {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, rgba(211, 47, 47, 0.1), rgba(212, 160, 23, 0.08));
+    color: var(--cl-red); font-size: 15px;
 }
+.section-subtitle { font-size: 14px; color: var(--cl-slate); margin: 0; line-height: 1.55; }
 
-/* Form Controls - Glassmorphism */
-.form-group {
-    margin-bottom: 20px;
-}
-
+/* Form controls */
+.form-group { margin-bottom: 22px; }
 .form-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: var(--text-primary);
-    font-size: 15px;
-    line-height: 1.4;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; color: var(--cl-navy);
+    margin-bottom: 8px; letter-spacing: 0.01em;
 }
+.form-label i { color: var(--cl-slate); font-size: 13px; opacity: 0.75; }
+.required-star { color: var(--cl-red); font-size: 14px; margin-left: 2px; }
 
-.form-label i {
-    margin-right: 6px;
-    color: var(--text-secondary);
+.form-control,
+select.form-control,
+textarea.form-control {
+    width: 100%; padding: 13px 16px; background: #F8FAFC;
+    border: 1.5px solid var(--cl-border); border-radius: var(--radius-sm);
+    font-size: 15px; color: var(--cl-navy); font-family: inherit;
+    transition: all 0.2s ease; min-height: 46px;
 }
-
-.required-star {
-    color: #e53e3e;
-    margin-left: 2px;
+.form-control::placeholder { color: #94A3B8; }
+.form-control:hover, select.form-control:hover, textarea.form-control:hover { border-color: #CBD5E1; }
+.form-control:focus, select.form-control:focus, textarea.form-control:focus {
+    outline: none; background: #fff; border-color: var(--cl-red);
+    box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.08);
 }
+.form-control.is-valid { border-color: var(--cl-green); background: #F0FDF4; }
+.form-control.is-invalid { border-color: var(--cl-red); background: #FEF2F2; }
+textarea.form-control { min-height: 100px; resize: vertical; line-height: 1.6; }
 
-.form-control, select, textarea {
-    width: 100%;
-    padding: 14px 16px;
-    background: var(--glass-white);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    font-size: 16px;
-    color: var(--text-primary);
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-    min-height: 52px;
+input[type="file"].form-control { padding: 10px 12px; font-size: 13px; cursor: pointer; }
+input[type="file"].form-control::file-selector-button {
+    background: var(--cl-navy); color: #fff; border: none;
+    padding: 8px 14px; border-radius: 8px; margin-right: 12px;
+    font-weight: 600; font-size: 12px; cursor: pointer; transition: background 0.2s ease;
 }
+input[type="file"].form-control::file-selector-button:hover { background: var(--cl-red); }
 
-.form-control::placeholder, select::placeholder, textarea::placeholder {
-    color: var(--text-muted);
-}
-
-.form-control:focus, select:focus, textarea:focus {
-    outline: none;
-    background: var(--glass-white);
-    border-color: rgba(148, 163, 184, 0.5);
-    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.1), 0 4px 20px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
-}
-
+/* Tips */
 .form-tip {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-top: 8px;
-    padding: 12px;
-    background: var(--glass-medium);
-    border-radius: 8px;
-    border-left: 3px solid rgba(148, 163, 184, 0.3);
+    display: flex; align-items: flex-start; gap: 8px;
+    margin-top: 8px; font-size: 12.5px; color: var(--cl-slate); line-height: 1.5;
+}
+.form-tip i { color: var(--cl-gold); font-size: 12px; margin-top: 2px; flex-shrink: 0; }
+
+/* Errors */
+.error-message {
+    display: flex; align-items: flex-start; gap: 8px;
+    margin-top: 6px; padding: 10px 12px;
+    background: #FEF2F2; border-left: 3px solid var(--cl-red);
+    border-radius: 8px; font-size: 13px; color: #991B1B; line-height: 1.5;
+}
+.error-message i { color: var(--cl-red); flex-shrink: 0; margin-top: 1px; }
+
+/* Grids */
+.field-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 640px) {
+    .field-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .field-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
 }
 
-.form-tip i {
-    color: var(--text-secondary);
-    font-size: 14px;
-    margin-top: 2px;
-    flex-shrink: 0;
-}
-
-.form-tip small {
-    font-size: 13px;
-    color: var(--text-secondary);
-    line-height: 1.4;
-}
-
-/* Capacity Grid - Glassmorphism */
+/* Capacity */
 .capacity-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 12px; margin-bottom: 20px;
 }
-
+@media (min-width: 640px) {
+    .capacity-grid { grid-template-columns: repeat(4, 1fr); }
+}
 .capacity-item {
-    text-align: center;
-    padding: 16px 12px;
-    background: var(--glass-white);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    transition: all 0.3s ease;
-    height: 100%;
+    padding: 18px 12px; background: #F8FAFC;
+    border: 1.5px solid var(--cl-border); border-radius: var(--radius-md);
+    text-align: center; transition: all 0.2s ease;
 }
-
-.capacity-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    border-color: rgba(148, 163, 184, 0.3);
+.capacity-item:focus-within {
+    border-color: var(--cl-red); background: #fff;
+    box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.08);
 }
-
 .capacity-icon {
-    color: var(--text-primary);
-    font-size: 22px;
-    margin-bottom: 10px;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: #fff; color: var(--cl-red); font-size: 16px;
+    margin-bottom: 10px; border: 1px solid var(--cl-border);
 }
-
 .capacity-label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 600;
-    color: var(--text-primary);
-    font-size: 14px;
+    display: block; font-size: 12px; font-weight: 600;
+    color: var(--cl-slate); text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 8px;
+}
+.capacity-item .form-control {
+    padding: 8px 10px; text-align: center; font-weight: 700;
+    font-size: 15px; min-height: 40px; background: #fff;
 }
 
-.capacity-input {
-    background: var(--glass-light);
-    border: 1px solid var(--glass-border);
-    border-radius: 8px;
-    padding: 10px;
-    text-align: center;
-    font-weight: 600;
-    color: var(--text-primary);
-    width: 100%;
-    max-width: 120px;
-    margin: 0 auto;
-    font-size: 15px;
-    min-height: 42px;
+/* Amenities — SAME STRUCTURE AS YOUR OLD TEMPLATE, NEW STYLING */
+.amenities-section-title {
+    font-size: 13px; font-weight: 700; color: var(--cl-navy);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin: 24px 0 12px; display: flex; align-items: center;
+    gap: 8px; padding-top: 12px; border-top: 1px solid var(--cl-border);
 }
+.amenities-section-title:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+.amenities-section-title i { color: var(--cl-red); font-size: 12px; }
 
-.capacity-input:focus {
-    outline: none;
-    border-color: rgba(148, 163, 184, 0.5);
-    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.1);
-}
-
-/* Amenities Grid - Glassmorphism */
 .amenities-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 12px;
+    display: grid; grid-template-columns: 1fr; gap: 10px;
 }
+@media (min-width: 480px) { .amenities-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .amenities-grid { grid-template-columns: repeat(3, 1fr); } }
 
 .amenity-item {
-    padding: 14px;
-    background: var(--glass-white);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 100%;
-    transition: all 0.3s ease;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 12px 14px; background: #F8FAFC;
+    border: 1.5px solid var(--cl-border); border-radius: var(--radius-sm);
+    transition: all 0.2s ease; cursor: pointer;
 }
-
-.amenity-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-    border-color: rgba(148, 163, 184, 0.3);
+.amenity-item:hover { background: #fff; border-color: #CBD5E1; }
+.amenity-item:has(input:checked) {
+    background: rgba(5, 150, 105, 0.06);
+    border-color: rgba(5, 150, 105, 0.35);
 }
-
 .amenity-content {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    min-width: 0;
+    display: flex; align-items: center; gap: 10px;
+    min-width: 0; flex: 1;
 }
-
 .amenity-icon {
-    color: var(--text-primary);
-    font-size: 18px;
-    flex-shrink: 0;
+    color: var(--cl-slate); font-size: 15px; flex-shrink: 0; opacity: 0.85;
 }
-
+.amenity-item:has(input:checked) .amenity-icon { color: var(--cl-green); opacity: 1; }
 .amenity-label {
-    margin: 0;
-    font-weight: 600;
-    color: var(--text-primary);
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 1.3;
+    font-size: 13px; font-weight: 500; color: var(--cl-navy);
+    margin: 0; cursor: pointer; line-height: 1.35;
+    overflow: hidden; text-overflow: ellipsis;
 }
-
 .amenity-checkbox {
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--glass-border);
-    border-radius: 6px;
-    cursor: pointer;
-    flex-shrink: 0;
+    width: 20px; height: 20px; border: 2px solid var(--cl-border);
+    border-radius: 6px; cursor: pointer; flex-shrink: 0;
+    position: relative; transition: all 0.15s ease;
+    appearance: none; -webkit-appearance: none; background: #fff;
+}
+.amenity-checkbox:checked { background: var(--cl-green); border-color: var(--cl-green); }
+.amenity-checkbox:checked::after {
+    content: "✓"; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); color: #fff;
+    font-size: 12px; font-weight: 700;
 }
 
-.amenity-checkbox:checked {
-    background: var(--text-primary);
-    border-color: var(--text-primary);
-}
-
-/* Listing Type Cards - Glassmorphism */
-.listing-type-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 16px;
-    margin-bottom: 25px;
-}
+/* Listing type cards */
+.listing-type-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 24px; }
+@media (min-width: 640px) { .listing-type-grid { grid-template-columns: 1fr 1fr; } }
 
 .listing-card-option {
-    border: 2px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 20px;
-    background: var(--glass-white);
-    backdrop-filter: blur(15px);
-    cursor: pointer;
-    height: 100%;
-    text-align: center;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    position: relative; padding: 24px 20px; background: #F8FAFC;
+    border: 2px solid var(--cl-border); border-radius: var(--radius-md);
+    cursor: pointer; text-align: center; transition: all 0.25s ease; overflow: hidden;
 }
-
 .listing-card-option:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-    border-color: rgba(148, 163, 184, 0.3);
+    background: #fff; border-color: #CBD5E1;
+    transform: translateY(-2px); box-shadow: var(--shadow-card);
 }
-
 .listing-card-option.selected {
-    border-color: var(--text-primary);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    background: #fff; border-color: var(--cl-navy); box-shadow: var(--shadow-hover);
 }
-
 .featured-badge {
-    position: absolute;
-    top: 15px;
-    right: -30px;
-    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
-    color: white;
-    padding: 5px 35px;
-    transform: rotate(45deg);
-    font-size: 12px;
-    font-weight: 700;
+    position: absolute; top: 12px; right: -28px;
+    background: linear-gradient(135deg, #D4A017, #B8860B);
+    color: #fff; padding: 4px 32px; transform: rotate(45deg);
+    font-size: 10px; font-weight: 800; letter-spacing: 0.06em;
+    text-transform: uppercase; box-shadow: 0 2px 8px rgba(212, 160, 23, 0.4);
 }
-
-.card-icon {
-    color: var(--text-primary);
-    font-size: 36px;
-    margin-bottom: 16px;
-}
-
-.card-title {
-    color: var(--text-primary);
-    margin-bottom: 12px;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 1.3;
-}
-
+.card-icon { font-size: 32px; color: var(--cl-navy); margin-bottom: 14px; }
+.listing-card-option.selected .card-icon { color: var(--cl-red); }
+.card-title { font-size: 16px; font-weight: 700; color: var(--cl-navy); margin: 0 0 8px; }
 .card-price {
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--text-primary);
-    margin-bottom: 12px;
-    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 24px; font-weight: 800; color: var(--cl-navy);
+    margin: 0 0 16px; letter-spacing: -0.02em;
 }
-
-.card-features {
-    margin-bottom: 16px;
-    text-align: left;
-}
-
+.listing-card-option.selected .card-price { color: var(--cl-red); }
+.card-features { text-align: left; margin-bottom: 16px; }
 .card-features ul {
-    padding-left: 20px;
-    margin: 0;
-    color: var(--text-secondary);
-    font-size: 14px;
-    line-height: 1.5;
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 6px;
 }
-
 .card-features li {
-    margin-bottom: 6px;
+    font-size: 12.5px; color: var(--cl-slate);
+    line-height: 1.4; padding-left: 18px; position: relative;
 }
-
-.listing-radio {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-    cursor: pointer;
+.card-features li::before {
+    content: "✓"; position: absolute; left: 0; top: 0;
+    color: var(--cl-green); font-weight: 700; font-size: 11px;
 }
-
-.listing-radio:checked {
-    background: var(--text-primary);
-    border-color: var(--text-primary);
+.listing-radio { position: absolute; opacity: 0; pointer-events: none; }
+.listing-radio-label {
+    display: inline-block; padding: 8px 20px; background: #F1F5F9;
+    border-radius: 100px; font-size: 12px; font-weight: 700;
+    color: var(--cl-navy); transition: all 0.2s ease;
 }
+.listing-card-option.selected .listing-radio-label { background: var(--cl-navy); color: #fff; }
 
-/* Photo Upload - Glassmorphism */
-.photo-tips {
-    background: var(--glass-medium);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 20px;
-    border-left: 4px solid var(--glass-border);
-}
-
-.photo-tips-content {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-}
-
-.photo-tips-icon {
-    color: var(--text-primary);
-    font-size: 18px;
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
-.photo-tips-title {
-    margin: 0 0 6px 0;
-    color: var(--text-primary);
-    font-weight: 600;
-    font-size: 15px;
-}
-
-.photo-tips-list {
-    margin: 0;
-    padding-left: 20px;
-    color: var(--text-secondary);
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.photo-tips-list li {
-    margin-bottom: 4px;
-}
-
+/* Photo upload */
 .photo-upload-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 16px;
-    margin-bottom: 25px;
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 12px; margin-bottom: 20px;
 }
+@media (min-width: 768px) { .photo-upload-grid { grid-template-columns: repeat(4, 1fr); } }
 
 .photo-upload-item {
-    border: 2px dashed var(--glass-border);
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    background: var(--glass-light);
-    height: 100%;
-    transition: all 0.3s ease;
-    cursor: pointer;
+    position: relative; padding: 16px 12px; background: #F8FAFC;
+    border: 2px dashed var(--cl-border); border-radius: var(--radius-sm);
+    text-align: center; transition: all 0.2s ease; cursor: pointer;
 }
-
-.photo-upload-item:hover {
-    border-color: rgba(148, 163, 184, 0.5);
-    background: var(--glass-medium);
-    transform: translateY(-3px);
+.photo-upload-item:hover { background: #fff; border-color: var(--cl-red); }
+.photo-upload-item:has(input:valid) {
+    background: #F0FDF4; border-color: var(--cl-green); border-style: solid;
 }
-
 .upload-icon {
-    color: var(--text-primary);
-    font-size: 28px;
-    margin-bottom: 12px;
+    font-size: 22px; color: var(--cl-slate);
+    margin-bottom: 8px; transition: color 0.2s ease;
 }
-
+.photo-upload-item:hover .upload-icon { color: var(--cl-red); }
 .upload-label {
-    display: block;
-    margin-bottom: 12px;
-    font-weight: 600;
-    color: var(--text-primary);
-    cursor: pointer;
-    font-size: 15px;
-    line-height: 1.3;
+    display: block; font-size: 12px; font-weight: 600;
+    color: var(--cl-navy); margin: 0; cursor: pointer; line-height: 1.35;
 }
-
+.upload-label .required-star { font-size: 13px; }
 .upload-info {
-    margin-top: 10px;
-    font-size: 13px;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
+    margin-top: 8px; font-size: 11px; color: var(--cl-slate);
+    display: flex; flex-direction: column; align-items: center;
+    gap: 3px; line-height: 1.3;
+}
+.upload-info i { font-size: 10px; color: var(--cl-slate); opacity: 0.7; }
+.photo-upload-item input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer;
+    width: 100%; height: 100%;
 }
 
-.upload-info i {
-    color: var(--text-muted);
-    flex-shrink: 0;
+/* Price input */
+.price-input-wrap {
+    display: flex; border-radius: var(--radius-sm); overflow: hidden;
+    border: 1.5px solid var(--cl-border); transition: all 0.2s ease;
 }
-
-/* Pricing Input - Glassmorphism */
-.price-input-container {
-    display: flex;
-    width: 100%;
-    margin-bottom: 12px;
+.price-input-wrap:focus-within {
+    border-color: var(--cl-red); box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.08);
 }
-
 .price-prefix {
-    background: var(--glass-white);
-    color: var(--text-primary);
-    border: 1px solid var(--glass-border);
-    padding: 14px 16px;
-    border-radius: 12px 0 0 12px;
-    font-weight: 600;
-    font-size: 15px;
-    border-right: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 60px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 16px; background: var(--cl-navy); color: #fff;
+    font-weight: 700; font-size: 13px; letter-spacing: 0.04em; flex-shrink: 0;
+}
+.price-input-wrap .form-control { border: none; border-radius: 0; background: #F8FAFC; }
+.price-input-wrap .form-control:focus { box-shadow: none; border: none; }
+
+/* Checkbox row */
+.checkbox-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 640px) { .checkbox-row { grid-template-columns: repeat(2, 1fr); } }
+
+.checkbox-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; background: #F8FAFC;
+    border: 1.5px solid var(--cl-border); border-radius: var(--radius-sm);
+    cursor: pointer; transition: all 0.2s ease;
+}
+.checkbox-item:hover { background: #fff; border-color: #CBD5E1; }
+.checkbox-item input[type="checkbox"] {
+    width: 20px; height: 20px; flex-shrink: 0;
+    accent-color: var(--cl-green); cursor: pointer;
+}
+.checkbox-item label {
+    font-size: 13px; font-weight: 500; color: var(--cl-navy);
+    margin: 0; cursor: pointer; line-height: 1.4;
 }
 
-.price-input {
-    border-radius: 0 12px 12px 0;
-    border-left: none;
-    flex: 1;
+/* Step navigation */
+.step-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 12px; padding: 20px 24px;
+    border-top: 1px solid var(--cl-border); background: #F8FAFC;
 }
 
-/* Submit Section - Glassmorphism */
-.submit-section {
-    background: var(--glass-light);
-    border-radius: 16px;
-    padding: 20px;
-    border: 1px solid var(--glass-border);
-    margin-top: 30px;
+.btn-nav {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 8px; padding: 12px 24px; border-radius: 100px;
+    border: 1.5px solid transparent; font-weight: 700; font-size: 14px;
+    font-family: inherit; cursor: pointer; transition: all 0.25s ease;
+    min-height: 46px; text-decoration: none;
+}
+.btn-nav-primary {
+    background: var(--cl-red); color: #fff;
+    box-shadow: 0 8px 20px -8px rgba(211, 47, 47, 0.5);
+}
+.btn-nav-primary:hover {
+    background: var(--cl-red-dark); color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -8px rgba(211, 47, 47, 0.65);
+}
+.btn-nav-secondary {
+    background: #fff; color: var(--cl-navy); border-color: var(--cl-border);
+}
+.btn-nav-secondary:hover { border-color: var(--cl-navy); }
+.btn-nav-secondary:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-nav-submit {
+    background: var(--cl-green); color: #fff;
+    box-shadow: 0 8px 20px -8px rgba(5, 150, 105, 0.5);
+}
+.btn-nav-submit:hover { background: #047857; color: #fff; transform: translateY(-2px); }
+
+/* Mobile */
+@media (max-width: 640px) {
+    .create-listing-container { padding: 16px 14px 60px; }
+    .form-step { padding: 20px 18px; }
+    .section-title { font-size: 1.15rem; }
+    .section-title i { width: 32px; height: 32px; font-size: 13px; }
+    .step-nav { padding: 16px 18px; flex-direction: column-reverse; }
+    .btn-nav { width: 100%; }
+    .progress-step { font-size: 12px; padding: 8px 12px; }
+    .progress-step-num { width: 20px; height: 20px; font-size: 10px; }
 }
 
-.submit-header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.submit-title {
-    color: var(--text-primary);
-    margin: 0 0 8px 0;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 1.3;
-}
-
-.submit-subtitle {
-    color: var(--text-secondary);
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.4;
-}
-
-.submit-button {
-    background: var(--glass-white);
-    color: var(--text-primary);
-    border: 1px solid var(--glass-border);
-    padding: 16px 20px;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    box-shadow: var(--glass-shadow);
-    cursor: pointer;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    backdrop-filter: blur(10px);
-    min-height: 56px;
-}
-
-.submit-button:hover {
-    background: var(--glass-white);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
-    border-color: rgba(148, 163, 184, 0.3);
-}
-
-.submit-button:active {
-    transform: translateY(-1px);
-}
-
-.submit-note {
-    text-align: center;
-    margin-top: 12px;
-}
-
-.submit-note p {
-    color: var(--text-secondary);
-    font-size: 13px;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.submit-note i {
-    color: var(--text-muted);
-    flex-shrink: 0;
-}
-
-/* Error Messages - Glassmorphism */
-.error-message {
-    color: #e53e3e;
-    font-size: 13px;
-    margin-top: 8px;
-    padding: 10px 12px;
-    background: rgba(229, 62, 62, 0.05);
-    border-radius: 8px;
-    border-left: 3px solid #e53e3e;
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    line-height: 1.4;
-}
-
-.error-message i {
-    font-size: 14px;
-    flex-shrink: 0;
-    margin-top: 1px;
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
+@media (prefers-reduced-motion: reduce) {
+    .form-step, .listing-card, .progress-step, .btn-nav {
+        animation: none !important;
+        transition: none !important;
     }
 }
 
-/* Responsive Breakpoints */
-
-/* Small tablets and large phones (600px and up) */
-@media (min-width: 600px) {
-    .create-listing-container {
-        padding: 24px 20px;
-    }
-
-    .alert-success-custom {
-        padding: 20px 24px;
-    }
-
-    .progress-steps {
-        padding: 24px 20px;
-    }
-
-    .form-section {
-        padding: 24px;
-    }
-
-    .section-header {
-        flex-direction: row;
-        text-align: left;
-        align-items: center;
-    }
-
-    .section-icon {
-        margin-right: 16px;
-    }
-
-    .section-content {
-        text-align: left;
-    }
-
-    .amenities-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .capacity-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 16px;
-    }
-
-    .photo-upload-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .listing-type-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-    }
-
-    .submit-button {
-        padding: 18px 24px;
-        font-size: 17px;
-    }
-}
-
-/* Tablets (768px and up) */
-@media (min-width: 768px) {
-    body {
-        padding: 20px;
-    }
-
-    .create-listing-container {
-        padding: 30px 24px;
-    }
-
-    .listing-card {
-        border-radius: 24px;
-    }
-
-    .form-section {
-        padding: 28px;
-        margin-bottom: 30px;
-    }
-
-    .section-title {
-        font-size: 20px;
-    }
-
-    .amenities-grid {
-        gap: 16px;
-    }
-
-    .photo-upload-grid {
-        gap: 20px;
-    }
-
-    .photo-upload-item {
-        padding: 24px;
-    }
-
-    .upload-icon {
-        font-size: 32px;
-    }
-
-    .submit-section {
-        padding: 28px;
-    }
-
-    .submit-title {
-        font-size: 22px;
-    }
-}
-
-/* Desktop (1024px and up) */
-@media (min-width: 1024px) {
-    .create-listing-container {
-        padding: 40px 30px;
-    }
-
-    .form-section {
-        padding: 32px;
-    }
-
-    .section-header {
-        margin-bottom: 25px;
-    }
-
-    .section-icon {
-        width: 60px;
-        height: 60px;
-        font-size: 24px;
-    }
-
-    .section-title {
-        font-size: 22px;
-    }
-
-    .form-group {
-        margin-bottom: 25px;
-    }
-
-    .capacity-grid {
-        gap: 20px;
-    }
-
-    .capacity-item {
-        padding: 20px 16px;
-    }
-
-    .amenities-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-    }
-
-    .amenity-item {
-        padding: 16px;
-    }
-
-    .listing-type-grid {
-        gap: 24px;
-    }
-
-    .listing-card-option {
-        padding: 28px;
-    }
-
-    .card-icon {
-        font-size: 42px;
-    }
-
-    .card-title {
-        font-size: 20px;
-    }
-
-    .card-price {
-        font-size: 32px;
-    }
-
-    .photo-upload-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-/* Small phones (480px and below) */
-@media (max-width: 480px) {
-    body {
-        font-size: 14px;
-    }
-
-    .create-listing-container {
-        padding: 16px 12px;
-    }
-
-    .alert-success-custom {
-        padding: 16px;
-        margin-bottom: 20px;
-    }
-
-    .alert-success-custom .alert-content {
-        gap: 12px;
-    }
-
-    .alert-success-custom .alert-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
-    }
-
-    .alert-success-custom .alert-title {
-        font-size: 16px;
-    }
-
-    .alert-success-custom .alert-message {
-        font-size: 14px;
-    }
-
-    .progress-steps {
-        padding: 16px;
-    }
-
-    .step-number {
-        width: 32px;
-        height: 32px;
-        font-size: 14px;
-        margin-bottom: 4px;
-    }
-
-    .step-label {
-        font-size: 11px;
-    }
-
-    .step-connector {
-        margin: 0 4px;
-        min-width: 16px;
-    }
-
-    .form-section {
-        padding: 16px;
-        margin-bottom: 20px;
-    }
-
-    .section-header {
-        gap: 12px;
-        margin-bottom: 16px;
-        padding-bottom: 16px;
-    }
-
-    .section-icon {
-        width: 44px;
-        height: 44px;
-        font-size: 18px;
-    }
-
-    .section-title {
-        font-size: 17px;
-    }
-
-    .section-subtitle {
-        font-size: 13px;
-    }
-
-    .form-control, select, textarea {
-        padding: 12px 14px;
-        font-size: 15px;
-        min-height: 48px;
-    }
-
-    .capacity-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-
-    .capacity-item {
-        padding: 14px 10px;
-    }
-
-    .capacity-icon {
-        font-size: 20px;
-    }
-
-    .amenities-grid {
-        gap: 10px;
-    }
-
-    .amenity-item {
-        padding: 12px;
-    }
-
-    .listing-type-grid {
-        gap: 12px;
-    }
-
-    .listing-card-option {
-        padding: 16px;
-    }
-
-    .card-icon {
-        font-size: 32px;
-        margin-bottom: 12px;
-    }
-
-    .card-title {
-        font-size: 16px;
-        margin-bottom: 10px;
-    }
-
-    .card-price {
-        font-size: 24px;
-        margin-bottom: 10px;
-    }
-
-    .card-features ul {
-        font-size: 13px;
-    }
-
-    .photo-tips {
-        padding: 14px;
-    }
-
-    .photo-tips-content {
-        gap: 10px;
-    }
-
-    .photo-tips-title {
-        font-size: 14px;
-    }
-
-    .photo-tips-list {
-        font-size: 12px;
-    }
-
-    .photo-upload-grid {
-        gap: 12px;
-    }
-
-    .photo-upload-item {
-        padding: 16px;
-    }
-
-    .upload-icon {
-        font-size: 24px;
-        margin-bottom: 10px;
-    }
-
-    .price-prefix {
-        padding: 12px 14px;
-        min-width: 50px;
-    }
-
-    .submit-section {
-        padding: 16px;
-        margin-top: 24px;
-    }
-
-    .submit-button {
-        padding: 14px 16px;
-        font-size: 15px;
-        min-height: 52px;
-    }
-
-    .submit-note p {
-        font-size: 12px;
-    }
-}
-
-/* Touch device optimizations */
-@media (hover: none) and (pointer: coarse) {
-    .btn-close:hover {
-        transform: none;
-        background: var(--glass-medium);
-    }
-
-    .capacity-item:hover,
-    .amenity-item:hover,
-    .listing-card-option:hover,
-    .photo-upload-item:hover,
-    .submit-button:hover {
-        transform: none;
-    }
-
-    /* Increase touch target sizes */
-    .form-control,
-    .capacity-input,
-    .submit-button,
-    .amenity-item,
-    .listing-card-option,
-    .photo-upload-item {
-        min-height: 44px;
-    }
-
-    .form-label,
-    .upload-label,
-    .amenity-label {
-        min-height: 24px;
-    }
-
-    .form-control,
-    select.form-control,
-    textarea.form-control {
-        font-size: 16px;
-        padding: 16px;
-    }
-
-    .amenity-checkbox,
-    .listing-radio {
-        min-width: 24px;
-        min-height: 24px;
-    }
-}
-
-/* High-resolution displays */
-@media (min-resolution: 192dpi) {
-    .alert-success-custom,
-    .form-section,
-    .listing-card {
-        backdrop-filter: var(--blur-intensity) saturate(180%);
-    }
-}
-
-/* Print styles */
-@media print {
-    .alert-success-custom,
-    .submit-section {
-        break-inside: avoid;
-    }
-
-    .form-section {
-        border: 1px solid #ddd;
-        box-shadow: none;
-    }
-}
+input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
 </style>
 
 <div class="create-listing-container">
+
+    <div class="page-header">
+        <h1>List your property</h1>
+        <p>Fill in the details below. We'll review your listing within 24 hours.</p>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-bar-wrap" id="progressBar">
+        <div class="progress-step active" data-step="0">
+            <span class="progress-step-num">1</span><span>Basics</span>
+        </div>
+        <div class="progress-connector"></div>
+        <div class="progress-step" data-step="1">
+            <span class="progress-step-num">2</span><span>Details</span>
+        </div>
+        <div class="progress-connector"></div>
+        <div class="progress-step" data-step="2">
+            <span class="progress-step-num">3</span><span>Amenities</span>
+        </div>
+        <div class="progress-connector"></div>
+        <div class="progress-step" data-step="3">
+            <span class="progress-step-num">4</span><span>Photos</span>
+        </div>
+        <div class="progress-connector"></div>
+        <div class="progress-step" data-step="4">
+            <span class="progress-step-num">5</span><span>Pricing</span>
+        </div>
+    </div>
+
     <div class="listing-card">
-        <!-- Success Message -->
+
         {% if messages %}
             {% for message in messages %}
-                <div class="alert-success-custom">
-                    <div class="alert-content">
-                        <div class="alert-icon">
-                            <i class="fa fa-check"></i>
-                        </div>
-                        <div class="alert-text">
-                            <h5 class="alert-title">Success!</h5>
-                            <p class="alert-message">{{ message }}</p>
-                        </div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert">×</button>
+                <div class="alert-custom {{ message.tags }}">
+                    <i class="fa fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                    <div>{{ message }}</div>
                 </div>
             {% endfor %}
         {% endif %}
 
-        <!-- Form Body -->
-        <div style="padding: 30px;">
-            <form method="POST" enctype="multipart/form-data" novalidate>
-                {% csrf_token %}
+        <form method="POST" enctype="multipart/form-data" novalidate id="listingForm">
+            {% csrf_token %}
 
-                <!-- Property Information Section -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-icon">
-                            <i class="fa fa-info-circle"></i>
-                        </div>
-                        <div class="section-content">
-                            <h3 class="section-title">Property Information</h3>
-                            <p class="section-subtitle">Tell us about your property</p>
-                        </div>
+            <!-- ============================================
+                 STEP 1 — BASICS
+                 ============================================ -->
+            <div class="form-step active" data-step="0">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa fa-home"></i> Property basics</h2>
+                    <p class="section-subtitle">What are you listing, and where?</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.title.id_for_label }}">
+                        <i class="fa fa-pencil-alt"></i>
+                        Property name <span class="required-star">*</span>
+                    </label>
+                    {{ form.title }}
+                    <div class="form-tip">
+                        <i class="fa fa-lightbulb"></i>
+                        <span>Make it catchy — e.g. "Luxury 3BR with City View"</span>
                     </div>
+                    {% if form.title.errors %}
+                        <div class="error-message">
+                            <i class="fa fa-exclamation-circle"></i>
+                            <span>{{ form.title.errors|join:" " }}</span>
+                        </div>
+                    {% endif %}
+                </div>
 
-                    <!-- Title -->
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.description.id_for_label }}">
+                        <i class="fa fa-align-left"></i>
+                        Description <span class="required-star">*</span>
+                    </label>
+                    {{ form.description }}
+                    <div class="form-tip">
+                        <i class="fa fa-lightbulb"></i>
+                        <span>Highlight unique features, nearby attractions, and what makes it special</span>
+                    </div>
+                    {% if form.description.errors %}
+                        <div class="error-message">
+                            <i class="fa fa-exclamation-circle"></i>
+                            <span>{{ form.description.errors|join:" " }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="field-grid cols-2">
                     <div class="form-group">
-                        <label class="form-label">
-                            <i class="fa fa-pencil-alt"></i>
-                            Property Name
-                            <span class="required-star">*</span>
+                        <label class="form-label" for="{{ form.property_type.id_for_label }}">
+                            <i class="fa fa-building"></i>
+                            Property type <span class="required-star">*</span>
                         </label>
-                        {{ form.title }}
-                        <div class="form-tip">
-                            <i class="fa fa-lightbulb"></i>
-                            <small>Make it catchy! Example: "Luxury 3-Bedroom Apartment with City View"</small>
-                        </div>
-                        {% if form.title.errors %}
-                            <div class="error-message">
-                                <i class="fa fa-exclamation-circle"></i>
-                                {% for error in form.title.errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                        {{ form.property_type }}
                     </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.transaction_type.id_for_label }}">
+                            <i class="fa fa-exchange-alt"></i>
+                            Transaction type <span class="required-star">*</span>
+                        </label>
+                        {{ form.transaction_type }}
+                        <div class="form-tip">
+                            <i class="fa fa-info-circle"></i>
+                            <span>Rent · Sale · Shortlet (nightly)</span>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="field-grid cols-2">
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.location.id_for_label }}">
+                            <i class="fa fa-map-marker-alt"></i>
+                            Location <span class="required-star">*</span>
+                        </label>
+                        {{ form.location }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.specific_location.id_for_label }}">
+                            <i class="fa fa-map-pin"></i>
+                            Specific area <span class="required-star">*</span>
+                        </label>
+                        {{ form.specific_location }}
+                    </div>
+                </div>
 
-    <!-- ADD DESCRIPTION FIELD HERE -->
-    <div class="form-group">
-        <label class="form-label">
-            <i class="fa fa-align-left"></i>
-            Property Description
-            <span class="required-star">*</span>
-        </label>
-        {{ form.description }}
-        <div class="form-tip">
-            <i class="fa fa-lightbulb"></i>
-            <small>Describe your property in detail - highlight unique features, nearby attractions, and what makes it special</small>
-        </div>
-        {% if form.description.errors %}
-            <div class="error-message">
-                <i class="fa fa-exclamation-circle"></i>
-                {% for error in form.description.errors %}
-                    {{ error }}
-                {% endfor %}
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.address.id_for_label }}">
+                        <i class="fa fa-address-card"></i>
+                        Full address (optional)
+                    </label>
+                    {{ form.address }}
+                    <div class="form-tip">
+                        <i class="fa fa-map-marked-alt"></i>
+                        <span>Street, building, estate — helps with Google Maps</span>
+                    </div>
+                </div>
             </div>
-        {% endif %}
-    </div>
 
+            <!-- ============================================
+                 STEP 2 — DETAILS
+                 ============================================ -->
+            <div class="form-step" data-step="1">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa fa-list-ul"></i> Property details</h2>
+                    <p class="section-subtitle">Size, rooms, and contact info</p>
+                </div>
 
-                    <!-- Property Type and Transaction Type -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-building"></i>
-                                    Property Type
-                                    <span class="required-star">*</span>
-                                </label>
-                                {{ form.property_type }}
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-exchange-alt"></i>
-                                    Transaction Type
-                                    <span class="required-star">*</span>
-                                </label>
-                                {{ form.transaction_type }}
-                                <div class="form-tip">
-                                    <i class="fa fa-info-circle"></i>
-                                    <small>Rent: Monthly, Sale: Purchase, Shortlet: Vacation/Nightly</small>
-                                </div>
-                            </div>
-                        </div>
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--cl-navy); margin: 0 0 16px;">
+                    <i class="fa fa-users" style="color: var(--cl-red); margin-right: 6px;"></i>
+                    Capacity
+                </h3>
+
+                <div class="capacity-grid">
+                    <div class="capacity-item">
+                        <div class="capacity-icon"><i class="fa fa-users"></i></div>
+                        <label class="capacity-label" for="{{ form.guests.id_for_label }}">Guests</label>
+                        {{ form.guests }}
                     </div>
-
-                    <!-- Location -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-map-marker-alt"></i>
-                                    Location
-                                    <span class="required-star">*</span>
-                                </label>
-                                {{ form.location }}
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-map-pin"></i>
-                                    Specific Location
-                                    <span class="required-star">*</span>
-                                </label>
-                                {{ form.specific_location }}
-                            </div>
-                        </div>
+                    <div class="capacity-item">
+                        <div class="capacity-icon"><i class="fa fa-door-closed"></i></div>
+                        <label class="capacity-label" for="{{ form.bedrooms.id_for_label }}">Bedrooms</label>
+                        {{ form.bedrooms }}
                     </div>
+                    <div class="capacity-item">
+                        <div class="capacity-icon"><i class="fa fa-bed"></i></div>
+                        <label class="capacity-label" for="{{ form.beds.id_for_label }}">Beds</label>
+                        {{ form.beds }}
+                    </div>
+                    <div class="capacity-item">
+                        <div class="capacity-icon"><i class="fa fa-bath"></i></div>
+                        <label class="capacity-label" for="{{ form.bathrooms.id_for_label }}">Baths</label>
+                        {{ form.bathrooms }}
+                    </div>
+                </div>
 
-                    <!-- Full Address -->
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--cl-navy); margin: 24px 0 16px;">
+                    <i class="fa fa-ruler-combined" style="color: var(--cl-red); margin-right: 6px;"></i>
+                    Size & condition
+                </h3>
+
+                <div class="field-grid cols-3">
                     <div class="form-group">
-                        <label class="form-label">
-                            <i class="fa fa-address-card"></i>
-                            Full Address (Optional)
+                        <label class="form-label" for="{{ form.land_size.id_for_label }}">
+                            <i class="fa fa-tree"></i> Land size
                         </label>
-                        {{ form.address }}
-                        <div class="form-tip">
-                            <i class="fa fa-map-marked-alt"></i>
-                            <small>Street name, building name, estate (helps with Google Maps)</small>
-                        </div>
+                        {{ form.land_size }}
                     </div>
-                </div>
-
-                <!-- Host Information Section -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-icon">
-                            <i class="fa fa-user"></i>
-                        </div>
-                        <div class="section-content">
-                            <h3 class="section-title">Host Information</h3>
-                            <p class="section-subtitle">How guests can contact you</p>
-                        </div>
-                    </div>
-
-                    <!-- Phone Numbers -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-phone"></i>
-                                    Phone Number
-                                    <span class="required-star">*</span>
-                                </label>
-                                {{ form.host_phone }}
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-whatsapp"></i>
-                                    WhatsApp
-                                    <span class="required-star">*</span>
-                                </label>
-                                {{ form.host_whatsapp }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Property Size & Details Section -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-icon">
-                            <i class="fa fa-ruler-combined"></i>
-                        </div>
-                        <div class="section-content">
-                            <h3 class="section-title">Property Size & Details</h3>
-                            <p class="section-subtitle">Dimensions and specifications</p>
-                        </div>
-                    </div>
-
-                    <!-- Size Fields -->
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-tree"></i>
-                                    Land Size
-                                </label>
-                                {{ form.land_size }}
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-ruler"></i>
-                                    Unit
-                                </label>
-                                {{ form.land_size_unit }}
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-building"></i>
-                                    Floor Area (sqm)
-                                </label>
-                                {{ form.floor_area }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Property Condition -->
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-calendar"></i>
-                                    Year Built
-                                </label>
-                                {{ form.year_built }}
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-check-circle"></i>
-                                    Condition
-                                </label>
-                                {{ form.condition }}
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-couch"></i>
-                                    Furnishing
-                                </label>
-                                {{ form.furnishing }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Floors -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-arrow-up"></i>
-                                    Total Floors in Building
-                                </label>
-                                {{ form.total_floors }}
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-layer-group"></i>
-                                    Floor Number (for apartments)
-                                </label>
-                                {{ form.floor_number }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Availability Dates -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-calendar-check"></i>
-                                    Available From
-                                </label>
-                                {{ form.available_from }}
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-calendar-times"></i>
-                                    Available To
-                                </label>
-                                {{ form.available_to }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Minimum/Maximum Stay -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-clock"></i>
-                                    Minimum Stay (nights)
-                                </label>
-                                {{ form.minimum_stay }}
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-hourglass-end"></i>
-                                    Maximum Stay (nights)
-                                </label>
-                                {{ form.maximum_stay }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Map Coordinates -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-map-pin"></i>
-                                    Latitude
-                                </label>
-                                {{ form.latitude }}
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-map-pin"></i>
-                                    Longitude
-                                </label>
-                                {{ form.longitude }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Rooms & Capacity Section -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-icon">
-                            <i class="fa fa-bed"></i>
-                        </div>
-                        <div class="section-content">
-                            <h3 class="section-title">Rooms & Capacity</h3>
-                            <p class="section-subtitle">Accommodation layout</p>
-                        </div>
-                    </div>
-
-                    <!-- Main Capacity Grid -->
-                    <div class="capacity-grid">
-                        <div class="capacity-item">
-                            <div class="capacity-icon">
-                                <i class="fa fa-users"></i>
-                            </div>
-                            <label class="capacity-label">Guests</label>
-                            {{ form.guests }}
-                        </div>
-                        <div class="capacity-item">
-                            <div class="capacity-icon">
-                                <i class="fa fa-door-closed"></i>
-                            </div>
-                            <label class="capacity-label">Bedrooms</label>
-                            {{ form.bedrooms }}
-                        </div>
-                        <div class="capacity-item">
-                            <div class="capacity-icon">
-                                <i class="fa fa-bed"></i>
-                            </div>
-                            <label class="capacity-label">Beds</label>
-                            {{ form.beds }}
-                        </div>
-                        <div class="capacity-item">
-                            <div class="capacity-icon">
-                                <i class="fa fa-bath"></i>
-                            </div>
-                            <label class="capacity-label">Bathrooms</label>
-                            {{ form.bathrooms }}
-                        </div>
-                    </div>
-
-                    <!-- Additional Rooms -->
-                    <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">En-suite Bathrooms</label>
-                                {{ form.en_suites }}
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Living Rooms</label>
-                                {{ form.living_rooms }}
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Kitchens</label>
-                                {{ form.kitchens }}
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Parking Spots</label>
-                                {{ form.parking_spots }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Room Checkboxes -->
-                    <div class="row mt-3">
-                        <div class="col-md-3">
-                            <div class="form-check">
-                                {{ form.servant_quarters }}
-                                <label class="form-check-label" for="{{ form.servant_quarters.id_for_label }}">
-                                    Servant Quarters
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-check">
-                                {{ form.store_rooms }}
-                                <label class="form-check-label" for="{{ form.store_rooms.id_for_label }}">
-                                    Store Rooms
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-check">
-                                {{ form.covered_parking }}
-                                <label class="form-check-label" for="{{ form.covered_parking.id_for_label }}">
-                                    Covered Parking
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-check">
-                                {{ form.visitor_parking }}
-                                <label class="form-check-label" for="{{ form.visitor_parking.id_for_label }}">
-                                    Visitor Parking
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Amenities Section - COMPLETELY REDESIGNED -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-icon">
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="section-content">
-                            <h3 class="section-title">Amenities & Features</h3>
-                            <p class="section-subtitle">Select what your property offers</p>
-                        </div>
-                    </div>
-
-                    <!-- Basic Amenities -->
-                    <h5 class="mt-3 mb-3" style="color: var(--text-primary);">
-                        <i class="fa fa-check-circle me-2"></i>Basic Amenities
-                    </h5>
-                    <div class="amenities-grid">
-                        {% for field_name in 'wifi parking kitchen'|split %}
-                            {% with form|get_item:field_name as field %}
-                                <div class="amenity-item">
-                                    <div class="amenity-content">
-                                        <div class="amenity-icon">
-                                            {% if field_name == 'wifi' %}
-                                                <i class="fa fa-wifi"></i>
-                                            {% elif field_name == 'parking' %}
-                                                <i class="fa fa-car"></i>
-                                            {% elif field_name == 'kitchen' %}
-                                                <i class="fa fa-utensils"></i>
-                                            {% endif %}
-                                        </div>
-                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    </div>
-                                    {{ field }}
-                                </div>
-                            {% endwith %}
-                        {% endfor %}
-                    </div>
-
-                    <!-- Fitness & Wellness -->
-                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
-                        <i class="fa fa-heartbeat me-2"></i>Fitness & Wellness
-                    </h5>
-                    <div class="amenities-grid">
-                        {% for field_name in 'gym pool spa sauna steam_room'|split %}
-                            {% with form|get_item:field_name as field %}
-                                {% if field %}
-                                <div class="amenity-item">
-                                    <div class="amenity-content">
-                                        <div class="amenity-icon">
-                                            {% if field_name == 'gym' %}
-                                                <i class="fa fa-dumbbell"></i>
-                                            {% elif field_name == 'pool' %}
-                                                <i class="fa fa-swimming-pool"></i>
-                                            {% elif field_name == 'spa' %}
-                                                <i class="fa fa-spa"></i>
-                                            {% elif field_name == 'sauna' %}
-                                                <i class="fa fa-hot-tub"></i>
-                                            {% elif field_name == 'steam_room' %}
-                                                <i class="fa fa-water"></i>
-                                            {% endif %}
-                                        </div>
-                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    </div>
-                                    {{ field }}
-                                </div>
-                                {% endif %}
-                            {% endwith %}
-                        {% endfor %}
-                    </div>
-
-                    <!-- Climate Control -->
-                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
-                        <i class="fa fa-thermometer-half me-2"></i>Climate Control
-                    </h5>
-                    <div class="amenities-grid">
-                        {% for field_name in 'ac heating ceiling_fans fireplace'|split %}
-                            {% with form|get_item:field_name as field %}
-                                {% if field %}
-                                <div class="amenity-item">
-                                    <div class="amenity-content">
-                                        <div class="amenity-icon">
-                                            {% if field_name == 'ac' %}
-                                                <i class="fa fa-snowflake"></i>
-                                            {% elif field_name == 'heating' %}
-                                                <i class="fa fa-fire"></i>
-                                            {% elif field_name == 'ceiling_fans' %}
-                                                <i class="fa fa-fan"></i>
-                                            {% elif field_name == 'fireplace' %}
-                                                <i class="fa fa-fireplace"></i>
-                                            {% endif %}
-                                        </div>
-                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    </div>
-                                    {{ field }}
-                                </div>
-                                {% endif %}
-                            {% endwith %}
-                        {% endfor %}
-                    </div>
-
-                    <!-- Entertainment -->
-                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
-                        <i class="fa fa-tv me-2"></i>Entertainment
-                    </h5>
-                    <div class="amenities-grid">
-                        {% for field_name in 'tv sound_system home_theater'|split %}
-                            {% with form|get_item:field_name as field %}
-                                {% if field %}
-                                <div class="amenity-item">
-                                    <div class="amenity-content">
-                                        <div class="amenity-icon">
-                                            {% if field_name == 'tv' %}
-                                                <i class="fa fa-tv"></i>
-                                            {% elif field_name == 'sound_system' %}
-                                                <i class="fa fa-music"></i>
-                                            {% elif field_name == 'home_theater' %}
-                                                <i class="fa fa-film"></i>
-                                            {% endif %}
-                                        </div>
-                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    </div>
-                                    {{ field }}
-                                </div>
-                                {% endif %}
-                            {% endwith %}
-                        {% endfor %}
-                    </div>
-
-                    <!-- Outdoor Features -->
-                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
-                        <i class="fa fa-tree me-2"></i>Outdoor Features
-                    </h5>
-                    <div class="amenities-grid">
-                        {% for field_name in 'balcony terrace garden roof_terrace bbq_area outdoor_shower'|split %}
-                            {% with form|get_item:field_name as field %}
-                                {% if field %}
-                                <div class="amenity-item">
-                                    <div class="amenity-content">
-                                        <div class="amenity-icon">
-                                            {% if field_name == 'balcony' %}
-                                                <i class="fa fa-home"></i>
-                                            {% elif field_name == 'terrace' %}
-                                                <i class="fa fa-sun"></i>
-                                            {% elif field_name == 'garden' %}
-                                                <i class="fa fa-leaf"></i>
-                                            {% elif field_name == 'roof_terrace' %}
-                                                <i class="fa fa-cloud-sun"></i>
-                                            {% elif field_name == 'bbq_area' %}
-                                                <i class="fa fa-utensils"></i>
-                                            {% elif field_name == 'outdoor_shower' %}
-                                                <i class="fa fa-shower"></i>
-                                            {% endif %}
-                                        </div>
-                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    </div>
-                                    {{ field }}
-                                </div>
-                                {% endif %}
-                            {% endwith %}
-                        {% endfor %}
-                    </div>
-
-                    <!-- Security Features -->
-                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
-                        <i class="fa fa-shield-alt me-2"></i>Security
-                    </h5>
-                    <div class="amenities-grid">
-                        {% for field_name in 'cctv security_guards electric_fence secure_compound alarm_system'|split %}
-                            {% with form|get_item:field_name as field %}
-                                {% if field %}
-                                <div class="amenity-item">
-                                    <div class="amenity-content">
-                                        <div class="amenity-icon">
-                                            {% if field_name == 'cctv' %}
-                                                <i class="fa fa-video"></i>
-                                            {% elif field_name == 'security_guards' %}
-                                                <i class="fa fa-user-shield"></i>
-                                            {% elif field_name == 'electric_fence' %}
-                                                <i class="fa fa-bolt"></i>
-                                            {% elif field_name == 'secure_compound' %}
-                                                <i class="fa fa-lock"></i>
-                                            {% elif field_name == 'alarm_system' %}
-                                                <i class="fa fa-bell"></i>
-                                            {% endif %}
-                                        </div>
-                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    </div>
-                                    {{ field }}
-                                </div>
-                                {% endif %}
-                            {% endwith %}
-                        {% endfor %}
-                    </div>
-
-                    <!-- Utilities -->
-                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
-                        <i class="fa fa-plug me-2"></i>Utilities
-                    </h5>
-                    <div class="amenities-grid">
-                        {% for field_name in 'generator solar_panels water_tank borehole backup_water internet_fiber'|split %}
-                            {% with form|get_item:field_name as field %}
-                                {% if field %}
-                                <div class="amenity-item">
-                                    <div class="amenity-content">
-                                        <div class="amenity-icon">
-                                            {% if field_name == 'generator' %}
-                                                <i class="fa fa-bolt"></i>
-                                            {% elif field_name == 'solar_panels' %}
-                                                <i class="fa fa-solar-panel"></i>
-                                            {% elif field_name == 'water_tank' %}
-                                                <i class="fa fa-water"></i>
-                                            {% elif field_name == 'borehole' %}
-                                                <i class="fa fa-well"></i>
-                                            {% elif field_name == 'backup_water' %}
-                                                <i class="fa fa-tint"></i>
-                                            {% elif field_name == 'internet_fiber' %}
-                                                <i class="fa fa-globe"></i>
-                                            {% endif %}
-                                        </div>
-                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    </div>
-                                    {{ field }}
-                                </div>
-                                {% endif %}
-                            {% endwith %}
-                        {% endfor %}
-                    </div>
-
-                    <!-- Building Amenities -->
-                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
-                        <i class="fa fa-building me-2"></i>Building Amenities
-                    </h5>
-                    <div class="amenities-grid">
-                        {% for field_name in 'elevator wheelchair_accessible reception lobby concierge laundry_room play_area pet_friendly'|split %}
-                            {% with form|get_item:field_name as field %}
-                                {% if field %}
-                                <div class="amenity-item">
-                                    <div class="amenity-content">
-                                        <div class="amenity-icon">
-                                            {% if field_name == 'elevator' %}
-                                                <i class="fa fa-arrow-up"></i>
-                                            {% elif field_name == 'wheelchair_accessible' %}
-                                                <i class="fa fa-wheelchair"></i>
-                                            {% elif field_name == 'reception' %}
-                                                <i class="fa fa-desk"></i>
-                                            {% elif field_name == 'lobby' %}
-                                                <i class="fa fa-couch"></i>
-                                            {% elif field_name == 'concierge' %}
-                                                <i class="fa fa-bell-concierge"></i>
-                                            {% elif field_name == 'laundry_room' %}
-                                                <i class="fa fa-washer"></i>
-                                            {% elif field_name == 'play_area' %}
-                                                <i class="fa fa-child"></i>
-                                            {% elif field_name == 'pet_friendly' %}
-                                                <i class="fa fa-paw"></i>
-                                            {% endif %}
-                                        </div>
-                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    </div>
-                                    {{ field }}
-                                </div>
-                                {% endif %}
-                            {% endwith %}
-                        {% endfor %}
-                    </div>
-
-                    <!-- Staff -->
-                    <h5 class="mt-4 mb-3" style="color: var(--text-primary);">
-                        <i class="fa fa-users me-2"></i>Staff Included
-                    </h5>
-                    <div class="amenities-grid">
-                        {% for field_name in 'house_staff askari caretaker'|split %}
-                            {% with form|get_item:field_name as field %}
-                                {% if field %}
-                                <div class="amenity-item">
-                                    <div class="amenity-content">
-                                        <div class="amenity-icon">
-                                            {% if field_name == 'house_staff' %}
-                                                <i class="fa fa-broom"></i>
-                                            {% elif field_name == 'askari' %}
-                                                <i class="fa fa-shield"></i>
-                                            {% elif field_name == 'caretaker' %}
-                                                <i class="fa fa-tools"></i>
-                                            {% endif %}
-                                        </div>
-                                        <label class="amenity-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    </div>
-                                    {{ field }}
-                                </div>
-                                {% endif %}
-                            {% endwith %}
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <!-- Virtual Tour Section -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-icon">
-                            <i class="fa fa-vr-cardboard"></i>
-                        </div>
-                        <div class="section-content">
-                            <h3 class="section-title">Virtual Tour & Media</h3>
-                            <p class="section-subtitle">Help guests visualize your property</p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-link"></i>
-                                    Virtual Tour URL
-                                </label>
-                                {{ form.virtual_tour_url }}
-                                <div class="form-tip">
-                                    <i class="fa fa-info-circle"></i>
-                                    <small>Link to Matterport, 3D tour, or video walkthrough</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-youtube"></i>
-                                    YouTube Video ID
-                                </label>
-                                {{ form.youtube_video_id }}
-                                <div class="form-tip">
-                                    <i class="fa fa-info-circle"></i>
-                                    <small>e.g., dQw4w9WgXcQ from youtu.be/dQw4w9WgXcQ</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="form-group">
-                        <label class="form-label">
+                        <label class="form-label" for="{{ form.land_size_unit.id_for_label }}">
+                            <i class="fa fa-ruler"></i> Unit
+                        </label>
+                        {{ form.land_size_unit }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.floor_area.id_for_label }}">
+                            <i class="fa fa-building"></i> Floor area (m²)
+                        </label>
+                        {{ form.floor_area }}
+                    </div>
+                </div>
+
+                <div class="field-grid cols-3">
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.year_built.id_for_label }}">
+                            <i class="fa fa-calendar"></i> Year built
+                        </label>
+                        {{ form.year_built }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.condition.id_for_label }}">
+                            <i class="fa fa-check-circle"></i> Condition
+                        </label>
+                        {{ form.condition }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.furnishing.id_for_label }}">
+                            <i class="fa fa-couch"></i> Furnishing
+                        </label>
+                        {{ form.furnishing }}
+                    </div>
+                </div>
+
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--cl-navy); margin: 24px 0 16px;">
+                    <i class="fa fa-address-book" style="color: var(--cl-red); margin-right: 6px;"></i>
+                    Contact
+                </h3>
+
+                <div class="field-grid cols-2">
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.host_phone.id_for_label }}">
+                            <i class="fa fa-phone"></i>
+                            Phone <span class="required-star">*</span>
+                        </label>
+                        {{ form.host_phone }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.host_whatsapp.id_for_label }}">
                             <i class="fa fa-whatsapp"></i>
-                            WhatsApp Group Link (Optional)
+                            WhatsApp <span class="required-star">*</span>
                         </label>
-                        {{ form.whatsapp_group_link }}
-                        <div class="form-tip">
-                            <i class="fa fa-info-circle"></i>
-                            <small>Link to WhatsApp group for property inquiries</small>
-                        </div>
+                        {{ form.host_whatsapp }}
                     </div>
                 </div>
 
-                <!-- Listing Type Section -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-icon">
-                            <i class="fa fa-crown"></i>
-                        </div>
-                        <div class="section-content">
-                            <h3 class="section-title">Listing Type</h3>
-                            <p class="section-subtitle">Choose how you want to list your property</p>
-                        </div>
-                    </div>
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--cl-navy); margin: 24px 0 16px;">
+                    <i class="fa fa-calendar-check" style="color: var(--cl-red); margin-right: 6px;"></i>
+                    Availability & virtual tour
+                </h3>
 
-                    <!-- Listing Options -->
-                    <div class="listing-type-grid">
-                        <div class="listing-card-option" id="free-listing-card">
-                            <div class="card-icon">
-                                <i class="fa fa-gift"></i>
-                            </div>
-                            <h5 class="card-title">Free Listing</h5>
-                            <div class="card-price">KES 0</div>
-                            <div class="card-features">
-                                <ul>
-                                    <li>Basic listing on the site</li>
-                                    <li>10% commission per booking</li>
-                                    <li>Standard visibility</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <input class="listing-radio" type="radio" name="listing_type" id="id_listing_type_0" value="free" checked>
-                                <label for="id_listing_type_0">Select Free Listing</label>
-                            </div>
-                        </div>
-                        <div class="listing-card-option" id="featured-listing-card">
-                            <div class="featured-badge">POPULAR</div>
-                            <div class="card-icon">
-                                <i class="fa fa-crown"></i>
-                            </div>
-                            <h5 class="card-title">Featured Listing</h5>
-                            <div class="card-price">KES 1,000</div>
-                            <div class="card-features">
-                                <ul>
-                                    <li><strong>Appears at the TOP</strong> of search results</li>
-                                    <li><strong>10x more visibility</strong></li>
-                                    <li><strong>Direct customer contact & booking</strong></li>
-                                    <li>Higher booking conversion</li>
-                                    <li>Social media promotion</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <input class="listing-radio" type="radio" name="listing_type" id="id_listing_type_1" value="featured">
-                                <label for="id_listing_type_1">Select Featured Listing</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pricing Section -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-icon">
-                            <i class="fa fa-money-bill-wave"></i>
-                        </div>
-                        <div class="section-content">
-                            <h3 class="section-title">Pricing</h3>
-                            <p class="section-subtitle">Set your price</p>
-                        </div>
-                    </div>
-
-                    <!-- Price -->
+                <div class="field-grid cols-2">
                     <div class="form-group">
-                        <label class="form-label">
-                            <i class="fa fa-tag"></i>
-                            Price (KES)
-                            <span class="required-star">*</span>
+                        <label class="form-label" for="{{ form.available_from.id_for_label }}">
+                            <i class="fa fa-calendar-check"></i> Available from
                         </label>
-                        <div class="price-input-container">
+                        {{ form.available_from }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.available_to.id_for_label }}">
+                            <i class="fa fa-calendar-times"></i> Available to
+                        </label>
+                        {{ form.available_to }}
+                    </div>
+                </div>
+
+                <div class="field-grid cols-2">
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.virtual_tour_url.id_for_label }}">
+                            <i class="fa fa-vr-cardboard"></i> Virtual tour URL
+                        </label>
+                        {{ form.virtual_tour_url }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.youtube_video_id.id_for_label }}">
+                            <i class="fa fa-youtube"></i> YouTube video ID
+                        </label>
+                        {{ form.youtube_video_id }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================
+                 STEP 3 — AMENITIES (SAME AS YOUR OLD TEMPLATE)
+                 ============================================ -->
+            <div class="form-step" data-step="2">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa fa-star"></i> Amenities & features</h2>
+                    <p class="section-subtitle">Check everything your property offers</p>
+                </div>
+
+                <!-- Basic -->
+                <h4 class="amenities-section-title"><i class="fa fa-check-circle"></i> Basic amenities</h4>
+                <div class="amenities-grid">
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-wifi amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.wifi.id_for_label }}">{{ form.wifi.label }}</label>
+                        </div>
+                        {{ form.wifi }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-car amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.parking.id_for_label }}">{{ form.parking.label }}</label>
+                        </div>
+                        {{ form.parking }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-utensils amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.kitchen.id_for_label }}">{{ form.kitchen.label }}</label>
+                        </div>
+                        {{ form.kitchen }}
+                    </div>
+                </div>
+
+                <!-- Fitness -->
+                <h4 class="amenities-section-title"><i class="fa fa-heartbeat"></i> Fitness & wellness</h4>
+                <div class="amenities-grid">
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-dumbbell amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.gym.id_for_label }}">{{ form.gym.label }}</label>
+                        </div>
+                        {{ form.gym }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-swimming-pool amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.pool.id_for_label }}">{{ form.pool.label }}</label>
+                        </div>
+                        {{ form.pool }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-spa amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.spa.id_for_label }}">{{ form.spa.label }}</label>
+                        </div>
+                        {{ form.spa }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-hot-tub amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.sauna.id_for_label }}">{{ form.sauna.label }}</label>
+                        </div>
+                        {{ form.sauna }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-water amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.steam_room.id_for_label }}">{{ form.steam_room.label }}</label>
+                        </div>
+                        {{ form.steam_room }}
+                    </div>
+                </div>
+
+                <!-- Climate -->
+                <h4 class="amenities-section-title"><i class="fa fa-thermometer-half"></i> Climate control</h4>
+                <div class="amenities-grid">
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-snowflake amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.ac.id_for_label }}">{{ form.ac.label }}</label>
+                        </div>
+                        {{ form.ac }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-fire amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.heating.id_for_label }}">{{ form.heating.label }}</label>
+                        </div>
+                        {{ form.heating }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-fan amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.ceiling_fans.id_for_label }}">{{ form.ceiling_fans.label }}</label>
+                        </div>
+                        {{ form.ceiling_fans }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-fireplace amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.fireplace.id_for_label }}">{{ form.fireplace.label }}</label>
+                        </div>
+                        {{ form.fireplace }}
+                    </div>
+                </div>
+
+                <!-- Entertainment -->
+                <h4 class="amenities-section-title"><i class="fa fa-tv"></i> Entertainment</h4>
+                <div class="amenities-grid">
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-tv amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.tv.id_for_label }}">{{ form.tv.label }}</label>
+                        </div>
+                        {{ form.tv }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-music amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.sound_system.id_for_label }}">{{ form.sound_system.label }}</label>
+                        </div>
+                        {{ form.sound_system }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-film amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.home_theater.id_for_label }}">{{ form.home_theater.label }}</label>
+                        </div>
+                        {{ form.home_theater }}
+                    </div>
+                </div>
+
+                <!-- Outdoor -->
+                <h4 class="amenities-section-title"><i class="fa fa-tree"></i> Outdoor</h4>
+                <div class="amenities-grid">
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-home amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.balcony.id_for_label }}">{{ form.balcony.label }}</label>
+                        </div>
+                        {{ form.balcony }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-sun amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.terrace.id_for_label }}">{{ form.terrace.label }}</label>
+                        </div>
+                        {{ form.terrace }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-leaf amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.garden.id_for_label }}">{{ form.garden.label }}</label>
+                        </div>
+                        {{ form.garden }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-cloud-sun amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.roof_terrace.id_for_label }}">{{ form.roof_terrace.label }}</label>
+                        </div>
+                        {{ form.roof_terrace }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-utensils amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.bbq_area.id_for_label }}">{{ form.bbq_area.label }}</label>
+                        </div>
+                        {{ form.bbq_area }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-shower amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.outdoor_shower.id_for_label }}">{{ form.outdoor_shower.label }}</label>
+                        </div>
+                        {{ form.outdoor_shower }}
+                    </div>
+                </div>
+
+                <!-- Security -->
+                <h4 class="amenities-section-title"><i class="fa fa-shield-alt"></i> Security</h4>
+                <div class="amenities-grid">
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-video amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.cctv.id_for_label }}">{{ form.cctv.label }}</label>
+                        </div>
+                        {{ form.cctv }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-user-shield amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.security_guards.id_for_label }}">{{ form.security_guards.label }}</label>
+                        </div>
+                        {{ form.security_guards }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-bolt amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.electric_fence.id_for_label }}">{{ form.electric_fence.label }}</label>
+                        </div>
+                        {{ form.electric_fence }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-lock amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.secure_compound.id_for_label }}">{{ form.secure_compound.label }}</label>
+                        </div>
+                        {{ form.secure_compound }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-bell amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.alarm_system.id_for_label }}">{{ form.alarm_system.label }}</label>
+                        </div>
+                        {{ form.alarm_system }}
+                    </div>
+                </div>
+
+                <!-- Utilities -->
+                <h4 class="amenities-section-title"><i class="fa fa-plug"></i> Utilities</h4>
+                <div class="amenities-grid">
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-bolt amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.generator.id_for_label }}">{{ form.generator.label }}</label>
+                        </div>
+                        {{ form.generator }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-solar-panel amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.solar_panels.id_for_label }}">{{ form.solar_panels.label }}</label>
+                        </div>
+                        {{ form.solar_panels }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-water amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.water_tank.id_for_label }}">{{ form.water_tank.label }}</label>
+                        </div>
+                        {{ form.water_tank }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-well amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.borehole.id_for_label }}">{{ form.borehole.label }}</label>
+                        </div>
+                        {{ form.borehole }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-tint amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.backup_water.id_for_label }}">{{ form.backup_water.label }}</label>
+                        </div>
+                        {{ form.backup_water }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-globe amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.internet_fiber.id_for_label }}">{{ form.internet_fiber.label }}</label>
+                        </div>
+                        {{ form.internet_fiber }}
+                    </div>
+                </div>
+
+                <!-- Building -->
+                <h4 class="amenities-section-title"><i class="fa fa-building"></i> Building amenities</h4>
+                <div class="amenities-grid">
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-arrow-up amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.elevator.id_for_label }}">{{ form.elevator.label }}</label>
+                        </div>
+                        {{ form.elevator }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-wheelchair amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.wheelchair_accessible.id_for_label }}">{{ form.wheelchair_accessible.label }}</label>
+                        </div>
+                        {{ form.wheelchair_accessible }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-desk amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.reception.id_for_label }}">{{ form.reception.label }}</label>
+                        </div>
+                        {{ form.reception }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-couch amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.lobby.id_for_label }}">{{ form.lobby.label }}</label>
+                        </div>
+                        {{ form.lobby }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-bell-concierge amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.concierge.id_for_label }}">{{ form.concierge.label }}</label>
+                        </div>
+                        {{ form.concierge }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-washer amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.laundry_room.id_for_label }}">{{ form.laundry_room.label }}</label>
+                        </div>
+                        {{ form.laundry_room }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-child amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.play_area.id_for_label }}">{{ form.play_area.label }}</label>
+                        </div>
+                        {{ form.play_area }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-paw amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.pet_friendly.id_for_label }}">{{ form.pet_friendly.label }}</label>
+                        </div>
+                        {{ form.pet_friendly }}
+                    </div>
+                </div>
+
+                <!-- Staff -->
+                <h4 class="amenities-section-title"><i class="fa fa-users"></i> Staff included</h4>
+                <div class="amenities-grid">
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-broom amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.house_staff.id_for_label }}">{{ form.house_staff.label }}</label>
+                        </div>
+                        {{ form.house_staff }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-shield amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.askari.id_for_label }}">{{ form.askari.label }}</label>
+                        </div>
+                        {{ form.askari }}
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-content">
+                            <i class="fa fa-tools amenity-icon"></i>
+                            <label class="amenity-label" for="{{ form.caretaker.id_for_label }}">{{ form.caretaker.label }}</label>
+                        </div>
+                        {{ form.caretaker }}
+                    </div>
+                </div>
+
+                <!-- Extras -->
+                <h4 class="amenities-section-title"><i class="fa fa-plus-circle"></i> Additional features</h4>
+                <div class="checkbox-row">
+                    <div class="checkbox-item">
+                        {{ form.servant_quarters }}
+                        <label for="{{ form.servant_quarters.id_for_label }}">Servant quarters</label>
+                    </div>
+                    <div class="checkbox-item">
+                        {{ form.store_rooms }}
+                        <label for="{{ form.store_rooms.id_for_label }}">Store rooms</label>
+                    </div>
+                    <div class="checkbox-item">
+                        {{ form.covered_parking }}
+                        <label for="{{ form.covered_parking.id_for_label }}">Covered parking</label>
+                    </div>
+                    <div class="checkbox-item">
+                        {{ form.visitor_parking }}
+                        <label for="{{ form.visitor_parking.id_for_label }}">Visitor parking</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================
+                 STEP 4 — PHOTOS
+                 ============================================ -->
+            <div class="form-step" data-step="3">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa fa-images"></i> Property photos</h2>
+                    <p class="section-subtitle">High-quality photos attract more guests</p>
+                </div>
+
+                <div class="form-tip" style="margin-bottom: 20px; padding: 12px 14px; background: #FEF3C7; border-radius: 10px; border-left: 3px solid var(--cl-gold);">
+                    <i class="fa fa-camera" style="color: var(--cl-gold); font-size: 14px;"></i>
+                    <span style="font-size: 13px; color: #92400E;">
+                        Use natural light · Show every room · Keep each photo under 5MB · Upload at least 3
+                    </span>
+                </div>
+
+                <div class="photo-upload-grid">
+                    <div class="photo-upload-item">
+                        <div class="upload-icon"><i class="fa fa-camera"></i></div>
+                        <label class="upload-label" for="{{ form.main_image.id_for_label }}">
+                            Main photo <span class="required-star">*</span>
+                        </label>
+                        {{ form.main_image }}
+                        <div class="upload-info"><i class="fa fa-star"></i><span>Required</span></div>
+                    </div>
+                    <div class="photo-upload-item">
+                        <div class="upload-icon"><i class="fa fa-image"></i></div>
+                        <label class="upload-label" for="{{ form.image_2.id_for_label }}">Photo 2</label>
+                        {{ form.image_2 }}
+                        <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
+                    </div>
+                    <div class="photo-upload-item">
+                        <div class="upload-icon"><i class="fa fa-image"></i></div>
+                        <label class="upload-label" for="{{ form.image_3.id_for_label }}">Photo 3</label>
+                        {{ form.image_3 }}
+                        <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
+                    </div>
+                    <div class="photo-upload-item">
+                        <div class="upload-icon"><i class="fa fa-image"></i></div>
+                        <label class="upload-label" for="{{ form.image_4.id_for_label }}">Photo 4</label>
+                        {{ form.image_4 }}
+                        <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
+                    </div>
+                    <div class="photo-upload-item">
+                        <div class="upload-icon"><i class="fa fa-image"></i></div>
+                        <label class="upload-label" for="{{ form.image_5.id_for_label }}">Photo 5</label>
+                        {{ form.image_5 }}
+                        <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
+                    </div>
+                    <div class="photo-upload-item">
+                        <div class="upload-icon"><i class="fa fa-image"></i></div>
+                        <label class="upload-label" for="{{ form.image_6.id_for_label }}">Photo 6</label>
+                        {{ form.image_6 }}
+                        <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
+                    </div>
+                    <div class="photo-upload-item">
+                        <div class="upload-icon"><i class="fa fa-image"></i></div>
+                        <label class="upload-label" for="{{ form.image_7.id_for_label }}">Photo 7</label>
+                        {{ form.image_7 }}
+                        <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
+                    </div>
+                    <div class="photo-upload-item">
+                        <div class="upload-icon"><i class="fa fa-image"></i></div>
+                        <label class="upload-label" for="{{ form.image_8.id_for_label }}">Photo 8</label>
+                        {{ form.image_8 }}
+                        <div class="upload-info"><i class="fa fa-plus"></i><span>Optional</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================
+                 STEP 5 — PRICING & LISTING TYPE
+                 ============================================ -->
+            <div class="form-step" data-step="4">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa fa-money-bill-wave"></i> Pricing & listing type</h2>
+                    <p class="section-subtitle">Set your price and choose how you want to list</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.price.id_for_label }}">
+                        <i class="fa fa-tag"></i>
+                        Price (KES) <span class="required-star">*</span>
+                    </label>
+                    <div class="price-input-wrap">
+                        <span class="price-prefix">KES</span>
+                        {{ form.price }}
+                    </div>
+                    <div class="form-tip">
+                        <i class="fa fa-info-circle"></i>
+                        <span id="priceHelp">Price per night (for shortlet)</span>
+                    </div>
+                    {% if form.price.errors %}
+                        <div class="error-message">
+                            <i class="fa fa-exclamation-circle"></i>
+                            <span>{{ form.price.errors|join:" " }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="field-grid cols-2">
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.service_charge.id_for_label }}">
+                            <i class="fa fa-file-invoice"></i> Service charge (monthly)
+                        </label>
+                        <div class="price-input-wrap">
                             <span class="price-prefix">KES</span>
-                            {{ form.price }}
-                        </div>
-                        <div class="form-tip">
-                            <i class="fa fa-info-circle"></i>
-                            <small>
-                                {% if form.transaction_type.value == 'rent' %}
-                                    Monthly rent amount
-                                {% elif form.transaction_type.value == 'sale' %}
-                                    Total sale price
-                                {% else %}
-                                    Price per night (for shortlet)
-                                {% endif %}
-                            </small>
+                            {{ form.service_charge }}
                         </div>
                     </div>
-
-                    <!-- Additional Costs -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-file-invoice"></i>
-                                    Service Charge (Monthly)
-                                </label>
-                                <div class="price-input-container">
-                                    <span class="price-prefix">KES</span>
-                                    {{ form.service_charge }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fa fa-hand-holding-usd"></i>
-                                    Deposit Required
-                                </label>
-                                <div class="price-input-container">
-                                    <span class="price-prefix">KES</span>
-                                    {{ form.deposit_required }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Pricing Checkboxes -->
-                    <div class="row mt-3">
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                {{ form.utilities_included }}
-                                <label class="form-check-label" for="{{ form.utilities_included.id_for_label }}">
-                                    Utilities Included
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                {{ form.title_deed }}
-                                <label class="form-check-label" for="{{ form.title_deed.id_for_label }}">
-                                    Title Deed Available
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                {{ form.loan_available }}
-                                <label class="form-check-label" for="{{ form.loan_available.id_for_label }}">
-                                    Financing Available
-                                </label>
-                            </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.deposit_required.id_for_label }}">
+                            <i class="fa fa-hand-holding-usd"></i> Deposit required
+                        </label>
+                        <div class="price-input-wrap">
+                            <span class="price-prefix">KES</span>
+                            {{ form.deposit_required }}
                         </div>
                     </div>
                 </div>
 
-                <!-- Images Section -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-icon">
-                            <i class="fa fa-images"></i>
-                        </div>
-                        <div class="section-content">
-                            <h3 class="section-title">Property Photos</h3>
-                            <p class="section-subtitle">High-quality photos attract more guests</p>
-                        </div>
+                <div class="checkbox-row" style="margin-bottom: 28px;">
+                    <div class="checkbox-item">
+                        {{ form.utilities_included }}
+                        <label for="{{ form.utilities_included.id_for_label }}">Utilities included</label>
                     </div>
-
-                    <!-- Photo Tips -->
-                    <div class="photo-tips">
-                        <div class="photo-tips-content">
-                            <div class="photo-tips-icon">
-                                <i class="fa fa-camera"></i>
-                            </div>
-                            <div>
-                                <h5 class="photo-tips-title">Photo Tips</h5>
-                                <ul class="photo-tips-list">
-                                    <li>Use natural light for better quality</li>
-                                    <li>Show all rooms and key features</li>
-                                    <li>Keep images under 5MB each</li>
-                                    <li>Upload at least 3 photos</li>
-                                    <li>Include exterior shots</li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="checkbox-item">
+                        {{ form.title_deed }}
+                        <label for="{{ form.title_deed.id_for_label }}">Title deed available</label>
                     </div>
+                    <div class="checkbox-item">
+                        {{ form.loan_available }}
+                        <label for="{{ form.loan_available.id_for_label }}">Financing available</label>
+                    </div>
+                </div>
 
-                    <!-- Image Uploads -->
-                    <div class="photo-upload-grid">
-                        {% for field_name in 'main_image image_2 image_3 image_4 image_5 image_6 image_7 image_8'|split %}
-                            {% with form|get_item:field_name as field %}
-                                {% if field %}
-                                <div class="photo-upload-item">
-                                    <div class="upload-icon">
-                                        {% if forloop.first %}
-                                            <i class="fa fa-camera"></i>
-                                        {% else %}
-                                            <i class="fa fa-image"></i>
-                                        {% endif %}
-                                    </div>
-                                    <label class="upload-label" for="{{ field.id_for_label }}">
-                                        {% if forloop.first %}Main Photo{% else %}Photo {{ forloop.counter }}{% endif %}
-                                        {% if forloop.first %}<span class="required-star">*</span>{% endif %}
-                                    </label>
-                                    {{ field }}
-                                    <div class="upload-info">
-                                        {% if forloop.first %}
-                                            <i class="fa fa-star"></i>
-                                            <span>Main photo (Required)</span>
-                                        {% else %}
-                                            <i class="fa fa-plus"></i>
-                                            <span>Additional photo</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                {% endif %}
-                            {% endwith %}
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--cl-navy); margin: 0 0 16px;">
+                    <i class="fa fa-crown" style="color: var(--cl-gold); margin-right: 6px;"></i>
+                    Listing type
+                </h3>
+
+                <div class="listing-type-grid">
+                    <div class="listing-card-option selected" id="free-listing-card">
+                        <div class="card-icon"><i class="fa fa-gift"></i></div>
+                        <h4 class="card-title">Free listing</h4>
+                        <div class="card-price">KES 0</div>
+                        <div class="card-features">
+                            <ul>
+                                <li>Basic listing on the site</li>
+                                <li>10% commission per booking</li>
+                                <li>Standard visibility</li>
+                            </ul>
+                        </div>
+                        {% for radio in form.listing_type %}
+                            {% if radio.data.value == 'free' %}{{ radio.tag }}{% endif %}
                         {% endfor %}
-                    </div>
-                </div>
-
-                <!-- Submit Section -->
-                <div class="submit-section">
-                    <div class="submit-header">
-                        <h4 class="submit-title">Ready to List Your Property?</h4>
-                        <p class="submit-subtitle">Review your information and submit when ready</p>
+                        <span class="listing-radio-label">Selected</span>
                     </div>
 
-                    <div>
-                        <button type="submit" id="submit-btn" class="submit-button">
-                            <i class="fa fa-paper-plane"></i>
-                            Submit Property Listing
-                        </button>
-
-                        <div class="submit-note">
-                            <p>
-                                <i class="fa fa-shield-alt"></i>
-                                Your listing will be reviewed within 24 hours
-                            </p>
+                    <div class="listing-card-option" id="featured-listing-card">
+                        <div class="featured-badge">Popular</div>
+                        <div class="card-icon"><i class="fa fa-crown"></i></div>
+                        <h4 class="card-title">Featured listing</h4>
+                        <div class="card-price">KES 1,000</div>
+                        <div class="card-features">
+                            <ul>
+                                <li>Top of search results</li>
+                                <li>10× more visibility</li>
+                                <li>Social media promotion</li>
+                            </ul>
                         </div>
+                        {% for radio in form.listing_type %}
+                            {% if radio.data.value == 'featured' %}{{ radio.tag }}{% endif %}
+                        {% endfor %}
+                        <span class="listing-radio-label">Upgrade</span>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+
+            <!-- ============================================
+                 STEP NAVIGATION
+                 ============================================ -->
+            <div class="step-nav">
+                <button type="button" class="btn-nav btn-nav-secondary" id="btnPrev" disabled>
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button type="button" class="btn-nav btn-nav-primary" id="btnNext">
+                    Continue <i class="fa fa-arrow-right"></i>
+                </button>
+                <button type="submit" class="btn-nav btn-nav-submit" id="btnSubmit" style="display: none;">
+                    <i class="fa fa-paper-plane"></i> Submit listing
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
-    const inputs = form.querySelectorAll('input, select, textarea');
+(function () {
+    'use strict';
 
-    // Transaction type change handler
-    const transactionType = document.getElementById('id_transaction_type');
-    const priceLabel = document.querySelector('label[for="id_price"]');
-    const priceHelp = document.querySelector('.form-tip small');
+    document.addEventListener('DOMContentLoaded', function () {
 
-    if (transactionType) {
-        transactionType.addEventListener('change', function() {
-            const selected = this.value;
-            const priceField = document.getElementById('id_price');
+        const form = document.getElementById('listingForm');
+        const steps = form.querySelectorAll('.form-step');
+        const progressSteps = document.querySelectorAll('.progress-step');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+        const btnSubmit = document.getElementById('btnSubmit');
 
-            if (selected === 'rent') {
-                priceField.placeholder = 'Monthly rent amount';
-                if (priceHelp) priceHelp.textContent = 'Monthly rent amount';
-            } else if (selected === 'sale') {
-                priceField.placeholder = 'Total sale price';
-                if (priceHelp) priceHelp.textContent = 'Total sale price';
-            } else {
-                priceField.placeholder = 'Price per night';
-                if (priceHelp) priceHelp.textContent = 'Price per night (for shortlet)';
+        let currentStep = 0;
+        const totalSteps = steps.length;
+
+        function showStep(index) {
+            if (index < 0) index = 0;
+            if (index >= totalSteps) index = totalSteps - 1;
+
+            steps.forEach((s, i) => s.classList.toggle('active', i === index));
+            progressSteps.forEach((p, i) => {
+                p.classList.toggle('active', i === index);
+                p.classList.toggle('completed', i < index);
+            });
+
+            btnPrev.disabled = index === 0;
+            btnNext.style.display = index === totalSteps - 1 ? 'none' : 'inline-flex';
+            btnSubmit.style.display = index === totalSteps - 1 ? 'inline-flex' : 'none';
+
+            const card = form.closest('.listing-card');
+            if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            currentStep = index;
+        }
+
+        function validateStep(index) {
+            const step = steps[index];
+            const requiredFields = step.querySelectorAll('[required]');
+            let valid = true;
+            let firstInvalid = null;
+
+            requiredFields.forEach(function (field) {
+                if (field.offsetParent === null) return;
+                if (!field.value || !field.value.trim()) {
+                    valid = false;
+                    field.classList.add('is-invalid');
+                    if (!firstInvalid) firstInvalid = field;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            if (!valid && firstInvalid) {
+                firstInvalid.focus();
+                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
+            return valid;
+        }
+
+        btnNext.addEventListener('click', function () {
+            if (!validateStep(currentStep)) return;
+            showStep(currentStep + 1);
         });
-    }
 
-    // Listing type selection
-    const freeCard = document.getElementById('free-listing-card');
-    const featuredCard = document.getElementById('featured-listing-card');
-    const freeRadio = document.getElementById('id_listing_type_0');
-    const featuredRadio = document.getElementById('id_listing_type_1');
-    const submitBtn = document.getElementById('submit-btn');
+        btnPrev.addEventListener('click', function () {
+            showStep(currentStep - 1);
+        });
 
-    // Update card styles based on selection
-    function updateCardStyles() {
-        if (freeCard && featuredCard && freeRadio && featuredRadio) {
-            if (freeRadio.checked) {
+        progressSteps.forEach(function (p, i) {
+            p.addEventListener('click', function () {
+                if (i <= currentStep) {
+                    showStep(i);
+                } else {
+                    for (let j = currentStep; j < i; j++) {
+                        if (!validateStep(j)) { showStep(j); return; }
+                    }
+                    showStep(i);
+                }
+            });
+        });
+
+        // Listing type
+        const freeCard = document.getElementById('free-listing-card');
+        const featuredCard = document.getElementById('featured-listing-card');
+        const freeRadio = form.querySelector('input[name="listing_type"][value="free"]');
+        const featuredRadio = form.querySelector('input[name="listing_type"][value="featured"]');
+
+        function setCardSelection() {
+            if (freeRadio && freeRadio.checked) {
                 freeCard.classList.add('selected');
                 featuredCard.classList.remove('selected');
-            } else {
+            } else if (featuredRadio && featuredRadio.checked) {
                 featuredCard.classList.add('selected');
                 freeCard.classList.remove('selected');
             }
         }
-    }
-
-    // Update submit button text
-    function updateSubmitButton() {
-        if (submitBtn) {
-            if (featuredRadio && featuredRadio.checked) {
-                submitBtn.innerHTML = '<i class="fa fa-crown"></i> Submit Featured Listing (KES 1,000)';
-            } else {
-                submitBtn.innerHTML = '<i class="fa fa-paper-plane"></i> Submit Property Listing';
-            }
-        }
-    }
-
-    // Add click handlers to cards
-    if (freeCard && freeRadio) {
-        freeCard.addEventListener('click', function() {
-            freeRadio.checked = true;
-            updateCardStyles();
-            updateSubmitButton();
+        if (freeCard) freeCard.addEventListener('click', function () {
+            if (freeRadio) { freeRadio.checked = true; setCardSelection(); }
         });
-    }
-
-    if (featuredCard && featuredRadio) {
-        featuredCard.addEventListener('click', function() {
-            featuredRadio.checked = true;
-            updateCardStyles();
-            updateSubmitButton();
+        if (featuredCard) featuredCard.addEventListener('click', function () {
+            if (featuredRadio) { featuredRadio.checked = true; setCardSelection(); }
         });
-    }
+        setCardSelection();
 
-    // Add change handlers to radio buttons
-    if (freeRadio) {
-        freeRadio.addEventListener('change', function() {
-            updateCardStyles();
-            updateSubmitButton();
-        });
-    }
-
-    if (featuredRadio) {
-        featuredRadio.addEventListener('change', function() {
-            updateCardStyles();
-            updateSubmitButton();
-        });
-    }
-
-    // Initialize styles
-    updateCardStyles();
-    updateSubmitButton();
-
-    // Form validation
-    inputs.forEach(input => {
-        input.addEventListener('blur', function() {
-            if (this.checkValidity()) {
-                this.classList.remove('is-invalid');
-                this.classList.add('is-valid');
-            } else {
-                this.classList.remove('is-valid');
-                this.classList.add('is-invalid');
-            }
-        });
-
-        input.addEventListener('input', function() {
-            if (this.checkValidity()) {
-                this.classList.remove('is-invalid');
-                this.classList.add('is-valid');
-            }
-        });
-    });
-
-    // Form submission handler
-    form.addEventListener('submit', function(e) {
-        // Validate required fields
-        let isValid = true;
-        inputs.forEach(input => {
-            if (input.required && !input.value.trim()) {
-                input.classList.add('is-invalid');
-                isValid = false;
-            }
-        });
-
-        if (!isValid) {
-            e.preventDefault();
-            alert('Please fill in all required fields marked with *');
-            return;
+        // Transaction type → price label
+        const transactionType = document.getElementById('id_transaction_type');
+        const priceHelp = document.getElementById('priceHelp');
+        const priceField = document.getElementById('id_price');
+        if (transactionType) {
+            transactionType.addEventListener('change', function () {
+                const v = this.value;
+                if (v === 'rent') {
+                    if (priceHelp) priceHelp.textContent = 'Monthly rent amount';
+                    if (priceField) priceField.placeholder = 'e.g. 45000';
+                } else if (v === 'sale') {
+                    if (priceHelp) priceHelp.textContent = 'Total sale price';
+                    if (priceField) priceField.placeholder = 'e.g. 8500000';
+                } else {
+                    if (priceHelp) priceHelp.textContent = 'Price per night (for shortlet)';
+                    if (priceField) priceField.placeholder = 'e.g. 4500';
+                }
+            });
+            transactionType.dispatchEvent(new Event('change'));
         }
 
-        // Show loading state
-        if (submitBtn) {
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Submitting...';
-            submitBtn.disabled = true;
-
-            // Re-enable button after 5 seconds in case submission fails
-            setTimeout(() => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 5000);
-        }
-    });
-
-    // Image preview for file inputs
-    const fileInputs = form.querySelectorAll('input[type="file"]');
-    fileInputs.forEach(input => {
-        input.addEventListener('change', function() {
-            const parent = this.closest('.photo-upload-item');
-            if (parent) {
-                const fileInfo = parent.querySelector('.upload-info span');
-                if (fileInfo && this.files.length > 0) {
-                    const fileName = this.files[0].name;
-                    if (fileName.length > 20) {
-                        fileInfo.textContent = fileName.substring(0, 17) + '...';
-                    } else {
-                        fileInfo.textContent = fileName;
-                    }
+        form.addEventListener('submit', function (e) {
+            for (let i = 0; i < totalSteps; i++) {
+                if (!validateStep(i)) {
+                    e.preventDefault();
+                    showStep(i);
+                    alert('Please fill in all required fields on this step.');
+                    return;
                 }
             }
+            btnSubmit.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Submitting...';
+            btnSubmit.disabled = true;
+            setTimeout(function () {
+                btnSubmit.innerHTML = '<i class="fa fa-paper-plane"></i> Submit listing';
+                btnSubmit.disabled = false;
+            }, 6000);
         });
+
+        form.querySelectorAll('input, select, textarea').forEach(function (input) {
+            input.addEventListener('blur', function () {
+                if (!this.hasAttribute('required')) return;
+                if (!this.value || !this.value.trim()) {
+                    this.classList.add('is-invalid');
+                    this.classList.remove('is-valid');
+                } else {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                }
+            });
+        });
+
+        showStep(0);
     });
-
-    // Add focus effects to form controls
-    inputs.forEach(input => {
-        input.addEventListener('focus', function() {
-            this.style.transform = 'translateY(-2px)';
-        });
-
-        input.addEventListener('blur', function() {
-            this.style.transform = 'translateY(0)';
-        });
-    });
-
-    // Auto-hide success message after 8 seconds
-    setTimeout(() => {
-        const alerts = document.querySelectorAll('.alert-success-custom');
-        alerts.forEach(alert => {
-            alert.style.opacity = '0';
-            alert.style.transform = 'translateY(-20px) scale(0.95)';
-            setTimeout(() => {
-                alert.style.display = 'none';
-            }, 300);
-        });
-    }, 8000);
-
-    // Scroll to top if there's a success message
-    {% if messages %}
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    {% endif %}
-});
+})();
 </script>
+
 {% endblock %}

@@ -1,12 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block extra_head %}
-  {{ block.super }}
-
-  <meta name="description" content="{{ meta_description }}">
-  <link rel="canonical" href="{{ share_url }}">
-
+{% block og_tags %}
+  <!-- Completely override base OG tags with listing-specific tags -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="bnb.co.ke">
   <meta property="og:title" content="{{ share_title }}">
@@ -22,845 +18,165 @@
   <meta name="twitter:description" content="{{ share_description }}">
   <meta name="twitter:image" content="{{ share_image_url }}">
 {% endblock %}
+
+{% block extra_head %}
+  <meta name="description" content="{{ meta_description }}">
+  <link rel="canonical" href="{{ share_url }}">
+{% endblock %}
+
 {% block content %}
 <style>
 /* Reset and Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; line-height: 1.6; color: #333; background-color: #fff; }
+.listing-detail-container { max-width: 1200px; margin: 0 auto; padding: 16px; }
+.back-link { margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; color: #FF0000; text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+.back-link i { font-size: 0.9rem; }
+.listing-detail-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+.property-header { margin-bottom: 20px; }
+.property-header h1 { font-size: 1.75rem; font-weight: 700; color: #222; margin-bottom: 8px; line-height: 1.3; }
+.verified-badge { color: #34a853; font-size: 1rem; margin-left: 8px; }
+.property-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; color: #666; font-size: 0.9rem; }
+.meta-item { display: flex; align-items: center; gap: 5px; }
+.rating-stars { color: #ffc107; }
+.location-icon { color: #FF0000; }
+.image-gallery-section { margin-bottom: 30px; }
+.main-image-container { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 12px; }
+.main-image { width: 100%; height: 300px; object-fit: cover; cursor: pointer; display: block; }
+.placeholder-image { width: 100%; height: 300px; background: linear-gradient(135deg, #4285f4 0%, #34a853 100%); display: flex; align-items: center; justify-content: center; color: white; }
+.placeholder-image i { font-size: 3rem; }
+.property-type-badge { position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,0.7); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; backdrop-filter: blur(10px); }
+.thumbnail-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.thumbnail-item { height: 80px; border-radius: 10px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease; }
+.thumbnail-item.active, .thumbnail-item:hover { border-color: #FF0000; }
+.thumbnail-item img { width: 100%; height: 100%; object-fit: cover; }
+.detail-section { margin-bottom: 30px; }
+.section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 20px; color: #222; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
+.detail-items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.detail-item { display: flex; align-items: center; gap: 12px; }
+.detail-icon { background: #f8f9fa; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.detail-icon i { color: #FF0000; font-size: 1.2rem; }
+.detail-content h4 { font-weight: 600; color: #555; font-size: 0.9rem; margin-bottom: 4px; }
+.detail-content p { color: #222; font-size: 1.1rem; font-weight: 500; }
+.amenities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+.amenity-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; }
+.amenity-item i { font-size: 1.1rem; width: 24px; color: #28a745; }
+.description-section { margin-bottom: 30px; }
+.description-content { color: #555; line-height: 1.6; font-size: 1rem; }
+.right-column { display: flex; flex-direction: column; gap: 30px; }
+.booking-card { border: 1px solid #e0e0e0; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.price-section { margin-bottom: 25px; }
+.price-amount { font-size: 1.8rem; font-weight: 700; color: #28a745; margin-bottom: 4px; }
+.price-period { color: #666; font-size: 0.95rem; }
+.booking-form { margin-bottom: 25px; }
+.booking-form h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #222; }
+.btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; border-radius: 10px; font-weight: 600; text-decoration: none; text-align: center; transition: all 0.3s ease; border: none; cursor: pointer; font-size: 1rem; width: 100%; margin-bottom: 12px; }
+.btn-primary { background-color: #ff5a5f; color: white; }
+.btn-primary:hover { background-color: #e04a50; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 90, 95, 0.3); }
+.btn-whatsapp { background-color: #25D366; color: white; }
+.btn-whatsapp:hover { background-color: #128C7E; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); }
+.btn-call { background-color: #007bff; color: white; }
+.btn-call:hover { background-color: #0056b3; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3); }
+.btn-review { background-color: #FF0000; color: white; padding: 12px 30px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-review:hover { background-color: #cc0000; transform: translateY(-2px); }
+.host-contact-section { border-top: 1px solid #e0e0e0; padding-top: 20px; }
+.secure-booking { color: #666; font-size: 0.9rem; text-align: center; padding: 12px; background: #f8f9fa; border-radius: 8px; margin-top: 15px; }
+.secure-booking i { color: #28a745; margin-right: 8px; }
+.map-section { border: 1px solid #e0e0e0; border-radius: 15px; padding: 20px; }
+.map-placeholder { height: 180px; background: #f8f9fa; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #666; margin-bottom: 15px; }
+.map-icon { font-size: 2rem; color: #FF0000; margin-bottom: 10px; }
+.map-info { text-align: center; }
+.location-disclaimer { color: #666; font-size: 0.9rem; margin-top: 10px; }
+.reviews-section { margin-top: 50px; padding-top: 30px; border-top: 1px solid #e0e0e0; }
+.reviews-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 30px; }
+.review-card { background: #f8f9fa; padding: 20px; border-radius: 10px; }
+.review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.review-avatar { width: 40px; height: 40px; background: #FF0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.9rem; }
+.review-info h4 { font-weight: 600; font-size: 1rem; margin-bottom: 4px; }
+.review-date { color: #666; font-size: 0.85rem; }
+.review-stars { color: #ffc107; margin-bottom: 10px; font-size: 0.95rem; }
+.review-content { color: #555; line-height: 1.5; font-size: 0.95rem; }
+.reviews-actions { text-align: center; margin-top: 30px; }
+.not-found-container { text-align: center; padding: 60px 20px; }
+.not-found-icon { font-size: 4rem; color: #e0e0e0; margin-bottom: 20px; }
+.not-found-title { font-size: 1.8rem; font-weight: 600; margin-bottom: 15px; color: #333; }
+.not-found-message { color: #666; margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+.similar-properties { background: #f8f9fa; padding: 50px 0; margin-top: 50px; }
+.similar-properties-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.similar-properties h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 30px; text-align: center; color: #222; }
+.info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
+.info-card { background: #f8f9fa; padding: 15px; border-radius: 10px; text-align: center; }
+.info-card i { font-size: 1.5rem; color: #FF0000; margin-bottom: 8px; }
+.info-label { font-size: 0.85rem; color: #666; margin-bottom: 4px; }
+.info-value { font-weight: 600; color: #222; }
+.transaction-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-left: 10px; }
+.transaction-rent { background: #e3f2fd; color: #1976d2; }
+.transaction-sale { background: #e8f5e9; color: #2e7d32; }
+.transaction-shortlet { background: #fff3e0; color: #f57c00; }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  line-height: 1.6;
-  color: #333;
-  background-color: #fff;
-}
-
-/* Main Container */
-.listing-detail-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 16px;
-}
-
-/* Back Link */
-.back-link {
-  margin-bottom: 20px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: #FF0000;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-
-.back-link i {
-  font-size: 0.9rem;
-}
-
-/* Main Grid */
-.listing-detail-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 30px;
-}
-
-/* Property Header */
-.property-header {
-  margin-bottom: 20px;
-}
-
-.property-header h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #222;
-  margin-bottom: 8px;
-  line-height: 1.3;
-}
-
-.verified-badge {
-  color: #34a853;
-  font-size: 1rem;
-  margin-left: 8px;
-}
-
-.property-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.meta-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.rating-stars {
-  color: #ffc107;
-}
-
-.location-icon {
-  color: #FF0000;
-}
-
-/* Image Gallery */
-.image-gallery-section {
-  margin-bottom: 30px;
-}
-
-.main-image-container {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-
-.main-image {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-  cursor: pointer;
-  display: block;
-}
-
-.placeholder-image {
-  width: 100%;
-  height: 300px;
-  background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
-
-.placeholder-image i {
-  font-size: 3rem;
-}
-
-.property-type-badge {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: rgba(0,0,0,0.7);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  backdrop-filter: blur(10px);
-}
-
-/* Thumbnail Grid */
-.thumbnail-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-.thumbnail-item {
-  height: 80px;
-  border-radius: 10px;
-  overflow: hidden;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.thumbnail-item.active,
-.thumbnail-item:hover {
-  border-color: #FF0000;
-}
-
-.thumbnail-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Property Details */
-.detail-section {
-  margin-bottom: 30px;
-}
-
-.section-title {
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: #222;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 10px;
-}
-
-/* Detail Items Grid */
-.detail-items-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.detail-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.detail-icon {
-  background: #f8f9fa;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.detail-icon i {
-  color: #FF0000;
-  font-size: 1.2rem;
-}
-
-.detail-content h4 {
-  font-weight: 600;
-  color: #555;
-  font-size: 0.9rem;
-  margin-bottom: 4px;
-}
-
-.detail-content p {
-  color: #222;
-  font-size: 1.1rem;
-  font-weight: 500;
-}
-
-/* Amenities Grid */
-.amenities-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 15px;
-}
-
-.amenity-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 0;
-}
-
-.amenity-item i {
-  font-size: 1.1rem;
-  width: 24px;
-  color: #28a745;
-}
-
-/* Description */
-.description-section {
-  margin-bottom: 30px;
-}
-
-.description-content {
-  color: #555;
-  line-height: 1.6;
-  font-size: 1rem;
-}
-
-/* Right Column */
-.right-column {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-/* Booking Card */
-.booking-card {
-  border: 1px solid #e0e0e0;
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-}
-
-.price-section {
-  margin-bottom: 25px;
-}
-
-.price-amount {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #28a745;
-  margin-bottom: 4px;
-}
-
-.price-period {
-  color: #666;
-  font-size: 0.95rem;
-}
-
-.booking-form {
-  margin-bottom: 25px;
-}
-
-.booking-form h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: #222;
-}
-
-/* Buttons */
-.btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px;
-  border-radius: 10px;
-  font-weight: 600;
-  text-decoration: none;
-  text-align: center;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  width: 100%;
-  margin-bottom: 12px;
-}
-
-.btn-primary {
-  background-color: #ff5a5f;
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #e04a50;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 90, 95, 0.3);
-}
-
-.btn-whatsapp {
-  background-color: #25D366;
-  color: white;
-}
-
-.btn-whatsapp:hover {
-  background-color: #128C7E;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-}
-
-.btn-call {
-  background-color: #007bff;
-  color: white;
-}
-
-.btn-call:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
-}
-
-.btn-review {
-  background-color: #FF0000;
-  color: white;
-  padding: 12px 30px;
-  border-radius: 25px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.btn-review:hover {
-  background-color: #cc0000;
-  transform: translateY(-2px);
-}
-
-/* Host Contact */
-.host-contact-section {
-  border-top: 1px solid #e0e0e0;
-  padding-top: 20px;
-}
-
-.secure-booking {
-  color: #666;
-  font-size: 0.9rem;
-  text-align: center;
-  padding: 12px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  margin-top: 15px;
-}
-
-.secure-booking i {
-  color: #28a745;
-  margin-right: 8px;
-}
-
-/* Map Section */
-.map-section {
-  border: 1px solid #e0e0e0;
-  border-radius: 15px;
-  padding: 20px;
-}
-
-.map-placeholder {
-  height: 180px;
-  background: #f8f9fa;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #666;
-  margin-bottom: 15px;
-}
-
-.map-icon {
-  font-size: 2rem;
-  color: #FF0000;
-  margin-bottom: 10px;
-}
-
-.map-info {
-  text-align: center;
-}
-
-.location-disclaimer {
-  color: #666;
-  font-size: 0.9rem;
-  margin-top: 10px;
-}
-
-/* Reviews Section */
-.reviews-section {
-  margin-top: 50px;
-  padding-top: 30px;
-  border-top: 1px solid #e0e0e0;
-}
-
-.reviews-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.review-card {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.review-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.review-avatar {
-  width: 40px;
-  height: 40px;
-  background: #FF0000;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.review-info h4 {
-  font-weight: 600;
-  font-size: 1rem;
-  margin-bottom: 4px;
-}
-
-.review-date {
-  color: #666;
-  font-size: 0.85rem;
-}
-
-.review-stars {
-  color: #ffc107;
-  margin-bottom: 10px;
-  font-size: 0.95rem;
-}
-
-.review-content {
-  color: #555;
-  line-height: 1.5;
-  font-size: 0.95rem;
-}
-
-.reviews-actions {
-  text-align: center;
-  margin-top: 30px;
-}
-
-/* Not Found State */
-.not-found-container {
-  text-align: center;
-  padding: 60px 20px;
-}
-
-.not-found-icon {
-  font-size: 4rem;
-  color: #e0e0e0;
-  margin-bottom: 20px;
-}
-
-.not-found-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: #333;
-}
-
-.not-found-message {
-  color: #666;
-  margin-bottom: 30px;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
-}
-
-/* Similar Properties */
-.similar-properties {
-  background: #f8f9fa;
-  padding: 50px 0;
-  margin-top: 50px;
-}
-
-.similar-properties-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.similar-properties h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 30px;
-  text-align: center;
-  color: #222;
-}
-
-/* Info Grid */
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.info-card {
-  background: #f8f9fa;
-  padding: 15px;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.info-card i {
-  font-size: 1.5rem;
-  color: #FF0000;
-  margin-bottom: 8px;
-}
-
-.info-label {
-  font-size: 0.85rem;
-  color: #666;
-  margin-bottom: 4px;
-}
-
-.info-value {
-  font-weight: 600;
-  color: #222;
-}
-
-/* Transaction Badge */
-.transaction-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-left: 10px;
-}
-
-.transaction-rent {
-  background: #e3f2fd;
-  color: #1976d2;
-}
-
-.transaction-sale {
-  background: #e8f5e9;
-  color: #2e7d32;
-}
-
-.transaction-shortlet {
-  background: #fff3e0;
-  color: #f57c00;
-}
-
-/* Responsive Breakpoints */
-
-/* Small tablets and large phones (768px and up) */
 @media (min-width: 768px) {
-  .listing-detail-container {
-    padding: 20px;
-  }
-
-  .property-header h1 {
-    font-size: 2rem;
-  }
-
-  .main-image {
-    height: 400px;
-  }
-
-  .placeholder-image {
-    height: 400px;
-  }
-
-  .thumbnail-container {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .thumbnail-item {
-    height: 100px;
-  }
-
-  .detail-items-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .amenities-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .reviews-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .btn {
-    width: auto;
-    padding: 16px 32px;
-  }
+  .listing-detail-container { padding: 20px; }
+  .property-header h1 { font-size: 2rem; }
+  .main-image, .placeholder-image { height: 400px; }
+  .thumbnail-container { grid-template-columns: repeat(4, 1fr); }
+  .thumbnail-item { height: 100px; }
+  .detail-items-grid { grid-template-columns: repeat(2, 1fr); }
+  .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+  .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+  .btn { width: auto; padding: 16px 32px; }
 }
-
-/* Tablets and small desktops (1024px and up) */
 @media (min-width: 1024px) {
-  .listing-detail-grid {
-    grid-template-columns: 2fr 1fr;
-    gap: 40px;
-  }
-
-  .booking-card {
-    position: sticky;
-    top: 20px;
-  }
-
-  .main-image {
-    height: 500px;
-  }
-
-  .placeholder-image {
-    height: 500px;
-  }
-
-  .thumbnail-container {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .thumbnail-item {
-    height: 120px;
-  }
-
-  .detail-items-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .amenities-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .reviews-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .listing-detail-grid { grid-template-columns: 2fr 1fr; gap: 40px; }
+  .booking-card { position: sticky; top: 20px; }
+  .main-image, .placeholder-image { height: 500px; }
+  .thumbnail-container { grid-template-columns: repeat(4, 1fr); }
+  .thumbnail-item { height: 120px; }
+  .detail-items-grid { grid-template-columns: repeat(2, 1fr); }
+  .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+  .reviews-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
-/* Large desktops (1200px and up) */
 @media (min-width: 1200px) {
-  .listing-detail-container {
-    padding: 30px 20px;
-  }
-
-  .detail-items-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .listing-detail-container { padding: 30px 20px; }
+  .detail-items-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
-/* Small phones (480px and below) */
 @media (max-width: 480px) {
-  .listing-detail-container {
-    padding: 12px;
-  }
-
-  .property-header h1 {
-    font-size: 1.5rem;
-  }
-
-  .property-meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .main-image {
-    height: 250px;
-  }
-
-  .placeholder-image {
-    height: 250px;
-  }
-
-  .thumbnail-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .thumbnail-item {
-    height: 70px;
-  }
-
-  .property-type-badge {
-    top: 12px;
-    right: 12px;
-    font-size: 0.8rem;
-    padding: 6px 12px;
-  }
-
-  .detail-items-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .amenities-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .booking-card {
-    padding: 20px;
-  }
-
-  .section-title {
-    font-size: 1.2rem;
-  }
-
-  .btn {
-    padding: 14px;
-    font-size: 0.95rem;
-  }
-
-  .reviews-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .info-grid {
-    grid-template-columns: 1fr;
-  }
+  .listing-detail-container { padding: 12px; }
+  .property-header h1 { font-size: 1.5rem; }
+  .property-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .main-image, .placeholder-image { height: 250px; }
+  .thumbnail-container { grid-template-columns: repeat(2, 1fr); }
+  .thumbnail-item { height: 70px; }
+  .property-type-badge { top: 12px; right: 12px; font-size: 0.8rem; padding: 6px 12px; }
+  .detail-items-grid { grid-template-columns: 1fr; gap: 16px; }
+  .amenities-grid { grid-template-columns: 1fr; }
+  .booking-card { padding: 20px; }
+  .section-title { font-size: 1.2rem; }
+  .btn { padding: 14px; font-size: 0.95rem; }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .info-grid { grid-template-columns: 1fr; }
 }
-
-/* Medium phones (481px to 767px) */
 @media (min-width: 481px) and (max-width: 767px) {
-  .listing-detail-container {
-    padding: 16px;
-  }
-
-  .main-image {
-    height: 350px;
-  }
-
-  .placeholder-image {
-    height: 350px;
-  }
-
-  .thumbnail-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .thumbnail-item {
-    height: 90px;
-  }
-
-  .info-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .listing-detail-container { padding: 16px; }
+  .main-image, .placeholder-image { height: 350px; }
+  .thumbnail-container { grid-template-columns: repeat(3, 1fr); }
+  .thumbnail-item { height: 90px; }
+  .info-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
-/* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
-  .btn:hover,
-  .thumbnail-item:hover {
-    transform: none;
-  }
-
-  .btn-primary:hover {
-    background-color: #ff5a5f;
-  }
-
-  .btn-whatsapp:hover {
-    background-color: #25D366;
-  }
-
-  .btn-call:hover {
-    background-color: #007bff;
-  }
-
-  /* Increase touch target sizes */
-  .btn,
-  .thumbnail-item {
-    min-height: 44px;
-  }
-
-  .detail-icon {
-    min-width: 44px;
-    min-height: 44px;
-  }
+  .btn:hover, .thumbnail-item:hover { transform: none; }
+  .btn-primary:hover { background-color: #ff5a5f; }
+  .btn-whatsapp:hover { background-color: #25D366; }
+  .btn-call:hover { background-color: #007bff; }
+  .btn, .thumbnail-item { min-height: 44px; }
+  .detail-icon { min-width: 44px; min-height: 44px; }
 }
-
-/* Print styles */
 @media print {
-  .booking-card,
-  .btn,
-  .map-section,
-  .reviews-actions {
-    display: none;
-  }
-
-  .listing-detail-container {
-    padding: 0;
-  }
-
-  .main-image {
-    height: 300px;
-  }
+  .booking-card, .btn, .map-section, .reviews-actions { display: none; }
+  .listing-detail-container { padding: 0; }
+  .main-image { height: 300px; }
 }
 </style>
 
-<!-- Add this near the top of your listing_detail.html, after the opening body content -->
 {% if messages %}
 <div class="messages-container" style="margin-bottom: 20px;">
     {% for message in messages %}
@@ -879,7 +195,7 @@ body {
     {% endfor %}
 </div>
 {% endif %}
-<!-- Individual Listing Detail Template -->
+
 <div class="listing-detail-container" style="max-width: 1200px; margin: 0 auto; padding: 20px;">
 
   <!-- Back to Listings Link -->
@@ -891,7 +207,6 @@ body {
 
   {% if listing %}
 
-  <!-- Main Content Grid -->
   <div class="listing-detail-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
 
     <!-- Left Column - Images & Description -->
@@ -906,7 +221,6 @@ body {
             <i class="fa fa-check-circle" aria-hidden="true"></i>
           </span>
           {% endif %}
-          <!-- Transaction Type Badge -->
           {% if listing.transaction_type == 'rent' %}
           <span class="transaction-badge transaction-rent">For Rent</span>
           {% elif listing.transaction_type == 'sale' %}
@@ -917,7 +231,6 @@ body {
         </h1>
 
         <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 15px; color: #666; font-size: 0.95rem;">
-
           <span style="display: flex; align-items: center; gap: 5px;">
             <i class="fa fa-map-marker" style="color: #FF0000;" aria-hidden="true"></i>
             {{ listing.get_location_display }}, {{ listing.specific_location }}
@@ -936,36 +249,22 @@ body {
       <div class="image-gallery-section" style="margin-bottom: 30px;">
         <div class="main-image-container" style="position: relative; border-radius: 20px; overflow: hidden; margin-bottom: 10px;">
           {% if listing.main_image %}
-          <img id="mainImage"
-               src="{{ listing.main_image.url }}"
-               alt="{{ listing.title }}"
-               style="width: 100%; height: 500px; object-fit: cover; cursor: pointer;">
+          <img id="mainImage" src="{{ listing.main_image.url }}" alt="{{ listing.title }}" style="width: 100%; height: 500px; object-fit: cover; cursor: pointer;">
           {% else %}
           <div style="width: 100%; height: 500px; background: linear-gradient(135deg, #4285f4 0%, #34a853 100%); display: flex; align-items: center; justify-content: center; color: white;">
             <i class="fa fa-home" style="font-size: 4rem;" aria-hidden="true"></i>
           </div>
           {% endif %}
-
-          <!-- Property Type Badge -->
           <div style="position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.7); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem;">
             {{ listing.get_property_type_display }}
           </div>
-
-
         </div>
 
-        <!-- Thumbnail Images -->
         {% if listing.all_images|length > 1 %}
         <div class="thumbnail-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
           {% for image in listing.all_images %}
-          <div class="thumbnail-item"
-               style="height: 100px; border-radius: 10px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease;"
-               onmouseover="this.style.borderColor='#FF0000'"
-               onmouseout="this.style.borderColor='transparent'"
-               onclick="changeMainImage('{{ image.url }}', this)">
-            <img src="{{ image.url }}"
-                 alt="Thumbnail {{ forloop.counter }}"
-                 style="width: 100%; height: 100%; object-fit: cover;">
+          <div class="thumbnail-item" style="height: 100px; border-radius: 10px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#FF0000'" onmouseout="this.style.borderColor='transparent'" onclick="changeMainImage('{{ image.url }}', this)">
+            <img src="{{ image.url }}" alt="Thumbnail {{ forloop.counter }}" style="width: 100%; height: 100%; object-fit: cover;">
           </div>
           {% endfor %}
         </div>
@@ -975,367 +274,105 @@ body {
       <!-- Property Details Section -->
       <div class="property-details-section" style="margin-bottom: 30px;">
 
-
-
-        <!-- ALL AMENITIES - Organized by Category -->
         <h3 class="section-title" style="font-size: 1.2rem; margin-top: 20px;">Amenities</h3>
 
-        <!-- Basic Amenities -->
         {% if listing.wifi or listing.parking or listing.kitchen %}
         <h4 style="font-size: 1rem; font-weight: 600; margin: 15px 0 10px; color: #555;">Basic</h4>
         <div class="amenities-grid">
-          {% if listing.wifi %}
-          <div class="amenity-item">
-            <i class="fa fa-wifi" aria-hidden="true"></i>
-            <span>WiFi</span>
-          </div>
-          {% endif %}
-
-          {% if listing.parking %}
-          <div class="amenity-item">
-            <i class="fa fa-car" aria-hidden="true"></i>
-            <span>Parking</span>
-          </div>
-          {% endif %}
-
-          {% if listing.kitchen %}
-          <div class="amenity-item">
-            <i class="fa fa-utensils" aria-hidden="true"></i>
-            <span>Kitchen</span>
-          </div>
-          {% endif %}
+          {% if listing.wifi %}<div class="amenity-item"><i class="fa fa-wifi" aria-hidden="true"></i><span>WiFi</span></div>{% endif %}
+          {% if listing.parking %}<div class="amenity-item"><i class="fa fa-car" aria-hidden="true"></i><span>Parking</span></div>{% endif %}
+          {% if listing.kitchen %}<div class="amenity-item"><i class="fa fa-utensils" aria-hidden="true"></i><span>Kitchen</span></div>{% endif %}
         </div>
         {% endif %}
 
-        <!-- Fitness & Wellness -->
         {% if listing.gym or listing.pool or listing.spa or listing.sauna or listing.steam_room %}
         <h4 style="font-size: 1rem; font-weight: 600; margin: 15px 0 10px; color: #555;">Fitness & Wellness</h4>
         <div class="amenities-grid">
-          {% if listing.gym %}
-          <div class="amenity-item">
-            <i class="fa fa-dumbbell" aria-hidden="true"></i>
-            <span>Gym</span>
-          </div>
-          {% endif %}
-
-          {% if listing.pool %}
-          <div class="amenity-item">
-            <i class="fa fa-swimmer" aria-hidden="true"></i>
-            <span>Swimming Pool</span>
-          </div>
-          {% endif %}
-
-          {% if listing.spa %}
-          <div class="amenity-item">
-            <i class="fa fa-spa" aria-hidden="true"></i>
-            <span>Spa</span>
-          </div>
-          {% endif %}
-
-          {% if listing.sauna %}
-          <div class="amenity-item">
-            <i class="fa fa-hot-tub" aria-hidden="true"></i>
-            <span>Sauna</span>
-          </div>
-          {% endif %}
-
-          {% if listing.steam_room %}
-          <div class="amenity-item">
-            <i class="fa fa-water" aria-hidden="true"></i>
-            <span>Steam Room</span>
-          </div>
-          {% endif %}
+          {% if listing.gym %}<div class="amenity-item"><i class="fa fa-dumbbell" aria-hidden="true"></i><span>Gym</span></div>{% endif %}
+          {% if listing.pool %}<div class="amenity-item"><i class="fa fa-swimmer" aria-hidden="true"></i><span>Swimming Pool</span></div>{% endif %}
+          {% if listing.spa %}<div class="amenity-item"><i class="fa fa-spa" aria-hidden="true"></i><span>Spa</span></div>{% endif %}
+          {% if listing.sauna %}<div class="amenity-item"><i class="fa fa-hot-tub" aria-hidden="true"></i><span>Sauna</span></div>{% endif %}
+          {% if listing.steam_room %}<div class="amenity-item"><i class="fa fa-water" aria-hidden="true"></i><span>Steam Room</span></div>{% endif %}
         </div>
         {% endif %}
 
-        <!-- Climate Control -->
         {% if listing.ac or listing.heating or listing.ceiling_fans or listing.fireplace %}
         <h4 style="font-size: 1rem; font-weight: 600; margin: 15px 0 10px; color: #555;">Climate Control</h4>
         <div class="amenities-grid">
-          {% if listing.ac %}
-          <div class="amenity-item">
-            <i class="fa fa-snowflake" aria-hidden="true"></i>
-            <span>Air Conditioning</span>
-          </div>
-          {% endif %}
-
-          {% if listing.heating %}
-          <div class="amenity-item">
-            <i class="fa fa-fire" aria-hidden="true"></i>
-            <span>Heating</span>
-          </div>
-          {% endif %}
-
-          {% if listing.ceiling_fans %}
-          <div class="amenity-item">
-            <i class="fa fa-fan" aria-hidden="true"></i>
-            <span>Ceiling Fans</span>
-          </div>
-          {% endif %}
-
-          {% if listing.fireplace %}
-          <div class="amenity-item">
-            <i class="fa fa-fireplace" aria-hidden="true"></i>
-            <span>Fireplace</span>
-          </div>
-          {% endif %}
+          {% if listing.ac %}<div class="amenity-item"><i class="fa fa-snowflake" aria-hidden="true"></i><span>Air Conditioning</span></div>{% endif %}
+          {% if listing.heating %}<div class="amenity-item"><i class="fa fa-fire" aria-hidden="true"></i><span>Heating</span></div>{% endif %}
+          {% if listing.ceiling_fans %}<div class="amenity-item"><i class="fa fa-fan" aria-hidden="true"></i><span>Ceiling Fans</span></div>{% endif %}
+          {% if listing.fireplace %}<div class="amenity-item"><i class="fa fa-fireplace" aria-hidden="true"></i><span>Fireplace</span></div>{% endif %}
         </div>
         {% endif %}
 
-        <!-- Entertainment -->
         {% if listing.tv or listing.sound_system or listing.home_theater %}
         <h4 style="font-size: 1rem; font-weight: 600; margin: 15px 0 10px; color: #555;">Entertainment</h4>
         <div class="amenities-grid">
-          {% if listing.tv %}
-          <div class="amenity-item">
-            <i class="fa fa-tv" aria-hidden="true"></i>
-            <span>TV</span>
-          </div>
-          {% endif %}
-
-          {% if listing.sound_system %}
-          <div class="amenity-item">
-            <i class="fa fa-music" aria-hidden="true"></i>
-            <span>Sound System</span>
-          </div>
-          {% endif %}
-
-          {% if listing.home_theater %}
-          <div class="amenity-item">
-            <i class="fa fa-film" aria-hidden="true"></i>
-            <span>Home Theater</span>
-          </div>
-          {% endif %}
+          {% if listing.tv %}<div class="amenity-item"><i class="fa fa-tv" aria-hidden="true"></i><span>TV</span></div>{% endif %}
+          {% if listing.sound_system %}<div class="amenity-item"><i class="fa fa-music" aria-hidden="true"></i><span>Sound System</span></div>{% endif %}
+          {% if listing.home_theater %}<div class="amenity-item"><i class="fa fa-film" aria-hidden="true"></i><span>Home Theater</span></div>{% endif %}
         </div>
         {% endif %}
 
-        <!-- Outdoor -->
         {% if listing.balcony or listing.terrace or listing.garden or listing.roof_terrace or listing.bbq_area or listing.outdoor_shower %}
         <h4 style="font-size: 1rem; font-weight: 600; margin: 15px 0 10px; color: #555;">Outdoor Features</h4>
         <div class="amenities-grid">
-          {% if listing.balcony %}
-          <div class="amenity-item">
-            <i class="fa fa-home" aria-hidden="true"></i>
-            <span>Balcony</span>
-          </div>
-          {% endif %}
-
-          {% if listing.terrace %}
-          <div class="amenity-item">
-            <i class="fa fa-sun" aria-hidden="true"></i>
-            <span>Terrace</span>
-          </div>
-          {% endif %}
-
-          {% if listing.garden %}
-          <div class="amenity-item">
-            <i class="fa fa-leaf" aria-hidden="true"></i>
-            <span>Garden</span>
-          </div>
-          {% endif %}
-
-          {% if listing.roof_terrace %}
-          <div class="amenity-item">
-            <i class="fa fa-cloud-sun" aria-hidden="true"></i>
-            <span>Roof Terrace</span>
-          </div>
-          {% endif %}
-
-          {% if listing.bbq_area %}
-          <div class="amenity-item">
-            <i class="fa fa-utensils" aria-hidden="true"></i>
-            <span>BBQ Area</span>
-          </div>
-          {% endif %}
-
-          {% if listing.outdoor_shower %}
-          <div class="amenity-item">
-            <i class="fa fa-shower" aria-hidden="true"></i>
-            <span>Outdoor Shower</span>
-          </div>
-          {% endif %}
+          {% if listing.balcony %}<div class="amenity-item"><i class="fa fa-home" aria-hidden="true"></i><span>Balcony</span></div>{% endif %}
+          {% if listing.terrace %}<div class="amenity-item"><i class="fa fa-sun" aria-hidden="true"></i><span>Terrace</span></div>{% endif %}
+          {% if listing.garden %}<div class="amenity-item"><i class="fa fa-leaf" aria-hidden="true"></i><span>Garden</span></div>{% endif %}
+          {% if listing.roof_terrace %}<div class="amenity-item"><i class="fa fa-cloud-sun" aria-hidden="true"></i><span>Roof Terrace</span></div>{% endif %}
+          {% if listing.bbq_area %}<div class="amenity-item"><i class="fa fa-utensils" aria-hidden="true"></i><span>BBQ Area</span></div>{% endif %}
+          {% if listing.outdoor_shower %}<div class="amenity-item"><i class="fa fa-shower" aria-hidden="true"></i><span>Outdoor Shower</span></div>{% endif %}
         </div>
         {% endif %}
 
-        <!-- Security -->
         {% if listing.cctv or listing.security_guards or listing.electric_fence or listing.secure_compound or listing.alarm_system %}
         <h4 style="font-size: 1rem; font-weight: 600; margin: 15px 0 10px; color: #555;">Security</h4>
         <div class="amenities-grid">
-          {% if listing.cctv %}
-          <div class="amenity-item">
-            <i class="fa fa-video" aria-hidden="true"></i>
-            <span>CCTV</span>
-          </div>
-          {% endif %}
-
-          {% if listing.security_guards %}
-          <div class="amenity-item">
-            <i class="fa fa-user-shield" aria-hidden="true"></i>
-            <span>Security Guards</span>
-          </div>
-          {% endif %}
-
-          {% if listing.electric_fence %}
-          <div class="amenity-item">
-            <i class="fa fa-bolt" aria-hidden="true"></i>
-            <span>Electric Fence</span>
-          </div>
-          {% endif %}
-
-          {% if listing.secure_compound %}
-          <div class="amenity-item">
-            <i class="fa fa-lock" aria-hidden="true"></i>
-            <span>Secure Compound</span>
-          </div>
-          {% endif %}
-
-          {% if listing.alarm_system %}
-          <div class="amenity-item">
-            <i class="fa fa-bell" aria-hidden="true"></i>
-            <span>Alarm System</span>
-          </div>
-          {% endif %}
+          {% if listing.cctv %}<div class="amenity-item"><i class="fa fa-video" aria-hidden="true"></i><span>CCTV</span></div>{% endif %}
+          {% if listing.security_guards %}<div class="amenity-item"><i class="fa fa-user-shield" aria-hidden="true"></i><span>Security Guards</span></div>{% endif %}
+          {% if listing.electric_fence %}<div class="amenity-item"><i class="fa fa-bolt" aria-hidden="true"></i><span>Electric Fence</span></div>{% endif %}
+          {% if listing.secure_compound %}<div class="amenity-item"><i class="fa fa-lock" aria-hidden="true"></i><span>Secure Compound</span></div>{% endif %}
+          {% if listing.alarm_system %}<div class="amenity-item"><i class="fa fa-bell" aria-hidden="true"></i><span>Alarm System</span></div>{% endif %}
         </div>
         {% endif %}
 
-        <!-- Utilities -->
         {% if listing.generator or listing.solar_panels or listing.water_tank or listing.borehole or listing.backup_water or listing.internet_fiber %}
         <h4 style="font-size: 1rem; font-weight: 600; margin: 15px 0 10px; color: #555;">Utilities</h4>
         <div class="amenities-grid">
-          {% if listing.generator %}
-          <div class="amenity-item">
-            <i class="fa fa-bolt" aria-hidden="true"></i>
-            <span>Generator</span>
-          </div>
-          {% endif %}
-
-          {% if listing.solar_panels %}
-          <div class="amenity-item">
-            <i class="fa fa-solar-panel" aria-hidden="true"></i>
-            <span>Solar Panels</span>
-          </div>
-          {% endif %}
-
-          {% if listing.water_tank %}
-          <div class="amenity-item">
-            <i class="fa fa-water" aria-hidden="true"></i>
-            <span>Water Tank</span>
-          </div>
-          {% endif %}
-
-          {% if listing.borehole %}
-          <div class="amenity-item">
-            <i class="fa fa-tint" aria-hidden="true"></i>
-            <span>Borehole</span>
-          </div>
-          {% endif %}
-
-          {% if listing.backup_water %}
-          <div class="amenity-item">
-            <i class="fa fa-tint" aria-hidden="true"></i>
-            <span>Backup Water</span>
-          </div>
-          {% endif %}
-
-          {% if listing.internet_fiber %}
-          <div class="amenity-item">
-            <i class="fa fa-globe" aria-hidden="true"></i>
-            <span>Fiber Internet</span>
-          </div>
-          {% endif %}
+          {% if listing.generator %}<div class="amenity-item"><i class="fa fa-bolt" aria-hidden="true"></i><span>Generator</span></div>{% endif %}
+          {% if listing.solar_panels %}<div class="amenity-item"><i class="fa fa-solar-panel" aria-hidden="true"></i><span>Solar Panels</span></div>{% endif %}
+          {% if listing.water_tank %}<div class="amenity-item"><i class="fa fa-water" aria-hidden="true"></i><span>Water Tank</span></div>{% endif %}
+          {% if listing.borehole %}<div class="amenity-item"><i class="fa fa-tint" aria-hidden="true"></i><span>Borehole</span></div>{% endif %}
+          {% if listing.backup_water %}<div class="amenity-item"><i class="fa fa-tint" aria-hidden="true"></i><span>Backup Water</span></div>{% endif %}
+          {% if listing.internet_fiber %}<div class="amenity-item"><i class="fa fa-globe" aria-hidden="true"></i><span>Fiber Internet</span></div>{% endif %}
         </div>
         {% endif %}
 
-        <!-- Building Amenities -->
         {% if listing.elevator or listing.wheelchair_accessible or listing.reception or listing.lobby or listing.concierge or listing.laundry_room or listing.play_area or listing.pet_friendly %}
         <h4 style="font-size: 1rem; font-weight: 600; margin: 15px 0 10px; color: #555;">Building Amenities</h4>
         <div class="amenities-grid">
-          {% if listing.elevator %}
-          <div class="amenity-item">
-            <i class="fa fa-arrow-up" aria-hidden="true"></i>
-            <span>Elevator</span>
-          </div>
-          {% endif %}
-
-          {% if listing.wheelchair_accessible %}
-          <div class="amenity-item">
-            <i class="fa fa-wheelchair" aria-hidden="true"></i>
-            <span>Wheelchair Accessible</span>
-          </div>
-          {% endif %}
-
-          {% if listing.reception %}
-          <div class="amenity-item">
-            <i class="fa fa-desk" aria-hidden="true"></i>
-            <span>Reception</span>
-          </div>
-          {% endif %}
-
-          {% if listing.lobby %}
-          <div class="amenity-item">
-            <i class="fa fa-couch" aria-hidden="true"></i>
-            <span>Lobby</span>
-          </div>
-          {% endif %}
-
-          {% if listing.concierge %}
-          <div class="amenity-item">
-            <i class="fa fa-bell-concierge" aria-hidden="true"></i>
-            <span>Concierge</span>
-          </div>
-          {% endif %}
-
-          {% if listing.laundry_room %}
-          <div class="amenity-item">
-            <i class="fa fa-washer" aria-hidden="true"></i>
-            <span>Laundry Room</span>
-          </div>
-          {% endif %}
-
-          {% if listing.play_area %}
-          <div class="amenity-item">
-            <i class="fa fa-child" aria-hidden="true"></i>
-            <span>Children's Play Area</span>
-          </div>
-          {% endif %}
-
-          {% if listing.pet_friendly %}
-          <div class="amenity-item">
-            <i class="fa fa-paw" aria-hidden="true"></i>
-            <span>Pet Friendly</span>
-          </div>
-          {% endif %}
+          {% if listing.elevator %}<div class="amenity-item"><i class="fa fa-arrow-up" aria-hidden="true"></i><span>Elevator</span></div>{% endif %}
+          {% if listing.wheelchair_accessible %}<div class="amenity-item"><i class="fa fa-wheelchair" aria-hidden="true"></i><span>Wheelchair Accessible</span></div>{% endif %}
+          {% if listing.reception %}<div class="amenity-item"><i class="fa fa-desk" aria-hidden="true"></i><span>Reception</span></div>{% endif %}
+          {% if listing.lobby %}<div class="amenity-item"><i class="fa fa-couch" aria-hidden="true"></i><span>Lobby</span></div>{% endif %}
+          {% if listing.concierge %}<div class="amenity-item"><i class="fa fa-bell-concierge" aria-hidden="true"></i><span>Concierge</span></div>{% endif %}
+          {% if listing.laundry_room %}<div class="amenity-item"><i class="fa fa-washer" aria-hidden="true"></i><span>Laundry Room</span></div>{% endif %}
+          {% if listing.play_area %}<div class="amenity-item"><i class="fa fa-child" aria-hidden="true"></i><span>Children's Play Area</span></div>{% endif %}
+          {% if listing.pet_friendly %}<div class="amenity-item"><i class="fa fa-paw" aria-hidden="true"></i><span>Pet Friendly</span></div>{% endif %}
         </div>
         {% endif %}
 
-        <!-- Staff -->
         {% if listing.house_staff or listing.askari or listing.caretaker %}
         <h4 style="font-size: 1rem; font-weight: 600; margin: 15px 0 10px; color: #555;">Staff Included</h4>
         <div class="amenities-grid">
-          {% if listing.house_staff %}
-          <div class="amenity-item">
-            <i class="fa fa-broom" aria-hidden="true"></i>
-            <span>House Staff</span>
-          </div>
-          {% endif %}
-
-          {% if listing.askari %}
-          <div class="amenity-item">
-            <i class="fa fa-shield" aria-hidden="true"></i>
-            <span>Askari (Guard)</span>
-          </div>
-          {% endif %}
-
-          {% if listing.caretaker %}
-          <div class="amenity-item">
-            <i class="fa fa-tools" aria-hidden="true"></i>
-            <span>Caretaker</span>
-          </div>
-          {% endif %}
+          {% if listing.house_staff %}<div class="amenity-item"><i class="fa fa-broom" aria-hidden="true"></i><span>House Staff</span></div>{% endif %}
+          {% if listing.askari %}<div class="amenity-item"><i class="fa fa-shield" aria-hidden="true"></i><span>Askari (Guard)</span></div>{% endif %}
+          {% if listing.caretaker %}<div class="amenity-item"><i class="fa fa-tools" aria-hidden="true"></i><span>Caretaker</span></div>{% endif %}
         </div>
         {% endif %}
 
-        <!-- Virtual Tour -->
         {% if listing.virtual_tour_url or listing.youtube_video_id %}
         <h3 class="section-title" style="font-size: 1.2rem; margin-top: 20px;">Virtual Tour</h3>
         <div style="margin-top: 15px;">
@@ -1344,7 +381,6 @@ body {
             <i class="fa fa-vr-cardboard" aria-hidden="true"></i> View 3D Tour
           </a>
           {% endif %}
-
           {% if listing.youtube_video_id %}
           <a href="https://www.youtube.com/watch?v={{ listing.youtube_video_id }}" target="_blank" class="btn" style="background: #ff0000; color: white; display: inline-flex; width: auto; padding: 10px 20px;">
             <i class="fa fa-youtube" aria-hidden="true"></i> Watch Video
@@ -1353,37 +389,13 @@ body {
         </div>
         {% endif %}
 
-        <!-- Additional Features -->
         {% if listing.servant_quarters or listing.store_rooms or listing.title_deed or listing.loan_available %}
         <h3 class="section-title" style="font-size: 1.2rem; margin-top: 20px;">Additional Features</h3>
         <div class="amenities-grid">
-          {% if listing.servant_quarters %}
-          <div class="amenity-item">
-            <i class="fa fa-home" aria-hidden="true"></i>
-            <span>Servant Quarters</span>
-          </div>
-          {% endif %}
-
-          {% if listing.store_rooms %}
-          <div class="amenity-item">
-            <i class="fa fa-archive" aria-hidden="true"></i>
-            <span>Store Rooms</span>
-          </div>
-          {% endif %}
-
-          {% if listing.title_deed %}
-          <div class="amenity-item">
-            <i class="fa fa-file-contract" aria-hidden="true"></i>
-            <span>Title Deed Available</span>
-          </div>
-          {% endif %}
-
-          {% if listing.loan_available %}
-          <div class="amenity-item">
-            <i class="fa fa-hand-holding-usd" aria-hidden="true"></i>
-            <span>Financing Available</span>
-          </div>
-          {% endif %}
+          {% if listing.servant_quarters %}<div class="amenity-item"><i class="fa fa-home" aria-hidden="true"></i><span>Servant Quarters</span></div>{% endif %}
+          {% if listing.store_rooms %}<div class="amenity-item"><i class="fa fa-archive" aria-hidden="true"></i><span>Store Rooms</span></div>{% endif %}
+          {% if listing.title_deed %}<div class="amenity-item"><i class="fa fa-file-contract" aria-hidden="true"></i><span>Title Deed Available</span></div>{% endif %}
+          {% if listing.loan_available %}<div class="amenity-item"><i class="fa fa-hand-holding-usd" aria-hidden="true"></i><span>Financing Available</span></div>{% endif %}
         </div>
         {% endif %}
 
@@ -1399,16 +411,13 @@ body {
           </div>
         </div>
       </div>
-
     </div>
 
     <!-- Right Column - Booking & Host Info -->
     <div class="right-column">
-
       <!-- Booking Card -->
       <div class="booking-card" style="border: 1px solid #e0e0e0; border-radius: 20px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); position: sticky; top: 20px;">
 
-        <!-- Price -->
         <div class="price-section" style="margin-bottom: 25px;">
           <div class="price-amount">
             {% if listing.transaction_type == 'shortlet' and listing.price_per_night %}
@@ -1422,12 +431,9 @@ body {
             {% endif %}
           </div>
           <div class="price-period">
-            {% if listing.transaction_type == 'shortlet' %}
-              per night
-            {% elif listing.transaction_type == 'rent' %}
-              per month
-            {% elif listing.transaction_type == 'sale' %}
-              total price
+            {% if listing.transaction_type == 'shortlet' %} per night
+            {% elif listing.transaction_type == 'rent' %} per month
+            {% elif listing.transaction_type == 'sale' %} total price
             {% endif %}
           </div>
 
@@ -1453,59 +459,58 @@ body {
           {% endif %}
         </div>
 
-        <!-- Quick Booking Form -->
         <div class="booking-form" style="margin-bottom: 25px;">
           <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #222;">Book this property</h3>
 
-
-  <button type="button" class="share-btn"
-        data-url="{% url 'listing_detail' listing.slug %}"
-        data-title="{{ listing.title }}"
-        data-image="{% if listing.main_image %}{{ listing.main_image.url }}{% endif %}"
-        data-description="{{ listing.get_property_type_display }} in {{ listing.get_location_display }} — {{ listing.specific_location }}"
-        aria-label="Share this listing"
-        ...>
-  <i class="fa fa-share-alt" aria-hidden="true" style="color: #555;"></i>
-</button>
-
+          <button type="button" class="share-btn"
+                  data-url="{% url 'listing_detail' listing.slug %}"
+                  data-title="{{ listing.title }}"
+                  data-image="{% if listing.main_image %}{{ listing.main_image.url }}{% endif %}"
+                  data-description="{{ listing.get_property_type_display }} in {{ listing.get_location_display }} — {{ listing.specific_location }}"
+                  aria-label="Share this listing"
+                  style="
+                      width: 44px;
+                      height: 44px;
+                      border-radius: 50%;
+                      background: rgba(255, 255, 255, 0.2);
+                      backdrop-filter: blur(8px);
+                      border: 1px solid rgba(255, 255, 255, 0.3);
+                      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                      color: #333;
+                      font-size: 1.2rem;
+                      display: inline-flex;
+                      align-items: center;
+                      justify-content: center;
+                      transition: all 0.3s ease;
+                      cursor: pointer;
+                      flex-shrink: 0;
+                      padding: 0;
+                      margin-bottom: 15px;
+                  "
+                  onmouseover="this.style.background='rgba(255,255,255,0.35)'; this.style.transform='translateY(-2px)';"
+                  onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
+            <i class="fa fa-share-alt" aria-hidden="true" style="color: #555;"></i>
+          </button>
 
           <!-- Book Now Button -->
-          <a href="{% url 'booking_form' listing.id %}"
-             class="btn btn-primary"
-             style="background-color: #D32F2F; color: white; padding: 15px; text-decoration: none; border-radius: 10px; display: block; text-align: center; font-weight: 600; font-size: 1.1rem; margin-bottom: 15px; transition: all 0.3s ease;">
+          <a href="{% url 'booking_form' listing.id %}" class="btn btn-primary" style="background-color: #D32F2F; color: white; padding: 15px; text-decoration: none; border-radius: 10px; display: block; text-align: center; font-weight: 600; font-size: 1.1rem; margin-bottom: 15px; transition: all 0.3s ease;">
             <i class="fa fa-calendar" aria-hidden="true"></i> Book Now
           </a>
 
           <!-- WhatsApp Booking Button -->
-          <a href="{{ listing.admin_whatsapp_link }}"
-             target="_blank"
-             class="btn btn-whatsapp"
-             style="background-color: #25D366; color: white; padding: 15px; text-decoration: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; margin-bottom: 10px;">
+          <a href="{{ listing.admin_whatsapp_link }}" target="_blank" class="btn btn-whatsapp" style="background-color: #25D366; color: white; padding: 15px; text-decoration: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; margin-bottom: 10px;">
             <i class="fab fa-whatsapp" aria-hidden="true"></i> Chat via WhatsApp
           </a>
         </div>
 
-         <!-- Contact Seller -->
         <div class="seller-contact-section" style="border-top: 1px solid #e0e0e0; padding-top: 20px;">
-
-           <!-- Phone Button -->
-                  <a href="tel:{{ listing.admin_contact }}"
-                     style="background-color: #007bff; color: white; padding: 10px 16px; text-decoration: none; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; min-width: 44px; flex-shrink: 0;"
-                     onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='translateY(-2px)';"
-                     onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='translateY(0)';">
-                    <i class="fa fa-phone" aria-hidden="true"></i>
-                    <span style="display: none;">Call </span>
-                  </a>
-
-
-
+          <a href="tel:{{ listing.admin_contact }}" style="background-color: #007bff; color: white; padding: 10px 16px; text-decoration: none; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; min-width: 44px; flex-shrink: 0;" onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='translateY(-2px)';" onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='translateY(0)';">
+            <i class="fa fa-phone" aria-hidden="true"></i><span style="display: none;">Call </span>
+          </a>
           <div class="secure-inquiry" style="color: #666; font-size: 0.9rem; text-align: center; padding: 12px; background: #f8f9fa; border-radius: 8px; margin-top: 15px;">
-            <i class="fa fa-shield-alt" aria-hidden="true"></i>
-            Secure inquiry with quick response
+            <i class="fa fa-shield-alt" aria-hidden="true"></i> Secure inquiry with quick response
           </div>
         </div>
-
-
       </div>
 
       <!-- Map Section -->
@@ -1513,18 +518,10 @@ body {
       <div class="map-section" style="margin-top: 30px; border: 1px solid #e0e0e0; border-radius: 15px; padding: 20px;">
         <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #222;">Location</h3>
         <div style="height: 200px; background: #f8f9fa; border-radius: 10px; position: relative; overflow: hidden;">
-          <iframe
-            width="100%"
-            height="100%"
-            frameborder="0"
-            style="border:0"
-            src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q={{ listing.latitude }},{{ listing.longitude }}"
-            allowfullscreen>
-          </iframe>
+          <iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q={{ listing.latitude }},{{ listing.longitude }}" allowfullscreen></iframe>
         </div>
         <div style="color: #666; font-size: 0.9rem; margin-top: 10px;">
-          <i class="fa fa-info-circle" aria-hidden="true"></i>
-          Exact address pin location
+          <i class="fa fa-info-circle" aria-hidden="true"></i> Exact address pin location
         </div>
       </div>
       {% else %}
@@ -1538,8 +535,7 @@ body {
           </div>
         </div>
         <div style="color: #666; font-size: 0.9rem;">
-          <i class="fa fa-info-circle" aria-hidden="true"></i>
-          Exact address pin location
+          <i class="fa fa-info-circle" aria-hidden="true"></i> Exact address pin location
         </div>
       </div>
       {% endif %}
@@ -1561,7 +557,6 @@ body {
   <!-- Reviews Section (Placeholder) -->
   <div class="reviews-section" style="margin-top: 50px; padding-top: 30px; border-top: 1px solid #e0e0e0;">
     <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 20px; color: #222;"> Reviews</h2>
-
     <div class="reviews-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
       <!-- Sample Review -->
       <div class="review-card" style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
@@ -1571,23 +566,14 @@ body {
           </div>
           <div>
             <div style="font-weight: 600;">BnB</div>
-
           </div>
         </div>
         <div class="review-stars" style="color: #ffc107; margin-bottom: 10px;">
-          <i class="fa fa-star" aria-hidden="true"></i>
-          <i class="fa fa-star" aria-hidden="true"></i>
-          <i class="fa fa-star" aria-hidden="true"></i>
-          <i class="fa fa-star" aria-hidden="true"></i>
-          <i class="fa fa-star" aria-hidden="true"></i>
+          <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
         </div>
         <p style="color: #555; line-height: 1.5;">"Excellent stay! The property was exactly as described and the host was very responsive."</p>
       </div>
-
-      <!-- Add more reviews as needed -->
     </div>
-
-
   </div>
 
   {% else %}
@@ -1600,16 +586,13 @@ body {
     <p class="not-found-message" style="color: #666; margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;">
       The property you're looking for is no longer available or may have been removed.
     </p>
-    <a href="{% url 'home' %}"
-       class="btn-primary"
-       style="background-color: #FF0000; color: white; padding: 12px 30px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: 600;">
+    <a href="{% url 'home' %}" class="btn-primary" style="background-color: #FF0000; color: white; padding: 12px 30px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: 600;">
       Browse Available Properties
     </a>
   </div>
   {% endif %}
 
 </div>
-
 
 <script>
 // Image gallery functionality
@@ -1618,13 +601,9 @@ function changeMainImage(imageUrl, element) {
   if (mainImage) {
     mainImage.src = imageUrl;
   }
-
-  // Remove active class from all thumbnails
   document.querySelectorAll('.thumbnail-item').forEach(item => {
     item.style.borderColor = 'transparent';
   });
-
-  // Add active class to clicked thumbnail
   if (element) {
     element.style.borderColor = '#FF0000';
   }
@@ -1636,13 +615,9 @@ document.addEventListener('DOMContentLoaded', function() {
   if (firstThumbnail) {
     firstThumbnail.style.borderColor = '#FF0000';
   }
-
-  // Make main image clickable for modal view
   const mainImage = document.getElementById('mainImage');
   if (mainImage) {
     mainImage.addEventListener('click', function() {
-      // Open modal or lightbox here
-      // You can integrate a lightbox library like ekko-lightbox
       console.log('Open image modal');
     });
   }
@@ -1650,56 +625,22 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
-/* Responsive Design */
 @media (max-width: 1024px) {
-  .listing-detail-grid {
-    grid-template-columns: 1fr !important;
-    gap: 20px;
-  }
-
-  .booking-card {
-    position: static !important;
-  }
-
-  .main-image-container img {
-    height: 400px !important;
-  }
+  .listing-detail-grid { grid-template-columns: 1fr !important; gap: 20px; }
+  .booking-card { position: static !important; }
+  .main-image-container img { height: 400px !important; }
 }
-
 @media (max-width: 768px) {
-  .listing-detail-container {
-    padding: 15px;
-  }
-
-  .main-image-container img {
-    height: 300px !important;
-  }
-
-  .property-details-section > div:first-child {
-    grid-template-columns: 1fr !important;
-  }
-
-  .amenities-section > div {
-    grid-template-columns: 1fr !important;
-  }
-
-  h1 {
-    font-size: 1.5rem !important;
-  }
+  .listing-detail-container { padding: 15px; }
+  .main-image-container img { height: 300px !important; }
+  .property-details-section > div:first-child { grid-template-columns: 1fr !important; }
+  .amenities-section > div { grid-template-columns: 1fr !important; }
+  h1 { font-size: 1.5rem !important; }
 }
-
 @media (max-width: 480px) {
-  .main-image-container img {
-    height: 250px !important;
-  }
-
-  .thumbnail-container {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-
-  .thumbnail-item {
-    height: 80px !important;
-  }
+  .main-image-container img { height: 250px !important; }
+  .thumbnail-container { grid-template-columns: repeat(2, 1fr) !important; }
+  .thumbnail-item { height: 80px !important; }
 }
 </style>
 
@@ -1711,10 +652,8 @@ document.addEventListener('DOMContentLoaded', function() {
   <script src="{% static 'js/ekko-lightbox.min.js' %}"></script>
   <script src="{% static 'js/custom.js' %}"></script>
 
-  <!-- Initialize Lightbox -->
   <script>
   $(document).ready(function() {
-    // Initialize ekko-lightbox for gallery
     $(document).on('click', '[data-toggle="lightbox"]', function(event) {
       event.preventDefault();
       $(this).ekkoLightbox();
@@ -1722,18 +661,18 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   </script>
 
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Function to share or copy URL
-    function shareListing(url, title) {
+    function shareListing(url, title, image, description) {
         const fullUrl = window.location.origin + url;
+
         if (navigator.share) {
             navigator.share({
                 title: title,
-                text: 'Check out this unit on Bnb.co.ke: ' + title,
+                text: description || ('Check out this unit on Bnb.co.ke: ' + title),
                 url: fullUrl,
             }).catch(err => {
+                if (err.name === 'AbortError') return;
                 console.log('Share failed:', err);
                 copyToClipboard(fullUrl, title);
             });
@@ -1742,7 +681,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Fallback: copy to clipboard with notification
     function copyToClipboard(text, title) {
         navigator.clipboard.writeText(text).then(() => {
             showNotification('Copied link to clipboard: ' + title);
@@ -1752,7 +690,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Show temporary notification
     function showNotification(message) {
         const notification = document.createElement('div');
         notification.textContent = message;
@@ -1775,14 +712,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 2000);
     }
 
-    // Attach click handlers to all share buttons
     document.querySelectorAll('.share-btn, .hero-btn-share').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const url = this.getAttribute('data-url');
             const title = this.getAttribute('data-title');
+            const image = this.getAttribute('data-image');
+            const description = this.getAttribute('data-description');
+
             if (url && title) {
-                shareListing(url, title);
+                shareListing(url, title, image, description);
             } else {
                 console.warn('Missing data-url or data-title on share button');
             }

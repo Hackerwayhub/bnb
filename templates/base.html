@@ -34,14 +34,15 @@
   <!-- Canonical URL -->
   <link rel="canonical" href="https://bnb.co.ke{% if current_location_slug %}/rentals-in-{{ current_location_slug }}/{% else %}/{% endif %}" />
 
-  <!-- Open Graph / Social Media Meta Tags -->
+    <!-- Open Graph / Social Media Meta Tags -->
+  {% block og_tags %}
   <meta property="og:title" content="{{ title|default:'bnb.co.ke - Verified bnbs, staycations & holiday homes in Kenya' }}" />
   <meta property="og:description" content="{{ meta_description|default:'Find verified bnbs, staycations and holiday homes across Kenya. Browse photos, amenities and book direct with verified hosts.' }}" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://bnb.co.ke{% if current_location_slug %}/rentals-in-{{ current_location_slug }}/{% else %}/{% endif %}" />
   <meta property="og:image" content="https://bnb.co.ke{% static 'images/open.jpg' %}" />
   <meta property="og:site_name" content="bnb.co.ke" />
-
+  {% endblock %}
   <!-- Favicon files -->
   <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">

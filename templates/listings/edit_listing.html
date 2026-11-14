@@ -1600,8 +1600,30 @@ body {
             let firstInvalid = null;
 
             requiredFields.forEach(function (field) {
+                // Skip hidden fields (like CSRF tokens or hidden form_type)
+                if (field.type === 'hidden') return;
                 if (field.offsetParent === null) return;
-                if (!field.value || !field.value.trim()) {
+
+                // ---- SPECIAL CASE: Main Image ----
+                // If the field is the main image, we only check if it has a file OR if the tile has an existing image
+                if (field.id === 'id_main_image') {
+                    const hasNewFile = field.files && field.files.length > 0;
+                    const tile = field.closest('[data-photo-tile]');
+                    const hasExisting = tile && tile.classList.contains('has-file');
+
+                    if (!hasNewFile && !hasExisting) {
+                        valid = false;
+                        field.classList.add('field-error');
+                        if (!firstInvalid) firstInvalid = field;
+                    } else {
+                        field.classList.remove('field-error');
+                    }
+                    return; // Skip the generic text validation for this file input
+                }
+
+                // ---- STANDARD VALIDATION ----
+                const value = (field.value || '').trim();
+                if (!value) {
                     valid = false;
                     field.classList.add('field-error');
                     if (!firstInvalid) firstInvalid = field;
@@ -1671,7 +1693,7 @@ body {
         syncTypeCards();
 
         // ============================================
-        // PHOTO PREVIEWS
+        // PHOTO PREVIEWS & DELETION
         // ============================================
         document.querySelectorAll('[data-photo-tile]').forEach(function (tile) {
             const input = tile.querySelector('input[type="file"]');
@@ -1682,6 +1704,7 @@ body {
 
             if (!input || !previewImg) return;
 
+            // Handle New File Selection
             input.addEventListener('change', function () {
                 const file = this.files && this.files[0];
                 if (!file) return;
@@ -1696,6 +1719,7 @@ body {
                             : file.name;
                         nameEl.textContent = name;
                     }
+
                     // Remove the "Current" badge if it exists
                     const existingBadge = preview.querySelector('.edit-photo-existing-badge');
                     if (existingBadge) existingBadge.remove();
@@ -1710,13 +1734,7 @@ body {
                         btn.setAttribute('aria-label', 'Remove');
                         btn.textContent = '✕';
                         btn.addEventListener('click', function (ev) {
-                            ev.preventDefault();
-                            ev.stopPropagation();
-                            input.value = '';
-                            tile.classList.remove('has-file');
-                            previewImg.src = '';
-                            if (nameEl) nameEl.textContent = '';
-                            btn.remove();
+                            handleRemove(ev, btn);
                         });
                         preview.appendChild(btn);
                     }
@@ -1724,24 +1742,38 @@ body {
                 reader.readAsDataURL(file);
             });
 
+            // Handle Remove Button Click
             if (removeBtn) {
                 removeBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    input.value = '';
-                    previewImg.src = '';
-                    if (nameEl) nameEl.textContent = '';
-                    tile.classList.remove('has-file');
-                    removeBtn.remove();
-
-                    // If this was an existing image, mark for deletion
-                    const existingBadge = preview.querySelector('.edit-photo-existing-badge');
-                    if (existingBadge) {
-                        existingBadge.remove();
-                        // Re-add a subtle remove-button state
-                        // (user can still upload a new file)
-                    }
+                    handleRemove(e, removeBtn);
                 });
+            }
+
+            function handleRemove(e, btn) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // If it has an existing image, add the hidden delete flag
+                const existingBadge = preview.querySelector('.edit-photo-existing-badge');
+                const fieldName = input.name;
+
+                if (fieldName) {
+                    // Create hidden input to tell Django to delete this specific image
+                    const deleteInput = document.createElement('input');
+                    deleteInput.type = 'hidden';
+                    deleteInput.name = 'delete_' + fieldName;
+                    deleteInput.value = 'true';
+                    form.appendChild(deleteInput);
+                }
+
+                // Clear the UI
+                input.value = '';
+                previewImg.src = '';
+                if (nameEl) nameEl.textContent = '';
+                tile.classList.remove('has-file');
+
+                if (btn) btn.remove();
+                if (existingBadge) existingBadge.remove();
             }
         });
 
@@ -1749,21 +1781,24 @@ body {
         // FORM SUBMIT
         // ============================================
         form.addEventListener('submit', function (e) {
+            // Validate all steps
             for (let i = 0; i < totalSteps; i++) {
                 if (!validateStep(i)) {
                     e.preventDefault();
                     showStep(i);
-                    alert('Please fix the errors before submitting.');
+                    alert('Please fix the errors on Step ' + (i + 1) + ' before submitting.');
                     return;
                 }
             }
+
+            // If valid, show loading state
             const overlay = document.getElementById('loadingOverlay');
             if (overlay) overlay.classList.add('active');
             btnSubmit.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
             btnSubmit.disabled = true;
         });
 
-        // Inline validation
+        // Inline validation (Remove red error borders on typing)
         form.querySelectorAll('input, select, textarea').forEach(function (input) {
             input.addEventListener('blur', function () {
                 if (!this.hasAttribute('required')) return;
@@ -1778,6 +1813,7 @@ body {
             });
         });
 
+        // Initialize
         showStep(0);
     });
 })();

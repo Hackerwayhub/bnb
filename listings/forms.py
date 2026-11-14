@@ -210,11 +210,28 @@ class ListingSubmissionForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         # Mark required fields
+        # Mark required fields
         required_fields = [
             'title', 'property_type', 'transaction_type', 'location', 'specific_location',
             'host_phone', 'host_whatsapp', 'guests', 'bedrooms', 'beds', 'bathrooms', 'price',
-            'main_image'
         ]
+
+        # Add main_image to required only if creating a NEW listing (no instance exists yet)
+        if not self.instance or not self.instance.pk:
+            required_fields.append('main_image')
+
+        for field_name in required_fields:
+            if field_name in self.fields:
+                self.fields[field_name].required = True
+                if not self.fields[field_name].label:
+                    self.fields[field_name].label = field_name.replace('_', ' ').title()
+                self.fields[field_name].widget.attrs['required'] = True
+
+        # If we are editing (instance has a pk) and the listing already has a main image, remove the 'required' attribute
+        if self.instance and self.instance.pk and self.instance.main_image:
+            self.fields['main_image'].required = False
+            if 'required' in self.fields['main_image'].widget.attrs:
+                del self.fields['main_image'].widget.attrs['required']
 
         for field_name in required_fields:
             if field_name in self.fields:

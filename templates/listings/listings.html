@@ -647,21 +647,15 @@ body.is-scrolled .filters-container {
   margin: 9px 9px 24px 9px;   /* was: margin: 9px; */
   border-radius: 18px;
 }
-    /* ============================================
-   HERO DELIVERY — LUXURY EDITORIAL
+/* ============================================
+   HERO DELIVERY — LUXURY EDITORIAL (NO BACKGROUND)
    ============================================ */
 .hero-delivery {
   display: inline-flex;
   align-items: center;
   gap: 16px;
-  background: rgba(15, 27, 45, 0.45);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 14px 28px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   margin-bottom: 24px;
+  padding: 0 4px;
 
   /* Entrance Animation */
   opacity: 0;
@@ -677,12 +671,16 @@ body.is-scrolled .filters-container {
 }
 
 .hero-delivery-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--safari-gold); /* or #D4A017 */
+  color: #FDE68A; /* Gold */
   font-size: 18px;
-  text-shadow: 0 0 15px rgba(212, 160, 23, 0.5);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); /* Shadow for readability */
+}
+
+.hero-delivery-divider {
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(253, 230, 138, 0.8), transparent);
+  flex-shrink: 0;
 }
 
 .hero-delivery-text {
@@ -690,31 +688,34 @@ body.is-scrolled .filters-container {
   font-size: clamp(1.1rem, 1.8vw, 1.35rem);
   font-weight: 600;
   color: #ffffff;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
   line-height: 1.4;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+  /* The magic touch: a deep, soft shadow for elegant readability */
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .hero-accent {
   font-style: italic;
   font-weight: 800;
-  background: linear-gradient(120deg, #FDE68A 0%, #D4A017 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  padding-right: 2px;
+  color: #FDE68A;
+  /* Gold shadow instead of gradient background-clip, which looks cleaner on images */
+  text-shadow: 0 2px 12px rgba(212, 160, 23, 0.4), 0 4px 16px rgba(0, 0, 0, 0.6);
 }
 
 /* Mobile adjustments */
 @media (max-width: 640px) {
   .hero-delivery {
-    padding: 10px 20px;
-    border-radius: 20px;
+    align-items: flex-start;
     gap: 12px;
-    align-items: flex-start; /* Align icon to top if text wraps */
+    flex-wrap: wrap; /* Allows text to wrap nicely on tiny screens */
   }
   .hero-delivery-icon {
     font-size: 15px;
-    margin-top: 3px;
+    margin-top: 4px;
+  }
+  .hero-delivery-divider {
+    display: none; /* Hide the line on mobile to save space */
   }
   .hero-delivery-text {
     font-size: 1rem;
@@ -1235,14 +1236,12 @@ body.is-scrolled .filters-container {
           <div class="hero-content">
 
               <div class="hero-delivery">
-  <div class="hero-delivery-icon">
-    <i class="fa fa-gem"></i>
-  </div>
+  <i class="fa fa-gem hero-delivery-icon"></i>
+  <span class="hero-delivery-divider"></span>
   <div class="hero-delivery-text">
     BnB, staycations, holiday homes, <span class="hero-accent">safari & travel</span> experiences in Kenya.
   </div>
 </div>
-
 
           </div>
         </div>

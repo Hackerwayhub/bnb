@@ -13,7 +13,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import default_token_generator
 from django.utils import timezone
-
+import logging
+logger = logging.getLogger(__name__)
 from .forms import (
     UserRegisterForm, UserLoginForm, UserUpdateForm,
     ProfileUpdateForm, PasswordResetForm, PasswordResetConfirmForm
@@ -21,86 +22,131 @@ from .forms import (
 from .models import UserProfile
 from listings.models import Listing, Booking
 
-
 def register(request):
-    """User registration view"""
+    """
+    User registration view with welcome email.
+    Handles form validation, user creation, auto-login, and welcome email dispatch.
+    """
+    # Redirect authenticated users
     if request.user.is_authenticated:
         return redirect('profile')
 
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
+
         if form.is_valid():
+            # ============================================================
+            # 1. Create the user
+            # ============================================================
             user = form.save()
             username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
 
-            # Log the user in
+            # ============================================================
+            # 2. Log the user in
+            # ============================================================
             login(request, user)
 
+            # Success message
             messages.success(
                 request,
                 f'🎉 Account created successfully! Welcome {username}.'
             )
 
-            # Send welcome email with HTML template
+            # ============================================================
+            # 3. Send welcome email (HTML + plain text)
+            # ============================================================
             try:
-                subject = 'Welcome to BnB Ke!'
-
-                # Create welcome email context
+                # Build context for the email template
                 welcome_context = {
                     'user': user,
                     'username': username,
-                    'site_name': 'BnB.co.ke',
+                    'site_name': 'bnb.co.ke',
                     'login_url': request.build_absolute_uri(reverse('login')),
                     'profile_url': request.build_absolute_uri(reverse('profile')),
                     'listings_url': request.build_absolute_uri(reverse('advertise_bnb')),
+                    'support_phone': '+254798246467',
                 }
 
-                # Render HTML email
-                html_message = render_to_string('auth/welcome_email.html', welcome_context)
+                # HTML version (rich)
+                html_message = render_to_string(
+                    'auth/welcome_email.html',
+                    welcome_context,
+                )
 
-                # Plain text version
-                plain_message = f"""Welcome to  BnB.co.ke, {username}!
+                # Plain-text fallback (for clients without HTML support)
+                plain_message = (
+                    f"Welcome to bnb.co.ke, {username}!\n\n"
+                    f"Thanks for joining. You can now:\n"
+                    f"• Create and manage property listings\n"
+                    f"• Book verified BnB stays and staycations\n"
+                    f"• Manage your profile and bookings\n\n"
+                    f"Create your first listing: {welcome_context['listings_url']}\n"
+                    f"Visit your profile: {welcome_context['profile_url']}\n\n"
+                    f"Questions? Call us on {welcome_context['support_phone']}.\n\n"
+                    f"— The bnb.co.ke team"
+                )
 
-Thank you for registering with  BnB.co.ke . You can now:
+                subject = f'Welcome to bnb.co.ke, {username}! 🎉'
 
-• Create and manage property listings
-• Book properties for your staycations
-• Manage your profile and bookings
-• Connect with other hosts and guests
+                # Send to user + optional admin BCC list
+                admin_recipients = getattr(settings, 'WELCOME_BCC_EMAILS', [])
+                recipients = [email] + list(admin_recipients)
 
-Get started by creating your first listing: {welcome_context['listings_url']}
-
-If you have any questions, feel free to contact our support team.
-
-Best regards,
-The  BnB.co.ke Team"""
+                # Deduplicate while preserving order
+                seen = set()
+                recipients = [
+                    e for e in recipients
+                    if e and not (e in seen or seen.add(e))
+                ]
 
                 send_mail(
                     subject=subject,
                     message=plain_message,
                     from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[email],
+                    recipient_list=recipients,
                     html_message=html_message,
-                    fail_silently=True,
+                    fail_silently=False,   # fail loudly so logs show errors
                 )
-            except Exception as e:
-                # Log the error but don't break registration
-                print(f"Welcome email failed: {e}")
 
-            # Redirect to profile or next parameter
+                logger.info(
+                    f"Welcome email sent for user {user.id} ({email}) "
+                    f"to: {recipients}"
+                )
+
+            except Exception as e:
+                # Log with full traceback for debugging
+                import traceback
+                traceback.print_exc()
+                logger.error(
+                    f"Welcome email failed for user {user.id} ({email}): {e}",
+                    exc_info=True,
+                )
+                # Don't block registration — user is already created
+                messages.warning(
+                    request,
+                    'Your account was created, but we could not send the welcome email. '
+                    'You can still use your account normally.'
+                )
+
+            # ============================================================
+            # 4. Redirect to next parameter or profile
+            # ============================================================
             next_url = request.GET.get('next', 'profile')
             return redirect(next_url)
+
     else:
         form = UserRegisterForm()
 
+    # ============================================================
+    # GET request or invalid form — re-render registration page
+    # ============================================================
     context = {
         'form': form,
         'title': 'Sign up / Login',
-        'page_title': 'Sign up / Login'
+        'page_title': 'Sign up / Login',
     }
     return render(request, 'auth/register.html', context)
-
 
 def login_view(request):
     """User login view"""

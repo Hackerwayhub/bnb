@@ -24,19 +24,17 @@ class Listing(models.Model):
     ]
 
     LOCATIONS = [
-        ('safaritravelexperiences', 'safari & travel experiences'),
+        ('safaritravelexperiences', 'safari'),
         ('kilimani', 'Kilimani'),
         ('westlands', 'Westlands'),
 
         ('kileleshwa', 'Kileleshwa'),
 
-        ('watamu', 'Watamu'),
-        ('diani', 'Diani'),
-        ('nyali', 'Nyali'),
-        ('mtwapa', 'Mtwapa'),
-        ('shanzu', 'Shanzu'),
+
         ('mombasa', 'Mombasa'),
         ('malindi', 'Malindi'),
+        ('watamu', 'Watamu'),
+        ('diani', 'Diani'),
         ('kilifi_town', 'Kilifi Town'),
 
         ('waiyaki_way', 'Waiyaki way'),
@@ -133,6 +131,9 @@ class Listing(models.Model):
         ('syokimau', 'Syokimau'),
         ('thogoto', 'Thogoto'),
         ('upper_hill', 'Upper Hill'),
+        ('nyali', 'Nyali'),
+        ('mtwapa', 'Mtwapa'),
+        ('shanzu', 'Shanzu'),
         ('uthiru', 'Uthiru'),
         ('athiriver', 'Athiriver'),
         ('kisumu', 'Kisumu'),
@@ -149,13 +150,6 @@ class Listing(models.Model):
         ('kakamega_town', 'Kakamega Town'),
         ('limuru', 'Limuru'),
 
-        ('nyahururu', 'Nyahururu'),
-        ('migori_town', 'Migori Town'),
-        ('kitui_town', 'Kitui Town'),
-        ('bungoma_town', 'Bungoma Town'),
-
-
-        ('kericho_town', 'Kericho Town'),
 
         ('dubai', 'Dubai'),
         ('usa', 'usa'),

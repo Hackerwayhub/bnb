@@ -572,7 +572,6 @@ def my_listings(request):
     }
     return render(request, 'listings/my_listings.html', context)
 
-
 @login_required
 def edit_listing(request, listing_id):
     """Edit existing listing - only accessible by listing owner"""
@@ -637,14 +636,25 @@ def edit_listing(request, listing_id):
     else:
         form = ListingSubmissionForm(instance=listing, user=request.user)
 
+    # ---- Build the image tile list for the edit template ----
+    image_fields = [
+        (form['image_2'], 'Photo 2'),
+        (form['image_3'], 'Photo 3'),
+        (form['image_4'], 'Photo 4'),
+        (form['image_5'], 'Photo 5'),
+        (form['image_6'], 'Photo 6'),
+        (form['image_7'], 'Photo 7'),
+        (form['image_8'], 'Photo 8'),
+    ]
+
     context = {
         'form': form,
         'listing': listing,
+        'image_fields': image_fields,   # ← NEW
         'title': f'Edit {listing.title} ~ BnB.co.ke',
-        'page_title': 'Edit Listing'
+        'page_title': 'Edit Listing',
     }
     return render(request, 'listings/edit_listing.html', context)
-
 
 @login_required
 def delete_listing(request, listing_id):

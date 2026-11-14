@@ -1458,13 +1458,17 @@ body {
           <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #222;">Book this property</h3>
 
 
-   <button type="button" class="share-btn"
+  <button type="button" class="share-btn"
         data-url="{% url 'listing_detail' listing.slug %}"
         data-title="{{ listing.title }}"
-        data-image="{{ share_image_url }}"
-        data-description="{{ share_description }}"
+        data-image="{% if listing.main_image %}{{ listing.main_image.url }}{% endif %}"
+        data-description="{{ listing.get_property_type_display }} in {{ listing.get_location_display }} — {{ listing.specific_location }}"
         aria-label="Share this listing"
         ...>
+  <i class="fa fa-share-alt" aria-hidden="true" style="color: #555;"></i>
+</button>
+
+
           <!-- Book Now Button -->
           <a href="{% url 'booking_form' listing.id %}"
              class="btn btn-primary"

@@ -1,5 +1,27 @@
 {% extends "base.html" %}
 {% load static %}
+
+{% block extra_head %}
+  {{ block.super }}
+
+  <meta name="description" content="{{ meta_description }}">
+  <link rel="canonical" href="{{ share_url }}">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="bnb.co.ke">
+  <meta property="og:title" content="{{ share_title }}">
+  <meta property="og:description" content="{{ share_description }}">
+  <meta property="og:url" content="{{ share_url }}">
+  <meta property="og:image" content="{{ share_image_url }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ share_title }}">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ share_title }}">
+  <meta name="twitter:description" content="{{ share_description }}">
+  <meta name="twitter:image" content="{{ share_image_url }}">
+{% endblock %}
 {% block content %}
 <style>
 /* Reset and Base Styles */
@@ -1436,33 +1458,13 @@ body {
           <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #222;">Book this property</h3>
 
 
-    <!-- Share Button - Glassmorphism Icon Only -->
-<button type="button" class="share-btn"
+   <button type="button" class="share-btn"
         data-url="{% url 'listing_detail' listing.slug %}"
         data-title="{{ listing.title }}"
+        data-image="{{ share_image_url }}"
+        data-description="{{ share_description }}"
         aria-label="Share this listing"
-        style="
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            color: #333;
-            font-size: 1.2rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            flex-shrink: 0;
-            padding: 0;
-        "
-        onmouseover="this.style.background='rgba(255,255,255,0.35)'; this.style.transform='translateY(-2px)';"
-        onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
-    <i class="fa fa-share-alt" aria-hidden="true" style="color: #555;"></i>
-</button>
+        ...>
           <!-- Book Now Button -->
           <a href="{% url 'booking_form' listing.id %}"
              class="btn btn-primary"

@@ -16,6 +16,8 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from .models import Listing, Booking
 import logging
+from django.urls import reverse
+from django.templatetags.static import static
 
 from decimal import Decimal
 import urllib.parse
@@ -666,25 +668,65 @@ def delete_listing(request, listing_id):
     }
     return render(request, 'listings/delete_listing.html', context)
 
-
 def listing_detail(request, slug):
     """
-    Display individual listing detail page
+    Display individual listing detail page.
+    Includes OG/SEO context so shared links render a rich preview.
     """
     listing = get_object_or_404(Listing, slug=slug, is_approved=True)
 
-    # Check if user is the owner
     is_owner = request.user.is_authenticated and listing.user == request.user
+
+    # ---- Build the share preview image URL ----
+    # Priority: main_image → first image in all_images → generic fallback
+    share_image_url = None
+    if listing.main_image:
+        share_image_url = request.build_absolute_uri(listing.main_image.url)
+    else:
+        images = listing.all_images
+        if images:
+            share_image_url = request.build_absolute_uri(images[0].url)
+
+    if not share_image_url:
+        # Generic fallback so OG tags are never empty
+        share_image_url = request.build_absolute_uri(
+            static('images/open.jpg')  # adjust if you use a different default
+        )
+
+    # ---- Build a clean share description ----
+    if listing.description:
+        # Strip newlines, cap at ~155 chars for OG best practice
+        clean_desc = ' '.join(listing.description.split())
+        if len(clean_desc) > 155:
+            clean_desc = clean_desc[:152].rstrip() + '...'
+    else:
+        clean_desc = (
+            f'{listing.get_property_type_display()} in '
+            f'{listing.get_location_display()} — {listing.specific_location}'
+        )
+
+    # ---- Build the full share URL (canonical) ----
+    share_url = request.build_absolute_uri(
+        reverse('listing_detail', kwargs={'slug': listing.slug})
+    )
 
     context = {
         'listing': listing,
         'is_owner': is_owner,
-        'title':  f'BnB  {listing.title} ',
+        'title': f'BnB  {listing.title} ',
         'page_title': f'BnB  {listing.title} ',
-        'meta_description': f'Book BnB/Airbnb {listing.title} in {listing.get_location_display()}. {listing.guests} guests, {listing.bedrooms} bedrooms, KES {listing.price_per_night}/night.',
+        'meta_description': (
+            f'Book BnB/Airbnb {listing.title} in {listing.get_location_display()}. '
+            f'{listing.guests} guests, {listing.bedrooms} bedrooms, '
+            f'KES {listing.price_per_night}/night.'
+        ),
+        # ---- NEW: OG/Share context ----
+        'share_title': listing.title,
+        'share_description': clean_desc,
+        'share_image_url': share_image_url,
+        'share_url': share_url,
     }
     return render(request, 'listings/listing_detail.html', context)
-
 
 
 # ============================================================================

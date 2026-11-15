@@ -868,3 +868,6 @@ def bnb_faq(request):
         'title': 'FAQ — bnb.co.ke | BnB Stays, Staycations & Holiday Homes in Kenya',
         'meta_description': 'Frequently asked questions about booking BnB stays, staycations, and holiday homes on bnb.co.ke. Answers for guests and hosts in Kenya.',
     })
+
+def terms_page(request):
+    return render(request, 'legal/terms.html')

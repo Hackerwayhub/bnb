@@ -1,0 +1,591 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+  <meta name="description" content="Terms of Service for bnb.co.ke — the rules and guidelines for using our BnB booking platform, safari services, and travel experiences in Kenya.">
+  <title>Terms of Service | bnb.co.ke</title>
+{% endblock %}
+
+{% block content %}
+
+<style>
+:root {
+    --terms-red: #D32F2F;
+    --terms-navy: #0F1B2D;
+    --terms-slate: #475569;
+    --terms-bg: #F8FAFC;
+    --terms-border: #E2E8F0;
+    --terms-green: #059669;
+    --terms-gold: #D4A017;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+    --shadow-card: 0 4px 24px -8px rgba(15, 27, 45, 0.1);
+}
+
+body {
+    background: var(--terms-bg);
+    font-family: -apple-system, 'Inter', 'Segoe UI', Roboto, sans-serif;
+    color: var(--terms-slate);
+    line-height: 1.7;
+    -webkit-text-size-adjust: 100%;
+}
+
+.terms-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+    overflow-x: hidden;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.terms-header {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--terms-border);
+    box-shadow: var(--shadow-card);
+    padding: 40px 32px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.terms-header::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--terms-red) 0%, var(--terms-gold) 100%);
+}
+
+.terms-header-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(211,47,47,0.1), rgba(212,160,23,0.1));
+    color: var(--terms-red);
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.terms-header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.25rem);
+    font-weight: 800;
+    color: var(--terms-navy);
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+    line-height: 1.2;
+}
+
+.terms-header p {
+    font-size: 15px;
+    color: var(--terms-slate);
+    margin: 0 0 8px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.terms-updated {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--terms-slate);
+    background: var(--terms-bg);
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-top: 12px;
+}
+
+/* ============================================
+   NAVIGATION / TABLE OF CONTENTS
+   ============================================ */
+.terms-toc {
+    background: #fff;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--terms-border);
+    box-shadow: var(--shadow-card);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.terms-toc-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--terms-navy);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.terms-toc-title i { color: var(--terms-red); font-size: 12px; }
+
+.terms-toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+}
+
+@media (min-width: 600px) {
+    .terms-toc-list { grid-template-columns: 1fr 1fr; }
+}
+
+.terms-toc-list a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    color: var(--terms-slate);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.terms-toc-list a:hover {
+    background: var(--terms-bg);
+    color: var(--terms-red);
+}
+
+.terms-toc-list a i {
+    color: var(--terms-red);
+    font-size: 11px;
+    opacity: 0.6;
+    width: 16px;
+}
+
+/* ============================================
+   CONTENT CARD
+   ============================================ */
+.terms-content {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--terms-border);
+    box-shadow: var(--shadow-card);
+    padding: 40px;
+}
+
+@media (max-width: 640px) {
+    .terms-content { padding: 28px 22px; }
+}
+
+/* ============================================
+   SECTIONS
+   ============================================ */
+.terms-section {
+    margin-bottom: 40px;
+    scroll-margin-top: 80px;
+}
+
+.terms-section:last-child { margin-bottom: 0; }
+
+.terms-section h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--terms-navy);
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--terms-border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    line-height: 1.3;
+}
+
+.terms-section h2 .section-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(211,47,47,0.1), rgba(212,160,23,0.08));
+    color: var(--terms-red);
+    font-size: 14px;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.terms-section h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--terms-navy);
+    margin: 24px 0 10px;
+    line-height: 1.4;
+}
+
+.terms-section p {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--terms-slate);
+    margin: 0 0 14px;
+}
+
+.terms-section p:last-child { margin-bottom: 0; }
+
+.terms-section ul,
+.terms-section ol {
+    margin: 0 0 16px;
+    padding-left: 24px;
+}
+
+.terms-section li {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--terms-slate);
+    margin-bottom: 8px;
+}
+
+.terms-section strong {
+    color: var(--terms-navy);
+    font-weight: 700;
+}
+
+.terms-section a {
+    color: var(--terms-red);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(211,47,47,0.3);
+    transition: border-color 0.2s ease;
+}
+
+.terms-section a:hover {
+    border-bottom-color: var(--terms-red);
+}
+
+/* Callout boxes */
+.terms-callout {
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.65;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border-left: 4px solid;
+}
+
+.terms-callout i {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.terms-callout.info {
+    background: #EFF6FF;
+    border-color: #3B82F6;
+    color: #1E40AF;
+}
+.terms-callout.info i { color: #3B82F6; }
+
+.terms-callout.warning {
+    background: #FFFBEB;
+    border-color: #F59E0B;
+    color: #92400E;
+}
+.terms-callout.warning i { color: #F59E0B; }
+
+.terms-callout.success {
+    background: #ECFDF5;
+    border-color: var(--terms-green);
+    color: #065F46;
+}
+.terms-callout.success i { color: var(--terms-green); }
+
+/* ============================================
+   CONTACT CARD (at end)
+   ============================================ */
+.terms-contact {
+    background: linear-gradient(135deg, var(--terms-navy) 0%, #1A2E48 100%);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin-top: 40px;
+    text-align: center;
+    color: #fff;
+}
+
+.terms-contact h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin: 0 0 8px;
+    color: #fff;
+}
+
+.terms-contact p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    margin: 0 0 20px;
+    line-height: 1.6;
+}
+
+.terms-contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.terms-contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.terms-contact-btn.wa {
+    background: #25D366;
+    color: #fff;
+}
+.terms-contact-btn.wa:hover { background: #1da851; color: #fff; }
+
+.terms-contact-btn.email {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+.terms-contact-btn.email:hover { background: rgba(255,255,255,0.25); color: #fff; }
+
+@media (max-width: 640px) {
+    .terms-container { padding: 16px 14px 60px; }
+    .terms-header { padding: 28px 20px; }
+    .terms-content { padding: 24px 18px; }
+    .terms-section h2 { font-size: 1.15rem; }
+    .terms-contact { padding: 24px 18px; }
+    .terms-contact-links { flex-direction: column; }
+    .terms-contact-btn { width: 100%; justify-content: center; }
+}
+</style>
+
+<div class="terms-container">
+
+  <!-- Header -->
+  <div class="terms-header">
+    <div class="terms-header-icon">
+      <i class="fa fa-file-contract"></i>
+    </div>
+    <h1>Terms of Service</h1>
+    <p>Please read these terms carefully before using bnb.co.ke. By accessing or using our platform, you agree to be bound by these terms.</p>
+    <div class="terms-updated">
+      <i class="fa fa-calendar"></i> Last updated: November 2025
+    </div>
+  </div>
+
+  <!-- Table of Contents -->
+  <div class="terms-toc">
+    <h2 class="terms-toc-title"><i class="fa fa-list"></i> On this page</h2>
+    <ul class="terms-toc-list">
+      <li><a href="#acceptance"><i class="fa fa-chevron-right"></i> 1. Acceptance of Terms</a></li>
+      <li><a href="#services"><i class="fa fa-chevron-right"></i> 2. Our Services</a></li>
+      <li><a href="#accounts"><i class="fa fa-chevron-right"></i> 3. User Accounts</a></li>
+      <li><a href="#bookings"><i class="fa fa-chevron-right"></i> 4. Bookings & Payments</a></li>
+      <li><a href="#cancellations"><i class="fa fa-chevron-right"></i> 5. Cancellations & Refunds</a></li>
+      <li><a href="#hosts"><i class="fa fa-chevron-right"></i> 6. Host Obligations</a></li>
+      <li><a href="#guest-conduct"><i class="fa fa-chevron-right"></i> 7. Guest Conduct</a></li>
+      <li><a href="#prohibited"><i class="fa fa-chevron-right"></i> 8. Prohibited Activities</a></li>
+      <li><a href="#liability"><i class="fa fa-chevron-right"></i> 9. Limitation of Liability</a></li>
+      <li><a href="#intellectual"><i class="fa fa-chevron-right"></i> 10. Intellectual Property</a></li>
+      <li><a href="#modifications"><i class="fa fa-chevron-right"></i> 11. Modifications</a></li>
+      <li><a href="#contact"><i class="fa fa-chevron-right"></i> 12. Contact Us</a></li>
+    </ul>
+  </div>
+
+  <!-- Content -->
+  <div class="terms-content">
+
+    <!-- 1 -->
+    <div class="terms-section" id="acceptance">
+      <h2><span class="section-num">1</span> Acceptance of Terms</h2>
+      <p>By accessing or using <strong>bnb.co.ke</strong> (the "Platform"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you may not use the Platform.</p>
+      <p>These Terms apply to all users of the Platform, including guests, hosts, and visitors who browse listings. If you are using the Platform on behalf of an organization, you represent that you have the authority to bind that organization to these Terms.</p>
+      <p>You must be at least 18 years old to create an account, make a booking, or list a property on bnb.co.ke.</p>
+    </div>
+
+    <!-- 2 -->
+    <div class="terms-section" id="services">
+      <h2><span class="section-num">2</span> Our Services</h2>
+      <p>bnb.co.ke is a platform that connects guests with verified hosts offering BnB , staycations, holiday homes, safari experiences, and travel services across Kenya.</p>
+      <p>We provide the following core services:</p>
+      <ul>
+        <li>Discovery and booking of verified short-term rental properties</li>
+        <li>Curated safari and travel packages with partner lodges</li>
+        <li>Car hire and airport transfer coordination</li>
+        <li>Investment advisory services for property owners</li>
+        <li>Community content and travel resources</li>
+      </ul>
+      <div class="terms-callout info">
+        <i class="fa fa-circle-info"></i>
+        <div>bnb.co.ke acts as a booking platform and intermediary. The actual accommodation contract is between the guest and the host. We facilitate the transaction, verify listings, and support both parties.</div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="terms-section" id="accounts">
+      <h2><span class="section-num">3</span> User Accounts</h2>
+      <p>To access certain features, you must create an account. You agree to:</p>
+      <ul>
+        <li>Provide accurate, current, and complete information during registration</li>
+        <li>Maintain the security of your password and account credentials</li>
+        <li>Accept responsibility for all activity that occurs under your account</li>
+        <li>Notify us immediately of any unauthorized use of your account</li>
+        <li>Not create multiple accounts for the purpose of circumventing restrictions</li>
+      </ul>
+      <p>We reserve the right to suspend or terminate accounts that violate these Terms, provide false information, or engage in fraudulent activity.</p>
+    </div>
+
+    <!-- 4 -->
+    <div class="terms-section" id="bookings">
+      <h2><span class="section-num">4</span> Bookings & Payments</h2>
+      <h3>Making a Booking</h3>
+      <p>When you submit a booking inquiry, you are making an offer to the host. A booking is confirmed only when payment is received and the host has acknowledged acceptance.</p>
+      <h3>Pricing</h3>
+      <p>All prices are listed in Kenyan Shillings (KES) unless otherwise stated. Prices include the nightly rate but may exclude cleaning fees, service charges, or deposits, which will be shown clearly on the listing page.</p>
+      <h3>Payment</h3>
+      <p>We accept M-Pesa, bank transfer, and card payments (where available). Payment must be completed before check-in. We do not store full card details on our servers.</p>
+      <div class="terms-callout warning">
+        <i class="fa fa-triangle-exclamation"></i>
+        <div>Never send money to anyone claiming to represent bnb.co.ke outside of our official payment channels. We are not responsible for losses incurred through off-platform transactions.</div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="terms-section" id="cancellations">
+      <h2><span class="section-num">5</span> Cancellations & Refunds</h2>
+      <p>Our standard cancellation policy is:</p>
+      <ul>
+        <li><strong>7+ days before check-in:</strong> Full refund, minus any transaction fees</li>
+        <li><strong>3–7 days before check-in:</strong> 50% refund</li>
+        <li><strong>Less than 72 hours before check-in:</strong> No refund</li>
+      </ul>
+      <p>Individual listings may have different cancellation policies — these are shown on the listing page before booking. If you need to cancel, contact us as early as possible.</p>
+      <h3>Refund Processing</h3>
+      <p>Approved refunds are processed within 5–10 business days to your original payment method. Bank transfer refunds may take longer due to banking hours.</p>
+      <div class="terms-callout success">
+        <i class="fa fa-circle-check"></i>
+        <div>If a property materially does not match its listing photos or description, we will arrange a comparable alternative or issue a full refund for the remaining nights.</div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="terms-section" id="hosts">
+      <h2><span class="section-num">6</span> Host Obligations</h2>
+      <p>If you list a property on bnb.co.ke, you agree that:</p>
+      <ul>
+        <li>You have the legal right to rent the property short-term</li>
+        <li>The property is registered with the Tourism Regulatory Authority where required by law</li>
+        <li>You have obtained all necessary permissions from landlords, estate management, or local authorities</li>
+        <li>The photos and description accurately reflect the property</li>
+        <li>You will maintain the property to a clean, safe, and habitable standard</li>
+        <li>You will honor confirmed bookings and provide a fair cancellation policy</li>
+        <li>You will declare and pay all applicable taxes on your rental income</li>
+      </ul>
+      <p>We reserve the right to remove listings that violate these obligations or that are reported for misrepresentation.</p>
+    </div>
+
+    <!-- 7 -->
+    <div class="terms-section" id="guest-conduct">
+      <h2><span class="section-num">7</span> Guest Conduct</h2>
+      <p>As a guest on bnb.co.ke, you agree to:</p>
+      <ul>
+        <li>Respect the property, its neighbours, and any building rules</li>
+        <li>Only bring the number of guests stated in your booking unless agreed otherwise</li>
+        <li>Not use the property for illegal activities, commercial use, or events without prior consent</li>
+        <li>Report any damage or issues to the host or bnb.co.ke promptly</li>
+        <li>Leave the property in a reasonable state at checkout</li>
+      </ul>
+      <p>You may be held responsible for any damage caused to the property by yourself or your guests during your stay.</p>
+    </div>
+
+    <!-- 8 -->
+    <div class="terms-section" id="prohibited">
+      <h2><span class="section-num">8</span> Prohibited Activities</h2>
+      <p>The following activities are strictly prohibited on the Platform:</p>
+      <ul>
+        <li>Posting false, misleading, or fraudulent listings</li>
+        <li>Impersonating another person or organization</li>
+        <li>Attempting to bypass, disable, or interfere with platform security features</li>
+        <li>Scraping, harvesting, or collecting user data without permission</li>
+        <li>Using the Platform to send spam, phishing messages, or unsolicited communications</li>
+        <li>Publishing defamatory, obscene, or unlawful content</li>
+        <li>Engaging in money laundering or other financial crimes</li>
+      </ul>
+      <p>Violations may result in immediate account termination and legal action where appropriate.</p>
+    </div>
+
+    <!-- 9 -->
+    <div class="terms-section" id="liability">
+      <h2><span class="section-num">9</span> Limitation of Liability</h2>
+      <p>bnb.co.ke acts as an intermediary between guests and hosts. While we verify listings and support both parties, we are not the owner or operator of any listed property.</p>
+      <p>To the maximum extent permitted by Kenyan law, bnb.co.ke is not liable for:</p>
+      <ul>
+        <li>Any direct or indirect loss arising from a stay</li>
+        <li>Actions or omissions of hosts or guests</li>
+        <li>Property damage, theft, or personal injury during a stay</li>
+        <li>Delays or disruptions caused by third-party travel services</li>
+        <li>Loss of data, profits, or business opportunity</li>
+      </ul>
+      <p>Guests and hosts are encouraged to obtain appropriate travel insurance and property insurance.</p>
+    </div>
+
+    <!-- 10 -->
+    <div class="terms-section" id="intellectual">
+      <h2><span class="section-num">10</span> Intellectual Property</h2>
+      <p>All content on bnb.co.ke — including text, images, logos, and design — is owned by bnb.co.ke or its licensors and protected by copyright and trademark laws.</p>
+      <p>By posting content (photos, descriptions, reviews) on the Platform, you grant us a non-exclusive, worldwide, royalty-free license to use, display, and distribute that content in connection with operating the Platform.</p>
+      <p>You may not reproduce, copy, or redistribute our content without prior written permission.</p>
+    </div>
+
+    <!-- 11 -->
+    <div class="terms-section" id="modifications">
+      <h2><span class="section-num">11</span> Modifications to Terms</h2>
+      <p>We may update these Terms from time to time. When we do, we will revise the "Last updated" date at the top of this page.</p>
+      <p>Material changes will be communicated via email or a prominent notice on the Platform. By continuing to use bnb.co.ke after changes take effect, you agree to the revised Terms.</p>
+      <p>These Terms are governed by the laws of Kenya. Any disputes shall be resolved in the courts of Kenya.</p>
+    </div>
+
+    <!-- 12 -->
+    <div class="terms-section" id="contact">
+      <h2><span class="section-num">12</span> Contact Us</h2>
+      <p>If you have any questions about these Terms, please contact us:</p>
+      <ul>
+        <li><strong>Email:</strong> <a href="mailto:booking.bnb.co.ke@gmail.com">booking.bnb.co.ke@gmail.com</a></li>
+        <li><strong>WhatsApp:</strong> <a href="https://wa.me/254798246467" target="_blank" rel="noopener">+254 798 246 467</a></li>
+        <li><strong>Address:</strong> Nairobi, Kenya</li>
+      </ul>
+    </div>
+
+    <!-- Contact CTA -->
+    <div class="terms-contact">
+      <h3>Still have questions?</h3>
+      <p>Our team is happy to walk you through anything in these terms.</p>
+      <div class="terms-contact-links">
+        <a href="https://wa.me/254798246467?text=Hi%20bnb.co.ke!%20I%20have%20a%20question%20about%20the%20Terms%20of%20Service."
+           target="_blank" rel="noopener" class="terms-contact-btn wa">
+          <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+        </a>
+        <a href="mailto:booking.bnb.co.ke@gmail.com" class="terms-contact-btn email">
+          <i class="fa fa-envelope"></i> Email legal team
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

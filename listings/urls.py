@@ -20,6 +20,7 @@ urlpatterns = [
 
     path('invest/', views.invest_landing, name='invest_landing'),
 
+
 path('safari/', views.safari_landing, name='safari_landing'),
     # Individual listing detail
     path('listing/<slug:slug>/', views.listing_detail, name='listing_detail'),
@@ -31,6 +32,7 @@ path('safari/', views.safari_landing, name='safari_landing'),
     # WhatsApp booking
     path('book-via-whatsapp/', views.book_via_whatsapp, name='whatsapp_booking'),
 path('faq/', views.bnb_faq, name='bnb_faq'),
+path('terms/', views.terms_page, name='terms_page'),
     # Property type URLs (clean URLs)
 
 

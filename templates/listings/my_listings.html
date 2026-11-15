@@ -382,7 +382,7 @@ body {
 .ml-icon-btn.view:hover { background: #3B82F6; border-color: #3B82F6; }
 .ml-icon-btn.edit:hover { background: var(--ml-gold); border-color: var(--ml-gold); }
 .ml-icon-btn.delete:hover { background: var(--ml-red); border-color: var(--ml-red); }
-
+.ml-icon-btn.copy:hover { background: var(--ml-green); border-color: var(--ml-green); }
 /* ============================================
    EMPTY STATE
    ============================================ */
@@ -666,6 +666,10 @@ body {
                             {% if listing.is_approved %}Active{% else %}Pending{% endif %}
                         </div>
                         <div class="ml-card-actions">
+                            <button type="button" class="ml-icon-btn copy" title="Copy Link" aria-label="Copy link to listing"
+        onclick="copyListingLink('{{ request.scheme }}://{{ request.get_host }}{{ listing.get_absolute_url }}')">
+    <i class="fa fa-link"></i>
+</button>
                             <a href="{{ listing.get_absolute_url }}" class="ml-icon-btn view" title="View" aria-label="View listing">
                                 <i class="fa fa-eye"></i>
                             </a>
@@ -845,7 +849,50 @@ body {
             setTimeout(function () { el.remove(); }, 300);
         });
     }, 6000);
+    // ============================================
+    // COPY LINK FUNCTIONALITY
+    // ============================================
+    window.copyListingLink = function(url) {
+        if (navigator.clipboard && window.isSecureContext) {
+            // Modern browsers on HTTPS
+            navigator.clipboard.writeText(url).then(function() {
+                showCopyToast('Link copied to clipboard!');
+            }).catch(function() {
+                fallbackCopy(url);
+            });
+        } else {
+            // Fallback for older browsers or HTTP
+            fallbackCopy(url);
+        }
+    };
 
+    function fallbackCopy(text) {
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            showCopyToast('Link copied!');
+        } catch (err) {
+            alert('Please copy manually: ' + text);
+        }
+        document.body.removeChild(textarea);
+    }
+
+    function showCopyToast(message) {
+        var toast = document.createElement('div');
+        toast.textContent = message;
+        toast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#0F1B2D;color:#fff;padding:12px 24px;border-radius:100px;font-size:14px;font-weight:600;z-index:10001;box-shadow:0 8px 24px rgba(0,0,0,0.2);animation:slideInDown 0.3s ease-out;';
+        document.body.appendChild(toast);
+        setTimeout(function() {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.3s ease';
+            setTimeout(function() { toast.remove(); }, 300);
+        }, 2000);
+    }
 })();
 </script>
 

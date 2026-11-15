@@ -5,12 +5,8 @@
   {% load static %}
   <!-- Basic Meta Tags -->
   <meta charset="utf-8" />
-
-
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta http-equiv="content-language" content="en-ke">
@@ -25,36 +21,36 @@
   <!-- Web App Manifest -->
   <link rel="manifest" href="{% static 'manifest.json' %}">
 
-  <!-- Dynamic SEO Meta Tags - FIXED TO SMALL b -->
+  <!-- Dynamic SEO Meta Tags -->
   <title>{{ title|default:"bnb.co.ke - Verified bnbs, staycations & holiday homes in Kenya" }}</title>
   <meta name="description" content="{{ meta_description|default:'Find verified bnbs, staycations and holiday homes across Kenya. Browse photos, amenities and book direct with verified hosts on bnb.co.ke.' }}" />
   <meta name="author" content="bnb.co.ke" />
   <meta name="robots" content="index, follow" />
 
-  <!-- Canonical URL -->
-  <link rel="canonical" href="https://bnb.co.ke{% if current_location_slug %}/rentals-in-{{ current_location_slug }}/{% else %}/{% endif %}" />
+  <!-- Canonical URL (Fixed: Removed /rentals-in/) -->
+  <link rel="canonical" href="https://bnb.co.ke{{ request.path }}" />
 
-    <!-- Open Graph / Social Media Meta Tags -->
+  <!-- Open Graph / Social Media Meta Tags -->
   {% block og_tags %}
   <meta property="og:title" content="{{ title|default:'bnb.co.ke - Verified bnbs, staycations & holiday homes in Kenya' }}" />
   <meta property="og:description" content="{{ meta_description|default:'Find verified bnbs, staycations and holiday homes across Kenya. Browse photos, amenities and book direct with verified hosts.' }}" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://bnb.co.ke{% if current_location_slug %}/rentals-in-{{ current_location_slug }}/{% else %}/{% endif %}" />
+  <meta property="og:url" content="https://bnb.co.ke{{ request.path }}" />
   <meta property="og:image" content="https://bnb.co.ke{% static 'images/open.jpg' %}" />
   <meta property="og:site_name" content="bnb.co.ke" />
   {% endblock %}
+
   <!-- Favicon files -->
   <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
   <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
 
-
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
 
   <!-- Lightbox Gallery CSS -->
   <link rel="stylesheet" href="{% static 'css/ekko-lightbox.css' %}" />
@@ -64,16 +60,11 @@
 
   <!-- Font Awesome CSS -->
   <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Custom CSS -->
   <link href="{% static 'css/style.css' %}" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Responsive CSS -->
   <link href="{% static 'css/bnb.css' %}" rel="stylesheet" />
-
-
-
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -131,7 +122,7 @@
   }
   </script>
 
-  <!-- Location-specific Schema -->
+  <!-- Location-specific Schema (Fixed) -->
   {% if selected_location != 'all' and location_name %}
   <script type="application/ld+json">
   {
@@ -151,994 +142,451 @@
     "serviceType": "Vacation Rentals",
     "availableChannel": {
       "@type": "ServiceChannel",
-      "serviceUrl": "https://bnb.co.ke{% if current_location_slug %}/rentals-in-{{ current_location_slug }}/{% else %}/{% endif %}"
+      "serviceUrl": "https://bnb.co.ke{{ request.path }}"
     }
   }
   </script>
   {% endif %}
+
+  <!-- ============================================
+       GLOBAL NAVIGATION CSS
+       ============================================ -->
+  <style>
+    /* Fixed hamburger positioning */
+    .custom_menu-btn {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 1001;
+        margin-left: auto;
+    }
+
+    #hamburgerBtn {
+        border: none;
+        background: #FFFFFF;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        cursor: pointer;
+        padding: 10px;
+        position: relative;
+        z-index: 1001;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #hamburgerBtn .s-1,
+    #hamburgerBtn .s-2 {
+        display: block;
+        height: 2px;
+        background-color: #333;
+        border-radius: 2px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: center;
+    }
+
+    #hamburgerBtn .s-1 { width: 16px; align-self: flex-end; margin-right: 6px; }
+    #hamburgerBtn .s-2 { width: 24px; }
+
+    /* When menu is open, button turns white */
+    .menu_btn-style {
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+    .menu_btn-style .s-1,
+    .menu_btn-style .s-2 {
+        background-color: #FFFFFF !important;
+    }
+    .menu_btn-style .s-1 { transform: translateY(4px) rotate(45deg); width: 24px; margin-right: 0 !important; align-self: center !important; }
+    .menu_btn-style .s-2 { transform: translateY(-4px) rotate(-45deg); width: 24px; }
+
+    /* Overlay menu */
+    #myNav {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 27, 45, 0.98);
+        backdrop-filter: blur(20px);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        overflow-y: auto;
+        padding: 80px 0 40px;
+    }
+
+    #myNav.menu_width {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .overlay-content {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        color: #FFFFFF;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 16px 20px;
+        font-size: 17px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    #myNav.menu_width .nav-link {
+        animation: menuSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    #myNav.menu_width .nav-link:nth-child(1) { animation-delay: 0.05s; }
+    #myNav.menu_width .nav-link:nth-child(2) { animation-delay: 0.10s; }
+    #myNav.menu_width .nav-link:nth-child(3) { animation-delay: 0.15s; }
+    #myNav.menu_width .nav-link:nth-child(4) { animation-delay: 0.20s; }
+    #myNav.menu_width .nav-link:nth-child(5) { animation-delay: 0.25s; }
+    #myNav.menu_width .nav-link:nth-child(6) { animation-delay: 0.30s; }
+
+    @keyframes menuSlideIn {
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    .nav-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateX(4px) !important;
+    }
+
+    .nav-link .link-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        margin-right: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .nav-link .link-content { flex: 1; }
+    .nav-link .link-content div { font-size: 17px; margin-bottom: 2px; }
+    .nav-link .link-content small { font-size: 12px; color: rgba(255,255,255,0.5); display: block; }
+
+    /* FAB (Assistant) */
+    #bnbkeFab {
+        background: #FFFFFF;
+        color: #111111;
+        border: 1px solid #EAEAEA;
+        border-radius: 999px;
+        padding: 10px 18px 10px 14px;
+        font-size: 13px;
+        font-weight: 500;
+        font-family: -apple-system, 'Inter', 'Segoe UI', Roboto, sans-serif;
+        box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.12);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        z-index: 1002;
+    }
+
+    /* PWA Prompts */
+    .pwa-install-prompt {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        width: 90%;
+        max-width: 400px;
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(20px); }
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-5px); }
+        60% { transform: translateY(-3px); }
+    }
+
+    .bounce-animation { animation: bounce 2s infinite; }
+  </style>
 
   {% block extra_head %}{% endblock %}
 </head>
 
 
 <body>
-<!-- Elevated Header Section -->
-<header class="header_section" style="position: relative; z-index: 1000; ">
-    <nav>
-        <div class="container-fluid" style="display: flex; justify-content: space-between; align-items: center;   ">
 
-<style>
-    .menu_btn-style .s-1,
-.menu_btn-style .s-2 {
-    background-color: #FFFFFF !important;
-}
-</style>
+  <!-- ============================================
+       FIXED HAMBURGER BUTTON
+       ============================================ -->
+  <div class="custom_menu-btn">
+    <button onclick="toggleNav()" id="hamburgerBtn" aria-label="Toggle menu">
+      <span class="s-1"></span>
+      <span class="s-2"></span>
+    </button>
+  </div>
 
-            <!-- Enhanced Hamburger Menu Button -->
-            <div class="custom_menu-btn" style="margin-left: auto; z-index: 1001; position: relative;">
-                <button onclick="toggleNav()" id="hamburgerBtn" style="
-    border: none;
-    background: transparent !important;
-    cursor: pointer;
-    padding: 8px;
-    position: relative;
-    z-index: 1001;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-">
-    <!-- Top bar — shorter -->
-    <span class="s-1" style="
-        display: block;
-        width: 16px;
-        height: 2px;
-        background-color: #333;
-        border-radius: 2px;
-        align-self: flex-end;
-        margin-right: 6px;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        transform-origin: center;
-    "></span>
-    <!-- Bottom bar — longer -->
-    <span class="s-2" style="
-        display: block;
-        width: 24px;
-        height: 2px;
-        background-color: #333;
-        border-radius: 2px;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        transform-origin: center;
-    "></span>
-</button>
+  <!-- ============================================
+       OVERLAY MENU
+       ============================================ -->
+  <div id="myNav" class="overlay">
+    <div class="overlay-content">
+      <div class="menu-links-container" style="display: grid; gap: 12px; padding: 0 20px;">
 
-                <!-- Floating Menu Label (Optional) -->
-                <div class="menu-label" style="
-                    position: absolute;
-                    top: -8px;
-                    right: -8px;
-                    background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 100%);
-                    color: white;
-                    font-size: 10px;
-                    font-weight: 700;
-                    padding: 2px 8px;
-                    border-radius: 10px;
-                    opacity: 0;
-                    transform: translateY(-10px);
-                    transition: all 0.3s ease;
-                    white-space: nowrap;
-                    box-shadow: 0 2px 10px rgba(255, 90, 95, 0.3);
-                ">
-                    MENU
-                </div>
-            </div>
+        <!-- 1. Home / BnB -->
+        <a href="/" class="nav-link">
+          <div class="link-icon" style="background: rgba(255, 90, 95, 0.2);">
+            <i class="fa fa-home" style="font-size: 18px; color: #FF5A5F;"></i>
+          </div>
+          <div class="link-content">
+            <div>BnB, staycations & holiday homes</div>
+            <small>Book verified properties across Kenya</small>
+          </div>
+          <i class="fa fa-chevron-right" style="color: rgba(255,255,255,0.4); font-size: 12px;"></i>
+        </a>
+
+        <!-- 2. Safari -->
+        <a href="{% url 'safari_landing' %}" class="nav-link">
+          <div class="link-icon" style="background: rgba(212, 160, 23, 0.2);">
+            <i class="fa fa-binoculars" style="font-size: 18px; color: #D4A017;"></i>
+          </div>
+          <div class="link-content">
+            <div>Safari & Travel</div>
+            <small>Luxury lodges & guided tours</small>
+          </div>
+          <i class="fa fa-chevron-right" style="color: rgba(255,255,255,0.4); font-size: 12px;"></i>
+        </a>
+
+        <!-- 3. Invest -->
+        <a href="{% url 'invest_landing' %}" class="nav-link">
+          <div class="link-icon" style="background: rgba(245, 158, 11, 0.2);">
+            <i class="fa fa-chart-line" style="font-size: 18px; color: #F59E0B;"></i>
+          </div>
+          <div class="link-content">
+            <div>Investment & Advisory</div>
+            <small>Invest, furnish & earn passive income</small>
+          </div>
+          <i class="fa fa-chevron-right" style="color: rgba(255,255,255,0.4); font-size: 12px;"></i>
+        </a>
+
+        <!-- 4. My Listings / Host -->
+        <a href="{% url 'my_bnb_listings' %}" class="nav-link">
+          <div class="link-icon" style="background: rgba(0, 123, 255, 0.2);">
+            <i class="fas fa-list" style="font-size: 18px; color: #3B82F6;"></i>
+          </div>
+          <div class="link-content">
+            <div>Host Account</div>
+            <small>Manage your listings</small>
+          </div>
+          <i class="fa fa-chevron-right" style="color: rgba(255,255,255,0.4); font-size: 12px;"></i>
+        </a>
+
+        <!-- 5. WhatsApp -->
+        <a href="{% url 'whatsapp_booking' %}" class="nav-link">
+          <div class="link-icon" style="background: rgba(37, 211, 102, 0.2);">
+            <i class="fab fa-whatsapp" style="font-size: 18px; color: #25D366;"></i>
+          </div>
+          <div class="link-content">
+            <div>WhatsApp Booking</div>
+            <small>Chat with us instantly</small>
+          </div>
+          <i class="fa fa-chevron-right" style="color: rgba(255,255,255,0.4); font-size: 12px;"></i>
+        </a>
+
+        <!-- 6. FAQ -->
+        <a href="{% url 'bnb_faq' %}" class="nav-link">
+          <div class="link-icon" style="background: rgba(148, 163, 184, 0.2);">
+            <i class="fa fa-circle-question" style="font-size: 18px; color: #94A3B8;"></i>
+          </div>
+          <div class="link-content">
+            <div>FAQ</div>
+            <small>Common questions answered</small>
+          </div>
+          <i class="fa fa-chevron-right" style="color: rgba(255,255,255,0.4); font-size: 12px;"></i>
+        </a>
+
+      </div>
+
+      <!-- Menu Footer -->
+      <div class="menu-footer" style="margin-top: 40px; padding: 24px 20px 0; border-top: 1px solid rgba(255,255,255,0.1);">
+        <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; display: flex; gap: 20px; justify-content: center;">
+          <span><i class="fa fa-check-circle" style="color: #34a853;"></i> Verified</span>
+          <span><i class="fa fa-shield-alt" style="color: #4285f4;"></i> Secure Booking</span>
         </div>
-
-        <!-- Enhanced Overlay Menu -->
-        <div id="myNav" class="overlay">
-            <!-- Animated Background Pattern -->
-
-            <!-- Enhanced Menu Content -->
-            <div class="overlay-content">
-
-                <!-- Enhanced Menu Links -->
-                <div class="menu-links-container" style="
-                    display: grid;
-                    gap: 15px;
-                    padding: 0 20px;
-                ">
-                    <a href="/" class="nav-link" onclick="toggleNav()" style="
-                        color: #FFFFFF;
-                        text-decoration: none;
-                        font-weight: 600;
-                        padding: 20px 24px;
-                        display: flex;
-                        align-items: center;
-                        font-size: 20px;
-                        background: rgba(255, 255, 255, 0.05);
-                        border-radius: 16px;
-                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                        border: 1px solid rgba(255, 255, 255, 0.1);
-                        backdrop-filter: blur(10px);
-                        transform: translateX(-20px);
-                        opacity: 0;
-                    ">
-                        <div class="link-icon" style="
-                            width: 40px;
-                            height: 40px;
-                            background: linear-gradient(135deg, rgba(255, 90, 95, 0.2) 0%, rgba(255, 56, 92, 0.2) 100%);
-                            border-radius: 10px;
-                            margin-right: 16px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            transition: all 0.3s ease;
-                        ">
-                            <i class="fa fa-book" aria-hidden="true" style="font-size: 18px; color: #FF0000;"></i>
-                        </div>
-                        <div class="link-content">
-                            <div style="font-size: 20px; margin-bottom: 4px;">BnB, staycations & holiday homes!</div>
-
-                        </div>
-                        <div class="link-arrow" style="
-                            margin-left: auto;
-                            opacity: 0;
-                            transform: translateX(-10px);
-                            transition: all 0.3s ease;
-                        ">
-                            <i class="fa fa-chevron-right" aria-hidden="true" style="color: rgba(255, 255, 255, 0.5);"></i>
-                        </div>
-                    </a>
-
-                    <a href="{% url 'safari_landing' %}" class="nav-link" onclick="toggleNav()" style="
-    color: #FFFFFF;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    font-size: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    transform: translateX(-20px);
-    opacity: 0;
-">
-
-                        <div class="link-icon" style="
-                            width: 40px;
-                            height: 40px;
-                            background: linear-gradient(135deg, rgba(0, 123, 255, 0.2) 0%, rgba(0, 86, 179, 0.2) 100%);
-                            border-radius: 10px;
-                            margin-right: 16px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            transition: all 0.3s ease;
-                        ">
-
-        <i class="fa fa-binoculars" style="font-size: 18px; color: #D4A017;"></i>
-
-                        </div>
-                        <div class="link-content">
-                            <div style="font-size: 20px; margin-bottom: 4px;">Safari & Travel </div>
-
-                        </div>
-                        <div class="link-arrow" style="
-                            margin-left: auto;
-                            opacity: 0;
-                            transform: translateX(-10px);
-                            transition: all 0.3s ease;
-                        ">
-                            <i class="fa fa-chevron-right" aria-hidden="true" style="color: rgba(255, 255, 255, 0.5);"></i>
-                        </div>
-                    </a>
-
-
-
-
-                      <a href="{% url 'my_bnb_listings' %}" class="nav-link" onclick="toggleNav()" style="
-                        color: #FFFFFF;
-                        text-decoration: none;
-                        font-weight: 600;
-                        padding: 20px 24px;
-                        display: flex;
-                        align-items: center;
-                        font-size: 20px;
-                        background: rgba(255, 255, 255, 0.05);
-                        border-radius: 16px;
-                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                        border: 1px solid rgba(255, 255, 255, 0.1);
-                        backdrop-filter: blur(10px);
-                        transform: translateX(-20px);
-                        opacity: 0;
-                        animation-delay: 0.1s;
-                    ">
-                        <div class="link-icon" style="
-                            width: 40px;
-                            height: 40px;
-                            background: linear-gradient(135deg, rgba(0, 123, 255, 0.2) 0%, rgba(0, 86, 179, 0.2) 100%);
-                            border-radius: 10px;
-                            margin-right: 16px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            transition: all 0.3s ease;
-                        ">
-                            <i class="fas fa-bullhorn" aria-hidden="true" style="font-size: 18px; color: #007bff;"></i>
-                        </div>
-                        <div class="link-content">
-                            <div style="font-size: 20px; margin-bottom: 4px;">Sign Up / Log In </div>
-
-                        </div>
-                        <div class="link-arrow" style="
-                            margin-left: auto;
-                            opacity: 0;
-                            transform: translateX(-10px);
-                            transition: all 0.3s ease;
-                        ">
-                            <i class="fa fa-chevron-right" aria-hidden="true" style="color: rgba(255, 255, 255, 0.5);"></i>
-                        </div>
-                    </a>
-
-
-
-
-                       <a href="{% url 'login' %}" class="nav-link" onclick="toggleNav()" style="
-                        color: #FFFFFF;
-                        text-decoration: none;
-                        font-weight: 600;
-                        padding: 20px 24px;
-                        display: flex;
-                        align-items: center;
-                        font-size: 20px;
-                        background: rgba(255, 255, 255, 0.05);
-                        border-radius: 16px;
-                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                        border: 1px solid rgba(255, 255, 255, 0.1);
-                        backdrop-filter: blur(10px);
-                        transform: translateX(-20px);
-                        opacity: 0;
-                        animation-delay: 0.1s;
-                    ">
-                        <div class="link-icon" style="
-                            width: 40px;
-                            height: 40px;
-                            background: linear-gradient(135deg, rgba(0, 123, 255, 0.2) 0%, rgba(0, 86, 179, 0.2) 100%);
-                            border-radius: 10px;
-                            margin-right: 16px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            transition: all 0.3s ease;
-                        ">
-                            <i class="fas fa-toolbox" aria-hidden="true" style="font-size: 18px; color: #007bff;"></i>
-                        </div>
-                        <div class="link-content">
-                            <div style="font-size: 20px; margin-bottom: 4px;">Host Account </div>
-
-                        </div>
-                        <div class="link-arrow" style="
-                            margin-left: auto;
-                            opacity: 0;
-                            transform: translateX(-10px);
-                            transition: all 0.3s ease;
-                        ">
-                            <i class="fa fa-chevron-right" aria-hidden="true" style="color: rgba(255, 255, 255, 0.5);"></i>
-                        </div>
-                    </a>
-
-
-                <a href="{% url 'whatsapp_booking' %}" class="nav-link" onclick="toggleNav()" style="
-    color: #FFFFFF;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    font-size: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    transform: translateX(-20px);
-    opacity: 0;
-">
-    <div class="link-icon" style="
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, rgba(37, 211, 102, 0.2) 0%, rgba(18, 140, 126, 0.2) 100%);
-        border-radius: 10px;
-        margin-right: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-    ">
-        <i class="fab fa-whatsapp" style="font-size: 18px; color: #25D366;"></i>
+      </div>
     </div>
-    <div class="link-content">
-        <div style="font-size: 20px; margin-bottom: 4px;">WhatsApp</div>
-
-    </div>
-    <div class="link-arrow" style="
-        margin-left: auto;
-        opacity: 0;
-        transform: translateX(-10px);
-        transition: all 0.3s ease;
-    ">
-        <i class="fa fa-chevron-right" aria-hidden="true" style="color: rgba(255, 255, 255, 0.5);"></i>
-    </div>
-</a>
-
-
-
-<a href="{% url 'bnb_faq' %}" class="nav-link" onclick="toggleNav()" style="
-    color: #FFFFFF;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    font-size: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    transform: translateX(-20px);
-    opacity: 0;
-">
-    <div class="link-icon" style="
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, rgba(148, 163, 184, 0.2) 0%, rgba(71, 85, 105, 0.2) 100%);
-        border-radius: 10px;
-        margin-right: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-    ">
-        <i class="fa fa-circle-question" style="font-size: 18px; color: #94A3B8;"></i>
-    </div>
-    <div class="link-content">
-        <div style="font-size: 20px; margin-bottom: 4px;">FAQ</div>
-    </div>
-    <div class="link-arrow" style="
-        margin-left: auto;
-        opacity: 0;
-        transform: translateX(-10px);
-        transition: all 0.3s ease;
-    ">
-        <i class="fa fa-chevron-right" aria-hidden="true" style="color: rgba(255, 255, 255, 0.5);"></i>
-    </div>
-</a>
-
-
-
-  <a href="{% url 'invest_landing' %}" class="nav-link" onclick="toggleNav()" style="
-    color: #FFFFFF;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    font-size: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    transform: translateX(-20px);
-    opacity: 0;
-">
-    <div class="link-icon" style="
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(211, 47, 47, 0.2) 100%);
-        border-radius: 10px;
-        margin-right: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-    ">
-        <i class="fa fa-chart-line" style="font-size: 18px; color: #F59E0B;"></i>
-    </div>
-    <div class="link-content">
-        <div style="font-size: 20px; margin-bottom: 4px;">Investment & Advisory</div>
-
-    </div>
-    <div class="link-arrow" style="
-        margin-left: auto;
-        opacity: 0;
-        transform: translateX(-10px);
-        transition: all 0.3s ease;
-    ">
-        <i class="fa fa-chevron-right" aria-hidden="true" style="color: rgba(255, 255, 255, 0.5);"></i>
-    </div>
-</a>
-                    
-                </div>
-
-                <!-- Menu Footer -->
-                <div class="menu-footer" data-nosnippet style="
-                    margin-top: 60px;
-                    padding: 30px 20px 0;
-                    border-top: 1px solid rgba(255, 255, 255, 0.1);
-                    opacity: 0;
-                    transform: translateY(20px);
-                    transition: all 0.5s ease 0.4s;
-                ">
-                    <div style="color: rgba(255, 255, 255, 0.5); font-size: 14px; line-height: 1.6;">
-
-                        <div style="display: flex; align-items: center; gap: 20px; margin-top: 20px;">
-                            <span style="display: flex; align-items: center; gap: 8px;">
-                                <i class="fa fa-check-circle" aria-hidden="true" style="color: #34a853;"></i>
-                                <span>Verified Properties</span>
-                            </span>
-                            <span style="display: flex; align-items: center; gap: 8px;">
-                                <i class="fa fa-shield-alt" aria-hidden="true" style="color: #4285f4;"></i>
-                                <span>Secure Booking</span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
-
-<script>function toggleNav() {
-    const nav = document.getElementById("myNav");
-    const hamburgerBtn = document.getElementById("hamburgerBtn");
-
-    nav.classList.toggle("menu_width");
-    hamburgerBtn.classList.toggle("menu_btn-style");
-
-    // Prevent body scroll when menu is open
-    document.body.style.overflow = nav.classList.contains("menu_width") ? "hidden" : "auto";
-}
-
-// Optional: Close menu with Escape key
-document.addEventListener('keydown', function(event) {
-    const nav = document.getElementById("myNav");
-    if (event.key === "Escape" && nav.classList.contains("menu_width")) {
-        toggleNav();
-    }
-});</script>
+  </div>
 
   <!-- Main Content Block -->
   <main>
     {% block content %}
-    <!-- Child templates will insert content here -->
     {% endblock %}
   </main>
 
+  <!-- ============================================
+       FLOATING ASSISTANT FAB
+       ============================================ -->
+  <div style="position: fixed; bottom: 24px; right: 24px; z-index: 1000;">
+    <button id="bnbkeFab">
+      <i class="fa fa-comment" style="font-size: 12px; color: #D32F2F; background: #FFF1F1; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"></i>
+      <span style="color: #111; font-size: 13px; font-weight: 500;">Assistant</span>
+    </button>
 
-  <!-- BNBKE Contact FAB -->
-<div style="position: fixed; bottom: 24px; right: 24px; z-index: 1000;">
-  <!-- Main FAB -->
-
-   <button id="bnbkeFab" style="
-  background: #FFFFFF;
-  color: #111111;
-  border: 1px solid #EAEAEA;
-  border-radius: 999px;
-  padding: 10px 18px 10px 14px;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: -apple-system, 'Inter', 'Segoe UI', Roboto, sans-serif;
-  letter-spacing: -0.01em;
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.04),
-    0 8px 24px -8px rgba(0, 0, 0, 0.12);
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
-  z-index: 1002;
-  outline: none;
-  height: auto;
-  line-height: 1;
-  -webkit-tap-highlight-color: transparent;
-"
-onfocus="this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(211,47,47,0.15), 0 8px 24px -8px rgba(0,0,0,0.12)'"
-onblur="this.style.boxShadow='0 1px 2px rgba(0,0,0,0.04), 0 8px 24px -8px rgba(0,0,0,0.12)'"
-onmouseover="this.style.background='#FAFAFA'; this.style.borderColor='#DADCE0'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05), 0 12px 32px -8px rgba(0,0,0,0.16)';"
-onmouseout="this.style.background='#FFFFFF'; this.style.borderColor='#EAEAEA'; this.style.boxShadow='0 1px 2px rgba(0,0,0,0.04), 0 8px 24px -8px rgba(0,0,0,0.12)';">
-  <i class="fa fa-comment" aria-hidden="true" style="
-    font-size: 12px;
-    color: #D32F2F;
-    background: #FFF1F1;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  "></i>
-  <span style="color: #111111; font-size: 13px; font-weight: 500;">Assistant</span>
-</button>
-
-  <!-- Hidden Contact Options -->
-  <div id="bnbkeOptions" style="
-    position: absolute;
-    bottom: 70px;
-    right: 0;
-    display: none;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 1001;
-  ">
-    <!-- Book Now Option -->
-
-
-
-
-<!-- Email Contact - Direct mailto link -->
-<a href="mailto:booking.bnb.co.ke@gmail.com?subject=Inquiry%20about%20BNB&body=Hello,%20I%20would%20like%20to%20get%20more%20information..." style="
-  background: #FF5A5F; /* Airbnb-like coral color */
-  color: white !important;
-  border: none;
-  border-radius: 50px;
-  padding: 12px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 140px;
-  justify-content: center;
-  animation: slideUp 0.4s ease-out;
-">
-
-  <i class="fas fa-book" aria-hidden="true" style="font-size: 16px;"></i>
-  Email us
-</a>
-
-<!-- WhatsApp Booking - Using actual WhatsApp brand color -->
-<a href="{% url 'whatsapp_booking' %}" style="
-  background: #25D366;
-  color: white !important;
-  border: none;
-  border-radius: 50px;
-  padding: 12px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 140px;
-  justify-content: center;
-  animation: slideUp 0.5s ease-out;
-">
-  <i class="fab fa-whatsapp" aria-hidden="true" style="font-size: 16px;"></i>
-  Chat via whatsApp
-</a>
-
-
-
-  </div>
-</div>
-
-
-    <!-- PWA Installation Prompt -->
-<div id="pwaInstallPrompt" class="pwa-install-prompt" style="display: none;">
-  <div class="pwa-prompt-content">
-
-    <div class="pwa-prompt-buttons">
-      <button id="pwaInstallBtn" class="pwa-install-btn">
-        <i class="fa fa-download" style="margin-right: 8px;"></i>
-        Install App
-      </button>
-      <button id="pwaLaterBtn" class="pwa-later-btn">Maybe Later</button>
-      <button id="pwaCloseBtn" class="pwa-close-btn">✕</button>
+    <div id="bnbkeOptions" style="position: absolute; bottom: 60px; right: 0; display: none; flex-direction: column; gap: 10px;">
+      <a href="mailto:booking.bnb.co.ke@gmail.com" style="background: #FF5A5F; color: #fff; border-radius: 50px; padding: 12px 20px; font-weight: 600; display: flex; align-items: center; gap: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(255,90,95,0.3);">
+        <i class="fas fa-envelope"></i> Email us
+      </a>
+      <a href="{% url 'whatsapp_booking' %}" style="background: #25D366; color: #fff; border-radius: 50px; padding: 12px 20px; font-weight: 600; display: flex; align-items: center; gap: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(37,211,102,0.3);">
+        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+      </a>
     </div>
   </div>
-</div>
 
-<!-- iOS Install Instructions -->
-<div id="iosInstallPrompt" class="ios-install-prompt" style="display: none;">
-  <div class="ios-prompt-content">
-    <div class="ios-prompt-header">
-      <h3>Add to Home Screen</h3>
-      <p>For the best experience, add BnB to your home screen</p>
-    </div>
-    <div class="ios-instructions">
-      <div class="ios-step">
-        <div class="step-number">1</div>
-        <div class="step-text">Tap the <span class="share-icon">📤</span> Share button</div>
-      </div>
-      <div class="ios-step">
-        <div class="step-number">2</div>
-        <div class="step-text">Scroll down and tap<br>"Add to Home Screen"</div>
-      </div>
-      <div class="ios-step">
-        <div class="step-number">3</div>
-        <div class="step-text">Tap "Add" in the top right</div>
-      </div>
-    </div>
-    <div class="ios-prompt-buttons">
-      <button id="iosGotItBtn" class="ios-gotit-btn">Got it, thanks!</button>
-      <button id="iosDismissBtn" class="ios-dismiss-btn">Don't show again</button>
+  <!-- ============================================
+       PWA PROMPTS (Android/Chrome Only)
+       ============================================ -->
+  <div id="pwaInstallPrompt" class="pwa-install-prompt" style="display: none; background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
+    <div style="display: flex; gap: 10px; justify-content: center;">
+      <button id="pwaInstallBtn" style="flex: 1; background: #D32F2F; color: #fff; border: none; padding: 12px; border-radius: 100px; font-weight: 600; cursor: pointer;"><i class="fa fa-download"></i> Install</button>
+      <button id="pwaLaterBtn" style="background: #F1F5F9; border: none; padding: 12px 20px; border-radius: 100px; font-weight: 600; cursor: pointer;">Later</button>
+      <button id="pwaCloseBtn" style="background: transparent; border: none; font-size: 20px; cursor: pointer; color: #94A3B8;">✕</button>
     </div>
   </div>
-</div>
 
-
-<style>
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  <!-- ============================================
+       SCRIPTS
+       ============================================ -->
+  <script>
+  function toggleNav() {
+      const nav = document.getElementById("myNav");
+      const hamburgerBtn = document.getElementById("hamburgerBtn");
+      nav.classList.toggle("menu_width");
+      hamburgerBtn.classList.toggle("menu_btn-style");
+      document.body.style.overflow = nav.classList.contains("menu_width") ? "hidden" : "auto";
   }
 
-  @keyframes slideDown {
-    from {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    to {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-  }
-
-  @keyframes pulse {
-    0% {
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1),
-                  0 0 20px rgba(255, 90, 95, 0.4),
-                  0 0 35px rgba(255, 90, 95, 0.25);
-    }
-    50% {
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1),
-                  0 0 25px rgba(255, 90, 95, 0.6),
-                  0 0 45px rgba(255, 90, 95, 0.4);
-    }
-    100% {
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1),
-                  0 0 20px rgba(255, 90, 95, 0.4),
-                  0 0 35px rgba(255, 90, 95, 0.25);
-    }
-  }
-
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateY(0);
-    }
-    40% {
-      transform: translateY(-5px);
-    }
-    60% {
-      transform: translateY(-3px);
-    }
-  }
-
-  .pulse-animation {
-    animation: pulse 2s infinite;
-  }
-
-  .bounce-animation {
-    animation: bounce 2s infinite;
-  }
-</style>
-
-<script>
-  let isBnbkeOptionsVisible = false;
-
-  function toggleBnbkeOptions() {
-    const options = document.getElementById('bnbkeOptions');
-    const fab = document.getElementById('bnbkeFab');
-
-    if (!isBnbkeOptionsVisible) {
-      // Show options
-      options.style.display = 'flex';
-      options.style.animation = 'slideUp 0.3s ease-out';
-      fab.innerHTML = '<i class="fa fa-times" aria-hidden="true" style="font-size: 16px; color: inherit !important;"></i> Close';
-      fab.classList.remove('pulse-animation', 'bounce-animation');
-    } else {
-      // Hide options
-      options.style.animation = 'slideDown 0.3s ease-out';
-      setTimeout(() => {
-        options.style.display = 'none';
-      }, 250);
-      fab.innerHTML = '<i class="fa fa-comment" aria-hidden="true" style="font-size: 16px; color: inherit !important;"></i> <span style="color: #000000;">Assistant</span>';
-    }
-
-    isBnbkeOptionsVisible = !isBnbkeOptionsVisible;
-  }
-
-  // Add click event to BNBKE FAB
-  document.getElementById('bnbkeFab').addEventListener('click', toggleBnbkeOptions);
-
-  // Close options when clicking outside
-  document.addEventListener('click', function(event) {
-    const fabContainer = document.querySelector('div[style*="position: fixed; bottom: 24px; right: 24px;"]');
-    const options = document.getElementById('bnbkeOptions');
-
-    if (isBnbkeOptionsVisible && !fabContainer.contains(event.target)) {
-      toggleBnbkeOptions();
-    }
-  });
-
-  // Add animations on page load
-  document.addEventListener('DOMContentLoaded', function() {
-    const fab = document.getElementById('bnbkeFab');
-
-    // Start with bounce animation
-    fab.classList.add('bounce-animation');
-
-    // Switch to pulse after bounce completes
-    setTimeout(() => {
-      fab.classList.remove('bounce-animation');
-      fab.classList.add('pulse-animation');
-    }, 4000);
-  });
-
-  // Remove animations when user interacts
-  document.getElementById('bnbkeFab').addEventListener('mouseenter', function() {
-    this.classList.remove('pulse-animation', 'bounce-animation');
-  });
-
-  // Optional: Add tooltip
-  document.getElementById('bnbkeFab').title = "Get help or explore BNB vacation rentals";
-</script>
-
-<script>
-// Simplified PWA Installation Manager
-class PWAInstallManager {
-  constructor() {
-    this.deferredPrompt = null;
-    this.isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    this.isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-                       window.navigator.standalone === true;
-
-    this.init();
-  }
-
-  init() {
-    // Initialize service worker
-    this.registerServiceWorker();
-
-    // Handle installation prompts
-    this.setupInstallPrompt();
-
-    // Setup event listeners
-    this.setupEventListeners();
-
-    // Check if should show prompts
-    setTimeout(() => this.checkPrompts(), 3000);
-
-    // Setup offline detection
-    this.setupOfflineDetection();
-  }
-
-  registerServiceWorker() {
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('{% static "sw.js" %}')
-          .then(registration => {
-            console.log('✅ Service Worker registered:', registration.scope);
-          })
-          .catch(error => {
-            console.log('❌ Service Worker registration failed:', error);
-          });
-      });
-    }
-  }
-
-  setupInstallPrompt() {
-    // Standard PWA install prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      this.deferredPrompt = e;
-      console.log('📱 PWA install prompt available');
-    });
-
-    // Track installation
-    window.addEventListener('appinstalled', () => {
-      console.log('🎉 PWA installed successfully');
-      this.hidePWAInstallPrompt();
-      this.showInstallSuccess();
-    });
-  }
-
-  setupEventListeners() {
-    // PWA install button
-    document.getElementById('pwaInstallBtn')?.addEventListener('click', () => {
-      this.installPWA();
-    });
-
-    // PWA later button
-    document.getElementById('pwaLaterBtn')?.addEventListener('click', () => {
-      this.hidePWAInstallPrompt();
-      // Don't store dismissal - will show again next session
-    });
-
-    // PWA close button
-    document.getElementById('pwaCloseBtn')?.addEventListener('click', () => {
-      this.hidePWAInstallPrompt();
-      // Don't store dismissal - will show again next session
-    });
-
-    // iOS got it button
-    document.getElementById('iosGotItBtn')?.addEventListener('click', () => {
-      this.hideIOSInstallPrompt();
-      // Don't store dismissal - will show again next session
-    });
-
-    // iOS dismiss button
-    document.getElementById('iosDismissBtn')?.addEventListener('click', () => {
-      this.hideIOSInstallPrompt();
-      // Don't store dismissal - will show again next session
-    });
-  }
-
-  async installPWA() {
-    if (this.deferredPrompt) {
-      try {
-        this.deferredPrompt.prompt();
-        const { outcome } = await this.deferredPrompt.userChoice;
-
-        if (outcome === 'accepted') {
-          console.log('✅ User accepted PWA install');
-          this.showInstallSuccess();
-        }
-
-        this.deferredPrompt = null;
-        this.hidePWAInstallPrompt();
-      } catch (error) {
-        console.error('Error installing PWA:', error);
+  document.addEventListener('keydown', function(event) {
+      const nav = document.getElementById("myNav");
+      if (event.key === "Escape" && nav.classList.contains("menu_width")) {
+          toggleNav();
       }
-    }
+  });
+
+  // Close menu when a link is clicked
+  document.querySelectorAll('#myNav .nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+          if (document.getElementById('myNav').classList.contains('menu_width')) {
+              toggleNav();
+          }
+      });
+  });
+
+  // FAB Toggle
+  let isBnbkeOptionsVisible = false;
+  document.getElementById('bnbkeFab').addEventListener('click', function() {
+      const options = document.getElementById('bnbkeOptions');
+      isBnbkeOptionsVisible = !isBnbkeOptionsVisible;
+      options.style.display = isBnbkeOptionsVisible ? 'flex' : 'none';
+      this.innerHTML = isBnbkeOptionsVisible
+          ? '<i class="fa fa-times" style="font-size: 16px;"></i> <span style="color:#000;">Close</span>'
+          : '<i class="fa fa-comment" style="font-size: 12px; color: #D32F2F; background: #FFF1F1; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"></i> <span style="color: #111; font-size: 13px; font-weight: 500;">Assistant</span>';
+  });
+
+  // Close FAB when clicking outside
+  document.addEventListener('click', function(event) {
+      const fabContainer = document.getElementById('bnbkeFab').parentElement;
+      if (isBnbkeOptionsVisible && !fabContainer.contains(event.target)) {
+          document.getElementById('bnbkeFab').click();
+      }
+  });
+  </script>
+
+  <script>
+  // PWA Install Manager (Android/Chrome Only - iOS removed)
+  class PWAInstallManager {
+      constructor() {
+          this.deferredPrompt = null;
+          this.isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+          this.init();
+      }
+
+      init() {
+          if ('serviceWorker' in navigator) {
+              window.addEventListener('load', () => {
+                  navigator.serviceWorker.register('{% static "sw.js" %}').catch(err => console.log(err));
+              });
+          }
+
+          window.addEventListener('beforeinstallprompt', (e) => {
+              e.preventDefault();
+              this.deferredPrompt = e;
+          });
+
+          window.addEventListener('appinstalled', () => {
+              this.hidePrompt();
+          });
+
+          document.getElementById('pwaInstallBtn')?.addEventListener('click', () => this.installPWA());
+          document.getElementById('pwaLaterBtn')?.addEventListener('click', () => this.hidePrompt());
+          document.getElementById('pwaCloseBtn')?.addEventListener('click', () => this.hidePrompt());
+
+          setTimeout(() => {
+              // Only shows if the browser triggers beforeinstallprompt (Android/Chrome)
+              if (this.deferredPrompt && !this.isStandalone) {
+                  document.getElementById('pwaInstallPrompt').style.display = 'block';
+              }
+          }, 5000);
+      }
+
+      installPWA() {
+          if (this.deferredPrompt) {
+              this.deferredPrompt.prompt();
+              this.deferredPrompt.userChoice.then((choice) => {
+                  if (choice.outcome === 'accepted') this.hidePrompt();
+                  this.deferredPrompt = null;
+              });
+          }
+      }
+
+      hidePrompt() {
+          document.getElementById('pwaInstallPrompt').style.display = 'none';
+      }
   }
 
-  checkPrompts() {
-    // Don't show if already installed
-    if (this.isStandalone) {
-      return;
-    }
+  document.addEventListener('DOMContentLoaded', () => new PWAInstallManager());
+  </script>
 
-    // Show PWA prompt for non-iOS
-    if (this.shouldShowPWAPrompt()) {
-      this.showPWAInstallPrompt();
-    }
-
-    // Show iOS instructions for iOS
-    if (this.shouldShowiOSPrompt()) {
-      setTimeout(() => this.showIOSInstallPrompt(), 5000);
-    }
-  }
-
-  shouldShowPWAPrompt() {
-    // Don't show on iOS (use custom instructions instead)
-    if (this.isiOS) return false;
-
-    // Check if deferred prompt is available
-    return !!this.deferredPrompt;
-  }
-
-  shouldShowiOSPrompt() {
-    // Only show on iOS Safari
-    if (!this.isiOS) return false;
-
-    // Don't show if already installed
-    if (this.isStandalone) return false;
-
-    return true;
-  }
-
-  showPWAInstallPrompt() {
-    const prompt = document.getElementById('pwaInstallPrompt');
-    if (prompt) {
-      prompt.style.display = 'block';
-      console.log('📱 Showing PWA install prompt');
-    }
-  }
-
-  hidePWAInstallPrompt() {
-    const prompt = document.getElementById('pwaInstallPrompt');
-    if (prompt) {
-      prompt.style.display = 'none';
-    }
-  }
-
-  showIOSInstallPrompt() {
-    const prompt = document.getElementById('iosInstallPrompt');
-    if (prompt) {
-      prompt.style.display = 'flex';
-      console.log('🍎 Showing iOS install instructions');
-    }
-  }
-
-  hideIOSInstallPrompt() {
-    const prompt = document.getElementById('iosInstallPrompt');
-    if (prompt) {
-      prompt.style.display = 'none';
-    }
-  }
-
-  showInstallSuccess() {
-    this.showToast('🎉 BNBKE installed successfully!');
-  }
-
-  showToast(message, duration = 3000) {
-    const toast = document.createElement('div');
-    toast.style.cssText = `
-      position: fixed;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.9);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 12px;
-      font-weight: 500;
-      z-index: 10001;
-      animation: slideUp 0.3s ease;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    `;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-      toast.style.animation = 'slideDown 0.3s ease';
-      setTimeout(() => document.body.removeChild(toast), 300);
-    }, duration);
-  }
-
-  setupOfflineDetection() {
-    window.addEventListener('online', () => {
-      document.getElementById('offlineIndicator')?.classList.remove('show');
-    });
-
-    window.addEventListener('offline', () => {
-      document.getElementById('offlineIndicator')?.classList.add('show');
-    });
-  }
-}
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  new PWAInstallManager();
-});
-</script>
-
-<script defer src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
-<script defer src="{% static 'js/bootstrap.js' %}"></script>
-<script defer src="{% static 'js/ekko-lightbox.min.js' %}"></script>
-<script defer src="{% static 'js/custom.js' %}"></script>
+  <script defer src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <script defer src="{% static 'js/bootstrap.js' %}"></script>
+  <script defer src="{% static 'js/ekko-lightbox.min.js' %}"></script>
+  <script defer src="{% static 'js/custom.js' %}"></script>
 
   {% block scripts %}
+  {% endblock %}
 
-{% endblock %}
 </body>
 </html>

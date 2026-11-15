@@ -162,23 +162,26 @@
     }
 
         #hamburgerBtn {
-        border: 1px solid #F1F5F9; /* Faint gray border instead of invisible */
-        background: #FFFFFF;
-        /* Removed the hard drop shadow, replaced with a very soft halo */
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04), 0 0 0 4px rgba(255,255,255,0.5);
+        border: none;
+        background: transparent; /* Completely invisible background */
         cursor: pointer;
-        padding: 8px;
+        padding: 10px;
         position: relative;
         z-index: 1001;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 5px;
-        width: 38px; /* Smaller footprint */
-        height: 38px;
-        border-radius: 50%;
-        transition: all 0.3s ease;
+        gap: 6px;
+        width: 44px;
+        height: 44px;
+        border-radius: 10px; /* Soft square hover area */
+        transition: background 0.3s ease;
+    }
+
+    /* Only show a slight background on hover */
+    #hamburgerBtn:hover {
+        background: rgba(0, 0, 0, 0.04);
     }
 
     #hamburgerBtn .s-1,

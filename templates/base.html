@@ -519,12 +519,18 @@
       });
   });
 
-  // FAB Toggle
+    // FAB Toggle
   let isBnbkeOptionsVisible = false;
-  document.getElementById('bnbkeFab').addEventListener('click', function() {
-      const options = document.getElementById('bnbkeOptions');
+  const fabBtn = document.getElementById('bnbkeFab');
+  const fabOptions = document.getElementById('bnbkeOptions');
+
+  fabBtn.addEventListener('click', function(e) {
+      // Stop the click from bubbling up to the document (which was instantly closing the menu)
+      e.stopPropagation();
+
       isBnbkeOptionsVisible = !isBnbkeOptionsVisible;
-      options.style.display = isBnbkeOptionsVisible ? 'flex' : 'none';
+      fabOptions.style.display = isBnbkeOptionsVisible ? 'flex' : 'none';
+
       this.innerHTML = isBnbkeOptionsVisible
           ? '<i class="fa fa-times" style="font-size: 16px;"></i> <span style="color:#000;">Close</span>'
           : '<i class="fa fa-comment" style="font-size: 12px; color: #D32F2F; background: #FFF1F1; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"></i> <span style="color: #111; font-size: 13px; font-weight: 500;">Assistant</span>';
@@ -532,9 +538,11 @@
 
   // Close FAB when clicking outside
   document.addEventListener('click', function(event) {
-      const fabContainer = document.getElementById('bnbkeFab').parentElement;
-      if (isBnbkeOptionsVisible && !fabContainer.contains(event.target)) {
-          document.getElementById('bnbkeFab').click();
+      // If the menu is open, and the click is NOT inside the options or the button itself, close it.
+      if (isBnbkeOptionsVisible && !fabOptions.contains(event.target) && !fabBtn.contains(event.target)) {
+          isBnbkeOptionsVisible = false;
+          fabOptions.style.display = 'none';
+          fabBtn.innerHTML = '<i class="fa fa-comment" style="font-size: 12px; color: #D32F2F; background: #FFF1F1; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"></i> <span style="color: #111; font-size: 13px; font-weight: 500;">Assistant</span>';
       }
   });
   </script>

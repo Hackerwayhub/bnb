@@ -197,7 +197,7 @@
     #hamburgerBtn .s-1 { width: 16px; align-self: flex-end; margin-right: 6px; }
     #hamburgerBtn .s-2 { width: 24px; }
 
-    /* When menu is open, button turns white */
+       /* When menu is open, lines turn white and thicker for visibility */
     .menu_btn-style {
         background: transparent !important;
         box-shadow: none !important;
@@ -205,10 +205,20 @@
     .menu_btn-style .s-1,
     .menu_btn-style .s-2 {
         background-color: #FFFFFF !important;
+        height: 3px; /* Made lines slightly thicker */
     }
-    .menu_btn-style .s-1 { transform: translateY(4px) rotate(45deg); width: 24px; margin-right: 0 !important; align-self: center !important; }
-    .menu_btn-style .s-2 { transform: translateY(-4px) rotate(-45deg); width: 24px; }
-
+    .menu_btn-style .s-1 {
+        transform: translateY(4px) rotate(45deg);
+        width: 26px; /* Slightly wider X */
+        margin-right: 0 !important;
+        align-self: center !important;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.3); /* Added a soft glow */
+    }
+    .menu_btn-style .s-2 {
+        transform: translateY(-4px) rotate(-45deg);
+        width: 26px;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.3); /* Added a soft glow */
+    }
     /* Overlay menu */
     #myNav {
         position: fixed;

@@ -15,12 +15,7 @@ class Listing(models.Model):
         ('three_bedroom_staycation', 'Three Bedroom '),
         ('Own_compound_staycation', 'Own compound/villa staycation'),
         ('beach_house_staycation', ' Beach house staycation'),
-        ('studio', ' Furnished Houses for rent - Studio  '),
-        ('one_bedroom', 'Furnished Houses for rent - One Bedroom '),
-        ('two_bedroom', 'Furnished Houses for rent - Two Bedroom '),
-        ('three_bedroom', 'Furnished Houses for rent - Three Bedroom  '),
-        ('Own_compound', 'Furnished Houses for rent - Own compound'),
-        ('beach_house', 'Furnished Houses for rent - beach house '),
+
     ]
 
     LOCATIONS = [
@@ -163,8 +158,8 @@ class Listing(models.Model):
 
     TRANSACTION_TYPE_CHOICES = [
         ('shortlet', 'Bnb / staycation'),
-        ('rent', 'For Rent'),
-        ('sale', 'For Sale'),
+
+
     ]
 
     PROPERTY_CONDITION_CHOICES = [

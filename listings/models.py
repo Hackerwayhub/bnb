@@ -8,13 +8,13 @@ from django.conf import settings
 class Listing(models.Model):
     # Property Types
     PROPERTY_TYPES = [
-        ('hidden_gems', 'Hidden gems/Cabins/Vacation Holiday homes'),
-        ('studio_staycation', ' studio '),
+        ('hidden_gems', 'Hidden gems/Cabins/Villa'),
+        ('beach_house_staycation', ' Beach house'),
+        ('studio_staycation', ' Studio '),
         ('one_bedroom_staycation', ' One Bedroom '),
         ('two_bedroom_staycation', ' Two Bedroom '),
         ('three_bedroom_staycation', 'Three Bedroom '),
-        ('Own_compound_staycation', 'Own compound/villa staycation'),
-        ('beach_house_staycation', ' Beach house staycation'),
+        ('Own_compound_staycation', 'Own compound'),
 
     ]
 

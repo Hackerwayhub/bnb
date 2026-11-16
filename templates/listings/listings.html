@@ -1042,37 +1042,7 @@ body.is-scrolled .filters-container {
                "
                onmouseover="this.style.background='#fafafa'; this.style.paddingLeft='18px'"
                onmouseout="this.style.background='transparent'; this.style.paddingLeft='14px'">
-            {% if type_code == 'apartment' %}
-              <i class="fa fa-building" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% elif type_code == 'house' %}
-              <i class="fa fa-home" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% elif type_code == 'villa' %}
-              <i class="fa fa-landmark" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% elif type_code == 'cottage' %}
-              <i class="fa fa-tree" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% elif type_code == 'bungalow' %}
-              <i class="fa fa-home" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% elif type_code == 'townhouse' %}
-              <i class="fa fa-city" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% elif type_code == 'penthouse' %}
-              <i class="fa fa-building" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% elif type_code == 'guesthouse' %}
-              <i class="fa fa-bed" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% elif type_code == 'hostel' %}
-              <i class="fa fa-bed" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% elif type_code == 'hotel' %}
-              <i class="fa fa-hotel" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% elif type_code == 'resort' %}
-              <i class="fa fa-umbrella-beach" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% elif type_code == 'cabin' %}
-              <i class="fa fa-tree" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% elif type_code == 'farm' %}
-              <i class="fa fa-tractor" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% elif type_code == 'castle' %}
-              <i class="fa fa-fort-awesome" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% else %}
-              <i class="fa fa-city" style="width: 16px; color: #D32F2F; font-size: 12px; opacity: 0.75;"></i>
-            {% endif %}
+
             <span>{{ type_name }}</span>
           </div>
         {% endfor %}

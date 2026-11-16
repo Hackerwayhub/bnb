@@ -678,7 +678,7 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
                         {{ form.transaction_type }}
                         <div class="form-tip">
                             <i class="fa fa-info-circle"></i>
-                            <span>Rent · Sale · Shortlet (nightly)</span>
+                            <span>BnB / staycation (nightly)</span>
                         </div>
                     </div>
                 </div>
@@ -694,7 +694,7 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
                     <div class="form-group">
                         <label class="form-label" for="{{ form.specific_location.id_for_label }}">
                             <i class="fa fa-map-pin"></i>
-                            Specific area <span class="required-star">*</span>
+                            Specific area / Apartment name <span class="required-star">*</span>
                         </label>
                         {{ form.specific_location }}
                     </div>
@@ -703,7 +703,7 @@ input[name="listing_type"][type="radio"] { position: absolute; opacity: 0; }
                 <div class="form-group">
                     <label class="form-label" for="{{ form.address.id_for_label }}">
                         <i class="fa fa-address-card"></i>
-                        Full address (optional)
+                        Full address / Google maps pin (optional)
                     </label>
                     {{ form.address }}
                     <div class="form-tip">
